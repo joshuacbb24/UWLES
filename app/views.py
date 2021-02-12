@@ -1,10 +1,12 @@
 """
 Definition of views.
 """
-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpRequest
+from .forms import UserInfo
 
 def home(request):
     """Renders the home page."""
@@ -43,3 +45,28 @@ def about(request):
             'year':datetime.now().year,
         }
     )
+
+def signup(request):
+    """Renders the signup page."""
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            user_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=user_password)
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'app/signup.html', {'form': form})
+
+
+def user_information(request):
+    form = UserInfo()
+    if request.method == 'POST':
+        form = UserInfo(request.POST)
+        if form.is_valid():
+            form.save()
+    context = {'form': form }
+    return render(request, 'app/userinfo.html', context)
