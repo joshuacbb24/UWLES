@@ -6,7 +6,7 @@ from django.contrib.auth import login, authenticate
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
-from .forms import UserInfo
+from .forms import User_Bg, User_EC, User_Demo
 
 def home(request):
     """Renders the home page."""
@@ -63,10 +63,24 @@ def signup(request):
 
 
 def user_information(request):
-    form = UserInfo()
+    form1 = User_Bg()
+    form2 = User_EC()
+    form3 = User_Demo()
     if request.method == 'POST':
-        form = UserInfo(request.POST)
-        if form.is_valid():
-            form.save()
-    context = {'form': form }
+        form1 = User_Bg(request.POST)
+        form2 = User_EC(request.POST)
+        form3 = User_Demo(request.POST)
+        if form1.is_valid() and form2.is_valid() and form3.is_valid():
+            background = form1.save()
+            form_two = form2.save(commit=False)
+            form_two.background = background
+            form_two.save()
+            form_three = form3.save(commit=False)
+            form_three.background = background
+            form_three.save()
+
+    context = {'form1': form1,
+               'form2': form2,
+               'form3': form3,
+              }
     return render(request, 'app/userinfo.html', context)
