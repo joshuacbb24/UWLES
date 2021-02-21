@@ -13,11 +13,13 @@ def home(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/index.html',
-        {
-            'title':'Home Page',
-            'year':datetime.now().year,
-        }
+        'app/index.html'
+       
+        #{
+            #'title':'Home Page',
+            #'year':datetime.now().year,
+        #}
+       
     )
 
 def contact(request):
@@ -60,7 +62,7 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'app/signup.html', {'form': form})
-
+    
 
 def user_information(request):
     form1 = User_Bg()
@@ -84,3 +86,7 @@ def user_information(request):
                'form3': form3,
               }
     return render(request, 'app/userinfo.html', context)
+
+def userPage(request):
+    context = {}
+    return render(request, 'app/user.html')

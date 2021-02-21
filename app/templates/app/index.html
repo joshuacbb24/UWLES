@@ -1,33 +1,22 @@
-{% extends "app/layout.html" %}
-
-{% block content %}
-
-<div class="jumbotron">
-    <h1>Django</h1>
-    <p class="lead">Django is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://www.djangoproject.com/" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            Django gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://djangobook.com/django-tutorials/">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>The Python Package Index is a repository of software for the Python programming language.</p>
-        <p><a class="btn btn-default" href="https://pypi.org/">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Microsoft Azure</h2>
-        <p>You can easily publish to Microsoft Azure using Visual Studio. Find out how you can host your application using a free trial today.</p>
-        <p><a class="btn btn-default" href="http://azure.microsoft.com">Learn more &raquo;</a></p>
-    </div>
-</div>
-
-{% endblock %}
+<!doctype html>
+{% extends 'app/layout.html' %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>(% block title %}{ endblock %)</title>
+</head>
+<body>
+    <h1>UWLES PROTOTYPE</h1>
+    <a href="{% url 'home' %}">Home</a> /
+    {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Log out</a>
+       <!-- had to remove a user,username for some reason-->
+    {% else %}
+        <a href="{% url 'signup' %)">Sign up</a> /
+        <a href="{% url 'login' %}">Login</a> /
+    {% endif %}
+    <hr>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

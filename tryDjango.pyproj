@@ -35,16 +35,27 @@
     <Compile Include="app\admin.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="app\decorators.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
     <Compile Include="app\tests.py" />
+    <Compile Include="app\url.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
     <Compile Include="manage.py" />
+    <Compile Include="tryDjango\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tryDjango\__init__.py" />
     <Compile Include="tryDjango\settings.py" />
-    <Compile Include="tryDjango\urls.py" />
     <Compile Include="tryDjango\wsgi.py" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +71,7 @@
     <Folder Include="tryDjango\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\templates\app\home.html" />
     <Content Include="app\templates\app\signup.html" />
     <Content Include="app\templates\app\userinfo.html" />
     <Content Include="requirements.txt" />
