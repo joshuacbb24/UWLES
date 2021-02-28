@@ -3,10 +3,22 @@ Definition of views.
 """
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
-from .forms import User_Bg, User_EC, User_Demo
+from .forms import User_Bg, User_EC, User_Demo ,CreateUserForm
+from .decorators import unauthenticated_user, allowed_user
+
+
+def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('app/index')
+    else:
+        context = {}
+        return render(request, 'app/login.html', context)
+
+@login_required(login_url='login')
 
 def home(request):
     """Renders the home page."""
@@ -16,7 +28,7 @@ def home(request):
         'app/index.html',
         {
             'title':'Home Page',
-            'year':datetime.now().year,
+             'year':datetime.now().year,
         }
     )
 
@@ -47,21 +59,25 @@ def about(request):
     )
 
 def signup(request):
-    """Renders the signup page."""
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            user_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=user_password)
-            login(request, user)
-            return redirect('home')
+    if request.user.is_authenticated:
+        return redirect('index')
     else:
-        form = UserCreationForm()
-    return render(request, 'app/signup.html', {'form': form})
+        """Renders the signup page."""
+        if request.method == 'POST':
+            form = CreateUserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                #username = form.cleaned_data.get('username')
+                #user_password = form.cleaned_data.get('password1')
+                #user = authenticate(username=username, password=user_password)
+                #login(request, user)
+                #return redirect('home')
+        #else:
+            #form = UserCreationForm()
+        return render(request, 'app/signup.html', {'form': form})
 
-
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin,client'])
 def user_information(request):
     form1 = User_Bg()
     form2 = User_EC()
@@ -84,3 +100,7 @@ def user_information(request):
                'form3': form3,
               }
     return render(request, 'app/userinfo.html', context)
+
+
+#def secret_page(request): add this and ask kutter for help monday
+    #return render (request, 'app/secret_page.html')
