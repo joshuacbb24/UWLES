@@ -66,6 +66,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\templates\app\home.html" />
+    <Content Include="app\templates\app\reset_password_confirm.html" />
+    <Content Include="app\templates\app\reset_password.html" />
+    <Content Include="app\templates\app\reset_password_complete.html" />
+    <Content Include="app\templates\app\reset_password_done.html" />
     <Content Include="app\templates\app\signup.html" />
     <Content Include="app\templates\app\userinfo.html" />
     <Content Include="app\templates\app\profile.html" />

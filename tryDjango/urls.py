@@ -33,8 +33,8 @@ urlpatterns = [
     path('userinfo/', views.user_information, name='userinfo'),
     path('profile/', views.profile, name='profile'),
    
-    path('reset_password/', PasswordResetView.as_view(), name="reset_password"),
-    path('reset_password_sent/', PasswordResetDoneView.as_view(), name="password_reset_done"),
-    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name="password_reset_confirm"), #encodes user ID in base 64, then uses the token to check if the password is valid, part of PasswordResetConfirmView documentation
-    path('reset_password_complete/', PasswordResetCompleteView.as_view(), name="password_reset_complete")
+    path('reset_password/', PasswordResetView.as_view(template_name='app/reset_password.html'), name="reset_password"),
+    path('reset_password_sent/', PasswordResetDoneView.as_view(template_name='app/reset_password_done.html'), name="password_reset_done"),
+    path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(template_name='app/reset_password_confirm.html'), name="password_reset_confirm"), #encodes user ID in base 64, then uses the token to check if the password is valid, part of PasswordResetConfirmView documentation
+    path('reset_password_complete/', PasswordResetCompleteView.as_view(template_name='app/reset_password_complete.html'), name="password_reset_complete")
 ]
