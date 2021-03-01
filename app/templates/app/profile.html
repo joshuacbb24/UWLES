@@ -1,0 +1,37 @@
+﻿<!--
+    profile.html
+    
+    This is the user profile page
+
+-->
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<ul class="nav navbar-nav navbar-right">
+     <li><span class="navbar-brand">Hello {{ user.username }}</span></li>
+</ul>
+
+<ul class="nav navbar-nav">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'userinfo' %}">User Info Form</a></li>
+</ul>
+
+<p>{{ object1.firstname }}</p>
+<p>{{ object1.lastname }}</p>
+<p>{{ object1.email }}</p>
+<p>{{ object1.gender }}</p>
+<p>{{ object1.birthday }}</p>
+<p>{{ object1.phone_number }}</p>
+<p>{{ object3.zipcode }}</p>
+<p>{{ object3.street_address }}</p>
+<p>{{ object3.city }}</p>
+
+{% else %}
+
+<ul>
+    <p>Not signed in!</p>
+</ul>
+
+{% endif %}
+{% endblock %}

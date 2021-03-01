@@ -6,8 +6,9 @@
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
 </form>
-<ul class="nav navbar-nav navbar-right">
-    <li><a href="{% url 'userinfo' %}">User Info</a></li>
+<ul class="nav navbar-nav">
+    <li><a href="{% url 'userinfo' %}">User Info Form</a></li>
+    <li><a href="{% url 'profile' %}">Profile</a></li>
 </ul>
 {% else %}
 

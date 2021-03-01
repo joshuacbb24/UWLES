@@ -41,12 +41,6 @@
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
     <Compile Include="app\tests.py" />
-    <Compile Include="app\url.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="app\urls.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
@@ -74,6 +68,7 @@
     <Content Include="app\templates\app\home.html" />
     <Content Include="app\templates\app\signup.html" />
     <Content Include="app\templates\app\userinfo.html" />
+    <Content Include="app\templates\app\profile.html" />
     <Content Include="requirements.txt" />
     <Content Include="app\static\app\content\bootstrap.css" />
     <Content Include="app\static\app\content\bootstrap.min.css" />
