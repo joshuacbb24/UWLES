@@ -4,28 +4,108 @@
     This is the user profile page
 
 -->
-
+{% load static %}
 {% block content %}
 {% if user.is_authenticated %}
-
-<ul class="nav navbar-nav navbar-right">
-     <li><span class="navbar-brand">Hello {{ user.username }}</span></li>
-</ul>
-
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static 'app/content/profile.css' %}"/>
+</head>
 <ul class="nav navbar-nav">
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'userinfo' %}">User Info Form</a></li>
 </ul>
-
-<p>{{ object1.firstname }}</p>
-<p>{{ object1.lastname }}</p>
-<p>{{ object1.email }}</p>
-<p>{{ object1.gender }}</p>
-<p>{{ object1.birthday }}</p>
-<p>{{ object1.phone_number }}</p>
-<p>{{ object3.zipcode }}</p>
-<p>{{ object3.street_address }}</p>
-<p>{{ object3.city }}</p>
+	<body>
+		<div class="container">
+			<nav></nav>
+			<div id="sidebar"></div>
+			<div id="profile">
+				<img src="{% static 'app/content/Deafult-Profile-Picture.png' %}" class="profilePic" alt="default profile picture"/>
+				<p class="name"> {{ object1.firstname }} {{ object1.lastname }} </p>
+				<p class="email">{{ object1.email }}</p>
+				<div class="tags">
+					<p class="profileTags"> Housing Assistance </p>
+					<p class="profileTags"> Senior </p>
+				</div>
+				<hr />
+				<p class="profileButton"> SEND MESSAGE </p>
+			</div>
+			<div id="personalInfo">
+				<div class="piContainer">
+					<div id="gender">
+						<p class="personalTitle"> Gender </p>
+						<p class="info"> {{ object1.gender }} </p>
+					</div>
+					<div id="street">
+						<p class="personalTitle"> Street Address </p>
+						<p class="info"> {{ object3.street_address }} </p>
+					</div>
+					<div id="status"> 
+						<p class="personalTitle"> Member Status </p>
+						<p class="info"> Active Member </p>
+					</div>
+					<div id="bday"> 
+						<p class="personalTitle"> Birthday </p>
+						<p class="info"> {{ object1.birthday }} </p>
+					</div>
+					<div id="city">
+						<p class="personalTitle"> City </p>
+						<p class="info"> {{ object3.city }} </p>
+					</div>
+					<div id="rdate">
+						<p class="personalTitle"> Registered Date </p>
+						<p class="info"> Nov 11th, 2020 </p>
+					</div>
+					<div id="phone"> 
+						<p class="personalTitle"> Phone Number </p>
+						<p class="info"> {{ object1.phone_number }} </p>
+					</div>
+					<div id="zip"> 
+						<p class="personalTitle"> ZIP Code </p>
+						<p class="info"> {{ object3.zipcode }} </p>
+					</div>
+				</div>
+			</div>
+			<div id="notes">
+				<h1 class="notes"> Notes </h1>
+				<div id="notesBox">
+					<p class="notesBox">
+						{{ object4.notes }}
+					</p>
+				</div>	
+				<p class="notesDescription">
+					Basic Activity and Community Needs
+				</p>
+				<div class="notesDetails">
+					<p class="notesAuthor"> Kathy, 211 Case Manager </p>
+					<p class="notesDate"> October 12, 2020 </p>
+				</div>			
+				
+			</div>
+			<div id="info">
+				<div id="infoBox">
+					<div id="infoHeader">
+						<ul>
+							<li class="upcoming">Upcoming Appointments</li>
+							<li class="past">Past Appointments</li>
+							<li class="referrals">Service Referrals</li>
+							<li class="records">Medical Records</li>
+						</ul>
+					</div>
+					<p class="link">Housing Assistance - Salvation Army, Lower 
+						Eastern Shore, Financial Assistance</p>
+					<p class="linkDescription"> Referred by Kathy, 211 Case Manager 
+						via chat; email follow-up provided</p>
+				</div>
+			</div>
+			<div id="resources">
+				<h1 class="resources"> Resources / Documents </h1>
+				<p class="emptyResources"> No Shared Resources So Far! </p>
+				<p class="resourcesBox"> Drag files here or click to browse </p>
+			</div>
+		</div>
+	
+	
+	</body>
 
 {% else %}
 

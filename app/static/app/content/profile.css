@@ -1,0 +1,298 @@
+p {
+    font-family: helvetica;
+    letter-spacing: 0.05em;
+}
+
+h1 {
+    font-size: 1.5em;
+    text-align: left;
+    font-family: helvetica;
+    letter-spacing: 0.05em;
+    margin-top: 30px;
+    margin-left: 40px;
+    margin-bottom: 20px;
+    color: #525252;
+}
+
+.container {
+    display: grid;
+    height: 150vh;
+    grid-template-columns: 0.15fr 1fr 1.5fr 2fr;
+    grid-template-rows: 0.15fr 0.15fr 0.75fr 1fr 0.4fr;
+    grid-template-areas: "sidebar nav nav nav" "sidebar clean clean clean" "sidebar profile personal notes" "sidebar info info resources" "sidebar footer footer footer";
+}
+
+#profile, #personalInfo, #notes, #info, #resources {
+    background: white;
+    box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+nav {
+    background: #222224;
+    grid-area: nav;
+}
+
+#sidebar {
+    background: #525252;
+    grid-area: sidebar;
+}
+
+#profile {
+    grid-area: profile;
+    margin-left: 20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+img.profilePic {
+    width: 150px;
+    height: 150px;
+    display: block;
+    margin: 0px auto;
+    margin-top: 20px;
+}
+
+p.name {
+    text-align: center;
+    font-size: 1.3em;
+    margin-bottom: 0px;
+    color: #525252;
+}
+
+p.email {
+    text-align: center;
+    font-size: 1em;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    color: #8c8c8c;
+}
+
+.tags {
+    white-space: nowrap;
+    text-align: center;
+}
+
+p.profileTags {
+    font-size: 0.75em;
+    display: inline-block;
+    background-color: #f2f0e9;
+    padding: 5px;
+    margin: 10px;
+}
+
+p.profileButton {
+    text-align: center;
+    margin-top: 25px;
+    color: #8c8c8c;
+}
+
+#personalInfo {
+    grid-area: personal;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.piContainer {
+    display: grid;
+    height: 50vh;
+    grid-template-columns: 0.5fr 0.5fr 0.5fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: "gender bday phone" "street city zip" "status rdate none";
+}
+
+#gender, #bday, #phone {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+#street, #city, #zip, #status, #rdate {
+    margin-left: 20px;
+}
+
+#gender {
+    grid-area: gender;
+}
+
+#bday {
+    grid-area: bday;
+}
+
+#phone {
+    grid-area: phone;
+    margin-right: 20px;
+}
+
+#street {
+    grid-area: street;
+}
+
+#city {
+    grid-area: city;
+}
+
+#zip {
+    grid-area: zip;
+    margin-right: 20px;
+}
+
+#status {
+    grid-area: status;
+    margin-bottom: 20px;
+}
+
+#rdate {
+    grid-area: rdate;
+    margin-bottom: 20px;
+}
+
+p.personalTitle {
+    font-size: 1em;
+    text-align: left;
+    color: #8c8c8c;
+}
+
+p.info {
+    font-size: 1em;
+    text-align: left;
+    color: #525252;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #8c8c8c;
+    padding-bottom: 10px;
+}
+
+#notes {
+    grid-area: notes;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 20px;
+}
+
+#notesBox {
+    margin-left: 30px;
+    margin-right: 30px;
+    background-color: #f2f0e9;
+}
+
+p.notesBox {
+    padding: 20px;
+    text-align: left;
+}
+
+p.notesDescription {
+    margin: 30px;
+    font-size: 0.9em;
+    color: #8c8c8c;
+    margin-bottom: 0px;
+}
+
+.notesDetails {
+    white-space: nowrap;
+    color: #8c8c8c;
+    font-size: 0.75em;
+}
+
+p.notesAuthor {
+    display: inline-block;
+    text-align: left;
+    margin-left: 30px;
+    margin-right: 300px;
+}
+
+p.notesDate {
+    display: inline-block;
+    text-align: right;
+    margin-right: 30px;
+}
+
+#resources {
+    grid-area: resources;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+
+p.emptyResources {
+    text-align: center;
+    padding: 100px 75px 75px 75px;
+    color: #8c8c8c;
+}
+
+p.resourcesBox {
+    border-top-style: dashed;
+    border-bottom-style: dashed;
+    border-left-style: dotted;
+    border-right-style: dotted;
+    margin: 50px 30px 30px 30px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 5px;
+    border-width: 1.5px 2px 2.2px 2px;
+    color: #8c8c8c;
+}
+
+#info {
+    grid-area: info;
+    margin-left: 20px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+li {
+    display: inline;
+    font-family: helvetica;
+    letter-spacing: 0.04em;
+    color: #8c8c8c;
+}
+
+#infoBox {
+    margin: 30px;
+    border-style: solid;
+    border-width: 1px;
+    height: 85%;
+    border-color: #8c8c8c;
+}
+
+#infoHeader {
+    background-color: #f2f0e9;
+    padding-top: 0.5px;
+    padding-bottom: 0.5px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    color: #8c8c8c;
+}
+
+li.referrals {
+    background-color: white;
+    padding-top: 16px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-style: solid;
+    border-width: 1px 1px 0px 1px;
+}
+
+li.upcoming, li.past, li.records {
+    background-color: #f2f0e9;
+    padding: 5px;
+}
+
+p.link, p.linkDescription {
+    font-weight: bold;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+p.link {
+    color: blue;
+    font-size: 1em;
+    margin-bottom: 0px;
+}
+
+p.linkDescription {
+    font-size: 0.8em;
+    margin-top: 1px;
+    color: black;
+}

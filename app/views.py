@@ -7,7 +7,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from .forms import User_Bg, User_EC, User_Demo, User_Creation_Form, User_Patient
-from .models import bg_info, ec_info, demo_info
+from .models import bg_info, ec_info, demo_info, patient_notes
 from .decorators import unauthenticated_user, allowed_user
 
 @login_required(login_url='login')
@@ -109,13 +109,16 @@ def profile(request):
         obj1 = bg_info.objects.get(user_id=current_user)
         obj2 = ec_info.objects.get(background_id=obj1.id)
         obj3 = demo_info.objects.get(background_id=obj1.id)
+        obj4 = patient_notes.objects.get(background_id=obj1.id)
     except bg_info.DoesNotExist:
         obj1 = None
         obj2 = None
         obj3 = None
+        obj4 = None
     context = {
             'object1': obj1,
             'object2': obj2,
             'object3': obj3,
+            'object4': obj4,
     }
     return render(request, 'app/profile.html', context)
