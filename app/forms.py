@@ -21,9 +21,14 @@ class BootstrapAuthenticationForm(AuthenticationForm):
 
 
 class User_Creation_Form(UserCreationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username'}),required = True)
+    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Email'}),required = True)
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),required = True)
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm'}),required = True)
     class Meta:
         model = CustomUser
         fields = ("username", "email", "password1", "password2")
+
 
 class User_Bg(ModelForm):
     firstname = forms.CharField(label='First Name',)

@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\content\profile.css" />
+    <Content Include="app\static\app\content\signup.css" />
     <Content Include="app\templates\app\home.html" />
     <Content Include="app\templates\app\reset_password_confirm.html" />
     <Content Include="app\templates\app\reset_password.html" />

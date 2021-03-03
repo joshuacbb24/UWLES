@@ -2,6 +2,7 @@
 Definition of views.
 """
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.shortcuts import render, redirect
@@ -60,7 +61,9 @@ def signup(request):
             username = form.cleaned_data.get('username')
             user_password = form.cleaned_data.get('password1')
             user_email = form.cleaned_data.get('email')
+            group = Group.objects.get(name='client')
             user = authenticate(username=username, password=user_password)
+            user.groups.add(group);
             login(request, user)
             return redirect('home')
     else:

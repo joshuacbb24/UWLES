@@ -1,0 +1,33 @@
+.signup_layout {
+    margin: auto;
+ }
+
+#id_username {
+    width: 200px;
+    height: 30px;
+    margin-top: 25px;
+    font-family: Arial;
+}
+#id_email {
+    width: 200px;
+    height: 30px;
+    font-family: Arial;
+}
+
+#id_password1 {
+    width: 200px;
+    height: 30px;
+    font-family: Arial;
+}
+
+#id_password2 {
+    width: 200px;
+    height: 30px;
+    font-family: Arial;
+}
+
+button[type=submit]{
+    background-color: limegreen;
+    color: white;
+    height: 30px;
+}
