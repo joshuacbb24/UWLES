@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+
 ]
+# CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Middleware framework
 # https://docs.djangoproject.com/en/2.1/topics/http/middleware/
@@ -108,13 +111,14 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Static files (CSS, JavaScript, Images) 
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 
-#SMTP Configuration
 
+#SMTP Configuration
+#EMAIL_BACKEND = 'django.core.mail.backends.console.Email\Backend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

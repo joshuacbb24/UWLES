@@ -60,14 +60,20 @@
     <Folder Include="app\static\app\content\" />
     <Folder Include="app\static\app\fonts\" />
     <Folder Include="app\static\app\scripts\" />
+    <Folder Include="app\static\cssForTemplate\" />
+    <Folder Include="app\static\java\" />
+    <Folder Include="app\static\images\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="tryDjango\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\content\.editorconfig" />
     <Content Include="app\static\app\content\profile.css" />
     <Content Include="app\static\app\content\signup.css" />
     <Content Include="app\templates\app\home.html" />
+    <Content Include="app\templates\app\layoutProto.html" />
+    <Content Include="app\templates\app\main.html" />
     <Content Include="app\templates\app\reset_password_confirm.html" />
     <Content Include="app\templates\app\reset_password.html" />
     <Content Include="app\templates\app\reset_password_complete.html" />

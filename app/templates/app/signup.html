@@ -1,10 +1,15 @@
-﻿{% extends 'app/index.html' %}
+﻿
+{% extends "app/layout.html" %}
+
+
 {% load static %}
 {% block content %}
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/signup.css' %}"/>
 </head>
 <h2>Sign Up</h2>
+<h4>Please create a unique username and password.</h4>
+                <hr />
 <form method="post" class="signup_layout">
     {% csrf_token %}
     <p>{{ form.username }} Required</p>
