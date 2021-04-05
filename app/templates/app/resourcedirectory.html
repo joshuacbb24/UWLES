@@ -1,0 +1,188 @@
+﻿{% load static %}
+{% block content %}
+	<head>
+		<link rel="stylesheet" type="text/css" href="{% static 'app/content/resourcelayout.css' %}"/>
+	</head>
+	
+	<body>
+		<div class="container">
+			<nav></nav>
+			<div id="sidebar"></div>
+			<div id="heading">
+				<p class="prevPages"> Home ></p> <p class ="currentPage"> Resource Directory</p>
+			</div>
+			<div id="search">
+				<div class="searchGrid">
+					<div id="searchByKeyword">
+						<input type="text" class="search1" placeholder="Search by Keyword">
+					</div>
+					<div id="searchByCity">
+						<form>
+							<input type="text" class="search2" placeholder="Search by City, County, Zip">
+						</form>
+					</div>
+				</div>
+			</div>
+			<div id="showTable">
+				<button class="button button2"> Show Table </button>
+			</div>
+			
+			<div id="disability">
+				<div class="disabilityGrid">
+					<div id="disabilityImg">
+						<!--<img src="disability image.JPG" class="disImage" alt="default resource image"/>-->
+					</div>
+					<div id="disabilityTitle">
+						<h2> {{ aging_disability.dir_name }} </h2>
+					</div>
+					<div id="disabilityDesc">
+						<p class="rDesc">{{ aging_disability.dir_descript }}</p>
+					</div>
+					<div id="exploreButton">
+						<button class="button button1"> Explore </button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="families">
+				<div class="familiesGrid">
+					<div id="familiesImg">
+						<!--<img src="families image.JPG" class="defaultImage" alt="default resource image"/>-->
+					</div>
+					<div id="familiesTitle">
+						<h2> {{ children_families.dir_name }}</h2>
+					</div>
+					<div id="familiesDesc">
+						<p class="rDesc">{{ children_families.dir_descript }}</p>
+					</div>
+					<div id="exploreButton">
+						<button class="button button1"> Explore </button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="violence">
+				<div class="violenceGrid">
+					<div id="violenceImg">
+						<!--<img src="violence image.JPG" class="defaultImage" alt="default resource image"/>-->
+					</div>
+					<div id="violenceTitle">
+						<h2>{{ domestic_family_violence.dir_name }}</h2>
+					</div>
+					<div id="violenceDesc">
+						<p class="rDesc">{{ domestic_family_violence.dir_descript }}</p>
+					</div>
+					<div id="exploreButton">
+						<button class="button button1"> Explore </button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="education">
+				<div class="educationGrid">
+					<div id="educationImg">
+						<!--<img src="education image.JPG" class="defaultImage" alt="default resource image"/>-->
+					</div>
+					<div id="educationTitle">
+						<h2>{{ education.dir_name }}</h2>
+					</div>
+					<div id="educationDesc">
+						<p class="rDesc">{{ education.dir_descript }}</p>
+					</div>
+					<div id="exploreButton">
+						<button class="button button1"> Explore </button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="employment">
+				<div class="employmentGrid">
+					<div id="employmentImg">
+						<!--<img src="employment image.JPG" class="defaultImage" alt="default resource image"/>-->
+					</div>
+					<div id="employmentTitle">
+						<h2>{{ employment.dir_name }}</h2>
+					</div>
+					<div id="employmentDesc">
+						<p class="rDesc">{{ employment.dir_descript }}</p>
+					</div>
+					<div id="exploreButton">
+						<button class="button button1"> Explore </button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="food">
+				<div class="foodGrid">
+					<div id="foodImg">
+						<!--<img src="food image.JPG" class="defaultImage" alt="default resource image"/>-->
+					</div>
+					<div id="foodTitle">
+						<h2>{{ food_services.dir_name }}</h2>
+					</div>
+					<div id="foodDesc">
+						<p class="rDesc">{{ food_services.dir_descript }}</p>
+					</div>
+					<div id="exploreButton">
+						<button class="button button1"> Explore </button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="healthcare">
+				<div class="healthcareGrid">
+					<div id="healthcareImg">
+						<!--<img src="healthcare image.JPG" class="defaultImage" alt="default resource image"/>-->
+					</div>
+					<div id="healthcareTitle">
+						<h2>{{ healthcare.dir_name }}</h2>
+					</div>
+					<div id="healthcareDesc">
+						<p class="rDesc">{{ healthcare.dir_descript }}</p>
+					</div>
+					<div id="exploreButton">
+						<button class="button button1"> Explore </button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="housing">
+				<div class="housingGrid">
+					<div id="housingImg">
+						<!--<img src="housing image.JPG" class="defaultImage" alt="default resource image"/>-->
+					</div>
+					<div id="housingTitle">
+						<h2>{{ housing_shelter.dir_name }}</h2>
+					</div>
+					<div id="housingDesc">
+						<p class="rDesc">{{ housing_shelter.dir_descript }}</p>
+					</div>
+					<div id="exploreButton">
+						<button class="button button1"> Explore </button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="legal">
+				<div class="legalGrid">
+					<div id="legalImg">
+						<!--<img src="legal image.JPG" class="defaultImage" alt="default resource image"/>-->
+					</div>
+					<div id="legalTitle">
+						<h2>{{ legal_tax_services.dir_name }}</h2>
+					</div>
+					<div id="legalDesc">
+						<p class="rDesc">{{ legal_tax_services.dir_descript }}</p>
+					</div>
+					<div id="exploreButton">
+						<button class="button button1"> Explore </button>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	
+	
+	</body>
+
+{% endblock %}

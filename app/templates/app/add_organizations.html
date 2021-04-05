@@ -1,0 +1,103 @@
+﻿{% extends 'app/layout.html' %}
+{% block content %}
+<head>
+    <style>
+        #id_org_name {
+            width: 138px;
+            height: 30px;
+            font-family: Arial;
+            margin-bottom: 5px;
+        }
+        #id_phone_number {
+            width: 138px;
+            height: 30px;
+            font-family: Arial;
+            margin-bottom: 5px;
+        }
+        #id_email {
+            width: 138px;
+            height: 30px;
+            font-family: Arial;
+            margin-bottom: 5px;
+        }
+        #id_website {
+            width: 138px;
+            height: 30px;
+            font-family: Arial;
+            margin-bottom: 5px;
+        }
+        #id_address {
+            width: 286px;
+            height: 30px;
+            font-family: Arial;
+            margin-bottom: 5px;
+        }
+        #id_city {
+            width: 132px;
+            height: 30px;
+            font-family: Arial;
+            margin-bottom: 5px;
+        }
+        #id_state {
+            width: 70px;
+            height: 30px;
+            font-family: Arial;
+            margin-bottom: 5px;
+        }
+        #id_zipcode {
+            width: 70px;
+            height: 30px;
+            font-family: Arial;
+            margin-bottom: 5px;
+        }
+        #id_description {
+            width: 280px;
+            height: 30px;
+            font-family: Arial;
+            margin-bottom: 5px;
+        }
+        #id_services_provided {
+            width: 500px;
+            height: 50px;
+            font-family: Arial;
+        }
+        div.serv {
+            border-width: 2px;
+            border-style: solid;
+            width: 286px;
+            height: 180px;
+        }
+    </style>
+</head>
+<h2>Add Organizations</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form1.org_name }}
+    {{ form1.phone_number }}
+    <br />
+
+    {{ form1.email }}
+    {{ form1.website }}
+    <br />
+
+    {{ form1.address }}
+    <br />
+
+    {{ form1.city }}
+    {{ form1.state }}
+    {{ form1.zipcode }}
+    <br />
+
+    {{ form1.description }}
+    <br />
+
+    <p>Services Provided</p>
+    <a href="{% url 'addservices' %}">Add New Service Tag</a>
+    <div class="serv">
+    {{ form1.services_provided }}
+    </div>
+    <br />
+
+    <input type="submit" />
+</form>
+{% endblock %}

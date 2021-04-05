@@ -53,7 +53,7 @@
 					</div>
 					<div id="rdate">
 						<p class="personalTitle"> Registered Date </p>
-						<p class="info"> Nov 11th, 2020 </p>
+						<p class="info"> {{ date_joined|date:"F d, Y" }}</p>
 					</div>
 					<div id="phone"> 
 						<p class="personalTitle"> Phone Number </p>
@@ -109,9 +109,8 @@
 
 {% else %}
 
-<ul>
-    <p>Not signed in!</p>
-</ul>
+ <p>Not signed in!</p>
+
 
 {% endif %}
 {% endblock %}

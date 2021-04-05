@@ -40,6 +40,12 @@
     </Compile>
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
+    <Compile Include="app\templatetags\project_templates.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\templatetags\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
@@ -55,6 +61,7 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="app\migrations\" />
+    <Folder Include="app\templatetags\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
@@ -66,12 +73,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\content\profile.css" />
+    <Content Include="app\static\app\content\resourcelayout.css" />
     <Content Include="app\static\app\content\signup.css" />
+    <Content Include="app\templates\app\addclients.html" />
+    <Content Include="app\templates\app\add_individuals.html" />
+    <Content Include="app\templates\app\add_organizations.html" />
+    <Content Include="app\templates\app\add_services.html" />
+    <Content Include="app\templates\app\add_skills.html" />
+    <Content Include="app\templates\app\clientlist.html" />
     <Content Include="app\templates\app\home.html" />
+    <Content Include="app\templates\app\removeclients.html" />
     <Content Include="app\templates\app\reset_password_confirm.html" />
     <Content Include="app\templates\app\reset_password.html" />
     <Content Include="app\templates\app\reset_password_complete.html" />
     <Content Include="app\templates\app\reset_password_done.html" />
+    <Content Include="app\templates\app\resourcedirectory.html" />
     <Content Include="app\templates\app\signup.html" />
     <Content Include="app\templates\app\userinfo.html" />
     <Content Include="app\templates\app\profile.html" />
