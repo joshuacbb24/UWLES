@@ -61,39 +61,40 @@
 
 
 
-.running div {
+.running {
     position: relative;
     height: 2.5rem;
     width: 100%;
     bottom: 2.4rem;
     background-color: #EBF2F2;
+    top: 0;
 }
 
-.running .dash {
-    position: relative;
-    float: left;
-    color: #013D44;
-    line-height: 2.5rem;
-    font-size: 1rem;
-    padding-left: 1rem;
-}
+    .running .dash {
+        position: relative;
+        float: left;
+        color: #013D44;
+        line-height: 2.5rem;
+        font-size: 1rem;
+        padding-left: 1rem;
+    }
 
-.running #dots {
-    position: relative;
-    float: right;
-    font-size: 1.7rem;
-    line-height: 2.5rem;
-    color: #013D44;
-    cursor: pointer;
-    padding-right: 16rem;
-}
+    .running #dots {
+        position: relative;
+        float: right;
+        font-size: 1.7rem;
+        line-height: 2.5rem;
+        color: #013D44;
+        cursor: pointer;
+        padding-right: 16rem;
+    }
 
 #grad {
     background-image: linear-gradient(to right, #68D0D1, #015D67, #164E66);
 }
 
 .main-content {
-    margin-top: 100px;
+    margin-top: 3.8rem;
     margin-left: 75px;
     margin-right: .5rem;
     background: #EBF2F2;

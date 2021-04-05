@@ -92,6 +92,9 @@
     <Content Include="app\static\app\content\resourcelayout.css" />
     <Content Include="app\static\app\content\signup.css" />
     <Content Include="app\static\app\content\style.css" />
+    <Content Include="app\static\app\scripts\chat.js" />
+    <Content Include="app\static\app\scripts\jquery.js" />
+    <Content Include="app\static\app\scripts\main.js" />
     <Content Include="app\templates\app\addclients.html" />
     <Content Include="app\templates\app\add_individuals.html" />
     <Content Include="app\templates\app\add_organizations.html" />
