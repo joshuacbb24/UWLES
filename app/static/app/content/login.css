@@ -1,4 +1,4 @@
-.signup_layout {
+.login_layout {
     margin: auto;
 }
 
@@ -13,7 +13,7 @@
     letter-spacing: 0.05em;
 }
 
-#id_email {
+#id_password {
     width: 200px;
     padding: 12px 20px;
     margin: 8px 0;
@@ -24,27 +24,6 @@
     letter-spacing: 0.05em;
 }
 
-#id_password1 {
-    width: 200px;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    font-family: helvetica;
-    letter-spacing: 0.05em;
-}
-
-#id_password2 {
-    width: 200px;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    font-family: helvetica;
-    letter-spacing: 0.05em;
-}
 
 
 button[type=submit] {

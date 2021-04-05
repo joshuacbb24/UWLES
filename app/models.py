@@ -59,6 +59,23 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         return True
     
+class OfflineMessage(models.Model):
+    """Messages queued for delivery when a user connnects"""
+    to_user = models.ForeignKey(Account, on_delete=models.PROTECT, related_name='offline_from_user')
+    from_user = models.ForeignKey(Account, on_delete=models.PROTECT, related_name='offline_to_user')
+    message = models.CharField(max_length=1024)
+
+class Channels(models.Model):
+    """The channel/socket associted with each user"""
+    user = models.ForeignKey(Account, on_delete=models.PROTECT, unique=True)
+    channel_name = models.CharField(max_length=512)
+
+class Messages(models.Model):
+    """"messages that have actually been delivered"""
+    to_user = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="to_user")
+    from_user = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="from_user")
+    message = models.CharField(max_length=1024)
+    sent_at = models.DateTimeField(auto_now_add=True)
 
 class BgInfo(models.Model):
     GENDER_CHOICES = (

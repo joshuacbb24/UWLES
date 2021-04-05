@@ -11,7 +11,7 @@
     <li><a href="{% url 'userinfo' %}">User Info Form</a></li>
     <li><a href="{% url 'profile' %}">Profile</a></li>
     <li><a href="{% url 'reset_password' %}">Reset Password</a></li>
-    <li><a href="{% url 'clientlist' %}">Client List</a></li>
+    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
 </ul>
 {% elif user.is_authenticated %}
 <form id="logoutForm" action="/logout/" method="post" class="navbar-right">

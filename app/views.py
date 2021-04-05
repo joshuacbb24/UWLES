@@ -360,3 +360,13 @@ def add_skills(request):
         'form1': form1,
         }
     return render(request, 'app/add_skills.html', context)
+
+@login_required(login_url='login')
+def dashboard(request):
+    users = Account.objects.exclude(pk=request.user.id)
+    return render(request, 'app/dashboard2.html', {'users': users})
+
+@login_required(login_url='login')
+def room(request):
+    users = Account.objects.exclude(pk=request.user.id)
+    return render(request, 'app/room.html', {'users': users})

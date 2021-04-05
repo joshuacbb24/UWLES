@@ -4,7 +4,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>tryDjango</Name>
     <RootNamespace>tryDjango</RootNamespace>
-    <InterpreterId>MSBuild|env2|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|env1|$(MSBuildProjectFullPath)</InterpreterId>
     <TestFramework>unittest</TestFramework>
   </PropertyGroup>
   <PropertyGroup>
@@ -35,11 +35,17 @@
     <Compile Include="app\admin.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="app\consumers.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\decorators.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
+    <Compile Include="app\routing.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\templatetags\project_templates.py">
       <SubType>Code</SubType>
     </Compile>
@@ -47,10 +53,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\tests.py" />
+    <Compile Include="app\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
     <Compile Include="manage.py" />
+    <Compile Include="tryDjango\asgi.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tryDjango\urls.py">
       <SubType>Code</SubType>
     </Compile>
@@ -72,15 +84,21 @@
     <Folder Include="tryDjango\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\content\chat.css" />
+    <Content Include="app\static\app\content\instantmessage.css" />
+    <Content Include="app\static\app\content\login.css" />
+    <Content Include="app\static\app\content\main.css" />
     <Content Include="app\static\app\content\profile.css" />
     <Content Include="app\static\app\content\resourcelayout.css" />
     <Content Include="app\static\app\content\signup.css" />
+    <Content Include="app\static\app\content\style.css" />
     <Content Include="app\templates\app\addclients.html" />
     <Content Include="app\templates\app\add_individuals.html" />
     <Content Include="app\templates\app\add_organizations.html" />
     <Content Include="app\templates\app\add_services.html" />
     <Content Include="app\templates\app\add_skills.html" />
     <Content Include="app\templates\app\clientlist.html" />
+    <Content Include="app\templates\app\dashboard2.html" />
     <Content Include="app\templates\app\home.html" />
     <Content Include="app\templates\app\removeclients.html" />
     <Content Include="app\templates\app\reset_password_confirm.html" />
@@ -88,6 +106,8 @@
     <Content Include="app\templates\app\reset_password_complete.html" />
     <Content Include="app\templates\app\reset_password_done.html" />
     <Content Include="app\templates\app\resourcedirectory.html" />
+    <Content Include="app\templates\app\room.html" />
+    <Content Include="app\templates\app\room_include.html" />
     <Content Include="app\templates\app\signup.html" />
     <Content Include="app\templates\app\userinfo.html" />
     <Content Include="app\templates\app\profile.html" />
@@ -127,10 +147,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="env2\">
-      <Id>env2</Id>
+    <Interpreter Include="env1\">
+      <Id>env1</Id>
       <Version>3.7</Version>
-      <Description>env2 (Python 3.7 (64-bit))</Description>
+      <Description>env1 (Python 3.7 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
