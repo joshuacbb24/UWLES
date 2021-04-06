@@ -1,0 +1,22 @@
+﻿{% extends 'app/layout.html' %}
+{% block content %}
+<head>
+</head>
+<h2>Client List</h2>
+<p>Client: <br /></p>
+    {% for clients in object1.clients.all %} 
+        {% for accounts in object2.all %}
+            {% if accounts.id == clients.id %}
+                {% for backgrounds in object3.all %}
+                    {% if backgrounds.user_id == accounts.id %}
+                        <li><a href="{% url 'clientsprofile' clients.id %}">{{ backgrounds }}'s Profile</a></li>
+                        <li><a href="{% url 'clientsinformation' clients.id %}">{{ backgrounds }}'s Information</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% endif  %}
+        {% endfor %}
+    <br /> 
+    {% endfor %}
+<li><a href="{% url 'addclients' %}">Add Clients</a></li>
+<li><a href="{% url 'removeclients' %}">Remove Clients</a></li>
+{% endblock %}

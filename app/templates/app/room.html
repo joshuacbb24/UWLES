@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" href="{% static 'app/content/instantmessage.css' %}" />
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
+<script src="{% static 'app/scripts/jquery.js' %}"></script>
+<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
+
+
+    <title>Chat Room</title>
+    <style>
+
+    .highlight{
+        background-color: #f1f1f1;
+    }
+    </style>
+</head>
+<body>
+    
+ 
+<div class="container">
+{% include "room_include.html" %}
+</div>
+    <script src="{% static 'app/scripts/chat.js' %}">
+       
+    </script>
+</body>
+</html>

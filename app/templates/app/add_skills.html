@@ -1,0 +1,11 @@
+﻿{% extends 'app/index.html' %}
+{% load static %}
+{% block content %}
+<h2>Add Skills Tags</h2>
+<form method="post" class="signup_layout">
+    {% csrf_token %}
+    <p>{{ form1 }}</p>
+    <br />
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
