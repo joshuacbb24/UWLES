@@ -7,7 +7,7 @@
 	<body>
 		<div class="container">
 			<nav>
-				<li></li><a href="{% url 'addindividuals' %}">add individuals</a></li>
+				<li><a href="{% url 'addindividuals' %}">Add individuals</a></li>
 			</nav>
 			<div id="sidebar"></div>
 			<div id="heading">
@@ -32,7 +32,7 @@
 			<div id="disability">
 				<div class="disabilityGrid">
 					<div id="disabilityImg">
-						<img src="{% static 'app/images/disability image.jfif' %}" class="disImage" alt="default resource image"/>
+						<img src="{% static 'app/images/disability_image.png' %}" class="defaultImage" alt="default resource image"/>
 					</div>
 					<div id="disabilityTitle">
 						<h2> {{ aging_disability.dir_name }} </h2>
@@ -49,7 +49,7 @@
 			<div id="families">
 				<div class="familiesGrid">
 					<div id="familiesImg">
-						<img src="{% static 'app/images/families image.jfif' %}" class="defaultImage" alt="default resource image"/>
+						<img src="{% static 'app/images/families_image.png' %}" class="defaultImage" alt="default resource image"/>
 					</div>
 					<div id="familiesTitle">
 						<h2> {{ children_families.dir_name }}</h2>
@@ -66,7 +66,7 @@
 			<div id="violence">
 				<div class="violenceGrid">
 					<div id="violenceImg">
-						<img src="{% static 'app/images/violence image.jfif' %}" alt="default resource image"/>
+						<img src="{% static 'app/images/violence_image.png' %}" class="defaultImage" alt="default resource image"/>
 					</div>
 					<div id="violenceTitle">
 						<h2>{{ domestic_family_violence.dir_name }}</h2>
@@ -83,7 +83,7 @@
 			<div id="education">
 				<div class="educationGrid">
 					<div id="educationImg">
-						<img src="{% static 'app/images/education image.jfif' %}" alt="default resource image"/>
+						<img src="{% static 'app/images/education_image.png' %}" class="defaultImage" alt="default resource image"/>
 					</div>
 					<div id="educationTitle">
 						<h2>{{ education.dir_name }}</h2>
@@ -100,7 +100,7 @@
 			<div id="employment">
 				<div class="employmentGrid">
 					<div id="employmentImg">
-						<img src="{% static 'app/images/employment image.jfif' %}" class="defaultImage" alt="default resource image"/>
+						<img src="{% static 'app/images/employment_image.png' %}" class="defaultImage" alt="default resource image"/>
 					</div>
 					<div id="employmentTitle">
 						<h2>{{ employment.dir_name }}</h2>
@@ -117,7 +117,7 @@
 			<div id="food">
 				<div class="foodGrid">
 					<div id="foodImg">
-						<img src="{% static 'app/images/food image.jfif' %}" alt="default resource image"/>
+						<img src="{% static 'app/images/food_image.png' %}" class="defaultImage" alt="default resource image"/>
 					</div>
 					<div id="foodTitle">
 						<h2>{{ food_services.dir_name }}</h2>
@@ -134,7 +134,7 @@
 			<div id="healthcare">
 				<div class="healthcareGrid">
 					<div id="healthcareImg">
-						<img src="{% static 'app/images/healthcare image.jfif' %}" class="defaultImage" alt="default resource image"/>
+						<img src="{% static 'app/images/healthcare_image.png' %}" class="defaultImage" alt="default resource image"/>
 					</div>
 					<div id="healthcareTitle">
 						<h2>{{ healthcare.dir_name }}</h2>
@@ -151,7 +151,7 @@
 			<div id="housing">
 				<div class="housingGrid">
 					<div id="housingImg">
-						<img src="{% static 'app/images/housing image.jfif' %}" class="defaultImage" alt="default resource image"/>
+						<img src="{% static 'app/images/housing_image.png' %}" class="defaultImage" alt="default resource image"/>
 					</div>
 					<div id="housingTitle">
 						<h2>{{ housing_shelter.dir_name }}</h2>
