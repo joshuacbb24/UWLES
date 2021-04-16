@@ -40,11 +40,13 @@ urlpatterns = [
     path('clientsinformation/<int:client_id>/', views.client_information, name='clientsinformation'),
     path('resourcedirectory/', views.resource_directory, name='resourcedirectory'),
     path('addindividuals/', views.add_individual, name='addindividuals'),
+    path('directorylist/<int:pk>/', views.load_directory, name="directorylist"),
     path('resourcelist/' , views.resourcelist, name= "resourcelist"),
     path('addorganizations/', views.add_organization, name='addorganizations'),
     path('addservices/', views.add_services, name='addservices'),
     path('addskills/', views.add_skills, name='addskills'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('makeclientaccount/', views.make_client_account, name='makeclientaccount'),
 
     path('app/', include('app.urls')),
     path('reset_password/', PasswordResetView.as_view(template_name='app/reset_password.html'), name="reset_password"),

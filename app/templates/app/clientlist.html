@@ -7,16 +7,22 @@
     {% for clients in object1.clients.all %} 
         {% for accounts in object2.all %}
             {% if accounts.id == clients.id %}
-                {% for backgrounds in object3.all %}
+                {% if accounts.id in list %}
+                    {% for backgrounds in object3.all %}
                     {% if backgrounds.user_id == accounts.id %}
                         <li><a href="{% url 'clientsprofile' clients.id %}">{{ backgrounds }}'s Profile</a></li>
                         <li><a href="{% url 'clientsinformation' clients.id %}">{{ backgrounds }}'s Information</a></li>
                     {% endif %}
                 {% endfor %}
+                {% else %}
+                    <li><a href="{% url 'clientsprofile' clients.id %}">{{ accounts }}'s Profile</a></li>
+                    <li><a href="{% url 'clientsinformation' clients.id %}">{{ accounts }}'s Information</a></li>
+                {% endif %}
             {% endif  %}
         {% endfor %}
     <br /> 
     {% endfor %}
 <li><a href="{% url 'addclients' %}">Add Clients</a></li>
 <li><a href="{% url 'removeclients' %}">Remove Clients</a></li>
+<li><a href="{% url 'makeclientaccount' %}">Create An Account For A Client</a></li>
 {% endblock %}

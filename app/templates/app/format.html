@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'app/content/format.css' %}" />
+    <script src="{% static 'app/scripts/jquery.js' %}"></script>
+    <script src="{% static 'app/scripts/format.js' %}"></script>
+	
+
+</head>
+<body>
+<div class="sidebar">
+
+
+  <div class="sidebar-menu">
+      <ul>
+          <li>
+              <a href="" class="active">
+                  <span id="fist-element" class="las la-home"></span>
+              </a>
+          </li>
+          <li>
+              <a href="">
+                  <span class="las la-book"></span>
+              </a>
+          </li>
+          <li>
+              <a href="">
+                  <span class="las la-comment-alt"></span>
+              </a>
+          </li>
+          <li>
+              <a href="">
+                  <span class="las la-user-friends"></span>
+              </a>
+          </li>
+          <li>
+            <a href="">
+                <span class="las la-plus-circle"></span>
+            </a>
+        </li>
+      </ul>
+  </div>
+</div>
+
+
+
+<header class="dash-header">
+
+  <div class="sidebar-header">
+      <span id="sidebar-toggle" class="las la-bars"></span>
+  </div>
+<div id="leftside">
+  <div class="search-wrapper">
+      <span class="las la-search"></span>
+      <input type="search" placeholder="Search here" />
+  </div>
+  <div class="vl"></div>
+    <div class="dropdown">
+      <div class="user-wrapper">
+        <span href="" class="las la-user-circle" style=color:white;></span>
+            <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
+          <div class="dropdown-content">
+            <div id="usermenu">
+            <h3>{{ user.username }}</h3>
+            <h4>Caseworker</h4>
+            </div>
+            <a href="javascript:document.getElementById('logoutForm').submit()">Logout</a>
+          </div>
+      </div>
+  </div>
+</div>
+</header>
+</body>
+</html>

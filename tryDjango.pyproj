@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\content\chat.css" />
+    <Content Include="app\static\app\content\format.css" />
     <Content Include="app\static\app\content\instantmessage.css" />
     <Content Include="app\static\app\content\login.css" />
     <Content Include="app\static\app\content\main.css" />
@@ -97,6 +98,7 @@
     <Content Include="app\static\app\content\signup.css" />
     <Content Include="app\static\app\content\style.css" />
     <Content Include="app\static\app\scripts\chat.js" />
+    <Content Include="app\static\app\scripts\format.js" />
     <Content Include="app\static\app\scripts\jquery.js" />
     <Content Include="app\static\app\scripts\main.js" />
     <Content Include="app\templates\app\addclients.html" />
@@ -106,6 +108,8 @@
     <Content Include="app\templates\app\add_skills.html" />
     <Content Include="app\templates\app\clientlist.html" />
     <Content Include="app\templates\app\dashboard2.html" />
+    <Content Include="app\templates\app\directory.html" />
+    <Content Include="app\templates\app\format.html" />
     <Content Include="app\templates\app\home.html" />
     <Content Include="app\templates\app\ListView.html" />
     <Content Include="app\templates\app\removeclients.html" />

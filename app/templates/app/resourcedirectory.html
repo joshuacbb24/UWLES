@@ -6,9 +6,6 @@
 	
 	<body>
 		<div class="container">
-			<nav>
-				<li><a href="{% url 'addindividuals' %}">Add individuals</a></li>
-			</nav>
 			<div id="sidebar"></div>
 			<div id="heading">
 				<p class="prevPages"> Home ></p> <p class ="currentPage"> Resource Directory</p>
@@ -26,7 +23,7 @@
 				</div>
 			</div>
 			<div id="showTable">
-				<button class="button button2"> Show Table </button>
+				<button class="button button2"><a href="{% url 'resourcelist' %}">Show Table</a></button>
 			</div>
 			
 			<div id="disability">
@@ -41,7 +38,7 @@
 						<p class="rDesc">{{ aging_disability.dir_descript }}</p>
 					</div>
 					<div id="exploreButton">
-						<button class="button button1"> Explore </button>
+						<button class="button button1"><a href="{% url 'directorylist' aging_disability.id %}">Explore</a></button>
 					</div>
 				</div>
 			</div>
@@ -58,7 +55,7 @@
 						<p class="rDesc">{{ children_families.dir_descript }}</p>
 					</div>
 					<div id="exploreButton">
-						<button class="button button1"> Explore </button>
+						<button class="button button1"><a href="{% url 'directorylist' children_families.id %}">Explore</a></button>
 					</div>
 				</div>
 			</div>
@@ -75,7 +72,7 @@
 						<p class="rDesc">{{ domestic_family_violence.dir_descript }}</p>
 					</div>
 					<div id="exploreButton">
-						<button class="button button1"> Explore </button>
+						<button class="button button1"><a href="{% url 'directorylist' domestic_family_violence.id %}">Explore</a></button>
 					</div>
 				</div>
 			</div>
@@ -92,7 +89,7 @@
 						<p class="rDesc">{{ education.dir_descript }}</p>
 					</div>
 					<div id="exploreButton">
-						<button class="button button1"> Explore </button>
+						<button class="button button1"><a href="{% url 'directorylist' education.id %}">Explore</a></button>
 					</div>
 				</div>
 			</div>
@@ -109,7 +106,7 @@
 						<p class="rDesc">{{ employment.dir_descript }}</p>
 					</div>
 					<div id="exploreButton">
-						<button class="button button1"> Explore </button>
+						<button class="button button1"><a href="{% url 'directorylist' employment.id %}">Explore</a></button>
 					</div>
 				</div>
 			</div>
@@ -126,7 +123,7 @@
 						<p class="rDesc">{{ food_services.dir_descript }}</p>
 					</div>
 					<div id="exploreButton">
-						<button class="button button1"> Explore </button>
+						<button class="button button1"><a href="{% url 'directorylist' food_services.id %}">Explore</a></button>
 					</div>
 				</div>
 			</div>
@@ -143,7 +140,7 @@
 						<p class="rDesc">{{ healthcare.dir_descript }}</p>
 					</div>
 					<div id="exploreButton">
-						<button class="button button1"> Explore </button>
+						<button class="button button1"><a href="{% url 'directorylist' healthcare.id %}">Explore</a></button>
 					</div>
 				</div>
 			</div>
@@ -160,7 +157,7 @@
 						<p class="rDesc">{{ housing_shelter.dir_descript }}</p>
 					</div>
 					<div id="exploreButton">
-						<button class="button button1"> Explore </button>
+						<button class="button button1"><a href="{% url 'directorylist' housing_shelter.id %}">Explore</a></button>
 					</div>
 				</div>
 			</div>
@@ -177,7 +174,7 @@
 						<p class="rDesc">{{ legal_tax_services.dir_descript }}</p>
 					</div>
 					<div id="exploreButton">
-						<button class="button button1"> Explore </button>
+						<button class="button button1"><a href="{% url 'directorylist' legal_tax_services.id %}">Explore</a></button>
 					</div>
 				</div>
 			</div>

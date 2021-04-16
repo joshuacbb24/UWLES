@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from .forms import *
 from .models import *
-from .filters import serviceFilter 
+from .filters import serviceFilter, directoryFilter
 from .decorators import unauthenticated_user, allowed_user
 
 @login_required(login_url='login')
@@ -54,57 +54,47 @@ def about(request):
     )
 
 def resourcelist(request):
+    directories = ResourceDirectory.objects.all()
     services = Services.objects.all()
-    
 
-    
-   
-    try:
-        obj1 = Articles.objects.all()
-        obj2 = Services.objects.all()
-        obj3 = ResourceDirectory.objects.all()
-       
-    except Articles.DoesNotExist:
-        obj1 = None
-        obj2 = None
-        obj3 = None
-
-    if request.method == "POST":
-        form = filter(request.POST)
-        if form.is_valid():
-            options = form.cleaned_data.get('location')
-            for option in options:
-                 #service = Services.objects.filter(service_county = option)
-                 #print(service)
-                 print(option)
+    myFilter1 = directoryFilter(request.GET, queryset=directories)
+    directories = myFilter1.qs
+    for directory in directories:
+        services = directory.dir_services.all()
+        myFilter2 = serviceFilter(request.GET, queryset=services)
+        services = myFilter2.qs
             
-            print("Printing")
-           
-
-    else:
-        print("not working")
-
-
-    myFilter1 = serviceFilter(request.GET, queryset=services)
-    services = myFilter1.qs
-   
-
-        
-        
     context = {
-            'object1': obj1,
-            'object2': obj2,
-            'object3': obj3,
-            'services' : services,
-            'myFilter1' :myFilter1,
-            } 
-           
+            'directories': directories,
+            'services': services,
+            'myFilter1': myFilter1,
+            'myFilter2': myFilter2,
+            }
+
     return render(request, 'app/ListView.html', context)
 
+def load_directory(request, pk):
+    try:
+        directory = ResourceDirectory.objects.filter(id=pk)
+    except ResourceDirectory.DoesNotExist:
+        directory = None
+    
+    myFilter1 = directoryFilter(request.GET, queryset=directory)
 
+    directories = myFilter1.qs
+    for xdirectory in directories:
+        services = xdirectory.dir_services.all()
+        myFilter2 = serviceFilter(request.GET, queryset=services)
+        services = myFilter2.qs
 
-
-
+    context = {
+            'directories': directories,
+            'services': services,
+            'myFilter1': myFilter1,
+            'myFilter2': myFilter2,
+            }
+           
+    return render(request, 'app/directory.html', context)
 
 def signup(request):
     """Renders the signup page."""
@@ -164,8 +154,7 @@ def user_information(request):
             form_four.background = form_one
             form_four.save()
             return redirect('/')
-    else:
-        print("not working properly")
+
     context = {'form1': form1,
                'form2': form2,
                'form3': form3,
@@ -208,6 +197,11 @@ def clientlist(request):
         obj1 = ClientList.objects.get(user_id=current_user)
         obj2 = Account.objects.all()
         obj3 = BgInfo.objects.all()
+        list = []
+        for objs in obj3:
+            list.append(objs.user_id)
+        print(list)
+        print(obj2)
     except ClientList.DoesNotExist:
         obj1 = None
         obj2 = None
@@ -216,6 +210,7 @@ def clientlist(request):
             'object1': obj1,
             'object2': obj2,
             'object3': obj3,
+            'list': list,
     }
     return render(request, 'app/clientlist.html', context)
 
@@ -292,26 +287,29 @@ def client_profile(request, client_id):
 def client_information(request, client_id):
     #allows caseworkers to edit client information
     current_client = client_id
-
-    form1 = User_Bg()
-    form2 = User_EC()
-    form3 = User_Demo()
-    form4 = User_Notes()
+    try:
+        instance1 = BgInfo.objects.get(user_id=current_client)
+        instance2 = EcInfo.objects.get(background=instance1)
+        instance3 = DemoInfo.objects.get(background=instance1)
+        instance4 = ClientNotes.objects.get(background=instance1)
+        form1 = User_Bg(instance=instance1)
+        form2 = User_EC(instance=instance2)
+        form3 = User_Demo(instance=instance3)
+        form4 = User_Notes(instance=instance4)
+    except BgInfo.DoesNotExist:
+        instance1 = None
+        instance2 = None
+        instance3 = None
+        instance4 = None
+        form1 = User_Bg(instance=instance1)
+        form2 = User_EC(instance=instance2)
+        form3 = User_Demo(instance=instance3)
+        form4 = User_Notes(instance=instance4)
     if request.method == 'POST':
-        try: 
-            instance1 = BgInfo.objects.get(user_id=current_client)
-            instance2 = EcInfo.objects.get(background_id=instance1)
-            instance3 = DemoInfo.objects.get(background_id=instance1)
-            instance4 = ClientNotes.objects.get(background_id=instance1)
-            form1 = User_Bg(request.POST, instance=instance1)
-            form2 = User_EC(request.POST, instance=instance2)
-            form3 = User_Demo(request.POST, instance=instance3)
-            form4 = User_Notes(request.POST, instance=instance4)
-        except BgInfo.DoesNotExist:
-            form1 = User_Bg(request.POST)
-            form2 = User_EC(request.POST)
-            form3 = User_Demo(request.POST)
-            form4 = User_Notes(request.POST)
+        form1 = User_Bg(request.POST, instance=instance1)
+        form2 = User_EC(request.POST, instance=instance2)
+        form3 = User_Demo(request.POST, instance=instance3)
+        form4 = User_Notes(request.POST, instance=instance4)
         if form1.is_valid() and form2.is_valid() and form3.is_valid() and form4.is_valid():
             form_one = form1.save(commit=False)
             form_one.user = Account.objects.get(id=current_client)
@@ -325,7 +323,7 @@ def client_information(request, client_id):
             form_four = form4.save(commit=False)
             form_four.background = form_one
             form_four.save()
-            return redirect('/')
+            return redirect('clientlist')
 
     context = {'form1': form1,
                'form2': form2,
@@ -334,8 +332,6 @@ def client_information(request, client_id):
               }
     return render(request, 'app/userinfo.html', context)
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['caseworker'])
 def resource_directory(request):
     healthcare = ResourceDirectory.objects.get(dir_name="Healthcare")
     aging_disability = ResourceDirectory.objects.get(dir_name="Aging and Disability")
@@ -424,3 +420,21 @@ def dashboard(request):
 def room(request):
     users = Account.objects.exclude(pk=request.user.id)
     return render(request, 'app/room.html', {'users': users})
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['caseworker'])
+def make_client_account(request):
+    if request.method == 'POST':
+        form = User_Creation_Form(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            user_password = form.cleaned_data.get('password1')
+            user_email = form.cleaned_data.get('email')
+            group = Group.objects.get(name="client")
+            user = authenticate(username=username, password=user_password)
+            user.groups.add(group)
+            return redirect('clientlist')
+    else:
+        form = User_Creation_Form()
+    return render(request, 'app/signup.html', {'form': form})

@@ -266,8 +266,7 @@ class ResourceDirectory(models.Model):
     dir_name = models.CharField(max_length = 50, unique = True)
     dir_descript = models.CharField(max_length = 200)
     dir_articles = models.ManyToManyField(Articles, blank = True, related_name="articles")
-    dir_organizations = models.ManyToManyField(OrganizationListing, blank = True, related_name="organizations")
-    dir_individuals = models.ManyToManyField(IndividualListing, blank = True, related_name="individuals")
+    dir_services = models.ManyToManyField(Services, blank = True, related_name="services")
 
     def __str__(self):
         return self.dir_name

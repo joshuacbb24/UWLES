@@ -35,7 +35,25 @@ class serviceFilter(django_filters.FilterSet):
                       'service_url'
                       ]
 
+class directoryFilter(django_filters.FilterSet):
+    DIRECTORY_CHOICES = (
+        ('Healthcare', 'Healthcare'),
+        ('Aging and Disability', 'Aging and Disability'),
+        ('Children and Families', 'Children and Families'),
+        ('Domestic/Family Violence', 'Domestic/Family Violence'),
+        ('Education', 'Education'),
+        ('Employment', 'Employment'),
+        ('Food Services', 'Food Services'),
+        ('Housing and Shelter', 'Housing and Shelter'),
+        ('Legal and Tax Services', 'Legal and Tax Services'),
+        )
 
+    dir_name = MultipleChoiceFilter(choices = DIRECTORY_CHOICES, widget=forms.CheckboxSelectMultiple)
+
+    class Meta:
+        model = ResourceDirectory
+        fields = '__all__'
+        exclude = ('dir_descript', 'dir_articles', 'dir_services',)
 
 
 
