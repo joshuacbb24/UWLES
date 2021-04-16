@@ -4,8 +4,9 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>tryDjango</Name>
     <RootNamespace>tryDjango</RootNamespace>
-    <InterpreterId>MSBuild|env2|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|env3|$(MSBuildProjectFullPath)</InterpreterId>
     <TestFramework>unittest</TestFramework>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -39,6 +40,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\decorators.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\filters.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\forms.py" />
@@ -103,6 +107,7 @@
     <Content Include="app\templates\app\clientlist.html" />
     <Content Include="app\templates\app\dashboard2.html" />
     <Content Include="app\templates\app\home.html" />
+    <Content Include="app\templates\app\ListView.html" />
     <Content Include="app\templates\app\removeclients.html" />
     <Content Include="app\templates\app\reset_password_confirm.html" />
     <Content Include="app\templates\app\reset_password.html" />
@@ -168,6 +173,18 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+    <Interpreter Include="env3\">
+      <Id>env3</Id>
+      <Version>3.7</Version>
+      <Description>env3 (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.7" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Django.targets" />
   <!-- Specify pre- and post-build commands in the BeforeBuild and 

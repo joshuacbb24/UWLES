@@ -40,6 +40,7 @@ urlpatterns = [
     path('clientsinformation/<int:client_id>/', views.client_information, name='clientsinformation'),
     path('resourcedirectory/', views.resource_directory, name='resourcedirectory'),
     path('addindividuals/', views.add_individual, name='addindividuals'),
+    path('resourcelist/' , views.resourcelist, name= "resourcelist"),
     path('addorganizations/', views.add_organization, name='addorganizations'),
     path('addservices/', views.add_services, name='addservices'),
     path('addskills/', views.add_skills, name='addskills'),

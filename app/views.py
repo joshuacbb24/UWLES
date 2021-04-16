@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from .forms import *
 from .models import *
+from .filters import countyFilter ,eligibilityFilter 
 from .decorators import unauthenticated_user, allowed_user
 
 @login_required(login_url='login')
@@ -51,6 +52,62 @@ def about(request):
             'year':datetime.now().year,
         }
     )
+
+def resourcelist(request):
+    county = Services.objects.all()
+    eli = Services.objects.all()
+
+    
+   
+    try:
+        obj1 = Articles.objects.all()
+        obj2 = Services.objects.all()
+        obj3 = ResourceDirectory.objects.all()
+       
+    except Articles.DoesNotExist:
+        obj1 = None
+        obj2 = None
+        obj3 = None
+
+    if request.method == "POST":
+        form = filter(request.POST)
+        if form.is_valid():
+            options = form.cleaned_data.get('location')
+            for option in options:
+                 #service = Services.objects.filter(service_county = option)
+                 #print(service)
+                 print(option)
+            
+            print("Printing")
+           
+
+    else:
+        print("not working")
+
+
+    myFilter1 = countyFilter(request.GET, queryset=county)
+    county = myFilter1.qs
+    myFilter2 = eligibilityFilter(request.GET , queryset=eli)
+    eli = myFilter2.qs
+
+        
+        
+    context = {
+            'object1': obj1,
+            'object2': obj2,
+            'object3': obj3,
+            'county' : county,
+            'myFilter1' :myFilter1,
+            'eli' : eli,
+            'myFilter2' : myFilter2,
+            } 
+           
+    return render(request, 'app/ListView.html', context)
+
+
+
+
+
 
 def signup(request):
     """Renders the signup page."""

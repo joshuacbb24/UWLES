@@ -139,3 +139,12 @@ class Add_Organization(ModelForm):
     class Meta:
         model = OrganizationListing
         fields = '__all__'
+
+class filter(forms.Form):
+    COUNTY_CHOICES = (
+        ('Worcester', 'Worcester'),
+        ('Wicomico', 'Wicomico'),
+        ('Somerset', 'Somerset'),
+        ('Dorchester', 'Dorchester'),
+        )
+    location = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=COUNTY_CHOICES)

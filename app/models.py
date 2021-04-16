@@ -185,6 +185,36 @@ class Articles(models.Model):
     def __str__(self):
         return self.article_name
 
+class Services(models.Model):
+    COUNTY_CHOICES = (
+        ('Worcester', 'Worcester'),
+        ('Wicomico', 'Wicomico'),
+        ('Somerset', 'Somerset'),
+        ('Dorchester', 'Dorchester'),
+        )
+    ELIGIBILITY_CHOICES = (
+        ('All Ages', 'All Ages'),
+        ('Children & Youth (17 and under)', 'Children & Youth (17 and under)'),
+        ('Adults (18-60)', 'Adults (18-60)'),
+        ('Seniors (60+)', 'Seniors (60+)'),
+        )
+    service_name = models.CharField(max_length = 100, unique = True)
+    service_descript = models.CharField(max_length = 500)
+    service_intake_eligibility = models.CharField(max_length = 200)
+    service_contact_name = models.CharField(max_length = 100)
+    service_contact_email = models.EmailField(max_length = 254)
+    service_contact_phone = models.CharField(max_length = 10)
+    service_contact_address = models.CharField(max_length = 100)
+    service_city = models.CharField(max_length = 25)
+    service_zipcode = models.CharField(max_length = 5)
+    service_county = models.CharField(max_length = 10, choices = COUNTY_CHOICES)
+    service_eligibility = models.CharField(max_length = 75, choices = ELIGIBILITY_CHOICES)
+    service_url = models.CharField(max_length = 5000)
+
+    def __str__(self):
+        return self.service_name
+
+
 class ServicesProvided(models.Model):
     tag = models.CharField(max_length = 25, unique = True)
 
