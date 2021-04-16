@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from .forms import *
 from .models import *
-from .filters import countyFilter ,eligibilityFilter 
+from .filters import serviceFilter 
 from .decorators import unauthenticated_user, allowed_user
 
 @login_required(login_url='login')
@@ -54,8 +54,8 @@ def about(request):
     )
 
 def resourcelist(request):
-    county = Services.objects.all()
-    eli = Services.objects.all()
+    services = Services.objects.all()
+    
 
     
    
@@ -85,10 +85,9 @@ def resourcelist(request):
         print("not working")
 
 
-    myFilter1 = countyFilter(request.GET, queryset=county)
-    county = myFilter1.qs
-    myFilter2 = eligibilityFilter(request.GET , queryset=eli)
-    eli = myFilter2.qs
+    myFilter1 = serviceFilter(request.GET, queryset=services)
+    services = myFilter1.qs
+   
 
         
         
@@ -96,10 +95,8 @@ def resourcelist(request):
             'object1': obj1,
             'object2': obj2,
             'object3': obj3,
-            'county' : county,
+            'services' : services,
             'myFilter1' :myFilter1,
-            'eli' : eli,
-            'myFilter2' : myFilter2,
             } 
            
     return render(request, 'app/ListView.html', context)

@@ -89,14 +89,6 @@
                 Search</button>
             </form>
     </div>
-
-    <div class="filter2">
-           <form method="get">
-                {{myFilter2.form}}
-                <button class="btn btn-primary" type="submit">
-                Search</button>
-            </form>
-    </div>
 </div>
 
 <div class="dropdown">
@@ -164,16 +156,16 @@ function filterFunction() {
             </tr>
             {% endfor %}
 
-            {% for service in services %} 
-            <tr>
-            <td>{{service.service_name}}</td>
-            <td>{{service.service_descript}}</td>
-            <td> View detail</td>
-            <td><a href= "{{service.service_url}}">Visit Site</a></td>
-            <td> Contact info</td>
+            {% for service in services %}
+                <tr>
+                <td>{{service.service_name}}</td>
+                <td>{{service.service_descript}}</td>
+                <td> View detail</td>
+                <td><a href= "{{service.service_url}}">Visit Site</a></td>
+                <td> Contact info</td>
              
         
-            </tr>
+                </tr>
             {% endfor %}
             
              </table>
