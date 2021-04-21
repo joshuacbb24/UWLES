@@ -1,7 +1,8 @@
 ﻿{% extends 'app/layout.html' %}
 {% block content %}
 <head>
-<meta name="viewport" content="width-device-width, intial-scale=1" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta name="viewport" content="width-device-width, intial-scale=1" />
 </head>
 <body>
 <style>
@@ -86,7 +87,7 @@
 
 <div class=" filters">
     <div class="filter1">
-           <form method="get">
+           <form method="get" id="filterForm">
                 {{myFilter1.form}}
                 {{myFilter2.form}}
                 <button class="btn btn-primary" type="submit">
@@ -117,6 +118,25 @@
 <script>
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
+
+
+    $(document).ready(function () {
+
+   // $('myfilter1').bind('change', function(event) {
+     //   $('serviceFilter').trigger("submit");
+   // });
+    console.log("registered checkbox listener.");
+   $("form input:checkbox").click(function() {
+      $("#filterForm").submit();
+        });
+    });
+
+
+
+
+
+
+
 function myFunction() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
