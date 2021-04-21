@@ -1,11 +1,14 @@
 from django.contrib import admin
 from app.models import *
 
+
 class ChannelsAdmin(admin.ModelAdmin):
     list_display = ['user', 'channel_name']
 
+
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ['from_user','to_user','message']
+    list_display = ['from_user', 'to_user', 'message']
+
 
 admin.site.register(BgInfo)
 admin.site.register(EcInfo)
@@ -20,6 +23,7 @@ admin.site.register(SkillsExpertise)
 admin.site.register(IndividualListing)
 admin.site.register(OrganizationListing)
 admin.site.register(Channels, ChannelsAdmin)
+admin.site.register(ChatGroup)
 admin.site.register(Messages, MessageAdmin)
 admin.site.register(OfflineMessage, MessageAdmin)
 admin.site.register(Services)

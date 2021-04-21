@@ -12,6 +12,7 @@ from .models import *
 from .filters import serviceFilter, directoryFilter
 from .decorators import unauthenticated_user, allowed_user
 
+
 @login_required(login_url='login')
 def home(request):
     """Renders the home page."""
@@ -19,13 +20,14 @@ def home(request):
     return render(
         request,
         'app/index.html'
-       
-        #{
-            #'title':'Home Page',
-            #'year':datetime.now().year,
-        #}
-       
+
+        # {
+        # 'title':'Home Page',
+        # 'year':datetime.now().year,
+        # }
+
     )
+
 
 def contact(request):
     """Renders the contact page."""
@@ -34,11 +36,12 @@ def contact(request):
         request,
         'app/contact.html',
         {
-            'title':'Contact',
-            'message':'Your contact page.',
-            'year':datetime.now().year,
+            'title': 'Contact',
+            'message': 'Your contact page.',
+            'year': datetime.now().year,
         }
     )
+
 
 def about(request):
     """Renders the about page."""
@@ -47,11 +50,12 @@ def about(request):
         request,
         'app/about.html',
         {
-            'title':'About',
-            'message':'Your application description page.',
-            'year':datetime.now().year,
+            'title': 'About',
+            'message': 'Your application description page.',
+            'year': datetime.now().year,
         }
     )
+
 
 def resourcelist(request):
     directories = ResourceDirectory.objects.all()
@@ -63,22 +67,23 @@ def resourcelist(request):
         services = directory.dir_services.all()
         myFilter2 = serviceFilter(request.GET, queryset=services)
         services = myFilter2.qs
-            
+
     context = {
-            'directories': directories,
-            'services': services,
-            'myFilter1': myFilter1,
-            'myFilter2': myFilter2,
-            }
+        'directories': directories,
+        'services': services,
+        'myFilter1': myFilter1,
+        'myFilter2': myFilter2,
+    }
 
     return render(request, 'app/ListView.html', context)
+
 
 def load_directory(request, pk):
     try:
         directory = ResourceDirectory.objects.filter(id=pk)
     except ResourceDirectory.DoesNotExist:
         directory = None
-    
+
     myFilter1 = directoryFilter(request.GET, queryset=directory)
 
     directories = myFilter1.qs
@@ -88,13 +93,14 @@ def load_directory(request, pk):
         services = myFilter2.qs
 
     context = {
-            'directories': directories,
-            'services': services,
-            'myFilter1': myFilter1,
-            'myFilter2': myFilter2,
-            }
-           
+        'directories': directories,
+        'services': services,
+        'myFilter1': myFilter1,
+        'myFilter2': myFilter2,
+    }
+
     return render(request, 'app/directory.html', context)
+
 
 def signup(request):
     """Renders the signup page."""
@@ -113,7 +119,8 @@ def signup(request):
     else:
         form = User_Creation_Form()
     return render(request, 'app/signup.html', {'form': form})
-    
+
+
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker', 'client'])
 def user_information(request):
@@ -159,7 +166,7 @@ def user_information(request):
                'form2': form2,
                'form3': form3,
                'form4': form4,
-              }
+               }
     return render(request, 'app/userinfo.html', context)
 
 
@@ -181,13 +188,14 @@ def profile(request):
         obj4 = None
         date_joined = None
     context = {
-            'object1': obj1,
-            'object2': obj2,
-            'object3': obj3,
-            'object4': obj4,
-            'date_joined': date_joined,
+        'object1': obj1,
+        'object2': obj2,
+        'object3': obj3,
+        'object4': obj4,
+        'date_joined': date_joined,
     }
     return render(request, 'app/profile.html', context)
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
@@ -207,12 +215,13 @@ def clientlist(request):
         obj2 = None
         obj3 = None
     context = {
-            'object1': obj1,
-            'object2': obj2,
-            'object3': obj3,
-            'list': list,
+        'object1': obj1,
+        'object2': obj2,
+        'object3': obj3,
+        'list': list,
     }
     return render(request, 'app/clientlist.html', context)
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
@@ -221,7 +230,7 @@ def add_clients(request):
     if request.method == 'POST':
         form1 = Client_List(request, request.POST)
         if form1.is_valid():
-            try: 
+            try:
                 form_one = ClientList.objects.get(user_id=request.user)
                 user = request.user
                 client = form1.cleaned_data.get('clients')
@@ -235,8 +244,9 @@ def add_clients(request):
                 qs = form1.cleaned_data.get('clients')
                 qs.update(has_caseworker=True)
             return redirect('/')
-    context = {'form1': form1,}
+    context = {'form1': form1, }
     return render(request, 'app/addclients.html', context)
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
@@ -252,8 +262,9 @@ def remove_clients(request):
             client.update(has_caseworker=False)
             ClientList.remove_client(user, client)
         return redirect('/')
-    context = {'form1': form1,}
+    context = {'form1': form1, }
     return render(request, 'app/removeclients.html', context)
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
@@ -274,18 +285,19 @@ def client_profile(request, client_id):
         obj4 = None
         date_joined = None
     context = {
-            'object1': obj1,
-            'object2': obj2,
-            'object3': obj3,
-            'object4': obj4,
-            'date_joined': date_joined,
+        'object1': obj1,
+        'object2': obj2,
+        'object3': obj3,
+        'object4': obj4,
+        'date_joined': date_joined,
     }
     return render(request, 'app/profile.html', context)
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def client_information(request, client_id):
-    #allows caseworkers to edit client information
+    # allows caseworkers to edit client information
     current_client = client_id
     try:
         instance1 = BgInfo.objects.get(user_id=current_client)
@@ -329,32 +341,39 @@ def client_information(request, client_id):
                'form2': form2,
                'form3': form3,
                'form4': form4,
-              }
+               }
     return render(request, 'app/userinfo.html', context)
+
 
 def resource_directory(request):
     healthcare = ResourceDirectory.objects.get(dir_name="Healthcare")
-    aging_disability = ResourceDirectory.objects.get(dir_name="Aging and Disability")
-    children_families = ResourceDirectory.objects.get(dir_name="Children and Families")
-    domestic_family_violence = ResourceDirectory.objects.get(dir_name="Domestic/Family Violence")
+    aging_disability = ResourceDirectory.objects.get(
+        dir_name="Aging and Disability")
+    children_families = ResourceDirectory.objects.get(
+        dir_name="Children and Families")
+    domestic_family_violence = ResourceDirectory.objects.get(
+        dir_name="Domestic/Family Violence")
     education = ResourceDirectory.objects.get(dir_name="Education")
     employment = ResourceDirectory.objects.get(dir_name="Employment")
     food_services = ResourceDirectory.objects.get(dir_name="Food Services")
-    housing_shelter = ResourceDirectory.objects.get(dir_name="Housing and Shelter")
-    legal_tax_services = ResourceDirectory.objects.get(dir_name="Legal and Tax Services")
+    housing_shelter = ResourceDirectory.objects.get(
+        dir_name="Housing and Shelter")
+    legal_tax_services = ResourceDirectory.objects.get(
+        dir_name="Legal and Tax Services")
 
     context = {
-            'healthcare': healthcare,
-            'aging_disability': aging_disability,
-            'children_families': children_families,
-            'domestic_family_violence': domestic_family_violence,
-            'education': education,
-            'employment': employment,
-            'food_services': food_services,
-            'housing_shelter': housing_shelter,
-            'legal_tax_services': legal_tax_services,
-        }
+        'healthcare': healthcare,
+        'aging_disability': aging_disability,
+        'children_families': children_families,
+        'domestic_family_violence': domestic_family_violence,
+        'education': education,
+        'employment': employment,
+        'food_services': food_services,
+        'housing_shelter': housing_shelter,
+        'legal_tax_services': legal_tax_services,
+    }
     return render(request, 'app/resourcedirectory.html', context)
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
@@ -366,8 +385,9 @@ def add_individual(request):
             return redirect('/')
     context = {
         'form1': form1,
-        }
+    }
     return render(request, 'app/add_individuals.html', context)
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
@@ -379,7 +399,7 @@ def add_organization(request):
             return redirect('/')
     context = {
         'form1': form1,
-        }
+    }
     return render(request, 'app/add_organizations.html', context)
 
 
@@ -394,8 +414,9 @@ def add_services(request):
             return redirect('/')
     context = {
         'form1': form1,
-        }
+    }
     return render(request, 'app/add_services.html', context)
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
@@ -408,18 +429,21 @@ def add_skills(request):
             return redirect('/')
     context = {
         'form1': form1,
-        }
+    }
     return render(request, 'app/add_skills.html', context)
+
 
 @login_required(login_url='login')
 def dashboard(request):
     users = Account.objects.exclude(pk=request.user.id)
     return render(request, 'app/dashboard2.html', {'users': users})
 
+
 @login_required(login_url='login')
 def room(request):
     users = Account.objects.exclude(pk=request.user.id)
     return render(request, 'app/room.html', {'users': users})
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
@@ -438,3 +462,18 @@ def make_client_account(request):
     else:
         form = User_Creation_Form()
     return render(request, 'app/signup.html', {'form': form})
+
+
+@login_required
+def multichat(request):
+    """
+    Root page view. This is essentially a single-page app, if you ignore the
+    login and admin parts.
+    """
+    # Get a list of rooms, ordered alphabetically
+    rooms = ChatGroup.objects.order_by("group_name")
+
+    # Render that in the index template
+    return render(request, "app/multichat.html", {
+        "rooms": rooms,
+    })

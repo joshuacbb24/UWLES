@@ -78,6 +78,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tryDjango.wsgi.application'
+#ASGI_APPLICATION = 'app.routing.application'
 ASGI_APPLICATION = 'tryDjango.asgi.application'
 CHANNEL_LAYERS = {
     'default': {
@@ -87,6 +88,34 @@ CHANNEL_LAYERS = {
         },
     },
 }
+NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS = True
+
+MSG_TYPE_MESSAGE = 0  # For standard messages
+MSG_TYPE_WARNING = 1  # For yellow messages
+MSG_TYPE_ALERT = 2  # For red & dangerous alerts
+MSG_TYPE_MUTED = 3  # For just OK information that doesn't bother users
+MSG_TYPE_ENTER = 4  # For just OK information that doesn't bother users
+MSG_TYPE_LEAVE = 5  # For just OK information that doesn't bother users
+
+MESSAGE_TYPES_CHOICES = (
+    (MSG_TYPE_MESSAGE, 'MESSAGE'),
+    (MSG_TYPE_WARNING, 'WARNING'),
+    (MSG_TYPE_ALERT, 'ALERT'),
+    (MSG_TYPE_MUTED, 'MUTED'),
+    (MSG_TYPE_ENTER, 'ENTER'),
+    (MSG_TYPE_LEAVE, 'LEAVE'),
+)
+
+MESSAGE_TYPES_LIST = [
+    MSG_TYPE_MESSAGE,
+    MSG_TYPE_WARNING,
+    MSG_TYPE_ALERT,
+    MSG_TYPE_MUTED,
+    MSG_TYPE_ENTER,
+    MSG_TYPE_LEAVE,
+]
+
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 DATABASES = {
@@ -94,7 +123,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'TEST': {
-            'NAME': os.path.join(BASE_DIR, 'db_test.sqlite3') #change jc made
+            'NAME': os.path.join(BASE_DIR, 'db_test.sqlite3')  # change jc made
         }
     }
 }
@@ -131,7 +160,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-#SMTP Configuration
+# SMTP Configuration
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -140,5 +169,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'uwlestestowner@gmail.com'
 EMAIL_HOST_PASSWORD = 'weloveuwles'
 
-#User selection
-AUTH_USER_MODEL="app.Account"
+# User selection
+AUTH_USER_MODEL = "app.Account"

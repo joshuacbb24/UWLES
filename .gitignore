@@ -339,3 +339,7 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /env1
+
+venv/*
+.vscode
+
