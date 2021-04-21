@@ -132,11 +132,6 @@ toggle between hiding and showing the dropdown content */
     });
 
 
-
-
-
-
-
 function myFunction() {
   document.getElementById("myDropdown").classList.toggle("show");
 }
@@ -187,7 +182,6 @@ function filterFunction() {
                 {% for service in directory.dir_services.all %}
                     {% for serv in services %}
                        {% if serv == service %}
-
                         <tr>
                         <td>{{service.service_name}}</td>
                         <td>{{directory.dir_name}}</td>

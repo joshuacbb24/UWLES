@@ -59,11 +59,9 @@ def resourcelist(request):
 
     myFilter1 = directoryFilter(request.GET, queryset=directories)
     directories = myFilter1.qs
-    for directory in directories:
-        services = directory.dir_services.all()
-        myFilter2 = serviceFilter(request.GET, queryset=services)
-        services = myFilter2.qs
-            
+    myFilter2 = serviceFilter(request.GET, queryset=services)    
+    services = myFilter2.qs
+
     context = {
             'directories': directories,
             'services': services,
@@ -78,14 +76,11 @@ def load_directory(request, pk):
         directory = ResourceDirectory.objects.filter(id=pk)
     except ResourceDirectory.DoesNotExist:
         directory = None
-    
+    services = Services.objects.all()
     myFilter1 = directoryFilter(request.GET, queryset=directory)
-
     directories = myFilter1.qs
-    for xdirectory in directories:
-        services = xdirectory.dir_services.all()
-        myFilter2 = serviceFilter(request.GET, queryset=services)
-        services = myFilter2.qs
+    myFilter2 = serviceFilter(request.GET, queryset=services)
+    services = myFilter2.qs
 
     context = {
             'directories': directories,
