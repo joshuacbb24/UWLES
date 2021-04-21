@@ -98,11 +98,9 @@ class ChatGroup(models.Model):
 
 class Messages(models.Model):
     """"messages that have actually been delivered"""
-    # TODO "to" field on this model needs to be a ChatGroup
-    to_user = models.ForeignKey(
-        Account, on_delete=models.PROTECT, related_name="to_user")
+    chat_group = models.ForeignKey(ChatGroup, on_delete=models.PROTECT)
     from_user = models.ForeignKey(
-        Account, on_delete=models.PROTECT, related_name="from_user")
+        Account, on_delete=models.PROTECT, related_name="messages_sent")
     message = models.CharField(max_length=1024)
     sent_at = models.DateTimeField(auto_now_add=True)
 

@@ -1,7 +1,7 @@
 from channels.db import database_sync_to_async
 
 from .exceptions import ClientError
-from .models import ChatGroup
+from .models import ChatGroup, Messages
 
 
 # This decorator turns this function from a synchronous function into an async one
@@ -24,3 +24,23 @@ def get_room_or_error(room_id, user):
     # if room.staff_only and not user.is_staff:
     #    raise ClientError("ROOM_ACCESS_DENIED")
     return room
+
+
+@database_sync_to_async
+def save_message(room_id, user, message):
+    """
+    Save message data to database
+    """
+    # Check if the user is logged in
+    if not user.is_authenticated:
+        raise ClientError("USER_HAS_TO_LOGIN")
+    # Find the room they requested (by ID)
+    try:
+        room = ChatGroup.objects.get(pk=room_id)
+    except ChatGroup.DoesNotExist:
+        raise ClientError("ROOM_INVALID")
+
+    message = Messages.objects.create(
+        chat_group=room, from_user=user, message=message)
+
+    return message
