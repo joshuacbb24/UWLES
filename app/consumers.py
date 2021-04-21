@@ -47,6 +47,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 # Leave the room
                 await self.leave_room(content["room"])
             elif command == "send":
+                # TODO Save message data to database
                 await self.send_room(content["room"], content["message"])
         except ClientError as e:
             # Catch any errors and send it back

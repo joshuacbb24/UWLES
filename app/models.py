@@ -63,6 +63,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
         return True
 
 
+# TODO maybe remove this model?
 class OfflineMessage(models.Model):
     """Messages queued for delivery when a user connnects"""
     to_user = models.ForeignKey(
@@ -72,6 +73,7 @@ class OfflineMessage(models.Model):
     message = models.CharField(max_length=1024)
 
 
+# TODO maybe remove this model?
 class Channels(models.Model):
     """The channel/socket associted with each user"""
     user = models.ForeignKey(Account, on_delete=models.PROTECT, unique=True)
@@ -96,6 +98,7 @@ class ChatGroup(models.Model):
 
 class Messages(models.Model):
     """"messages that have actually been delivered"""
+    # TODO "to" field on this model needs to be a ChatGroup
     to_user = models.ForeignKey(
         Account, on_delete=models.PROTECT, related_name="to_user")
     from_user = models.ForeignKey(
