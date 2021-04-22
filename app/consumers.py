@@ -3,7 +3,7 @@ from django.conf import settings
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from .exceptions import ClientError
-from .utils import get_room_or_error, save_message, create_group
+from .utils import get_room_or_error, save_message, create_group, fetch_recent
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -43,6 +43,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             if command == "join":
                 # Make them join the room
                 await self.join_room(content["room"])
+                await self.fetch_recent(content["room"])
             elif command == "leave":
                 # Leave the room
                 await self.leave_room(content["room"])

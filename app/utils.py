@@ -58,8 +58,25 @@ def create_group(newUsers, user, name):
     try:
         room = ChatGroup.objects.create(members=newUsers, created_by=user,
                                         group_name=name)
-    except ChatGroup.AlreadyExists:
+    except ChatGroup.DoesNotExist:
 
         raise ClientError("ROOM_INVALID")
 
     return room
+
+
+@database_sync_to_async
+def fetch_recent(user, room_id):
+    """
+    Print out past messages
+    """
+    # Check if the user is logged in
+    if not user.is_authenticated:
+        raise ClientError("USER_HAS_TO_LOGIN")
+    # Find the room they requested (by ID)
+    try:
+        return list(Messages.objects.filter(
+            (Q(ChatGroup=room_id)).order_by('sent_at')))
+    except ChatGroup.DoesNotExist:
+
+        raise ClientError("NO_MESSAGES")

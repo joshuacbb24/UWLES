@@ -1,4 +1,4 @@
-{% extends "app/layout.html" %}
+
 
 {% load static %}
 
@@ -13,6 +13,8 @@
     href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
     rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" />
 
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -38,11 +40,15 @@
 {% block header_text %}MultiChat Example{% endblock %}
 
 {% block content %}
-    <p>
-        &nbsp;
-    </p>
+
+<section id="users-list" style=display:block;position:relative;>
+
+        <input id="tag-input" style=display:block;position:relative; name='users-list-tags'>
 
 
+    </section>
+    <div className="row">
+        <div className="col-md-2">
     <ul class="rooms">
         {% for room in rooms %}
             <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
@@ -50,31 +56,12 @@
             <p class="empty">No chat rooms defined. Maybe make some in the <a href="{% url 'admin:index' %}">admin</a>?</p>
         {% endfor %}
     </ul>
-<p>
-    HI
-</p>
-<p>
-    HI
-</p>
-<p>
-    HI
-</p>
-<p>
-    HI
-</p>
-<p>
-    HI
-</p>
-    <div id="chats">    
-        <div class="container">
-    <section id="users-list" style=display:block;>
-
-        <input id="tag-input" style=display:block; name='users-list-tags'>
-
-
-    </section>
 </div>
+<div className="col-md-10">
+    <div id="chats"></div>    
     </div>
+    </div>
+
 
 {% endblock %}
 
