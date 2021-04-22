@@ -43,7 +43,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             if command == "join":
                 # Make them join the room
                 await self.join_room(content["room"])
-                await self.fetch_recent(content["room"])
+                messages = await fetch_recent(content["room"])
+                for message in messages:
+                    await self.send_room(content["room"], "message": message)
             elif command == "leave":
                 # Leave the room
                 await self.leave_room(content["room"])
@@ -53,7 +55,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             elif command == "create":
                 # maybe a primary key for name
                 # json parse new users for name of chat
-                await create_group(content["newUsers"], self.scope["user"])
+                room = await create_group(content["newUsers"], self.scope["user"])
         except ClientError as e:
             # Catch any errors and send it back
             await self.send_json({"error": e.code})

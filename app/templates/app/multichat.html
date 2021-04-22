@@ -41,12 +41,18 @@
 
 {% block content %}
 
+
+<!-- Make it autocomplete or somehting like that so not all users
+show in the dropdown. Maybe an onChange functionality. Make it so dropdown
+is empty when first clicked -->
+
 <section id="users-list" style=display:none;position:relative;>
 
      <p><input id="tag-input" style=display:none;position:relative; name='users-list-tags'><button style=display:none;position:relative; id="create-group"> Create </button></p>
 
 
     </section>
+
     <div className="row">
         <div className="col-md-2">
     <ul class="rooms">
@@ -68,10 +74,16 @@
 
 {% block scripts %}
 <input id="myself" type="hidden" value="{{request.user.username}}" />
+<input id="fileupload" type="file" name="file" multiple style="display: none;" data-url="{% url 'upload' %}"
+data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+
 
 <br>
     <script>
         $(function () {
+
+
+
             // Correctly decide between ws:// and wss://
             var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
             var ws_path = ws_scheme + '://' + window.location.host + "/chat/stream/";
@@ -79,6 +91,9 @@
             
             var socket = new WebSocket(ws_path);
             //var socket = new ReconnectingWebSocket(ws_path);
+
+
+
 
             // Handle incoming messages
             socket.onmessage = function (message) {
@@ -103,7 +118,6 @@
 
 
 
-
                 // Handle joining
                 if (data.join) {
                     console.log("Joining room " + data.join);
@@ -114,6 +128,10 @@
                             "<form><input><button>Send</button></form>" +
                             "</div>"
                     );
+
+
+
+
                     // Hook up send button to send a message
                     roomdiv.find("form").on("submit", function () {
                         socket.send(JSON.stringify({
@@ -125,8 +143,7 @@
                         return false;
                     });
 
-
-                    
+                   
                     
                     // Handle leaving
                 } else if (data.leave) {
@@ -190,28 +207,37 @@
             };
 
 
+
+
             // Says if we joined a room or not by if there's a div for it
             inRoom = function (roomId) {
                 return $("#room-" + roomId).length > 0;
             };
 
 
+
+
             // Room join/leave
 
-            // Show all saved messages when joining a room
-            //if already in that room either do nothing or reload that room
-            //if not in that room leave current room if in one then join the
-            //room that was clicked on
+            /* -Show all saved messages when joining a room
+            -Make it if already in that room either do nothing or reload that room
+            -if not in that room leave current room, if in one, then join the
+            room that was clicked on
+            -If not in room when a message comes in give it an unread class*/
 
             $("li.room-link").click(function () {
                 roomId = $(this).attr("data-room-id");
                 if (inRoom(roomId)) {
                     // Leave room
+
                     $(this).removeClass("joined");
                     socket.send(JSON.stringify({
                         "command": "leave",
                         "room": roomId
                     }));
+
+                    //empty chat log
+
                 } else {
                     // Join room
                     $(this).addClass("joined");
@@ -221,6 +247,9 @@
                     }));
                 }
             });
+
+
+
             
             // Creating Room
 
@@ -241,6 +270,8 @@
             $("#create-chat").click(function () {
                 if (inRoom(roomId)) {
                     // Leave room
+                    
+
                     $(this).removeClass("joined");
                     socket.send(JSON.stringify({
                         "command": "leave",
@@ -260,6 +291,8 @@
 
             })
 
+
+
             // Helpful debugging
             socket.onopen = function () {
                 console.log("Connected to chat socket");
@@ -270,6 +303,7 @@
         });
 
         
+
     </script>
        <script data-name="users-list">
         // https://www.mockaroo.com/
@@ -328,6 +362,7 @@
                     tag: tagTemplate,
                     dropdownItem: suggestionItemTemplate
                 },
+
 
                 whitelist: [
                     {% for user in users %}

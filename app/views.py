@@ -478,3 +478,55 @@ def multichat(request):
     return render(request, "app/multichat.html", {
         "rooms": rooms, 'users': users,
     })
+
+
+class BasicUploadView(View):
+    def get(self, request):
+        UploadedFiles_list = UploadedFile.objects.all()
+        return render(request, 'app/file_upload.html', {'UploadedFiles': UploadedFiles_list})
+
+    def post(self, request):
+        form = UploadFileForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['file'], request)
+            # form.save()
+            UploadedFile = form.save()
+            data = {'is_valid': True, 'name': UploadedFile.file.name,
+                    'url': UploadedFile.file.url}
+            # return redirect("/")
+        else:
+            data = {'is_valid': False}
+        return JsonResponse(data)
+
+# def upload_file(request):
+    # if request.method == 'POST':
+        #form = UploadFileForm(request.POST, request.FILES)
+        # if form.is_valid():
+        #handle_uploaded_file(request.FILES['file'], request)
+        # form.save()
+        # return redirect("/")
+    # else:
+        ##form = UploadFileForm()
+        # return render(self.request, 'app/file_upload.html', {'form': form})
+
+
+def handle_uploaded_file(f, request):
+    filename = request.user.username + f.name
+    ext = f.name.split('.')
+    if len(ext) > 1:
+        ext = ext[-1]
+    else:
+        ext = ext[0]
+
+    m = hashlib.sha256()
+    m.update(filename.encode())
+    m.update(ext.encode())
+    fname = m.hexdigest() + "." + ext
+
+    print(fname)
+    with open(fname, 'wb+') as destination:
+        print('UPLOAD BIEING HANDLED')
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+    return fname

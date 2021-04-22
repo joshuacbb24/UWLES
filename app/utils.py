@@ -47,7 +47,7 @@ def save_message(room_id, user, message):
 
 
 @database_sync_to_async
-def create_group(newUsers, user, name):
+def create_group(newUsers, user):
     """
     Create a new group
     """
@@ -58,14 +58,14 @@ def create_group(newUsers, user, name):
 
     # rename created room to list of newusers
     try:
-        for u in newUsers:
-        room.users.add(models.Account.objects.get(username=u.strip()))
-    room.users.add(user)
+       # for u in newUsers:
+       # room.users.add(models.Account.objects.get(username=u.strip()))
+        # room.users.add(user)
 
-    name = "-".join([x.username for x in room.users.all()])
+        # name = "-".join([x.username for x in room.users.all()])
 
-    room = ChatGroup.objects.create(members=newUsers, created_by=user,
-                                    group_name=)
+        room = ChatGroup.objects.create(members=newUsers, created_by=user,
+                                        group_name=newUsers)
     except ChatGroup.DoesNotExist:
 
         raise ClientError("ROOM_INVALID")
@@ -74,17 +74,14 @@ def create_group(newUsers, user, name):
 
 
 @database_sync_to_async
-def fetch_recent(user, room_id):
+def fetch_recent(room_id):
     """
     Print out past messages
     """
-    # Check if the user is logged in
-    if not user.is_authenticated:
-        raise ClientError("USER_HAS_TO_LOGIN")
     # Find the room they requested (by ID)
     try:
-        return list(Messages.objects.filter(
-            (Q(ChatGroup=room_id)).order_by('sent_at')))
-    except ChatGroup.DoesNotExist:
+        return list(Messages.objects.filter(chat_group=room_id).order_by('sent_at'))
+
+    except Messages.DoesNotExist:
 
         raise ClientError("NO_MESSAGES")
