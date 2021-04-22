@@ -44,3 +44,22 @@ def save_message(room_id, user, message):
         chat_group=room, from_user=user, message=message)
 
     return message
+
+
+@database_sync_to_async
+def create_group(newUsers, user, name):
+    """
+    Create a new group
+    """
+    # Check if the user is logged in
+    if not user.is_authenticated:
+        raise ClientError("USER_HAS_TO_LOGIN")
+    # Find the room they requested (by ID)
+    try:
+        room = ChatGroup.objects.create(members=newUsers, created_by=user,
+                                        group_name=name)
+    except ChatGroup.AlreadyExists:
+
+        raise ClientError("ROOM_INVALID")
+
+    return room

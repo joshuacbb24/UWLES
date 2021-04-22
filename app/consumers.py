@@ -3,7 +3,7 @@ from django.conf import settings
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from .exceptions import ClientError
-from .utils import get_room_or_error, save_message
+from .utils import get_room_or_error, save_message, create_group
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -49,6 +49,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             elif command == "send":
                 message = await save_message(content["room"], self.scope["user"], content["message"])
                 await self.send_room(content["room"], content["message"])
+            elif command == "create":
+                # maybe a primary key for name
+                # json parse new users for name of chat
+                await create_group(content["newUsers"], self.scope["user"], content["newName"])
         except ClientError as e:
             # Catch any errors and send it back
             await self.send_json({"error": e.code})
