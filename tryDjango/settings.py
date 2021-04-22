@@ -171,3 +171,25 @@ EMAIL_HOST_PASSWORD = 'weloveuwles'
 
 # User selection
 AUTH_USER_MODEL = "app.Account"
+
+# sending files
+
+# FILE_UPLOAD_HANDLERS = [
+# 'django.core.files.uploadhandler.MemoryFileUploadHandler',
+# 'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+# ]
+
+
+MEDIA_ROOT = BASE_DIR + "/uploaded/"
+MEDIA_URL = "/uploaded/"
+
+# S3 file storage
+#DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)

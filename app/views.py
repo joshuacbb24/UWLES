@@ -6,11 +6,14 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.shortcuts import render, redirect
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from .forms import *
 from .models import *
 from .filters import serviceFilter, directoryFilter
 from .decorators import unauthenticated_user, allowed_user
+from django.views import View
+from .forms import UploadFileForm
+from .models import UploadedFile
 
 
 @login_required(login_url='login')
@@ -478,6 +481,8 @@ def multichat(request):
     return render(request, "app/multichat.html", {
         "rooms": rooms, 'users': users,
     })
+
+# find out if the rendering htmls is correct
 
 
 class BasicUploadView(View):

@@ -2,7 +2,7 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
+/*
 html,
 body,
 div,
@@ -92,6 +92,7 @@ video {
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
+/*
 article,
 aside,
 details,
@@ -130,7 +131,7 @@ table {
 }
 
 /* Header */
-
+/*
 header {
   padding: 20px 0;
   margin: 0 0 40px 0;
@@ -150,6 +151,7 @@ header a {
 }
 
 /* Body */
+/*
 section {
   width: 800px;
   margin: 0 auto;
@@ -220,3 +222,4 @@ p {
   font-weight: bold;
   font-style: italic;
 }
+*/

@@ -3,7 +3,7 @@ from django.conf import settings
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from .exceptions import ClientError
-from .utils import get_room_or_error, save_message, create_group, fetch_recent
+from .utils import get_room_or_error, save_message, create_group, fetch_recent, RoomExistsException
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -45,7 +45,12 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 await self.join_room(content["room"])
                 messages = await fetch_recent(content["room"])
                 for message in messages:
-                    await self.send_room(content["room"], "message": message)
+                    await self.send_room(content["room"], message={
+                        'id': message.id,
+                        'text': message.message,
+                        'from_user': message.from_user.username,
+                        'sent_at': message.sent_at.strftime("%Y-%m-%d %H:%M:%S")
+                    })
             elif command == "leave":
                 # Leave the room
                 await self.leave_room(content["room"])
@@ -55,7 +60,12 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             elif command == "create":
                 # maybe a primary key for name
                 # json parse new users for name of chat
-                room = await create_group(content["newUsers"], self.scope["user"])
+                try:
+                    room = await create_group(content["newUsers"], self.scope["user"])
+                    await self.send_json({'room_id': room.id, 'name': room.group_name, 'msg_type': 'created'})
+                except RoomExistsException as inst:
+                    await self.send_json({'msg_type': 'room_exists', 'room_name': inst.room.group_name, 'room_id': inst.room.id})
+
         except ClientError as e:
             # Catch any errors and send it back
             await self.send_json({"error": e.code})

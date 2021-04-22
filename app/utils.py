@@ -1,12 +1,18 @@
 from channels.db import database_sync_to_async
 
 from .exceptions import ClientError
-from .models import ChatGroup, Messages
+from .models import ChatGroup, Messages, Account
 
+
+class RoomExistsException(Exception):
+    def __init__(self, room):
+        self.room = room
 
 # This decorator turns this function from a synchronous function into an async one
 # we can call from our async consumers, that handles Django DBs correctly.
 # For more, see http://channels.readthedocs.io/en/latest/topics/databases.html
+
+
 @database_sync_to_async
 def get_room_or_error(room_id, user):
     """
@@ -61,11 +67,19 @@ def create_group(newUsers, user):
        # for u in newUsers:
        # room.users.add(models.Account.objects.get(username=u.strip()))
         # room.users.add(user)
+        users = [x['name'] for x in newUsers]
+        users.append(user.username)
 
-        # name = "-".join([x.username for x in room.users.all()])
+        name = "-".join(users)
+        rooms = ChatGroup.objects.filter(group_name=name)
+        if rooms.exists():
 
-        room = ChatGroup.objects.create(members=newUsers, created_by=user,
-                                        group_name=newUsers)
+            raise RoomExistsException(rooms.first())
+
+        room = ChatGroup.objects.create(created_by=user,
+                                        group_name=name)
+        for member in newUsers:
+            room.members.add(member['value'])
     except ChatGroup.DoesNotExist:
 
         raise ClientError("ROOM_INVALID")
@@ -73,14 +87,14 @@ def create_group(newUsers, user):
     return room
 
 
-@database_sync_to_async
+@ database_sync_to_async
 def fetch_recent(room_id):
     """
     Print out past messages
     """
     # Find the room they requested (by ID)
     try:
-        return list(Messages.objects.filter(chat_group=room_id).order_by('sent_at'))
+        return list(Messages.objects.filter(chat_group=room_id).order_by('sent_at').select_related('from_user'))
 
     except Messages.DoesNotExist:
 
