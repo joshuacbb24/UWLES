@@ -10,6 +10,11 @@ class MessageAdmin(admin.ModelAdmin):
     list_display = ['from_user', 'chat_group', 'message']
 
 
+class RoomAdmin(admin.ModelAdmin):
+    list_display = ('created_by', 'created_at', 'name')
+
+
+admin.site.enable_nav_sidebar = False
 admin.site.register(BgInfo)
 admin.site.register(EcInfo)
 admin.site.register(DemoInfo)

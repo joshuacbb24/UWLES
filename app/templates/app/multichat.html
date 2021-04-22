@@ -47,11 +47,10 @@
 
     .chat-log {
         position: relative;
-        float: left;
-        width: 48%;
-        height: 550px;
-        overflow: hidden;
-        border-right: 1px solid #c4c4c4;
+        height: 77.3%;
+        background-color: #f8f8f8;
+        z-index: 1;
+        border-bottom: 2px solid black;
     }
 
     .left-panel {
@@ -60,6 +59,15 @@
         width: 26%;
         border-right: 1px solid #c4c4c4;
         height: 550px;
+    }
+
+    .middle-panel {
+        position: relative;
+        float: left;
+        width: 48%;
+        height: 550px;
+        overflow: hidden;
+        border-right: 1px solid #c4c4c4;
     }
 
     .rooms-container {
@@ -111,6 +119,42 @@
     .rooms li:hover {
         background-color: #eee;
     }
+
+    .input-section {
+        position: relative;
+        bottom: 0;
+    }
+
+    .user-header {
+        position: relative;
+        height: 70px;
+        background-color: white;
+        z-index: 2;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
+    }
+
+    .incoming {
+        position: relative;
+        float: left;
+        margin-bottom: 5px;
+        font-size: 14px;
+        padding: 5px 10px 5px 12px;
+        width: 80%;
+        border-radius: 3px;
+        background: #F0F0F0 none repeat scroll 0 0;
+    }
+
+    .outgoing {
+        position: relative;
+        background: #A0A0A0 none repeat scroll 0 0;
+        border-radius: 3px;
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: #fff;
+        padding: 5px 10px 5px 12px;
+        float: right;
+        width: 80%;
+    }
 </style>
 {% endblock %}
 {% block title %}MultiChat Example{% endblock %}
@@ -156,7 +200,9 @@ is empty when first clicked -->
         </section>
         <div id="#chat-log" class="chat-log"></div>
         <div class="input-section">
-
+            <input type="text" class="write_msg" placeholder="Type a message" />
+            <i id="upload-photos-button" class="las la-paperclip" style="cursor:pointer;font-size:25px;"></i>
+            <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
         </div>
     </div>
     <div class="right-panel"></div>
@@ -209,6 +255,8 @@ is empty when first clicked -->
                     "<form><input><button>Send</button></form>" +
                     "</div>"
                 );
+                $(".user-header").html(data.title);
+
 
                 // Hook up send button to send a message
                 roomdiv.find("form").on("submit", function () {
@@ -227,6 +275,8 @@ is empty when first clicked -->
             } else if (data.leave) {
                 console.log("Leaving room " + data.leave);
                 $("#room-" + data.leave).remove();
+                $(".user-header").empty();
+                $(".chat-log").empty();
                 // Handle getting a message
             } else if (data.message || data.msg_type != 0) {
                 var msgdiv = $(".chat-log");
@@ -235,12 +285,13 @@ is empty when first clicked -->
                 // msg types are defined in chat/settings.py
                 // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
                 const LEFT_ROOM = 5;
+                const cssClass = $("#myself").val() == data.from_user ? 'outgoing' : 'incoming';
                 switch (data.msg_type) {
                     case 0:
                         // Message
 
                         ok_msg =
-                            "<div class='message'>" +
+                            "<div class='cssClass'>" +
                             "<span class='username'>" +
                             data.message.from_user +
                             ": </span>" +
@@ -303,7 +354,7 @@ is empty when first clicked -->
                         console.log("Unsupported message type!");
                         return;
                 }
-                $("#chat-log").html();
+                $(".chat-log").html();
                 msgdiv.append(ok_msg);
 
                 msgdiv.scrollTop(msgdiv.prop("scrollHeight"));
@@ -349,6 +400,11 @@ is empty when first clicked -->
                         room: roomId,
                     })
                 );
+                $(".user-header").show();
+                $("#create-chat").show();
+                $("#tag-input").hide();
+                $("#users-list").hide();
+                $("#create-group").hide();
                 $(".chat-log").html(" ");
             }
         });
@@ -387,6 +443,7 @@ is empty when first clicked -->
             $("#tag-input").show();
             $("#users-list").show();
             $("#create-group").show();
+            $(".chat-log").empty();
         });
 
         $("#create-group").click(function () {

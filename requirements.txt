@@ -23,6 +23,7 @@ isort==5.8.0
 lazy-object-proxy==1.5.2
 mccabe==0.6.1
 msgpack==1.0.2
+Pillow==8.2.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycodestyle==2.7.0
