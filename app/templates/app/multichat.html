@@ -41,9 +41,9 @@
 
 {% block content %}
 
-<section id="users-list" style=display:block;position:relative;>
+<section id="users-list" style=display:none;position:relative;>
 
-        <input id="tag-input" style=display:block;position:relative; name='users-list-tags'>
+     <p><input id="tag-input" style=display:none;position:relative; name='users-list-tags'><button style=display:none;position:relative; id="create-group"> Create </button></p>
 
 
     </section>
@@ -61,13 +61,14 @@
     <div id="chats"></div>    
     </div>
     </div>
-
+    <button id='create-chat'>create new chat</button><br>
 
 {% endblock %}
 
 
 {% block scripts %}
 <input id="myself" type="hidden" value="{{request.user.username}}" />
+
 <br>
     <script>
         $(function () {
@@ -89,6 +90,20 @@
                     alert(data.error);
                     return;
                 }
+
+
+
+
+                //chat window
+
+                // Only one chat room that will be emptied when entering new rooms
+                // find a way to get only one chat room
+                $("#chats").show(roomdiv);
+
+
+
+
+
                 // Handle joining
                 if (data.join) {
                     console.log("Joining room " + data.join);
@@ -109,7 +124,10 @@
                         roomdiv.find("input").val("");
                         return false;
                     });
-                    $("#chats").append(roomdiv);
+
+
+                    
+                    
                     // Handle leaving
                 } else if (data.leave) {
                     console.log("Leaving room " + data.leave);
@@ -118,6 +136,10 @@
                 } else if (data.message || data.msg_type != 0) {
                     var msgdiv = $("#room-" + data.room + " .messages");
                     var ok_msg = "";
+                    
+                    
+                    
+                    
                     // msg types are defined in chat/settings.py
                     // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
                     switch (data.msg_type) {
@@ -167,12 +189,20 @@
                 }
             };
 
+
             // Says if we joined a room or not by if there's a div for it
             inRoom = function (roomId) {
                 return $("#room-" + roomId).length > 0;
             };
 
+
             // Room join/leave
+
+            // Show all saved messages when joining a room
+            //if already in that room either do nothing or reload that room
+            //if not in that room leave current room if in one then join the
+            //room that was clicked on
+
             $("li.room-link").click(function () {
                 roomId = $(this).attr("data-room-id");
                 if (inRoom(roomId)) {
@@ -191,6 +221,44 @@
                     }));
                 }
             });
+            
+            // Creating Room
+
+                // if room created reset all back to the way it was and add room to list
+                // if no valid input in tag create button is disabled/won't create
+                /* if statement and maybe while statement that will cycle through room names or id's and compare to what
+                 was entered in input and compare it to room names until it doesn't match room will not be created 
+                or if create button is pressed and room already exists will swap to that room*/
+
+            
+            /* Because the name has to be unique a room with the same name
+                can't be created so if we can return an error message or some
+                signifer saying room was not created it should be possible to make
+                a command to do a remote click on that room with the name that
+                already exists
+            */
+
+            $("#create-chat").click(function () {
+                if (inRoom(roomId)) {
+                    // Leave room
+                    $(this).removeClass("joined");
+                    socket.send(JSON.stringify({
+                        "command": "leave",
+                        "room": roomId
+                    }));
+                }
+
+                $("#create-chat").hide();
+                $("#tag-input").show();
+                $("#create-group").show();
+
+                socket.send(JSON.stringify({
+                        "command": "create",
+                        "newUsers": JSON.parse($("#tag-input").val()),
+                    }));
+
+
+            })
 
             // Helpful debugging
             socket.onopen = function () {

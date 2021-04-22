@@ -55,9 +55,17 @@ def create_group(newUsers, user, name):
     if not user.is_authenticated:
         raise ClientError("USER_HAS_TO_LOGIN")
     # Find the room they requested (by ID)
+
+    # rename created room to list of newusers
     try:
-        room = ChatGroup.objects.create(members=newUsers, created_by=user,
-                                        group_name=name)
+        for u in newUsers:
+        room.users.add(models.Account.objects.get(username=u.strip()))
+    room.users.add(user)
+
+    name = "-".join([x.username for x in room.users.all()])
+
+    room = ChatGroup.objects.create(members=newUsers, created_by=user,
+                                    group_name=)
     except ChatGroup.DoesNotExist:
 
         raise ClientError("ROOM_INVALID")

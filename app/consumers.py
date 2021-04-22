@@ -53,7 +53,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             elif command == "create":
                 # maybe a primary key for name
                 # json parse new users for name of chat
-                await create_group(content["newUsers"], self.scope["user"], content["newName"])
+                await create_group(content["newUsers"], self.scope["user"])
         except ClientError as e:
             # Catch any errors and send it back
             await self.send_json({"error": e.code})
