@@ -99,7 +99,7 @@ class ChatGroup(models.Model):
 
 class Messages(models.Model):
     """"messages that have actually been delivered"""
-    chat_group = models.ForeignKey(ChatGroup, on_delete=models.PROTECT)
+    chat_group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
     from_user = models.ForeignKey(
         Account, on_delete=models.PROTECT, related_name="messages_sent")
     message = models.CharField(max_length=1024)
