@@ -200,9 +200,13 @@ is empty when first clicked -->
         </section>
         <div id="#chat-log" class="chat-log"></div>
         <div class="input-section">
-            <input type="text" class="write_msg" placeholder="Type a message" />
-            <i id="upload-photos-button" class="las la-paperclip" style="cursor:pointer;font-size:25px;"></i>
-            <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+            <form class="sending-form">
+                <input type="text" style="display: none;" id="typed_msg" placeholder="Type a message" />
+                <i id="upload-photos-button" class="las la-paperclip"
+                    style="display:none;cursor:pointer;font-size:25px;"></i>
+                <button class="msg_send_btn" style="display: none;" type="submit"><i class="fa fa-paper-plane-o"
+                        aria-hidden="true"></i></button>
+            </form>
         </div>
     </div>
     <div class="right-panel"></div>
@@ -227,48 +231,74 @@ is empty when first clicked -->
 
         // Handle incoming messages
         socket.onmessage = function (message) {
-            // Decode the JSON
-            console.log("Got websocket message " + message.data);
             var data = JSON.parse(message.data);
+
             // Handle errors
             if (data.error) {
                 alert(data.error);
                 return;
             }
-
+            message = data.message
             //chat window
 
             // Only one chat room that will be emptied when entering new rooms
             // find a way to get only one chat room
 
-            // Handle joining
+
             if (data.join) {
                 console.log("Joining room " + data.join);
-                var roomdiv = $(
-                    "<div class='room' id='room-" +
-                    data.join +
-                    "'>" +
-                    "<h2>" +
-                    data.title +
-                    "</h2>" +
-                    "<div class='messages'></div>" +
-                    "<form><input><button>Send</button></form>" +
-                    "</div>"
-                );
+
+                //   console.log("myself value: " + $("#myself").val() + "data.from_user value: " + message.from_user)
+
                 $(".user-header").html(data.title);
-
-
+                /*
+                                var roomdiv = $(
+                                            "<div class='room' id='room-" + data.join + "'>" +
+                                            "<h2>" + data.title + "</h2>" +
+                                            "<div class='messages'></div>" +
+                                            "<form><input><button>Send</button></form>" +
+                                            "</div>"
+                                    );
+                
+                */
                 // Hook up send button to send a message
-                roomdiv.find("form").on("submit", function () {
+                $(".sending-form").on("submit", function () {
+                    event.preventDefault();
+                    var inputString = document.getElementById("typed_msg").value
                     socket.send(
                         JSON.stringify({
                             command: "send",
                             room: data.join,
-                            message: roomdiv.find("input").val(),
+                            message: inputString,
                         })
                     );
-                    roomdiv.find("input").val("");
+                    $("#typed_msg").val("");
                     return false;
+                });
+
+                //hook up sending files
+                /* 1. OPEN THE FILE EXPLORER WINDOW */
+                $("#upload-photos-button").click(function () {
+                    $("#fileupload").click();
+                });
+
+                /* 2. INITIALIZE THE FILE UPLOAD COMPONENT */
+                $("#fileupload").fileupload({
+                    dataType: 'json',
+                    done: function (e, data2) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
+                        if (data.result.is_valid) {
+                            /*send file to recipient and add a progress bar*/
+                            console.log("file uploaded")
+                            const message = 'file <a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
+                            socket.send(
+                                JSON.stringify({
+                                    command: "send",
+                                    room: data.join,
+                                    'message': message,
+                                })
+                            );
+                        }
+                    }
                 });
 
                 // Handle leaving
@@ -281,17 +311,18 @@ is empty when first clicked -->
             } else if (data.message || data.msg_type != 0) {
                 var msgdiv = $(".chat-log");
                 var ok_msg = "";
+                // Handle joining
+                const cssClass = $("#myself").val() == message.from_user ? 'outgoing' : 'incoming';
 
                 // msg types are defined in chat/settings.py
                 // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
                 const LEFT_ROOM = 5;
-                const cssClass = $("#myself").val() == data.from_user ? 'outgoing' : 'incoming';
                 switch (data.msg_type) {
                     case 0:
                         // Message
 
                         ok_msg =
-                            "<div class='cssClass'>" +
+                            `<div class='${cssClass}'>` +
                             "<span class='username'>" +
                             data.message.from_user +
                             ": </span>" +
@@ -400,6 +431,9 @@ is empty when first clicked -->
                         room: roomId,
                     })
                 );
+                $("#typed_msg").show();
+                $("#upload-photos-button").show();
+                $("#msg_send_btn").show();
                 $(".user-header").show();
                 $("#create-chat").show();
                 $("#tag-input").hide();
@@ -438,12 +472,15 @@ is empty when first clicked -->
                     );
                 }
             }
+            $("#upload-photos-button").hide();
             $(".user-header").hide();
             $("#create-chat").hide();
             $("#tag-input").show();
             $("#users-list").show();
             $("#create-group").show();
             $(".chat-log").empty();
+            $("#typed_msg").hide();
+            $("#msg_send_btn").hide();
         });
 
         $("#create-group").click(function () {

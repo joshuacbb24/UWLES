@@ -12,11 +12,13 @@ $(function () {
           /*send file to recipient and add a progress bar*/
           console.log("file uploaded")
           const message = 'file <a style=word-wrap:break-word; href="'+data.result.url+'" target="_blank">' + data.result.name + '</a>'
-          chatSocket.send(JSON.stringify({
-            'to': document.getElementById('username').value,
-            'message': message
-          }));
-          addMessage($("#myself").val(), message)
+          socket.send(
+            JSON.stringify({
+                command: "send",
+                room: data.join,
+                'message': message,
+            })
+        );
         }
       }
     });
