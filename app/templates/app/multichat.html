@@ -479,6 +479,7 @@ is empty when first clicked -->
                         // Message
                         let text = (data.message.text) ? data.message.text : data.message;
                         let user = (data.message.from_user) ? data.message.from_user : data.username;
+                        let time = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
                         const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
                         ok_msg =
                             `<div class='${cssClass}'>` +

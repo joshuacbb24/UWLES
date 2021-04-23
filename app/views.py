@@ -20,10 +20,10 @@ from .forms import GetBackgroundColorForm
 @login_required(login_url='login')
 def home(request):
     """Renders the home page."""
-    if request.method == 'POST':
+    """  if request.method == 'POST':
         color = GetBackgroundColorForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save() """
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -115,7 +115,10 @@ def signup(request):
     if request.method == 'POST':
         form = User_Creation_Form(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.populate_bgColor()
+            user.save()
+
             username = form.cleaned_data.get('username')
             user_password = form.cleaned_data.get('password1')
             user_email = form.cleaned_data.get('email')
@@ -510,11 +513,11 @@ class BasicUploadView(View):
 
 # def upload_file(request):
     # if request.method == 'POST':
-        #form = UploadFileForm(request.POST, request.FILES)
+        # form = UploadFileForm(request.POST, request.FILES)
         # if form.is_valid():
-        #handle_uploaded_file(request.FILES['file'], request)
+        # handle_uploaded_file(request.FILES['file'], request)
         # form.save()
         # return redirect("/")
     # else:
-        ##form = UploadFileForm()
+        # form = UploadFileForm()
         # return render(self.request, 'app/file_upload.html', {'form': form})

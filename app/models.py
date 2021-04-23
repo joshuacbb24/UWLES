@@ -2,6 +2,7 @@
 Definition of models.
 """
 
+import random
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group
@@ -64,8 +65,13 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         return True
 
+    def populate_bgColor(self):
+        random_number = random.randint(0, 16777215)
+        hex_number = format(random_number, 'x')
+        self.bgColor = '#' + hex_number
+        # TODO maybe remove this model?
 
-# TODO maybe remove this model?
+
 class OfflineMessage(models.Model):
     """Messages queued for delivery when a user connnects"""
     to_user = models.ForeignKey(

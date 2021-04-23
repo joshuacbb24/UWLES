@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,8 +36,8 @@
     </div>
 
     <div class="container body-content">
-{% block content %}{% endblock %}
-        <hr/>
+        {% block content %}{% endblock %}
+        <hr />
         <footer>
             <p>&copy; {{ year }} - My Django Application</p>
         </footer>
@@ -45,7 +46,9 @@
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
-{% block scripts %}{% endblock %}
+    <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
+    {% block scripts %}{% endblock %}
 
 </body>
+
 </html>

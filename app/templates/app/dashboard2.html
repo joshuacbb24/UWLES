@@ -18,6 +18,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
     rel="stylesheet">
 
+
   <script src="{% static 'app/scripts/main.js' %}"></script>
   <script src="{% static 'app/scripts/jquery.js' %}"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -206,7 +207,11 @@
       <div class="vl"></div>
       <div class="dropdown">
         <div class="user-wrapper">
-          <img id="profile-pic" src="{{user.avatar.url}}" data-username="{{user.username}}">
+          <div id="profile-pic-wrapper" data-username="{{user.username}}" data-bgcolor="{{user.bgColor}}">
+            {% if user.avatar %}
+            <img id="profile-pic" src="{{user.avatar.url}}">
+            {% endif %}
+          </div>
           <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
           <div class="dropdown-content">
             <div id="usermenu">
@@ -320,6 +325,7 @@
       }
     </script>
   </div>
+  <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
 </body>
 
 </html>

@@ -3,7 +3,6 @@
 {% block content %}
 <h2>Homepage</h2>
 <p>Welcome to the UWLES Prototype!, {% if user.is.authenticated %}
-    <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
     {{ user.username }}{% else %}visitor{% endif %}!
 </p>
 <p>
