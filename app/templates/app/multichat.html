@@ -1,12 +1,9 @@
 {% load static %} {% block extra_head %}
-<link rel="stylesheet" href="{% static " app/content/multichat.css" %}" type="text/css" media="screen" />
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
-<link rel="stylesheet" href="{% static 'app/content/instantmessage.css' %}" />
 <link rel="stylesheet" href="{% static 'app/content/tagify.css' %}" />
 <link rel="stylesheet" href="{% static 'app/content/tags.css' %}" />
-<link rel="stylesheet" href="{% static 'app/content/chat.css' %}" />
 <link rel="stylesheet"
-    href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css" />
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
     rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
@@ -52,7 +49,8 @@
         height: 77.3%;
         background-color: #f8f8f8;
         z-index: 1;
-        border-bottom: 2px solid black;
+        overflow: auto;
+        border-bottom: 1px solid #c4c4c4;
     }
 
     .left-panel {
@@ -157,6 +155,18 @@
         float: right;
         width: 80%;
     }
+
+    .msg_send_btn {
+        background: #4c4c4c none repeat scroll 0 0;
+        border: medium none;
+        border-radius: 50%;
+        color: #fff;
+        cursor: pointer;
+        font-size: 17px;
+        height: 33px;
+        top: 5px;
+        width: 5%;
+    }
 </style>
 {% endblock %}
 {% block title %}MultiChat Example{% endblock %}
@@ -202,14 +212,14 @@ is empty when first clicked -->
         </section>
         <div id="#chat-log" class="chat-log"></div>
         <div class="input-section">
+            <input id="fileupload" type="file" name="file" multiple style="display: none" data-url="{% url 'upload' %}"
+                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' />
             <form class="sending-form">
-                <input id="fileupload" type="file" name="file" multiple style="display: none"
-                    data-url="{#% url 'upload' %#}" data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' />
                 <input type="text" style="display: none;" id="typed_msg" placeholder="Type a message" />
                 <i id="upload-photos-button" class="las la-paperclip"
-                    style="display:none;cursor:pointer;font-size:125px;"></i>
-                <button class="msg_send_btn" style="display: none;" type="submit"><i class="fa fa-paper-plane-o"
-                        aria-hidden="true"></i></button>
+                    style="display:none;cursor:pointer;font-size:25px;"></i>
+                <button class="msg_send_btn" style="display: none;" type="submit"><i style="color: white;"
+                        class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
             </form>
         </div>
     </div>
@@ -241,34 +251,33 @@ is empty when first clicked -->
                 alert(data.error);
                 return;
             }
+
             message = data.message
-            //chat window
-
-            // Only one chat room that will be emptied when entering new rooms
-            // find a way to get only one chat room
 
 
+            // Handle joining
             if (data.join) {
                 console.log("Joining room " + data.join);
 
                 //   console.log("myself value: " + $("#myself").val() + "data.from_user value: " + message.from_user)
 
-                $(".user-header").html(data.title);
+
 
                 // Hook up send button to send a message
                 $(".sending-form").on("submit", function () {
                     event.preventDefault();
-                    var inputString = document.getElementById("typed_msg").value
                     socket.send(
                         JSON.stringify({
                             "command": "send",
                             "room": data.join,
-                            "message": inputString,
+                            "message": document.querySelector('#typed_msg').value
                         })
                     );
                     $("#typed_msg").val("");
                     return false;
                 });
+
+
 
                 //hook up sending files
                 /* 1. OPEN THE FILE EXPLORER WINDOW */
@@ -288,12 +297,14 @@ is empty when first clicked -->
                                 JSON.stringify({
                                     "command": "send",
                                     "room": data.join,
-                                    "message": message,
+                                    "message": message
                                 })
                             );
                         }
                     }
                 });
+
+                $(".user-header").html(data.title);
 
                 // Handle leaving
             } else if (data.leave) {
@@ -305,7 +316,7 @@ is empty when first clicked -->
             } else if (data.message || data.msg_type != 0) {
                 var msgdiv = $(".chat-log");
                 var ok_msg = "";
-                // Handle joining
+
                 const cssClass = $("#myself").val() == message.from_user ? 'outgoing' : 'incoming';
 
                 // msg types are defined in chat/settings.py
@@ -317,13 +328,13 @@ is empty when first clicked -->
 
                         ok_msg =
                             `<div class='${cssClass}'>` +
-                            "<span class='username'>" +
+                            `<span class='username'>` +
                             data.message.from_user +
-                            ": </span>" +
-                            "<span class='body'>" +
+                            `: </span>` +
+                            `<span class='body'>` +
                             data.message.text +
-                            "</span>" +
-                            "</div>";
+                            `</span>` +
+                            `</div>`;
                         break;
                     case 1:
                         // Warning / Advice messages
@@ -427,7 +438,7 @@ is empty when first clicked -->
                 );
                 $("#typed_msg").show();
                 $("#upload-photos-button").show();
-                $("#msg_send_btn").show();
+                $(".msg_send_btn").show();
                 $(".user-header").show();
                 $("#create-chat").show();
                 $("#tag-input").hide();
@@ -474,7 +485,7 @@ is empty when first clicked -->
             $("#create-group").show();
             $(".chat-log").empty();
             $("#typed_msg").hide();
-            $("#msg_send_btn").hide();
+            $(".msg_send_btn").hide();
         });
 
         $("#create-group").click(function () {

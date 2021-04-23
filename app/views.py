@@ -114,6 +114,7 @@ def signup(request):
             username = form.cleaned_data.get('username')
             user_password = form.cleaned_data.get('password1')
             user_email = form.cleaned_data.get('email')
+            user_avatar = form.cleaned_data.get('avatar')
             group = Group.objects.get(name="client")
             user = authenticate(username=username, password=user_password)
             user.groups.add(group)
@@ -493,7 +494,6 @@ class BasicUploadView(View):
     def post(self, request):
         form = UploadFileForm(self.request.POST, self.request.FILES)
         if form.is_valid():
-            handle_uploaded_file(request.FILES['file'], request)
             # form.save()
             UploadedFile = form.save()
             data = {'is_valid': True, 'name': UploadedFile.file.name,
@@ -513,25 +513,3 @@ class BasicUploadView(View):
     # else:
         ##form = UploadFileForm()
         # return render(self.request, 'app/file_upload.html', {'form': form})
-
-
-def handle_uploaded_file(f, request):
-    filename = request.user.username + f.name
-    ext = f.name.split('.')
-    if len(ext) > 1:
-        ext = ext[-1]
-    else:
-        ext = ext[0]
-
-    m = hashlib.sha256()
-    m.update(filename.encode())
-    m.update(ext.encode())
-    fname = m.hexdigest() + "." + ext
-
-    print(fname)
-    with open(fname, 'wb+') as destination:
-        print('UPLOAD BIEING HANDLED')
-        for chunk in f.chunks():
-            destination.write(chunk)
-
-    return fname
