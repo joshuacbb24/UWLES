@@ -410,6 +410,7 @@ is empty when first clicked -->
 <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
 <script>
     let roomId = false;
+    let sent = false;
     $(function () {
         // Correctly decide between ws:// and wss://
         var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
@@ -440,6 +441,7 @@ is empty when first clicked -->
 
                 // Hook up send button to send a message
                 $(".sending-form").on("submit", function () {
+
                     event.preventDefault();
                     socket.send(
                         JSON.stringify({
@@ -447,11 +449,9 @@ is empty when first clicked -->
                             "room": data.join,
                             "message": document.querySelector('#typed_msg').value
                         })
-
-
                     );
                     $("#typed_msg").val("");
-                    return false;
+                    sent = true;
                 });
 
 
@@ -477,6 +477,7 @@ is empty when first clicked -->
                                     "message": message
                                 })
                             );
+                            sent = true;
                         }
                     }
                 });
@@ -505,15 +506,13 @@ is empty when first clicked -->
 
                         let text = (data.message.text) ? data.message.text : data.message;
                         let user = (data.message.from_user) ? data.message.from_user : data.username;
-                        if statement for where user.username is not equal to data.message.from_user
+                        //if statement for where user.username is not equal to data.message.from_user
                         let time = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
                         const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
+
                         if (cssClass == 'outgoing') {
                             ok_msg =
-                                `<div class=''>` +
-                                `<span class='username'>` +
-                                user +
-                                `: </span>` +
+                                `<div class='chat-wrapper'>` +
                                 `<div class='${cssClass}'>` +
                                 `<span class='body'>` +
                                 text +
@@ -523,28 +522,18 @@ is empty when first clicked -->
                         } else {
                             ok_msg =
                                 `<div class='chat-wrapper'>` +
-                                `<span class='username'>` +
-                                user +
-                                `: </span>` +
-                                `{% if user.username != data.message.from_user}` +
-                                `< div class='profile-pic-wrapper' data-username="{{data.message.from_user}}" data-bgcolor="{{data.message.from_user.bgColor}}" >
-                                {% if user.avatar %} `+
-                                `< img class='profile-pic' src = "{{data.message.from_user.avatar.url}}" >
-                            {% endif %} ` +
-                                `{% endif %}` +
-                                `</div > ` +
-                                `< div class='${cssClass}' > ` +
-                                `< span class='body' > ` +
+                                `<div class='${cssClass}'>` +
+                                `<span class='body'>` +
                                 text +
-                                `</span > ` +
-                                `</div > ` +
-                                `</div > `;
+                                `</span>` +
+                                `</div>` +
+                                `</div>`;
 
-                            //play sound only on receiving end and not when you first join or when you send
-                            var x = document.getElementById("chatAudio");
-                            x.play();
+                            if (sent) {
+                                var x = document.getElementById("chatAudio");
+                                x.play();
+                            }
                         }
-
 
                         break;
                     case 1:
