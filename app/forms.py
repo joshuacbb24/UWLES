@@ -195,3 +195,9 @@ class UploadFileForm(forms.ModelForm):
     class Meta:
         model = UploadedFile
         fields = ['file']
+
+
+class GetBackgroundColorForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['bgColor']

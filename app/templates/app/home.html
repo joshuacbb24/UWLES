@@ -1,9 +1,12 @@
 ﻿{% extends 'app/index.html' %}
 <!-- working on creating a basic homepage by scartch -->
 {% block content %}
-    <h2>Homepage</h2>
-    <p>Welcome to the UWLES Prototype!, {% if user.is.authenticated %}{{ user.username }}{% else %}visitor{% endif %}!</p>
-    <p>
-        <strong>Total users registered: </strong> {{ count }}
-    </p>
+<h2>Homepage</h2>
+<p>Welcome to the UWLES Prototype!, {% if user.is.authenticated %}
+    <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
+    {{ user.username }}{% else %}visitor{% endif %}!
+</p>
+<p>
+    <strong>Total users registered: </strong> {{ count }}
+</p>
 {% endblock %}

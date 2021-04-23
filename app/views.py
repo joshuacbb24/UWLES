@@ -14,11 +14,16 @@ from .decorators import unauthenticated_user, allowed_user
 from django.views import View
 from .forms import UploadFileForm
 from .models import UploadedFile
+from .forms import GetBackgroundColorForm
 
 
 @login_required(login_url='login')
 def home(request):
     """Renders the home page."""
+    if request.method == 'POST':
+        color = GetBackgroundColorForm(request.POST)
+        if form.is_valid():
+            form.save()
     assert isinstance(request, HttpRequest)
     return render(
         request,
