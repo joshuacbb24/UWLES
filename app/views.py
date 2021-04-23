@@ -484,7 +484,8 @@ def multichat(request):
     """
     # Get a list of rooms, ordered alphabetically
     users = Account.objects.exclude(pk=request.user.id)
-    rooms = ChatGroup.objects.order_by("group_name")
+    rooms = ChatGroup.objects.filter(
+        members=request.user).order_by("group_name")
 
     # Render that in the index template
     return render(request, "app/multichat.html", {

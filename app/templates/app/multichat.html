@@ -341,10 +341,9 @@ is empty when first clicked -->
                 {% for room in rooms %}
                 <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
                 {% empty %}
-                <li class="empty">
-                    No chat rooms defined. Maybe make some in the
-                    <a href="{% url 'admin:index' %}">admin</a>?
-                </li>
+                <p>
+                    No chat rooms.
+                </p>
                 {% endfor %}
             </div>
         </div>
@@ -383,6 +382,9 @@ is empty when first clicked -->
 
 
 <br />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"
+    integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA=="
+    crossorigin="anonymous"></script>
 <script>
     let roomId = false;
     $(function () {
@@ -391,8 +393,8 @@ is empty when first clicked -->
         var ws_path = ws_scheme + "://" + window.location.host + "/chat/stream/";
         console.log("Connecting to " + ws_path);
 
-        var socket = new WebSocket(ws_path);
-        //var socket = new ReconnectingWebSocket(ws_path);
+        //var socket = new WebSocket(ws_path);
+        var socket = new ReconnectingWebSocket(ws_path);
 
         // Handle incoming messages
         socket.onmessage = function (message) {
