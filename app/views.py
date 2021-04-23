@@ -108,7 +108,7 @@ def load_directory(request, pk):
 def signup(request):
     """Renders the signup page."""
     if request.method == 'POST':
-        form = User_Creation_Form(request.POST)
+        form = User_Creation_Form(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')

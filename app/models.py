@@ -38,6 +38,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     avatar = models.ImageField(null=True, blank=True, upload_to='profile_pics')
+    bgColor = models.CharField(max_length=10, null=True, blank=True)
     date_joined = models.DateTimeField(
         verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
