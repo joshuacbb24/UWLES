@@ -207,9 +207,9 @@
       <div class="vl"></div>
       <div class="dropdown">
         <div class="user-wrapper">
-          <div id="profile-pic-wrapper" data-username="{{user.username}}" data-bgcolor="{{user.bgColor}}">
+          <div class="profile-pic-wrapper" data-username="{{user.username}}" data-bgcolor="{{user.bgColor}}">
             {% if user.avatar %}
-            <img id="profile-pic" src="{{user.avatar.url}}">
+            <img class="profile-pic" src="{{user.avatar.url}}">
             {% endif %}
           </div>
           <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>

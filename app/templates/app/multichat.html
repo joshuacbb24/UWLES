@@ -319,6 +319,25 @@
     #status-options ul li#status-offline.active span.status-circle:before {
         border: 1px solid #95a5a6;
     }
+
+    .profile-pic {
+        max-width: 32px;
+        max-height: 32px;
+        width: 32px;
+        height: 32px;
+        white-space: normal;
+        margin-right: 15px;
+        border-radius: 50%;
+        font-size: 16px;
+        color: #fff;
+        text-align: center;
+        line-height: 150px;
+        cursor: context-menu;
+        overflow: hidden;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
 </style>
 {% endblock %}
 {% block title %}MultiChat Example{% endblock %}
@@ -382,9 +401,13 @@ is empty when first clicked -->
 
 
 <br />
+<audio id="chatAudio">
+    <source src="{% static 'app/audio/notification.mp3' %}" type="audio/mpeg">
+</audio>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"
     integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA=="
     crossorigin="anonymous"></script>
+<script src="{% static 'app/scripts/default_avatar.js' %}"></script>
 <script>
     let roomId = false;
     $(function () {
@@ -479,19 +502,50 @@ is empty when first clicked -->
                 switch (data.msg_type) {
                     case 0:
                         // Message
+
                         let text = (data.message.text) ? data.message.text : data.message;
                         let user = (data.message.from_user) ? data.message.from_user : data.username;
+                        if statement for where user.username is not equal to data.message.from_user
                         let time = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
                         const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
-                        ok_msg =
-                            `<div class='${cssClass}'>` +
-                            `<span class='username'>` +
-                            user +
-                            `: </span>` +
-                            `<span class='body'>` +
-                            text +
-                            `</span>` +
-                            `</div>`;
+                        if (cssClass == 'outgoing') {
+                            ok_msg =
+                                `<div class=''>` +
+                                `<span class='username'>` +
+                                user +
+                                `: </span>` +
+                                `<div class='${cssClass}'>` +
+                                `<span class='body'>` +
+                                text +
+                                `</span>` +
+                                `</div>` +
+                                `</div>`;
+                        } else {
+                            ok_msg =
+                                `<div class='chat-wrapper'>` +
+                                `<span class='username'>` +
+                                user +
+                                `: </span>` +
+                                `{% if user.username != data.message.from_user}` +
+                                `< div class='profile-pic-wrapper' data-username="{{data.message.from_user}}" data-bgcolor="{{data.message.from_user.bgColor}}" >
+                                {% if user.avatar %} `+
+                                `< img class='profile-pic' src = "{{data.message.from_user.avatar.url}}" >
+                            {% endif %} ` +
+                                `{% endif %}` +
+                                `</div > ` +
+                                `< div class='${cssClass}' > ` +
+                                `< span class='body' > ` +
+                                text +
+                                `</span > ` +
+                                `</div > ` +
+                                `</div > `;
+
+                            //play sound only on receiving end and not when you first join or when you send
+                            var x = document.getElementById("chatAudio");
+                            x.play();
+                        }
+
+
                         break;
                     case 1:
                         // Warning / Advice messages
@@ -534,7 +588,7 @@ is empty when first clicked -->
                         ok_msg =
                             "<div class='contextual-message text-muted'>room created</div>";
                         $(".rooms").append(
-                            `<li class="room-link" data-room-id="${data.room_id}">${data.name}</li>`
+                            `< li class="room-link" data - room - id="${data.room_id}" > ${data.name}</li >`
                         );
                         break;
                     case "room_exists":
@@ -610,7 +664,7 @@ is empty when first clicked -->
         // if room created reset all back to the way it was and add room to list
         // if no valid input in tag create button is disabled/won't create
         /* if statement and maybe while statement that will cycle through room names or id's and compare to what
-                         was entered in input and compare it to room names until it doesn't match room will not be created 
+                         was entered in input and compare it to room names until it doesn't match room will not be created
                         or if create button is pressed and room already exists will swap to that room*/
 
         /* Because the name has to be unique a room with the same name
@@ -678,37 +732,37 @@ is empty when first clicked -->
 
         function tagTemplate(tagData) {
             return `
-          <tag title="${tagData.email}"
-                  contenteditable='false'
-                  spellcheck='false'
-                  tabIndex="-1"
-                  class="tagify__tag ${tagData.class ? tagData.class : ""}"
-                  ${this.getAttributes(tagData)}>
+                    < tag title = "${tagData.email}"
+                contenteditable = 'false'
+                spellcheck = 'false'
+                tabIndex = "-1"
+                class="tagify__tag ${tagData.class ? tagData.class : ""}"
+                ${this.getAttributes(tagData)}>
               <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
-              <div>
-                  <div class='tagify__tag__avatar-wrap'>
-                      <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                                    <div>
+                                        <div class='tagify__tag__avatar-wrap'>
+                                            <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
                   </div>
-                  <span class='tagify__tag-text'>${tagData.name}</span>
-              </div>
+                                            <span class='tagify__tag-text'>${tagData.name}</span>
+                                        </div>
           </tag>
-      `
+                `
         }
 
         function suggestionItemTemplate(tagData) {
             return `
-          <div ${this.getAttributes(tagData)}
-              class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
-              tabindex="0"
-              role="option">
-              ${tagData.avatar ? `
+                    < div ${this.getAttributes(tagData)}
+                class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+                tabindex = "0"
+                role = "option" >
+                    ${tagData.avatar ? `
               <div class='tagify__dropdown__item__avatar-wrap'>
                   <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
               </div>` : ''
                 }
-              <strong>${tagData.name}</strong>
-              <span>${tagData.email}</span>
-          </div>
+                                        <strong>${tagData.name}</strong>
+                                        <span>${tagData.email}</span>
+                                    </div >
       `
         }
 
@@ -733,9 +787,9 @@ is empty when first clicked -->
                 {% for user in users %}
           {
                 "value": {{ user.pk }},
-        "name": "{{user.username}}",
-            "avatar": "{{user.avatar}}",
-                "email": "{{user.email}}"
+        "name": "{{ user.username }}",
+            "avatar": "{{ user.avatar }}",
+                "email": "{{ user.email }}"
           },
     {% endfor %}
       ]
