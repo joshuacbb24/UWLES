@@ -49,7 +49,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         'id': message.id,
                         'text': message.message,
                         'from_user': message.from_user.username,
-                        'sent_at': message.sent_at.strftime("%Y-%m-%d %H:%M:%S")
+                        'sent_at': message.sent_at.strftime("%Y-%m-%d %H:%M:%S %p")
                     })
             elif command == "leave":
                 # Leave the room

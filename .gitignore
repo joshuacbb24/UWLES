@@ -342,4 +342,6 @@ healthchecksdb
 
 venv/*
 .vscode
-
+env
+env2
+env3
