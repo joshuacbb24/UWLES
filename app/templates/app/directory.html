@@ -2,6 +2,8 @@
 {% block content %}
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <meta name="viewport" content="width-device-width, intial-scale=1" />
 </head>
 <body>
@@ -82,6 +84,159 @@
     ul {
         list-style-type: none;
     }
+    .modal-open {
+    overflow: hidden;
+}
+
+    body.modal-open,
+    .modal-open .navbar-fixed-top,
+    .modal-open .navbar-fixed-bottom {
+        margin-right: 15px;
+    }
+
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    display: none;
+    overflow: auto;
+    overflow-y: scroll;
+}
+
+    .modal.fade .modal-dialog {
+        -webkit-transform: translate(0, -25%);
+        -ms-transform: translate(0, -25%);
+        transform: translate(0, -25%);
+        -webkit-transition: -webkit-transform 0.3s ease-out;
+        -moz-transition: -moz-transform 0.3s ease-out;
+        -o-transition: -o-transform 0.3s ease-out;
+        transition: transform 0.3s ease-out;
+    }
+
+    .modal.in .modal-dialog {
+        -webkit-transform: translate(0, 0);
+        -ms-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+
+.modal-dialog {
+    z-index: 1050;
+    width: auto;
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #ffffff;
+    border: 1px solid #999999;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    outline: none;
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+    background-clip: padding-box;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+    background-color: #000000;
+    opacity: 0.5 !important;
+}
+
+    .modal-backdrop.fade {
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+
+    .modal-backdrop.in {
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+    }
+
+.modal-header {
+    min-height: 16.428571429px;
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+    .modal-header .close {
+        margin-top: -2px;
+    }
+
+.modal-title {
+    margin: 0;
+    line-height: 1.428571429;
+}
+
+.modal-body {
+    position: relative;
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 19px 20px 20px;
+    margin-top: 15px;
+    text-align: right;
+    border-top: 1px solid #e5e5e5;
+}
+
+    .modal-footer:before,
+    .modal-footer:after {
+        display: table;
+        content: " ";
+    }
+
+    .modal-footer:after {
+        clear: both;
+    }
+
+    .modal-footer:before,
+    .modal-footer:after {
+        display: table;
+        content: " ";
+    }
+
+    .modal-footer:after {
+        clear: both;
+    }
+
+    .modal-footer .btn + .btn {
+        margin-bottom: 0;
+        margin-left: 5px;
+    }
+
+    .modal-footer .btn-group .btn + .btn {
+        margin-left: -1px;
+    }
+
+    .modal-footer .btn-block + .btn-block {
+        margin-left: 0;
+    }
+
+@media screen and (min-width: 768px) {
+    .modal-dialog {
+        right: auto;
+        left: 50%;
+        width: 600px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .modal-content {
+        -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+}
 </style>
 
 
@@ -149,7 +304,11 @@ function filterFunction() {
       a[i].style.display = "none";
     }
   }
-}
+    }
+
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
 </script>
 
 <h2>Article List</h2>
@@ -170,9 +329,24 @@ function filterFunction() {
                 <tr>
                 <td>{{article.article_name}}</td>
                 <td>{{directory.dir_name}}</td>
-                <td> View detail</td>
+                <td><a href="" data-toggle="modal" data-target="#ArticleInfo">View detail</a></td>
+                <div class="modal" tabindex="-1" role="dialog" id="ArticleInfo">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{article.article_name}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                {{article.article_descript}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <td><a href= "{{article.article_content}}">Visit Site</a></td>
-                <td> Contact info</td>
+                <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{article.article_content}}">Contact Info</a></td>
              
         
                 </tr>
@@ -185,9 +359,35 @@ function filterFunction() {
                         <tr>
                         <td>{{service.service_name}}</td>
                         <td>{{directory.dir_name}}</td>
-                        <td> View detail</td>
+                        <td><a href="" data-toggle="modal" data-target="#ServiceInfo">View detail</a></td>
+                        <div class="modal" tabindex="-1" role="dialog" id="ServiceInfo">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">{{service.service_name}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <a style="font-size: 30px" href= "{{service.service_url}}">Visit Site</a>
+                                        <p>{{service.service_descript}}</p>
+                                        <p>Intake and Eligibility: {{service.service_intake_eligibility}}</p>
+                                        <h2>Main Contact:</h2>
+                                            <p>NAME: {{service.service_contact_name}}</p>
+                                            <p>EMAIL: {{service.service_contact_email}}</p>
+                                            <p>PHONE: {{service.service_contact_phone}}</p>
+                                        <h2>Address Information:</h2>
+                                            <p>ADDRESS: {{service.service_contact_address}}</p>
+                                            <p>CITY: {{service.service_city}}</p>
+                                            <p>ZIPCODE: {{service.service_zipcode}}</p>
+                                            <p>COUNTY: {{service.service_county}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <td><a href= "{{service.service_url}}">Visit Site</a></td>
-                        <td> Contact info</td>
+                        <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{service.service_contact_name}}<br/>{{service.service_contact_email}}<br/>{{service.service_contact_phone}}">Contact Info</a></td>
                         </tr>
                         {% endif %}
                     {% endfor %}
