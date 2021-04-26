@@ -510,7 +510,7 @@ is empty when first clicked -->
                         let text = (typeof data.message == 'object') ? data.message.text : data.message;
                         let user = (typeof data.message == 'object' && data.message.from_user) ? data.message.from_user : data.username;
 
-                        let avatar = data.message.avatar ? '<img width="64" src="' + data.message.avatar + '">' : '<div class="profile-pic-wrapper" data-username="' + data.message.from_user + '" data-bgcolor="' + data.message.default + '"></div>'
+                        let avatar = data.message.avatar ? '<img class="profile-pic" src="' + data.message.avatar + '">' : '<div class="profile-pic-wrapper" data-username="' + data.message.from_user + '" data-bgcolor="' + data.message.default + '"></div>'
                         //if statement for where user.username is not equal to data.message.from_user
                         let time = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
                         const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
