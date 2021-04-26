@@ -49,6 +49,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         'id': message.id,
                         'text': message.message,
                         'from_user': message.from_user.username,
+                        'avatar': message.from_user.avatar.url if message.from_user.avatar else '',
+                        'default': message.from_user.bgColor,
+                        'notification': False,
                         'sent_at': message.sent_at.strftime("%m-%d %H:%M %p")
                     })
             elif command == "leave":
@@ -56,7 +59,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 await self.leave_room(content["room"])
             elif command == "send":
                 message = await save_message(content["room"], self.scope["user"], content["message"])
-                await self.send_room(content["room"], content["message"])
+                await self.send_room(content["room"], content["message"], notification=True)
             elif command == "create":
                 # maybe a primary key for name
                 # json parse new users for name of chat
@@ -140,7 +143,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             "leave": str(room.id),
         })
 
-    async def send_room(self, room_id, message):
+    async def send_room(self, room_id, message, notification=False):
         """
         Called by receive_json when someone sends a message to a room.
         """
@@ -154,8 +157,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             {
                 "type": "chat.message",
                 "room_id": room_id,
-                "username": self.scope["user"].username,
-                "message": message,
+                "username":  message['from_user'] if isinstance(message, dict) else self.scope['user'].username,
+                "default":  message['default'] if isinstance(message, dict) else self.scope["user"].bgColor,
+                'avatar':  message['avatar'] if isinstance(message, dict) else self.scope['user'].avatar.url if self.scope['user'] else '',
+                'notification': notification,
+                "message": message['text'] if isinstance(message, dict) else message,
             }
         )
 
@@ -193,11 +199,17 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         Called when someone has messaged our chat.
         """
         # Send a message down to the client
+        print('called', event)
         await self.send_json(
             {
                 "msg_type": settings.MSG_TYPE_MESSAGE,
                 "room": event["room_id"],
                 "username": event["username"],
-                "message": event["message"],
+                "message": {
+                    'text': event["message"],
+                    "avatar": event['avatar'],
+                    'default': event['default'],
+                    "notification": event['notification']
+                }
             },
         )

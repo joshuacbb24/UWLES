@@ -371,7 +371,7 @@ is empty when first clicked -->
         </div>
     </div>
     <div class="middle-panel">
-        <div class="user-header"></div>
+        <div class="user-header"><button style="display: none;">referral chat</button></div>
         <section id="users-list" style="display: none; position: relative">
             <p>
                 <input id="tag-input" style="display: none; position: relative" name="users-list-tags" /><button
@@ -443,6 +443,7 @@ is empty when first clicked -->
                 $(".sending-form").on("submit", function () {
 
                     event.preventDefault();
+                    sent = true;
                     socket.send(
                         JSON.stringify({
                             "command": "send",
@@ -451,7 +452,7 @@ is empty when first clicked -->
                         })
                     );
                     $("#typed_msg").val("");
-                    sent = true;
+                    sent = false;
                 });
 
 
@@ -469,6 +470,7 @@ is empty when first clicked -->
                         if (data2.result.is_valid) {
                             /*send file to recipient and add a progress bar*/
                             console.log("file uploaded")
+                            sent = true;
                             const message = 'file <a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
                             socket.send(
                                 JSON.stringify({
@@ -477,8 +479,9 @@ is empty when first clicked -->
                                     "message": message
                                 })
                             );
-                            sent = true;
+                            sent = false;
                         }
+
                     }
                 });
 
@@ -504,17 +507,25 @@ is empty when first clicked -->
                     case 0:
                         // Message
 
-                        let text = (data.message.text) ? data.message.text : data.message;
-                        let user = (data.message.from_user) ? data.message.from_user : data.username;
+                        let text = (typeof data.message == 'object') ? data.message.text : data.message;
+                        let user = (typeof data.message == 'object' && data.message.from_user) ? data.message.from_user : data.username;
+
+                        let avatar = data.message.avatar ? '<img width="64" src="' + data.message.avatar + '">' : '<div class="profile-pic-wrapper" data-username="' + data.message.from_user + '" data-bgcolor="' + data.message.default + '"></div>'
                         //if statement for where user.username is not equal to data.message.from_user
                         let time = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
                         const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
+                        if (data.message.notification && user != '{{user.username}}') {
+
+                            var x = document.getElementById("chatAudio");
+                            x.play();
+                        }
 
                         if (cssClass == 'outgoing') {
                             ok_msg =
                                 `<div class='chat-wrapper'>` +
                                 `<div class='${cssClass}'>` +
                                 `<span class='body'>` +
+                                avatar +
                                 text +
                                 `</span>` +
                                 `</div>` +
@@ -524,15 +535,14 @@ is empty when first clicked -->
                                 `<div class='chat-wrapper'>` +
                                 `<div class='${cssClass}'>` +
                                 `<span class='body'>` +
+                                avatar +
                                 text +
                                 `</span>` +
                                 `</div>` +
                                 `</div>`;
 
-                            if (sent) {
-                                var x = document.getElementById("chatAudio");
-                                x.play();
-                            }
+
+
                         }
 
                         break;
@@ -590,6 +600,7 @@ is empty when first clicked -->
                         console.log("Unsupported message type!");
                         return;
                 }
+                showDefaultAvatar();
                 $(".chat-log").html();
                 msgdiv.append(ok_msg);
 
@@ -598,6 +609,7 @@ is empty when first clicked -->
                 console.log("Cannot handle message!");
             }
         };
+
 
         // Says if we joined a room or not by if there's a div for it
         inRoom = function (roomId) {
