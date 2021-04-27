@@ -1,4 +1,5 @@
 ﻿{% extends 'app/layout.html' %}
+{% load static %}
 {% block content %}
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -32,13 +33,17 @@
 
 #myInput:focus {outline: 3px solid #ddd;}
 
+#searchBar {
+      
+    }
+
 .dropdown {
   position: relative;
   display: inline-block;
 }
 
 .dropdown-content {
-  display: none;
+  
   position: absolute;
   background-color: #f6f6f6;
   min-width: 230px;
@@ -51,7 +56,8 @@
   color: black;
   padding: 12px 16px;
   text-decoration: none;
-  display: block;
+  
+  display: none;
 }
 
 .dropdown a:hover {background-color: #ddd;}
@@ -237,22 +243,85 @@
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
 }
+.header {
+        font-family: Inter;
+        font-style: normal;
+        font-weight: 500;
+        font-size:20px;
+        line-height: 24px;
+        letter-spacing: 0.01em;
+        color: #676767;
+        position: relative;
+    }
+    .name {
+        top: 0;
+        width: 58px;
+        height: 24px;
+       position: absolute;
+    }
+    .atoz {
+        top: 2px;
+        left: 60px;
+        font-size: 16px;
+
+        text-align: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        width: 69px;
+        height: 30.42px;
+        background: #DEDEDE;
+        border-radius: 3px;
+        position: absolute;
+    }
+    .category {
+       
+        top: 0;
+        left: 500px;
+        width: 91px;
+        height: 18px;
+        position: absolute;
+        
+        top: 0;
+    }
+    .atoz2 {
+        top: 0;
+        left: 590px;
+        width: 69px;
+        height: 30.42px;
+        background: #DEDEDE;
+        border-radius: 3px;
+        position: absolute;
+        text-align: center;
+    }
+    .showGrid {
+        text-align: center;
+        width: 129px;
+        height: 35px;
+        top: 0;
+        left: 990px;
+        position: absolute;
+        background: #DEDEDE;
+        border-radius: 5px;
+    }
+
+    .filter1 {
+        display: none;
+    }
 </style>
 
 
 <div class=" filters">
-    <div class="filter1">
+    <button onclick="filterButton()"><img src="{% static 'app/images/filter.png' %}" class="defaultImage" alt="default resource image"/></button>
+    <div class="filter1" id="filter1">
            <form method="get" id="filterForm">
                 {{myFilter2.form}}
-                <button class="btn btn-primary" type="submit">
-                Search</button>
             </form>
     </div>
 </div>
-<div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-  <div id="myDropdown" class="dropdown-content">
-    <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+<div id="searchBar">
+ <!-- <button onclick="myFunction()" class="dropbtn">Dropdown</button> -->
+   <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+   <div class="dropdown-content" id="dropdown-container"> 
     {% for directory in directories %}
               {% for article in directory.dir_articles.all %}
                     <a href=" = "{{article.article_content}}">{{article.article_name}}</a>
@@ -286,24 +355,59 @@ toggle between hiding and showing the dropdown content */
     });
 
 
+
 function myFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
+  var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName("li");
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
 }
 
-function filterFunction() {
-  var input, filter, ul, li, a, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("myDropdown");
-  a = div.getElementsByTagName("a");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-    }
-  }
+ function filterButton() {
+        var x = document.getElementById("filter1");
+        if (x.style.display == "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+     }
+     alert("hey");
+    } 
+
+    function filterFunction() {
+        var input, filter, ul, li, a, i, allHidden;
+        allHidden = true;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("searchBar");
+        a = div.getElementsByTagName("a");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "block";
+                allHidden = false;
+            }
+            else {
+                a[i].style.display = "none";
+            }
+        }
+        if (input.value == "") {
+
+            document.getElementById("dropdown-container").stlye.display = "none";
+        }
+
+        else {
+            document.getElementById("dropdown-container").stlye.display = "block";
+        }
     }
 
 $(function () {
@@ -311,17 +415,17 @@ $(function () {
 })
 </script>
 
-<h2>Article List</h2>
-<p>Articles: <br /></p>
+<div class="header">
+    
+    <div class="name">Name</div>
+    <div class="atoz"><img src="{% static 'app/images/A.png' %}" class="defaultImage" alt="default resource image"/> <img src="{% static 'app/images/arrow.png' %}" class="defaultImage" alt="default resource image"/> <img src="{% static 'app/images/Z.png' %}" class="defaultImage" alt="default resource image"/></div>
+    <div class="category">Category</div>
+    <div class="atoz2"><img src="{% static 'app/images/A.png' %}" class="defaultImage" alt="default resource image"/> <img src="{% static 'app/images/arrow.png' %}" class="defaultImage" alt="default resource image"/> <img src="{% static 'app/images/Z.png' %}" class="defaultImage" alt="default resource image"/></div>
+    <div class="showGrid"><img src="{% static 'app/images/showGrid.png' %}" class="defaultImage" alt="default resource image"/><img src="{% static 'app/images/grid.png' %}" class="defaultImage" alt="default resource image"/></div>
+ </div>
+    <br>
+    <br>
     <table>
-            <tr>
-                <th>Article Name</th>
-                <th>Category</th>
-                <th> View detail</th>
-                <th> Visit Site</th>
-                <th> Contact info</th>
-                
-            </tr>
     
 
             {% for directory in directories %}
@@ -329,7 +433,7 @@ $(function () {
                 <tr>
                 <td>{{article.article_name}}</td>
                 <td>{{directory.dir_name}}</td>
-                <td><a href="" data-toggle="modal" data-target="#ArticleInfo">View detail</a></td>
+                <td><a href="" data-toggle="modal" data-target="#ArticleInfo">View detail <img src="{% static 'app/images/Vector.png' %}" class="defaultImage" alt="default resource image"/></a></td>
                 <div class="modal" tabindex="-1" role="dialog" id="ArticleInfo">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -345,8 +449,8 @@ $(function () {
                         </div>
                     </div>
                 </div>
-                <td><a href= "{{article.article_content}}">Visit Site</a></td>
-                <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{article.article_content}}">Contact Info</a></td>
+                <td><a href= "{{article.article_content}}">Visit Site <img src="{% static 'app/images/BoxArrow.png' %}" class="defaultImage" alt="default resource image"/></a></td>
+                <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{article.article_content}}">Contact Info <img src="{% static 'app/images/ContactInfo.png' %}" class="defaultImage" alt="default resource image"/></a></td>
              
         
                 </tr>
@@ -359,7 +463,7 @@ $(function () {
                         <tr>
                         <td>{{service.service_name}}</td>
                         <td>{{directory.dir_name}}</td>
-                        <td><a href="" data-toggle="modal" data-target="#ServiceInfo">View detail</a></td>
+                        <td><a href="" data-toggle="modal" data-target="#ServiceInfo">View detail <img src="{% static 'app/images/Vector.png' %}" class="defaultImage" alt="default resource image"/></a></td>
                         <div class="modal" tabindex="-1" role="dialog" id="ServiceInfo">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -370,7 +474,7 @@ $(function () {
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <a style="font-size: 30px" href= "{{service.service_url}}">Visit Site</a>
+                                        <a style="font-size: 30px" href= "{{service.service_url}}">Visit Site <img src="{% static 'app/images/BoxArrow.png' %}" class="defaultImage" alt="default resource image"/></a>
                                         <p>{{service.service_descript}}</p>
                                         <p>Intake and Eligibility: {{service.service_intake_eligibility}}</p>
                                         <h2>Main Contact:</h2>
@@ -386,8 +490,8 @@ $(function () {
                                 </div>
                             </div>
                         </div>
-                        <td><a href= "{{service.service_url}}">Visit Site</a></td>
-                        <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{service.service_contact_name}}<br/>{{service.service_contact_email}}<br/>{{service.service_contact_phone}}">Contact Info</a></td>
+                        <td><a href= "{{service.service_url}}">Visit Site <img src="{% static 'app/images/BoxArrow.png' %}" class="defaultImage" alt="default resource image"/></a></td>
+                        <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{service.service_contact_name}}<br/>{{service.service_contact_email}}<br/>{{service.service_contact_phone}}">Contact Info <img src="{% static 'app/images/ContactInfo.png' %}" class="defaultImage" alt="default resource image"/></a></td>
                         </tr>
                         {% endif %}
                     {% endfor %}
