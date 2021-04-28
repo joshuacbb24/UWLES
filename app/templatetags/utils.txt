@@ -1,7 +1,7 @@
 from channels.db import database_sync_to_async
 
 from .exceptions import ClientError
-from .models import ChatGroup, Messages, Account
+from .models import ChatGroup, Messages, Account, Channels
 
 
 class RoomExistsException(Exception):
@@ -53,7 +53,7 @@ def save_message(room_id, user, message):
 
 
 @database_sync_to_async
-def create_group(newUsers, user):
+def create_group(newUsers, user, channel_layer):
     """
     Create a new group
     """
@@ -81,7 +81,16 @@ def create_group(newUsers, user):
         for member in newUsers:
             room.members.add(member['value'])
         room.members.add(user)
-
+        for user in room.members.all():
+            channel = Channels.objects.filter(user=user).first()
+            if not channel:
+                continue
+            print('adding user', room.group_name,
+                  user.username, channel.channel_name)
+            channel_layer.group_add(
+                room.group_name,
+                channel.channel_name
+            )
     except ChatGroup.DoesNotExist:
 
         raise ClientError("ROOM_INVALID")
@@ -101,3 +110,17 @@ def fetch_recent(room_id):
     except Messages.DoesNotExist:
 
         raise ClientError("NO_MESSAGES")
+
+
+@database_sync_to_async
+def set_user_channel(user, channel_name):
+    user, _ = Channels.objects.get_or_create(user=user)
+    user.channel_name = channel_name
+    user.save()
+
+
+@database_sync_to_async
+def join_channels(user, channel_name, channel_layer):
+    for chat_group in user.all_group_members.all():
+        channel_layer.group_add(chat_group.group_name, channel_name)
+    return list(user.all_group_members.all())

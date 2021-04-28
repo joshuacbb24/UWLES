@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'django_filters',
+    'django_tagify',
 ]
 
 SITE_ID = 1

@@ -290,22 +290,7 @@ is empty when first clicked -->
 
         //var socket = new WebSocket(ws_path);
         var socket = new ReconnectingWebSocket(ws_path);
-        var roomName = null;
-        $(".sending-form").on("submit", function () {
 
-            event.preventDefault();
-            if (roomName) {
-                socket.send(
-                    JSON.stringify({
-                        "command": "send",
-                        "room": roomName,
-                        "message": document.querySelector('#typed_msg').value
-                    })
-                );
-                $("#typed_msg").empty();
-                return false;
-            }
-        });
         // Handle incoming messages
         socket.onmessage = function (message) {
             var data = JSON.parse(message.data);
@@ -322,11 +307,24 @@ is empty when first clicked -->
             // Handle joining
             if (data.join) {
                 console.log("Joining room " + data.join);
-                roomName = data.join;
+
                 //   console.log("myself value: " + $("#myself").val() + "data.from_user value: " + message.from_user)
 
                 // Hook up send button to send a message
+                $(".sending-form").on("submit", function () {
 
+                    event.preventDefault();
+
+                    socket.send(
+                        JSON.stringify({
+                            "command": "send",
+                            "room": data.join,
+                            "message": document.querySelector('#typed_msg').value
+                        })
+                    );
+                    $("#typed_msg").val("");
+
+                });
 
 
 
@@ -343,6 +341,7 @@ is empty when first clicked -->
                         if (data2.result.is_valid) {
                             /*send file to recipient and add a progress bar*/
                             console.log("file uploaded")
+
                             const message = 'file <a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
                             socket.send(
                                 JSON.stringify({
@@ -362,7 +361,6 @@ is empty when first clicked -->
                 // Handle leaving
             } else if (data.leave) {
                 console.log("Leaving room " + data.leave);
-                roomName = null;
                 $("#room-" + data.leave).remove();
                 $(".user-header").empty();
                 $(".chat-log").empty();
@@ -380,22 +378,45 @@ is empty when first clicked -->
                     case 0:
                         // Message
 
-                        let text = (data.message.text) ? data.message.text : data.message;
-                        let user = (data.message.from_user) ? data.message.from_user : data.username;
-                        const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
+                        let text = (typeof data.message == 'object') ? data.message.text : data.message;
+                        let user = (typeof data.message == 'object' && data.message.from_user) ? data.message.from_user : data.username;
 
-                        ok_msg =
-                            `<div class='${cssClass}''>` +
-                            `<span class='username'>` +
-                            user +
-                            `: </span>` +
-                            `<span class='text' > ` +
-                            text +
-                            `</span> ` +
-                            `</div> `;
+                        let avatar = data.message.avatar ? '<img class="profile-pic" src="' + data.message.avatar + '">' : '<div class="profile-pic-wrapper" data-username="' + data.message.from_user + '" data-bgcolor="' + data.message.default + '"></div>'
+                        //if statement for where user.username is not equal to data.message.from_user
+                        let time = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
+                        const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
+                        if (data.message.notification && user != '{{user.username}}') {
+
+                            var x = document.getElementById("chatAudio");
+                            x.play();
+                        }
+
+                        if (cssClass == 'outgoing') {
+                            ok_msg =
+                                `<div class='chat-wrapper'>` +
+                                `<div class='${cssClass}'>` +
+                                `<span class='body'>` +
+                                avatar +
+                                text +
+                                `</span>` +
+                                `</div>` +
+                                `</div>`;
+                        } else {
+                            ok_msg =
+                                `<div class='chat-wrapper'>` +
+                                `<div class='${cssClass}'>` +
+                                `<span class='body'>` +
+                                avatar +
+                                text +
+                                `</span>` +
+                                `</div>` +
+                                `</div>`;
+
+
+
+                        }
 
                         break;
-
                     case 1:
                         // Warning / Advice messages
                         ok_msg =
@@ -417,22 +438,22 @@ is empty when first clicked -->
                             data.message +
                             "</div>";
                         break;
-                    /* case 4:
-                         // User joined room
-                         ok_msg =
-                             "<div class='contextual-message text-muted'>" +
-                             data.username +
-                             " joined the room!" +
-                             "</div>";
-                         break;
-                     case LEFT_ROOM:
-                         // User left room
-                         ok_msg =
-                             "<div class='contextual-message text-muted'>" +
-                             data.username +
-                             " left the room!" +
-                             "</div>";
-                         break;*/
+                    case 4:
+                        // User joined room
+                        ok_msg =
+                            "<div class='contextual-message text-muted'>" +
+                            data.username +
+                            " joined the room!" +
+                            "</div>";
+                        break;
+                    case LEFT_ROOM:
+                        // User left room
+                        ok_msg =
+                            "<div class='contextual-message text-muted'>" +
+                            data.username +
+                            " left the room!" +
+                            "</div>";
+                        break;
                     case "created":
                         ok_msg =
                             "<div class='contextual-message text-muted'>room created</div>";
@@ -450,7 +471,7 @@ is empty when first clicked -->
                         console.log("Unsupported message type!");
                         return;
                 }
-
+                showDefaultAvatar();
                 $(".chat-log").html();
                 msgdiv.append(ok_msg);
 
@@ -557,23 +578,13 @@ is empty when first clicked -->
                     newUsers: JSON.parse($("#tag-input").val()),
                 })
             );
-
+            $("#create-chat").show();
             $("#tag-input").hide();
             $("#users-list").hide();
-            $("#tag-input").empty();
             $("#create-group").hide();
 
             //join the room that was just created
-
-            /*
             $("li[data-room-id=" + data.room_id + "]").click();
-
-            $(".msg_send_btn").show();
-            $(".user-header").show();
-            $("#create-chat").show();
-            $("#create-chat").show();
-            $("#typed_msg").show();
-            $("#upload-photos-button").show();*/
         });
 
         // Helpful debugging
