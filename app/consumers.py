@@ -14,6 +14,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     behind database_sync_to_async or sync_to_async. For more, read
     http://channels.readthedocs.io/en/latest/topics/consumers.html
     """
+    user_channels = {}
 
     # WebSocket event handlers
 
@@ -30,6 +31,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             await self.accept()
         # Store which rooms the user has joined on this connection
         self.rooms = set()
+        self.user_channels[self.scope['user'].username] = self.channel_name
 
     async def receive_json(self, content):
         """
@@ -38,6 +40,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         """
         # Messages will have a "command" key we can switch on
         command = content.get("command", None)
+        print('received command', command)
         try:
             if command == "join":
                 # Make them join the room
@@ -61,8 +64,23 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 # maybe a primary key for name
                 # json parse new users for name of chat
                 try:
-                    room = await create_group(content["newUsers"], self.scope["user"])
-                    await self.send_json({'room_id': room.id, 'name': room.group_name, 'msg_type': 'created'})
+                    room, users = await create_group(content["newUsers"], self.scope["user"])
+                    # Add users to room channel
+                    print('user channels', self.user_channels)
+                    for user in users:
+                        # Send a message to this user's channel
+                        channel_name = self.user_channels.get(user.username)
+                        if channel_name:
+                            await self.channel_layer.send(
+                                channel_name,
+                                {
+                                    "type": "chat.add",
+                                    "room_id": room.id,
+                                    'name': room.group_name,
+                                    "username": user.username,
+                                }
+                            )
+                    # await self.send_json({'room_id': room.id, 'name': room.group_name, 'msg_type': 'created'})
                 except RoomExistsException as inst:
                     await self.send_json({'msg_type': 'room_exists', 'room_name': inst.room.group_name, 'room_id': inst.room.id})
         except ClientError as e:
@@ -86,7 +104,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         Called by receive_json when someone sent a join command.
         """
         # The logged-in user is in our scope thanks to the authentication ASGI middleware
-        room = await get_room_or_error(room_id, self.scope["user"])
+        user = self.scope["user"]
+        print('joining room', room_id, user)
+        room = await get_room_or_error(room_id, user)
+        print('channel', self.channel_layer, self.channel_name)
         # Send a join message if it's turned on
         if settings.NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS:
             await self.channel_layer.group_send(
@@ -94,7 +115,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 {
                     "type": "chat.join",
                     "room_id": room_id,
-                    "username": self.scope["user"].username,
+                    "username": user.username,
                 }
             )
         # Store that we're in the room
@@ -158,6 +179,20 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
     # Handlers for messages sent over the channel layer
     # These helper methods are named by the types we send - so chat.join becomes chat_join
+
+    async def chat_add(self, event):
+        """
+        Called when someone has added people to a chat.
+        """
+        # Send a message down to the client
+        await self.send_json(
+            {
+                "msg_type": "created",
+                "room": event["room_id"],
+                "name": event["name"],
+                "username": event["username"],
+            },
+        )
 
     async def chat_join(self, event):
         """

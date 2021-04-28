@@ -306,6 +306,33 @@ is empty when first clicked -->
                 return false;
             }
         });
+
+        $("#upload-photos-button").click(function () {
+            $("#fileupload").click();
+        });
+
+        /* 2. INITIALIZE THE FILE UPLOAD COMPONENT */
+        $("#fileupload").fileupload({
+            dataType: 'json',
+            done: function (e, data2) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
+                if (data2.result.is_valid) {
+                    /*send file to recipient and add a progress bar*/
+                    console.log("file uploaded")
+                    const message = 'file <a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
+                    if (roomName) {
+                        socket.send(
+                            JSON.stringify({
+                                "command": "send",
+                                "room": data.join,
+                                "message": message
+                            })
+                        );
+                    }
+                }
+
+            }
+        });
+
         // Handle incoming messages
         socket.onmessage = function (message) {
             var data = JSON.parse(message.data);
@@ -332,30 +359,7 @@ is empty when first clicked -->
 
                 //hook up sending files
                 /* 1. OPEN THE FILE EXPLORER WINDOW */
-                $("#upload-photos-button").click(function () {
-                    $("#fileupload").click();
-                });
 
-                /* 2. INITIALIZE THE FILE UPLOAD COMPONENT */
-                $("#fileupload").fileupload({
-                    dataType: 'json',
-                    done: function (e, data2) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
-                        if (data2.result.is_valid) {
-                            /*send file to recipient and add a progress bar*/
-                            console.log("file uploaded")
-                            const message = 'file <a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
-                            socket.send(
-                                JSON.stringify({
-                                    "command": "send",
-                                    "room": data.join,
-                                    "message": message
-                                })
-                            );
-
-                        }
-
-                    }
-                });
 
                 $(".user-header").html(data.title);
 
@@ -437,8 +441,9 @@ is empty when first clicked -->
                         ok_msg =
                             "<div class='contextual-message text-muted'>room created</div>";
                         $(".rooms").append(
-                            `<li class="room-link" data-room-id="${data.room_id}"> ${data.name}</li>`
+                            `<li class="room-link" data-room-id="${data.room}"> ${data.name}</li>`
                         );
+
                         break;
                     case "room_exists":
                         $("li[data-room-id=" + data.room_id + "]").click();
@@ -474,7 +479,8 @@ is empty when first clicked -->
                     room that was clicked on
                     -If not in room when a message comes in give it an unread class*/
 
-        $(".room-link").click(function () {
+
+        function roomClick() {
             roomId = $(this).attr("data-room-id");
             if (inRoom(roomId)) {
                 // Leave room
@@ -508,7 +514,8 @@ is empty when first clicked -->
                 $("#create-group").hide();
                 $(".chat-log").empty();
             }
-        });
+        }
+        $(document).on('click', '.room-link', roomClick)
 
         // Creating Room
 

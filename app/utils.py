@@ -86,7 +86,7 @@ def create_group(newUsers, user):
 
         raise ClientError("ROOM_INVALID")
 
-    return room
+    return room, list(room.members.all())
 
 
 @ database_sync_to_async
