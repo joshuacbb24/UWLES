@@ -1,7 +1,42 @@
-﻿{% extends 'app/layout.html' %}
+﻿{% extends 'app/format.html' %}
 {% block content %}
 <head>
 </head>
+<body>
+    <div class="sidebar">
+
+
+  <div class="sidebar-menu">
+      <ul>
+          <li>
+              <a href="{% url 'dashboard' %}">
+                  <span id="fist-element" class="las la-home"></span>
+              </a>
+          </li>
+          <li>
+              <a href="{% url 'resourcedirectory' %}">
+                  <span class="las la-book"></span>
+              </a>
+          </li>
+          <li>
+              <a href="">
+                  <span class="las la-comment-alt"></span>
+              </a>
+          </li>
+          <li>
+              <a href="{% url 'clientlist' %}" class="active">
+                  <span class="las la-user-friends"></span>
+              </a>
+          </li>
+          <li>
+            <a href="">
+                <span class="las la-plus-circle"></span>
+            </a>
+        </li>
+      </ul>
+  </div>
+</div>
+</body>
 <h2>Client List</h2>
 <p>Client: <br /></p>
     {% for clients in object1.clients.all %} 

@@ -1,12 +1,11 @@
-
-//header and sidebar
+/*header and sidebar*/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     list-style-type: none;
     text-decoration: none;
-    font-family: helvetica;
+    font-family: effra, Helvetica;
 }
 
 .sidebar {
@@ -125,8 +124,6 @@
     color: var(--text-grey);
 }
 
-
-
 .dropdown {
     display: inline-block;
     cursor: pointer;
@@ -163,60 +160,61 @@
     background-color: #ddd;
 }
 
+.container {
+    position: absolute;
+    left: 20%;
+    top: 100px;
+}
 
-//format
+/* format */
 html,
 body {
     height: 100%;
     background: #EBF2F2;
     font-family: Effra, Helvetica;
 }
-
-//title
+/*title*/
 h1 {
     font-size: 24pt;
     font-weight: medium;
     color: #013D44;
 }
+    /*This is their smaller main title option*/
+    h1.smaller {
+        font-size: 22pt;
+        font-weight: medium;
+        color: #013D44;
+    }
 
-//This is their smaller main title option;
-h1.smaller {
-    font-size: 22pt;
-    font-weight: medium;
-    color: #013D44;
-}
-
-//title
+/*title*/
 h2 {
     font-size: 18pt;
     font-weight: medium;
     color: #013D44;
 }
 
-//title
+/*title*/
 h3 {
     font-size: 18pt;
     font-weight: normal;
     color: #013D44;
 }
 
-//paragraph text
+/*paragraph text*/
 p {
     font-size: 14pt;
     font-weight: normal;
     color: 373737;
 }
-
-//small indicator text
-p.indicatorText {
-    font-size: 12pt;
-    font-weight: normal;
-    color: 373737;
-}
+    /*small indicator text*/
+    p.indicatorText {
+        font-size: 12pt;
+        font-weight: normal;
+        color: 373737;
+    }
 
 
 /*
-
 card {
 	background-color: #FFFFFF;
 	border-radius: 6px;
@@ -224,8 +222,6 @@ card {
 card.title {
 	background-color: #FCFCFC;
 }
-
-
 accent.text {
 	color: B721B5;
 }
@@ -235,3 +231,4 @@ accent.object {
 accent.highlight {
 	color: 21B5B7; 
 }
+*/

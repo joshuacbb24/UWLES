@@ -1,4 +1,4 @@
-﻿{% extends 'app/layout.html' %}
+﻿{% extends 'app/format.html' %}
 {% load static %}
 {% block content %}
 <head>
@@ -269,7 +269,21 @@
         text-transform: capitalize;
         width: 69px;
         height: 30.42px;
-        background: #DEDEDE;
+        background: url("/static/app/images/atoz.png");
+        border-radius: 3px;
+        position: absolute;
+    }
+    .ztoa {
+        top: 2px;
+        left: 60px;
+        font-size: 16px;
+
+        text-align: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        width: 69px;
+        height: 30.42px;
+        background: url("/static/app/images/ztoa.png");
         border-radius: 3px;
         position: absolute;
     }
@@ -288,7 +302,17 @@
         left: 590px;
         width: 69px;
         height: 30.42px;
-        background: #DEDEDE;
+        background: url("/static/app/images/atoz.png");
+        border-radius: 3px;
+        position: absolute;
+        text-align: center;
+    }
+    .ztoa2 {
+        top: 0;
+        left: 590px;
+        width: 69px;
+        height: 30.42px;
+        background: url("/static/app/images/ztoa.png");
         border-radius: 3px;
         position: absolute;
         text-align: center;
@@ -380,7 +404,6 @@ function myFunction() {
         } else {
             x.style.display = "none";
      }
-     alert("hey");
     } 
 
     function filterFunction() {
@@ -409,23 +432,139 @@ function myFunction() {
             document.getElementById("dropdown-container").stlye.display = "block";
         }
     }
+function sortTable() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("myTable");
+    if (toggle1 == false) {
+
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 0; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[0];
+                y = rows[i + 1].getElementsByTagName("TD")[0];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+        toggle1 = true;
+    }
+    else {
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 0; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[0];
+                y = rows[i + 1].getElementsByTagName("TD")[0];
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+        toggle1 = false;
+    }
+}
+
+function sortTable2() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById("myTable");
+    if (toggle2 == false) {
+
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 0; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[1];
+                y = rows[i + 1].getElementsByTagName("TD")[1];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+        toggle2 = true;
+    }
+    else {
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 0; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[1];
+                y = rows[i + 1].getElementsByTagName("TD")[1];
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+        toggle2 = false;
+    }
+}
 
 $(function () {
   $('[data-toggle="popover"]').popover()
 })
+
+var toggle1 = false;
+var toggle2 = false;
+var clickNum1 = 0;
+var clickNum2 = 0;
+
+$(document).ready(function () {
+        $(".change1").click(function () {
+            clickNum1++;
+            if (clickNum1 >= 2) {
+                $(".atoz").toggleClass("ztoa");
+            }
+        });
+        $(".change2").click(function () {
+            clickNum2++;
+            if (clickNum2 >= 2) {
+                $(".atoz2").toggleClass("ztoa2");
+            }
+        });
+    });
+
+
 </script>
 
 <div class="header">
-    
     <div class="name">Name</div>
-    <div class="atoz"><img src="{% static 'app/images/A.png' %}" class="defaultImage" alt="default resource image"/> <img src="{% static 'app/images/arrow.png' %}" class="defaultImage" alt="default resource image"/> <img src="{% static 'app/images/Z.png' %}" class="defaultImage" alt="default resource image"/></div>
+    <div class="change1"><div class="atoz" id="atoz" onclick="sortTable()"></div></div>
     <div class="category">Category</div>
-    <div class="atoz2"><img src="{% static 'app/images/A.png' %}" class="defaultImage" alt="default resource image"/> <img src="{% static 'app/images/arrow.png' %}" class="defaultImage" alt="default resource image"/> <img src="{% static 'app/images/Z.png' %}" class="defaultImage" alt="default resource image"/></div>
+    <div class="change2"><div class="atoz2" onclick="sortTable2()"></div></div>
     <div class="showGrid"><img src="{% static 'app/images/showGrid.png' %}" class="defaultImage" alt="default resource image"/><img src="{% static 'app/images/grid.png' %}" class="defaultImage" alt="default resource image"/></div>
  </div>
     <br>
     <br>
-    <table>
+    <table id="myTable">
     
 
             {% for directory in directories %}
