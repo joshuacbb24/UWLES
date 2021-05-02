@@ -489,7 +489,15 @@
     }
 
 </style>
-
+<div class=" filters">
+    <button onclick="filterButton()"><img src="{% static 'app/images/filter.png' %}" class="defaultImage" alt="default resource image"/></button>
+    <div class="filter1" id="filter1">
+           <form method="get" id="filterForm">
+                {{myFilter1.form}}
+                {{myFilter2.form}}
+            </form>
+    </div>
+</div>
 
  <div id="searchBar">
   
