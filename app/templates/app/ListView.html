@@ -5,6 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <meta name="viewport" content="width-device-width, intial-scale=1" />
 </head>
 <body>
@@ -33,6 +34,18 @@
 
 #myInput:focus {outline: 3px solid #ddd;}
 
+#myInput2 {
+  box-sizing: border-box;
+  background-image: url('searchicon.png');
+  background-position: 14px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  padding: 14px 20px 12px 45px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+}
+
+#myInput2:focus {outline: 3px solid #ddd;}
 #searchBar {
       
     }
@@ -157,7 +170,7 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 1030;
+    z-index: -1;
     background-color: #000000;
     opacity: 0.5 !important;
 }
@@ -335,48 +348,200 @@
     .filter1 {
         display: none;
     }
+.popover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1010;
+    display: none;
+    max-width: 276px;
+    padding: 1px;
+    text-align: left;
+    white-space: normal;
+    background-color: #ffffff;
+    border: 4px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    background-clip: padding-box;
+}
+
+    .popover.top {
+        margin-top: -10px;
+    }
+
+    .popover.right {
+        margin-left: 10px;
+    }
+
+    .popover.bottom {
+        margin-top: 10px;
+    }
+
+    .popover.left {
+        margin-left: -10px;
+    }
+
+.popover-title {
+    padding: 8px 14px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 18px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ebebeb;
+    border-radius: 5px 5px 0 0;
+}
+
+.popover-content {
+    padding: 9px 14px;
+}
+
+.popover .arrow,
+.popover .arrow:after {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+}
+
+.popover .arrow {
+    border-width: 11px;
+}
+
+    .popover .arrow:after {
+        border-width: 10px;
+        content: "";
+    }
+
+.popover.top .arrow {
+    bottom: -11px;
+    left: 50%;
+    margin-left: -11px;
+    border-top-color: #999999;
+    border-top-color: rgba(0, 0, 0, 0.25);
+    border-bottom-width: 0;
+}
+
+    .popover.top .arrow:after {
+        bottom: 1px;
+        margin-left: -10px;
+        border-top-color: #ffffff;
+        border-bottom-width: 0;
+        content: " ";
+    }
+
+.popover.right .arrow {
+    top: 50%;
+    left: -11px;
+    margin-top: -11px;
+    border-right-color: #999999;
+    border-right-color: rgba(0, 0, 0, 0.25);
+    border-left-width: 0;
+}
+
+    .popover.right .arrow:after {
+        bottom: -10px;
+        left: 1px;
+        border-right-color: #ffffff;
+        border-left-width: 0;
+        content: " ";
+    }
+
+.popover.bottom .arrow {
+    top: -11px;
+    left: 50%;
+    margin-left: -11px;
+    border-bottom-color: #999999;
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+    border-top-width: 0;
+}
+
+    .popover.bottom .arrow:after {
+        top: 1px;
+        margin-left: -10px;
+        border-bottom-color: #ffffff;
+        border-top-width: 0;
+        content: " ";
+    }
+
+.popover.left .arrow {
+    top: 50%;
+    right: -11px;
+    margin-top: -11px;
+    border-left-color: #999999;
+    border-left-color: rgba(0, 0, 0, 0.25);
+    border-right-width: 0;
+}
+
+    .popover.left .arrow:after {
+        right: 1px;
+        bottom: -10px;
+        border-left-color: #ffffff;
+        border-right-width: 0;
+        content: " ";
+    }
+    .hidden {
+        display: none;
+    }
+
 </style>
 
 
-<div class=" filters">
-    <button onclick="filterButton()"><img src="{% static 'app/images/filter.png' %}" class="defaultImage" alt="default resource image"/></button>
-    <div class="filter1" id="filter1">
-           <form method="get" id="filterForm">
-                {{myFilter1.form}}
-                {{myFilter2.form}}
-            </form>
-    </div>
-</div>
-
-  <div id="searchBar">
- <!-- <button onclick="myFunction()" class="dropbtn">Dropdown</button> -->
+ <div id="searchBar">
+  
    <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-   <div class="dropdown-content" id="dropdown-container"> 
+  <!--  onkeyup="searchBar()"-->    
+     <div class="dropdown-content" id="dropdown-container"> 
 
     
-    {% for directory in directories %}
-              {% for article in directory.dir_articles.all %}
-                    <a href=" = "{{article.article_content}}">{{article.article_name}}</a>
-              {% endfor %}
+        {% for directory in directories %}
+                  {% for article in directory.dir_articles.all %}
+                        <a href="{{article.article_content}}">{{article.article_name}}</a>
+                  {% endfor %}
 
-              {% for service in directory.dir_services.all %}
-                  {% for serv in services %}
-                     {% if serv == service %}
-                        <a href= "{{service.service_url}}">{{service.service_name}}</a>
-                      {% endif %}
+                  {% for service in directory.dir_services.all %}
+                      {% for serv in services %}
+                         {% if serv == service %}
+                            <a href= "{{service.service_url}}">{{service.service_name}}</a>
+                          {% endif %}
+                      {% endfor %}
                   {% endfor %}
               {% endfor %}
-          {% endfor %}
-   </div>
-</div>
+     </div>
+  </div>
 
+
+      
+    <div id="searchBar2">
+
+   <input type="text" placeholder="Search by location" id="myInput2" onkeyup="filterFunction2()">
+     <div class="dropdown-content" id="dropdown-container"> 
+
+        {% for directory in directories %}
+         {% for service in directory.dir_services.all %}
+          
+                      {% for serv in services %}
+                         {% if serv == service %}
+                  
+                                    <a href= "{{service.service_url}}">{{service.service_city}}</a>
+                                
+                         {% endif %}
+                      {% endfor %}
+                   
+                  {% endfor %}
+         {% endfor %}
+              
+              
+     </div>
+    </div>
 
 <script>
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
-
-
-   
 
     $(document).ready(function () {
 
@@ -547,8 +712,8 @@ function sortTable2() {
     }
  }
 
-    $(function () {
-        $('[data-toggle="popover"]').popover()
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover(); 
     });
 
     $(document).ready(function () {
@@ -566,6 +731,57 @@ function sortTable2() {
         });
     });
 
+    jQuery.expr[':'].Contains = function(a, i, m) {
+    return jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+};
+
+
+$("#myInput").on("keyup", function() {
+    var value = $(this).val();
+
+    $("table tr").each(function(index) {
+        if (index !== -1) {
+
+            $row = $(this);
+
+            var id = $row.find("#serviceName").text();
+            var id2 = $row.find("#articleName").text();
+
+            if (id.indexOf(value) !== 0 && id2.indexOf(value) !== 0) {
+                $row.hide();
+            }
+            else {
+                $row.show();
+            }}
+    });
+});
+
+
+
+
+$("#myInput2").on("keyup", function() {
+    var value = $(this).val();
+
+
+
+    $("table tr").each(function(index) {
+        if (index !== -1) {
+
+            $row = $(this);
+
+            var id = $row.find("#city").text();
+            var id2 = $row.find("#county").text();
+            var id3 = $row.find("#zipcode").text();
+           
+
+            if (id.indexOf(value) !== 0 && id2.indexOf(value) !== 0 && id3.indexOf(value) !== 0) {
+                $row.hide();
+            }
+            else {
+                $row.show();
+            }}
+    });
+});
 
 </script>
 
@@ -584,24 +800,25 @@ function sortTable2() {
             {% for directory in directories %}
                 {% for article in directory.dir_articles.all %}
                 <tr>
-                <td>{{article.article_name}}</td>
+                <td id="articleName">{{article.article_name}}</td>
                 <td>{{directory.dir_name}}</td>
-                <td><a href="" data-toggle="modal" data-target="#ArticleInfo">View detail <img src="{% static 'app/images/Vector.png' %}" class="defaultImage" alt="default resource image"/></a></td>
-                <div class="modal" tabindex="-1" role="dialog" id="ArticleInfo">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">{{article.article_name}}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                {{article.article_descript}}
+                <td><a href="" data-toggle="modal" data-target="#ArticleInfo{{article.id}}">View detail <img src="{% static 'app/images/Vector.png' %}" class="defaultImage" alt="default resource image"/></a>
+                    <div class="modal" tabindex="-1" role="dialog" id="ArticleInfo{{article.id}}">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{article.article_name}}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    {{article.article_descript}}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </td>
                 <td><a href= "{{article.article_content}}">Visit Site <img src="{% static 'app/images/BoxArrow.png' %}" class="defaultImage" alt="default resource image"/></a></td>
                 <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{article.article_content}}">Contact Info <img src="{% static 'app/images/ContactInfo.png' %}" class="defaultImage" alt="default resource image"/></a></td>
              
@@ -614,10 +831,10 @@ function sortTable2() {
                        {% if serv == service %}
 
                         <tr>
-                        <td>{{service.service_name}}</td>
+                        <td id="serviceName">{{service.service_name}}</td>
                         <td id="dirname">{{directory.dir_name}}</td>
-                        <td><a href="" data-toggle="modal" data-target="#ServiceInfo">View detail <img src="{% static 'app/images/Vector.png' %}" class="defaultImage" alt="default resource image"/></a></td>
-                        <div class="modal" tabindex="-1" role="dialog" id="ServiceInfo">
+                        <td><a href="" data-toggle="modal" data-target="#ServiceInfo{{service.id}}">View detail <img src="{% static 'app/images/Vector.png' %}" class="defaultImage" alt="default resource image"/></a>
+                        <div class="modal" tabindex="-1" role="dialog" id="ServiceInfo{{service.id}}">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -643,8 +860,12 @@ function sortTable2() {
                                 </div>
                             </div>
                         </div>
+                        </td>
                         <td><a href= "{{service.service_url}}">Visit Site <img src="{% static 'app/images/BoxArrow.png' %}" class="defaultImage" alt="default resource image"/></a></td>
-                        <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{service.service_contact_name}}<br/>{{service.service_contact_email}}<br/>{{service.service_contact_phone}}">Contact Info <img src="{% static 'app/images/ContactInfo.png' %}" class="defaultImage" alt="default resource image"/></a></td>
+                        <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{service.service_contact_name}}<br/>{{service.service_contact_email}}">Contact Info <img src="{% static 'app/images/ContactInfo.png' %}" class="defaultImage" alt="default resource image"/></a></td>
+                        <td id="city" class="hidden">{{service.service_city}}</td>
+                        <td id="county" class="hidden">{{service.service_county}}</td>
+                        <td id="zipcode" class="hidden">{{service.service_zipcode}}</td>
                         </tr>
                         {% endif %}
                     {% endfor %}
