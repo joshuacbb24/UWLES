@@ -448,7 +448,9 @@ def add_skills(request):
 @login_required(login_url='login')
 def dashboard(request):
     users = Account.objects.exclude(pk=request.user.id)
-    return render(request, 'app/dashboard2.html', {'users': users})
+    rooms = ChatGroup.objects.filter(
+        members=request.user).order_by("group_name")
+    return render(request, 'app/dashboard2.html', {'users': users, "rooms": rooms, })
 
 
 @login_required(login_url='login')

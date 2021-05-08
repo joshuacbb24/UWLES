@@ -89,7 +89,7 @@ def create_group(newUsers, user):
     return room, list(room.members.all())
 
 
-@ database_sync_to_async
+@database_sync_to_async
 def fetch_recent(room_id):
     """
     Print out past messages
@@ -101,3 +101,19 @@ def fetch_recent(room_id):
     except Messages.DoesNotExist:
 
         raise ClientError("NO_MESSAGES")
+
+
+@database_sync_to_async
+def fetch_members(room_id):
+    """
+    get list of members in room
+    """
+    # find the room they requested (by ID)
+    try:
+        people = ChatGroup.objects.get(pk=room_id)
+
+        return list(people.members.all())
+
+    except ChatGroup.DoesNotExist:
+
+        raise ClientError("NO_GROUPS")

@@ -12,6 +12,8 @@
   <link rel="stylesheet" href="{% static 'app/content/style.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'app/content/chat.css' %}" />
   <link href="{% static 'app/content/main.css' %}" rel='stylesheet' />
+  <link rel="stylesheet" href="{% static 'app/content/chatPopUp.css' %}" />
+
 
 
   <link rel="stylesheet" href="{% static 'app/content/instantmessage.css' %}" />
@@ -20,10 +22,15 @@
 
 
   <script src="{% static 'app/scripts/main.js' %}"></script>
-  <script src="{% static 'app/scripts/jquery.js' %}"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="{% static 'app/scripts/jquery.js' %}"></script>
 
-  <script src="{% static 'app/scripts/pop-up-chat.js' %}"></script>
+  <script src="{% static 'app/scripts/jquery.ui.widget.js' %}"></script>
+  <script src="{% static 'app/scripts/jquery.iframe-transport.js' %}"></script>
+  <script src="{% static 'app/scripts/jquery.fileupload.js' %}"></script>
+
+  <!--<script src="{% static 'app/scripts/pop.js' %}"></script>-->
   <script>
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -134,26 +141,6 @@
       font-family: Helvetica;
       font-size: 14px;
     }
-
-
-    #act {
-      position: relative;
-      top: 4%;
-    }
-
-    #ref {
-      position: relative;
-    }
-
-    #rev {
-      position: relative;
-    }
-
-    .vl {
-      position: relative;
-      border-left: 1px solid white;
-      height: 100%;
-    }
   </style>
 </head>
 
@@ -164,7 +151,7 @@
     <div class="sidebar-menu">
       <ul>
         <li>
-          <a href="" class="active">
+          <a href="{% url 'dashboard' %}" class="active">
             <span id="fist-element" class="las la-home"></span>
           </a>
         </li>
@@ -227,7 +214,7 @@
 
   <div class="menu3">
     <div class="card-single-right">
-      <img id="act" src="{% static 'app/images/activity.png' %}" style=" position: relative;">
+      <img id="act" src="{% static 'app/images/activity.png' %}">
     </div>
   </div>
 
@@ -235,97 +222,117 @@
     <div class="running">
       <div><span class="dash"><strong>Dashboard</strong></span><span id="dots" class="las la-ellipsis-v"></span></div>
     </div>
+
+
+
     <div class="menu">
       <div class="card-single-one">
         <div id='calendar'></div>
       </div>
 
       <div class="card-single-two">
-        <!--<img id="ref" src="{% static 'app/images/referral.png' %}" style=" position: relative;">-->
+        <img id="ref" src="{% static 'app/images/referral.png' %}">
       </div>
     </div>
     <div class="menu2">
       <div class="card-single-three">
-        <img id="rev" src="{% static 'app/images/review.png' %}" style=" position: relative;">
+        <img id="rev" src="{% static 'app/images/review.png' %}">
       </div>
       <div class="card-single-four">
-        <h4>Clients<span class="las la-expand-arrows-alt"></span></h4>
-
+        <img id="cli" src="{% static 'app/images/clients.png' %}">
       </div>
     </div>
 
 
-    <div class="open-button">Chat<i id="opn_btn" style=font-size:25px;color:white;float:right; class="las la-angle-up"
+    <div class="open-button">Chat<i id="opn_btn" style="font-size:25px;color:white;float:right;" class="las la-angle-up"
         onclick="openForm()"></i></div>
 
     <div class="chat-popup" id="myForm">
-      <div class="chatHeader">Chat<i id="cls_btn" style=font-size:25px;color:white;float:right;
+      <div class="chatHeader">Chat<i id="cls_btn" style="font-size:25px;color:white;float:right;"
           class="las la-angle-down" onclick="closeForm()"></i></div>
-      <div class="messaging">
-        <div class="inbox_msg">
-          <div class="inbox_people">
-            <div class="headind_srch">
-              <div class="recent_heading">
-                <h4 style="color:#013D44;">Users</h4>
-              </div>
-              <div class="srch_bar">
-                <div class="stylish-input-group">
-                  <input type="text" id="search-bar" class="search-bar" placeholder="Search">
-                  <span class="input-group-addon">
-                    <button type="button"> <i class="fa fa-search" aria-hidden="true"></i> </button>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <input id="username" type="hidden" size="100">
-            <input id="myself" type="hidden" value="{{request.user.username}}" />
-            <div class="inbox_chat">
-
-              <div class="chat_list">
-                <!--<div class="chat_people">-->
-                <div id="chat_people" class="chat_people">
-                  {% for room in rooms %}
-                  <li id="list" class='person' data-room-id='{{room.id}}'>{{ room }}</li>
-                  {% empty %}
-                  <p>
-                    No chat rooms.
-                  </p>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
+      <div class="left-panel" id="left-panel">
+        <div class="left-panel-header" style="height: 15%;">
+          <div class="search-container">
+            <input type=" text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
           </div>
-          <div class="mesgs">
-            <div id="message_header"><i id="go_back" class="las la-arrow-left" style=font-size:25px;></i><span
-                id="user_header" style=font-size:20px;></span></div>
-            <div id="chat-log" class="msg_history">
-            </div>
-            <form class="sending-form">
-              <div class="type_msg">
-                <div class="input_msg_write">
-                  <input type="text" style="display: none;" id="chat-message-input" placeholder="Type a message"
-                    required />
-                  <i id="upload-photos-button" class="las la-paperclip"
-                    style="display:none;cursor:pointer;font-size:25px;"></i>
-                  <button id="chat-message-submit" class="msg_send_btn" style="display: none;" type="submit"><i
-                      style="color: white;" class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
-                </div>
-              </div>
-            </form>
+        </div>
+        <div class="rooms-container">
+          <div class="rooms">
+            {% for room in rooms %}
+            <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
+            {% empty %}
+            <p>
+              No chat rooms.
+            </p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="middle-panel" id="middle-panel">
+        <div class="user-header" style="height: 10%;">
+          <div>
+            <h4 style="margin-top: 3.5%;"></h4><button class="showMembers" style="display: none;">members</button>
+          </div>
+          <button class="add-user" style="display: none;">Add User</button>
 
-            <!--<div class="type_msg">
-              <div class="input_msg_write">
-                <input type="text" id="chat-message-input" class="write_msg" placeholder="Type a message">
-                <button id="chat-message-submit" class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o"
-                    aria-hidden="true"></i></button>
-              </div>
-            </div>-->
+
+        </div>
+        <section id="users-list" style="display: none; position: relative;">
+          <p>
+            <input id="tag-input" style="display: none; position: relative;" name="users-list-tags" /><button
+              style="display: none; position: relative;" id="create-group">
+              Create
+            </button>
+          </p>
+        </section>
+        <div class="arrows" style="height: 10%;background-color: #F0F0F0;"><i id="go_back" class="las la-arrow-left"
+            style="font-size:25px;margin-top: 3.5%;"></i><i id="expand" class="las la-expand-arrows-alt"
+            style="font-size:25px;float:right;cursor: pointer;margin-top: 3.5%;"></i></div>
+        <div class="chat-log"></div>
+        <div class="input-section" style="height: 10%;background-color: #F0F0F0;">
+          <input id="fileupload" type="file" name="file" multiple style="display: none" data-url="{% url 'upload' %}"
+            data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' />
+          <form class="sending-form">
+            <div>
+              <input type="text" style="display: none; width: 75%;margin-top: 2%;" id="typed_msg"
+                placeholder="Type a message" required />
+              <i id="upload-photos-button" class="las la-paperclip"
+                style="display:none;cursor:pointer;font-size:25px;float: left;margin-top: 3%;margin-left: 1.5%;"></i>
+              <button class="msg_send_btn" style="display: none;float:left;margin-right: 1%;width: 9%;" type="submit"><i
+                  style="color: white;" class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="right-panel" id="right-panel" style="display: none;">
+        <button class="rightAccordion" style="display: none;">Members</button>
+        <div class="rightPanel">
+          <ul class="right-btn-group">
+            <li class="list-of-members"></li>
+          </ul>
+        </div>
+        <button class="rightAccordion">Files</button>
+        <div class="rightPanel">
+          <div class="right-btn-group">
+            <button>File 1</button>
+            <button>File 2</button>
+            <button>File 3</button>
           </div>
         </div>
 
+        <button class="rightAccordion">Links</button>
+        <div class="rightPanel">
+          <div class="right-btn-group">
+            <button>Link 1</button>
+            <button>Link 2</button>
+            <button>Link 3</button>
+          </div>
+        </div>
+        <script src="{% static 'app/scripts/rightChat.js' %}"></script>
       </div>
     </div>
-
+    <input id="myself" type="hidden" value="{{request.user.username}}" />
     <script>
       function openForm() {
         document.getElementById("myForm").style.display = "block";
@@ -345,7 +352,396 @@
     integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA=="
     crossorigin="anonymous"></script>
   <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
+  <script>
 
+    $("#caret-icon").on('click', function () {
+      $(this).toggleClass('la-angle-up la-angle-down');
+      $(".dropdown-content").toggle('show hide');
+    })
+
+    $("#sidebar-toggle").on('click', function () {
+      $(".sidebar").toggle('show hide');
+    })
+  </script>
+  <script>
+    let clickState = 0;
+    $("#go_back").on("click", goback);
+
+    function goback() {
+      document.getElementById("myForm").style.width = "21%";
+      document.getElementById("middle-panel").style.width = "100%"
+      $(".left-panel").show();
+      $(".middle-panel").hide();
+      $(".right-panel").hide();
+
+    };
+
+    $("#expand").on("click", expand);
+
+    function expand() {
+      $(this).toggleClass('la-compress-arrows-alt la-expand-arrows-alt');
+      if (clickState == 0) {
+        document.getElementById("myForm").style.width = "600px";
+        document.getElementById("middle-panel").style.width = "50%"
+        document.getElementById("right-panel").style.width = "50%"
+        $(".right-panel").show();
+        clickState = 1;
+      } else {
+        $(".right-panel").hide();
+        document.getElementById("myForm").style.width = "21%";
+        document.getElementById("middle-panel").style.width = "100%"
+        clickState = 0;
+      }
+    };
+
+  </script>
+  <script>
+    let roomId = false;
+
+    $(function () {
+      // Correctly decide between ws:// and wss://
+      var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+      var ws_path = ws_scheme + "://" + window.location.host + "/chat/stream/";
+      console.log("Connecting to " + ws_path);
+
+      //var socket = new WebSocket(ws_path);
+      var socket = new ReconnectingWebSocket(ws_path);
+      var roomName = null;
+      $(".sending-form").on("submit", function () {
+
+        event.preventDefault();
+        if (roomName) {
+          socket.send(
+            JSON.stringify({
+              "command": "send",
+              "room": roomName,
+              "message": document.querySelector('#typed_msg').value
+            })
+          );
+          $("#typed_msg").empty();
+          return false;
+        }
+      });
+
+      $("#upload-photos-button").click(function () {
+        $("#fileupload").click();
+      });
+
+      /* 2. INITIALIZE THE FILE UPLOAD COMPONENT */
+      $("#fileupload").fileupload({
+        dataType: 'json',
+        done: function (e, data2) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
+          if (data2.result.is_valid) {
+            /*send file to recipient and add a progress bar*/
+            console.log("file uploaded")
+            const message = 'file <a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
+            if (roomName) {
+              socket.send(
+                JSON.stringify({
+                  "command": "send",
+                  "room": roomName,
+                  "message": message
+                })
+              );
+            }
+          }
+
+        }
+      });
+
+      // Handle incoming messages
+      socket.onmessage = function (message) {
+        console.log("message", message)
+        console.log("Got websocket message " + message.data)
+        var data = JSON.parse(message.data);
+        console.log("data", data)
+        // Handle errors
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+
+        message = data.message
+
+
+        // Handle joining
+        if (data.join) {
+          console.log("Joining room " + data.join);
+          roomName = data.join;
+
+
+          //   console.log("myself value: " + $("#myself").val() + "data.from_user value: " + message.from_user)
+
+          // Hook up send button to send a message
+
+
+
+
+          //hook up sending files
+          /* 1. OPEN THE FILE EXPLORER WINDOW */
+
+
+          $(".user-header h4").html(data.title);
+
+          // Handle leaving
+        } else if (data.leave) {
+          console.log("Leaving room " + data.leave);
+          roomName = null;
+          $("#room-" + data.leave).remove();
+          $(".user-header").empty();
+          $(".chat-log").empty();
+
+          // Handle getting a message
+        } else if (data.message || data.msg_type != 0) {
+          var msgdiv = $(".chat-log");
+          var ok_msg = "";
+
+
+
+          // msg types are defined in chat/settings.py
+          // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
+          const LEFT_ROOM = 5;
+          switch (data.msg_type) {
+            case 0:
+              // Message
+
+              let text = (data.message.text) ? data.message.text : data.message;
+              let user = (data.message.from_user) ? data.message.from_user : data.username;
+              const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
+
+              ok_msg =
+                `<div class='${cssClass}''>` +
+                `<span class='username'>` +
+                user +
+                `: </span>` +
+                `<span class='text' > ` +
+                text +
+                `</span> ` +
+                `</div> `;
+
+
+              break;
+
+            case 1:
+              // Warning / Advice messages
+              ok_msg =
+                "<div class='contextual-message text-warning'>" +
+                data.message +
+                "</div>";
+              break;
+            case 2:
+              // Alert / Danger messages
+              ok_msg =
+                "<div class='contextual-message text-danger'>" +
+                data.message +
+                "</div>";
+              break;
+            case 3:
+              // "Muted" messages
+              ok_msg =
+                "<div class='contextual-message text-muted'>" +
+                data.message +
+                "</div>";
+              break;
+            /* case 4:
+                 // User joined room
+                 ok_msg =
+                     "<div class='contextual-message text-muted'>" +
+                     data.username +
+                     " joined the room!" +
+                     "</div>";
+                 break;
+             case LEFT_ROOM:
+                 // User left room
+                 ok_msg =
+                     "<div class='contextual-message text-muted'>" +
+                     data.username +
+                     " left the room!" +
+                     "</div>";
+                 break;*/
+            case "created":
+              ok_msg =
+                $(".rooms").append(
+                  `<li class="room-link" data-room-id="${data.room}"> ${data.name}</li>`
+                );
+
+              break;
+            case "room_exists":
+              $("li[data-room-id=" + data.room_id + "]").click();
+              ok_msg =
+                "<div class='contextual-message text-muted'>room already exists</div>";
+              break;
+
+            case "get_members":
+              var people = data.member
+
+
+              // $(".avatar-list").append(
+              //`<li><img src="" alt="user" class="profile-photo-lg"></li>`
+              // );
+
+              $(".list-of-members").append(
+                `       <li>
+            		        <h4><a href="#" class="profile-link">${people.username}</a></h4>
+        	            </li>`
+
+              );
+
+              /*$(".remove-buttons").append(
+                  `<li style="padding-bottom: 18px;"><button data-id="${people.id}" class="remove-user">Remove User</button>
+                      </li>`      //attach user id to remove button
+              );*/
+
+              break;
+
+            default:
+              console.log("Unsupported message type!");
+              return;
+          }
+
+          $(".chat-log").html();
+          if (data.msg_type != "created")
+            msgdiv.append(ok_msg);
+
+          msgdiv.scrollTop(msgdiv.prop("scrollHeight"));
+        } else {
+          console.log("Cannot handle message!");
+        }
+      };
+
+
+      // Says if we joined a room or not by if there's a div for it
+      inRoom = function (roomId) {
+        return $("#room-" + roomId).length > 0;
+      };
+
+      // Room join/leave
+
+      /* -Show all saved messages when joining a room
+                  -Make it if already in that room either do nothing or reload that room
+                  -if not in that room leave current room, if in one, then join the
+                  room that was clicked on
+                  -If not in room when a message comes in give it an unread class*/
+
+
+      function roomClick() {
+        roomId = $(this).attr("data-room-id");
+        if (inRoom(roomId)) {
+          // Leave room
+
+          $(this).removeClass("joined");
+          socket.send(
+            JSON.stringify({
+              command: "leave",
+              room: roomId,
+            })
+          );
+          $(".chat-log").empty();
+          //empty chat log
+        } else {
+          // Join room
+
+          $(this).addClass("joined");
+          socket.send(
+            JSON.stringify({
+              command: "join",
+              room: roomId,
+            })
+          );
+
+
+          $(".list-of-members").empty();
+
+          socket.send(
+            JSON.stringify({
+              command: "members",
+              room: roomId,
+            })
+          );
+
+          $(".left-panel").hide();
+          $(".middle-panel").show();
+          $("#typed_msg").show();
+          $("#upload-photos-button").show();
+          $(".msg_send_btn").show();
+          $(".user-header").show();
+          $("#create-chat").show();
+          $("#tag-input").hide();
+          $("#users-list").hide();
+          $("#create-group").hide();
+          $(".chat-log").empty();
+          $(".rightAccordion").show();
+
+        }
+      }
+      $(document).on('click', '.room-link', roomClick)
+
+
+
+      // Creating Rooms
+
+      $("#create-chat").click(function () {
+        if (roomId) {
+          if (inRoom(roomId)) {
+            // Leave room
+
+            $(this).removeClass("joined");
+            socket.send(
+              JSON.stringify({
+                command: "leave",
+                room: roomId,
+              })
+            );
+          }
+        }
+        $("#upload-photos-button").hide();
+        $(".user-header").hide();
+        $("#create-chat").hide();
+        $("#tag-input").show();
+        $("#users-list").show();
+        $("#create-group").show();
+        $(".chat-log").empty();
+        $("#typed_msg").hide();
+        $(".msg_send_btn").hide();
+        $(".rightAccordion").hide();
+      });
+
+      $("#create-group").click(function () {
+        socket.send(
+          JSON.stringify({
+            command: "create",
+            newUsers: JSON.parse($("#tag-input").val()),
+          })
+        );
+
+        $("#tag-input").hide();
+        $("#users-list").hide();
+        $("#tag-input").empty();
+        $("#create-group").hide();
+
+        //join the room that was just created
+
+
+        $("li[data-room-id=" + data.room_id + "]").click();
+
+        $(".msg_send_btn").show();
+        $(".user-header").show();
+        $("#create-chat").show();
+        $("#create-chat").show();
+        $("#typed_msg").show();
+        $("#upload-photos-button").show();
+        $(".rightAccordion").show();
+      });
+
+      // Helpful debugging
+      socket.onopen = function () {
+        console.log("Connected to chat socket");
+      };
+      socket.onclose = function () {
+        console.log("Disconnected from chat socket");
+      };
+    });
+  </script>
 </body>
 
 </html>

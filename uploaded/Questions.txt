@@ -1,0 +1,44 @@
+
+To Do:
+-fix aws to needed specifications
+-join the room that was just created automatically (already have solution, but need to know if it will work)
+-error in tagify but it still works
+-get list of members in the chat
+
+
+
+Summer:
+(may)
+-(can i use the date filter in the javascript like {{ data.message.sent_at|date:"F d"}} {{ data.message.sent_at|time:"g:i"}})
+-avatars and notification for chat (check to see if solution is correct)
+-check if room exists (boolean) and if it doesn't, create it then send message else switch to that room then send it
+Or if you're not in a room when a message is sent check if room exists (boolean) and if it doesn't, 
+create it and send the message else switch rooms then send it
+
+(june)
+-add unread functionality
+-add online status away online offline and add classes for each (counter that you can manually adjust)
+-show last message
+
+(july)
+-Add members to ongoing chat
+-remove members from chat
+-prepend chat clicked to top of list and save positioning even on reload
+(either save data in browser/local storage or in database)
+
+(august)
+-get files that were sent in room and display them (maybe add progress bar for uploading)
+-create tasks (reference figma)
+-rename room
+
+
+
+things to think about:
+-if a single chat show status on profile picture and maybe a show members button to show whose active and whose in group
+and if even one of the members in group is active give chat image an active status
+
+
+
+ (value for tag input is set as the users in the room and then you can add additional ones from the tag-input then you 
+click the create button to create that group) (how do i access that rooms users and do i need to stringify them before i add them to the value also
+do i need a for loop to place each one in the value or can i add them to value all at once?)

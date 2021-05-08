@@ -3,7 +3,7 @@ from django.conf import settings
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from .exceptions import ClientError
-from .utils import get_room_or_error, save_message, create_group, fetch_recent, RoomExistsException
+from .utils import get_room_or_error, save_message, create_group, fetch_recent, fetch_members, RoomExistsException
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -44,6 +44,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         try:
             if command == "join":
                 # Make them join the room
+                print("joined room")
                 await self.join_room(content["room"])
                 messages = await fetch_recent(content["room"])
                 for message in messages:
@@ -57,6 +58,16 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             elif command == "leave":
                 # Leave the room
                 await self.leave_room(content["room"])
+            elif command == "members":
+                # get the members of the room
+                members = await fetch_members(content["room"])
+                print('members', members)
+                for member in members:
+                    await self.send_json({'member': {
+                        'id': member.id,
+                        'username': member.username,
+                        'email': member.email
+                    }, 'msg_type': 'get_members', })
             elif command == "send":
                 message = await save_message(content["room"], self.scope["user"], content["message"])
                 await self.send_room(content["room"], content["message"])
