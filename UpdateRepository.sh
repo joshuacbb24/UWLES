@@ -10,5 +10,6 @@ rm -rf /app/**
 cp -r ~/UWLES/** /app
 rm -rf /app/.git**
 cd /app
-tmux new-session -d -s "django" "LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH /usr/bin/python3 manage.py runserver '0.0.0.0:8000'"
+pip3 install --user -r requirements.txt 
+tmux new-session -d -s "django" "bash startServer.sh"
 
