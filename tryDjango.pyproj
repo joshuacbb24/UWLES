@@ -4,7 +4,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>tryDjango</Name>
     <RootNamespace>tryDjango</RootNamespace>
-    <InterpreterId>MSBuild|env3|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|env2|$(MSBuildProjectFullPath)</InterpreterId>
     <TestFramework>unittest</TestFramework>
     <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
@@ -39,7 +39,13 @@
     <Compile Include="app\consumers.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="app\context_processors.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\decorators.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\exceptions.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\filters.py">
@@ -60,6 +66,9 @@
     <Compile Include="app\urls.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="app\utils.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
@@ -77,6 +86,7 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="app\migrations\" />
+    <Folder Include="app\static\app\audio\" />
     <Folder Include="app\templatetags\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
@@ -89,18 +99,62 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\content\chat.css" />
+    <Content Include="app\static\app\content\chatPage.css" />
+    <Content Include="app\static\app\content\chatPopUp.css" />
+    <Content Include="app\static\app\content\chatscreen.css" />
     <Content Include="app\static\app\content\format.css" />
     <Content Include="app\static\app\content\instantmessage.css" />
+    <Content Include="app\static\app\content\instantmessage2.css" />
     <Content Include="app\static\app\content\login.css" />
     <Content Include="app\static\app\content\main.css" />
+    <Content Include="app\static\app\content\multichat.css" />
     <Content Include="app\static\app\content\profile.css" />
     <Content Include="app\static\app\content\resourcelayout.css" />
     <Content Include="app\static\app\content\signup.css" />
     <Content Include="app\static\app\content\style.css" />
+    <Content Include="app\static\app\content\tagify.css" />
+    <Content Include="app\static\app\content\tags.css" />
+    <Content Include="app\static\app\scripts\Array.findIndex.js" />
+    <Content Include="app\static\app\scripts\Array.includes.js" />
+    <Content Include="app\static\app\scripts\Array.some.js" />
+    <Content Include="app\static\app\scripts\AutoUrlDetect.js" />
+    <Content Include="app\static\app\scripts\basic-upload.js" />
     <Content Include="app\static\app\scripts\chat.js" />
+    <Content Include="app\static\app\scripts\chat2 - Copy.js" />
+    <Content Include="app\static\app\scripts\chat2.js" />
+    <Content Include="app\static\app\scripts\defaults.js" />
+    <Content Include="app\static\app\scripts\default_avatar.js" />
+    <Content Include="app\static\app\scripts\dropdown.js" />
+    <Content Include="app\static\app\scripts\Element.classList.js" />
+    <Content Include="app\static\app\scripts\Element.closest.js" />
+    <Content Include="app\static\app\scripts\Element.matches.js" />
+    <Content Include="app\static\app\scripts\es6-promise.js" />
+    <Content Include="app\static\app\scripts\Event.js" />
+    <Content Include="app\static\app\scripts\EventDispatcher.js" />
+    <Content Include="app\static\app\scripts\events.js" />
     <Content Include="app\static\app\scripts\format.js" />
+    <Content Include="app\static\app\scripts\helpers.js" />
+    <Content Include="app\static\app\scripts\jquery.fileupload.js" />
+    <Content Include="app\static\app\scripts\jquery.iframe-transport.js" />
     <Content Include="app\static\app\scripts\jquery.js" />
+    <Content Include="app\static\app\scripts\jQuery.tagify.min.js" />
+    <Content Include="app\static\app\scripts\jquery.ui.widget.js" />
+    <Content Include="app\static\app\scripts\leftChat.js" />
     <Content Include="app\static\app\scripts\main.js" />
+    <Content Include="app\static\app\scripts\NodeList.forEach.js" />
+    <Content Include="app\static\app\scripts\Object.assign.js" />
+    <Content Include="app\static\app\scripts\pop-up-chat.js" />
+    <Content Include="app\static\app\scripts\pop.js" />
+    <Content Include="app\static\app\scripts\react.tagify.js" />
+    <Content Include="app\static\app\scripts\rightChat.js" />
+    <Content Include="app\static\app\scripts\String.includes.js" />
+    <Content Include="app\static\app\scripts\String.trim.js" />
+    <Content Include="app\static\app\scripts\styles.scss" />
+    <Content Include="app\static\app\scripts\tag.js" />
+    <Content Include="app\static\app\scripts\tagify.js" />
+    <Content Include="app\static\app\scripts\tagify.min.js" />
+    <Content Include="app\static\app\scripts\tagify.polyfills.min.js" />
+    <Content Include="app\static\app\scripts\templates.js" />
     <Content Include="app\templates\app\addclients.html" />
     <Content Include="app\templates\app\add_individuals.html" />
     <Content Include="app\templates\app\add_organizations.html" />
@@ -109,9 +163,11 @@
     <Content Include="app\templates\app\clientlist.html" />
     <Content Include="app\templates\app\dashboard2.html" />
     <Content Include="app\templates\app\directory.html" />
+    <Content Include="app\templates\app\file_upload.html" />
     <Content Include="app\templates\app\format.html" />
     <Content Include="app\templates\app\home.html" />
     <Content Include="app\templates\app\ListView.html" />
+    <Content Include="app\templates\app\multichat.html" />
     <Content Include="app\templates\app\removeclients.html" />
     <Content Include="app\templates\app\reset_password_confirm.html" />
     <Content Include="app\templates\app\reset_password.html" />
@@ -123,6 +179,7 @@
     <Content Include="app\templates\app\signup.html" />
     <Content Include="app\templates\app\userinfo.html" />
     <Content Include="app\templates\app\profile.html" />
+    <Content Include="app\templates\chatpage.html" />
     <Content Include="requirements.txt" />
     <Content Include="app\static\app\content\bootstrap.css" />
     <Content Include="app\static\app\content\bootstrap.min.css" />
@@ -170,17 +227,8 @@
     </Interpreter>
     <Interpreter Include="env2\">
       <Id>env2</Id>
-      <Version>3.9</Version>
-      <Description>env2 (Python 3.9)</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
-    <Interpreter Include="env3\">
-      <Id>env3</Id>
       <Version>3.7</Version>
-      <Description>env3 (Python 3.7 (64-bit))</Description>
+      <Description>env2 (Python 3.7 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>

@@ -1,7 +1,7 @@
 """
 Definition of models.
 """
-
+import random
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group
@@ -35,6 +35,8 @@ class MyAccountManager(BaseUserManager):
 class Account(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
+    avatar = models.ImageField(null=True, blank=True, upload_to='profile_pics')
+    bgColor = models.CharField(max_length=10, null=True, blank=True)
     date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_admin = models.BooleanField(default=False)
@@ -58,22 +60,50 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return True
+
+    def populate_bgColor(self):
+        random_number = random.randint(0, 16777215)
+        hex_number = format(random_number, 'x')
+        self.bgColor = '#' + hex_number
+        # TODO maybe remove this model?
     
 class OfflineMessage(models.Model):
     """Messages queued for delivery when a user connnects"""
-    to_user = models.ForeignKey(Account, on_delete=models.PROTECT, related_name='offline_from_user')
-    from_user = models.ForeignKey(Account, on_delete=models.PROTECT, related_name='offline_to_user')
+    to_user = models.ForeignKey(
+        Account, on_delete=models.PROTECT, related_name='offline_from_user')
+    from_user = models.ForeignKey(
+        Account, on_delete=models.PROTECT, related_name='offline_to_user')
     message = models.CharField(max_length=1024)
 
+
+# TODO maybe remove this model?
 class Channels(models.Model):
     """The channel/socket associted with each user"""
     user = models.ForeignKey(Account, on_delete=models.PROTECT, unique=True)
     channel_name = models.CharField(max_length=512)
 
+
+class ChatGroup(models.Model):
+    group_name = models.CharField(max_length=100, null=True, unique=True)
+    created_by = models.ForeignKey(Account, on_delete=models.PROTECT)
+    members = models.ManyToManyField(Account, related_name="all_group_members")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.group_name
+
+    def last_message(self):
+        try:
+            return Messages.objects.filter(parent_group=self.pk).order_by('date-sent')[0]
+        except IndexError:
+            return None
+
+
 class Messages(models.Model):
     """"messages that have actually been delivered"""
-    to_user = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="to_user")
-    from_user = models.ForeignKey(Account, on_delete=models.PROTECT, related_name="from_user")
+    chat_group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, null=True)
+    from_user = models.ForeignKey(
+        Account, on_delete=models.PROTECT, related_name="messages_sent")
     message = models.CharField(max_length=1024)
     sent_at = models.DateTimeField(auto_now_add=True)
 
@@ -270,3 +300,8 @@ class ResourceDirectory(models.Model):
 
     def __str__(self):
         return self.dir_name
+
+class UploadedFile(models.Model):
+    file = models.FileField()
+    owner = models.ForeignKey(Account, null=True, on_delete=models.PROTECT)
+    uploaded_at = models.DateTimeField(auto_now_add=True)

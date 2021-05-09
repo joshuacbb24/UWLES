@@ -20,13 +20,19 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                    'placeholder':'Password'}))
 
 class User_Creation_Form(UserCreationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username'}),required = True)
-    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Email'}),required = True)
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),required = True)
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Confirm'}),required = True)
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Username'}), required=True)
+    email = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Email'}), required=True)
+    avatar = forms.ImageField(widget=forms.FileInput, required=False)
+    password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'placeholder': 'Password'}), required=True)
+    password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'placeholder': 'Confirm'}), required=True)
+
     class Meta:
         model = Account
-        fields = ("username", "email", "password1",)
+        fields = ("username", "email", "password1", "avatar")
 
 class User_Bg(ModelForm):
     firstname = forms.CharField(label='First Name',)
@@ -148,3 +154,14 @@ class filter(forms.Form):
         ('Dorchester', 'Dorchester'),
         )
     location = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=COUNTY_CHOICES)
+
+class UploadFileForm(forms.ModelForm):
+    class Meta:
+        model = UploadedFile
+        fields = ['file']
+
+
+class GetBackgroundColorForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['bgColor']

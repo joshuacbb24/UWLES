@@ -1,5 +1,5 @@
 .open-button {
-    background-color: #015D67;
+    background-color: #015d67;
     color: white;
     padding: 16px 20px;
     border: none;
@@ -15,8 +15,8 @@
 .chat-popup {
     display: none;
     position: fixed;
-    bottom: 0;
-    right: 250px;
+    bottom: 0px;
+    right: 246px;
     border: 3px solid #f1f1f1;
     z-index: 9;
     width: 21%;
@@ -30,12 +30,12 @@
     padding: 5px 10px 5px 12px;
     width: 80%;
     border-radius: 3px;
-    background: #F0F0F0 none repeat scroll 0 0;
+    background: #f0f0f0 none repeat scroll 0 0;
 }
 
 .outgoing {
     position: relative;
-    background: #A0A0A0 none repeat scroll 0 0;
+    background: #a0a0a0 none repeat scroll 0 0;
     border-radius: 3px;
     font-size: 14px;
     margin-bottom: 5px;
@@ -67,7 +67,7 @@
 
 .grid-container {
     display: grid;
-    grid-template-areas: 'menu header' 'menu main' 'menu footer';
+    grid-template-areas: "menu header" "menu main" "menu footer";
     grid-gap: 10px;
     background-color: #f0f0f0;
     padding: 10px;
@@ -102,7 +102,7 @@
 .chatHeader {
     position: relative;
     top: 0;
-    background-color: #015D67;
+    background-color: #015d67;
     color: white;
     padding: 16px 20px;
     border: none;
@@ -110,7 +110,6 @@
 }
 
 /* Set a style for the submit/send button */
-
 
 /* Add a red background color to the cancel button */
 .cls_btn {

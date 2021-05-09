@@ -1,12 +1,98 @@
 ﻿{% load static %}
+{% load project_templates %}
 {% block content %}
 	<head>
 		<link rel="stylesheet" type="text/css" href="{% static 'app/content/resourcelayout.css' %}"/>
+		<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
+		<script src="{% static 'app/scripts/jquery.js' %}"></script>
+		<script src="{% static 'app/scripts/main.js' %}"></script>
+		<script src="{% static 'app/scripts/format.js' %}"></script>
 	</head>
 	
 	<body>
+		<div class="sidebar">
+
+
+			<div class="sidebar-menu">
+				<ul>
+					<li>
+						<a href="{% url 'dashboard' %}">
+							<span id="fist-element" class="las la-home"></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'resourcedirectory' %}" class="active">
+							<span class="las la-book"></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'multichat' %}">
+							<span class="las la-comment-alt"></span>
+						</a>
+					</li>
+					<li>
+						<a href="{% url 'clientlist' %}">
+							<span class="las la-user-friends"></span>
+						</a>
+					</li>
+					<li>
+					  <a href="">
+						  <span class="las la-plus-circle"></span>
+					  </a>
+				  </li>
+				</ul>
+			</div>
+		  </div>
+		  
+		  
+		  
+		  <header class="dash-header">
+    <div class="sidebar-header">
+      <span id="sidebar-toggle" class="las la-bars"></span>
+  </div>
+<div id="leftside">
+  <div class="search-wrapper">
+      <span class="las la-search"></span>
+      <input type="search" placeholder="Search here" />
+  </div>
+  <div class="vl"></div>
+    <div class="dropdown">
+      <div class="user-wrapper">
+        <a href="{% url 'profile' %}"><div class="profile-pic-wrapper" data-username="{{user.username}}" data-bgcolor="{{user.bgColor}}">
+            {% if user.avatar %}
+            <img class="profile-pic" src="{{user.avatar.url}}">
+            {% endif %}
+          </div></a>
+            <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
+          <div class="dropdown-content">
+            <div id="usermenu">
+            {% if user.id in userlist %}
+                {% for back in background %}
+                    {% if back.user_id == user.id %}
+                        <h3>{{ back.firstname }} {{ back.lastname }}</h3>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <h3>{{ user.username }}</h3>
+            {% endif %}
+			{% if request.user|has_group:"caseworker" %}
+                <h4>Caseworker</h4>
+            {% elif request.user|has_group:"client" %}
+                <h4>Client</h4>
+            {% else %}
+                <h4>Not implemented</h4>
+            {% endif %}
+            </div>
+            <a href="{% url 'logout' %}">Log out</a>
+          </div>
+      </div>
+  </div>
+</div>
+
+</header>
 		<div class="container">
-			<div id="sidebar"></div>
 			<div id="heading">
 				<p class="prevPages"> Home ></p> <p class ="currentPage"> Resource Directory</p>
 			</div>

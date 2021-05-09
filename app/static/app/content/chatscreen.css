@@ -1,0 +1,384 @@
+body {
+    margin: 0;
+    background-color: #EBF2F2;
+    font-family: effra, Helvetica;
+}
+
+.sidebar {
+    width: 60px;
+    left: 0;
+    top: 60px;
+    height: 100%;
+    background-image: linear-gradient(to bottom, #68D0D1, #015D67, #164E66);
+    position: fixed;
+    z-index: 10;
+}
+
+.dash-header {
+    display: flex;
+    padding: .8rem 1rem;
+    background-image: linear-gradient(to right, #68D0D1, #015D67, #164E66);
+    height: 60px;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+    position: fixed;
+    right: 0;
+}
+
+.chatContainer {
+    display: grid;
+    height: 100%;
+    margin-left: 80px;
+    margin-top: 100px;
+    grid-template-columns: 25% 50% 25%;
+    grid-template-rows: 10% 90%;
+    grid-template-areas: "topnav1 topnav2 right" "left middle right"
+}
+
+.topnav2 {
+    grid-area: topnav2;
+    overflow: hidden;
+    background-color: #FCFCFC;
+}
+
+img.chatPic {
+    float: left;
+    width: 7%;
+    margin-top: 15px;
+    margin-left: 16px;
+}
+
+p.chatName {
+    float: left;
+    margin-left: 20px;
+    font-size: 18pt;
+    font-weight: normal;
+    color: #013D44;
+}
+
+.topnav2:after {
+    content: '\FF0B';
+    font-size: 50px;
+    color: #AFAFAF;
+    font-weight: bold;
+    float: right;
+    margin-right: 16px;
+}
+
+.topnav1 {
+    grid-area: topnav1;
+    overflow: hidden;
+    background-color: #FCFCFC;
+}
+
+    .topnav1 .search-container {
+        float: center;
+        margin-left: 16px;
+    }
+
+    .topnav1 input[type=text] {
+        padding: 6px;
+        margin-top: 8px;
+        font-size: 17px;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 5px;
+        border-color: #AFAFAF;
+        width: 80%;
+        height: 60%;
+    }
+
+    .topnav1 .search-container button {
+        float: center;
+        padding: 6px 10px;
+        margin-top: 8px;
+        background: #AFAFAF;
+        font-size: 17px;
+        cursor: pointer;
+        height: 55%;
+    }
+
+        .topnav1 .search-container button:hover {
+            background: #ccc;
+        }
+
+
+
+/*.column {
+    float: left;
+    height: 90%;
+  }*/
+
+.left {
+    grid-area: left;
+    /* width: 25%;
+    height: 90%;*/
+    background-color: #FCFCFC;
+}
+
+.middle {
+    grid-area: middle;
+    /* width: 50%;
+    height: 90%;*/
+    background-color: #D7D7D7;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.right {
+    grid-area: right;
+    /* width: 22%;
+    height: 100%;*/
+    background-color: #D7D7D7;
+}
+
+/* Clear floats after the columns */
+/* .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }*/
+
+/* .topnav1 input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    margin-left: 5px;
+    font-size: 17px;
+    border-style: solid;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: #AFAFAF;
+    width: 80%;
+    height: 8%;
+  }
+  
+  .topnav1 .search-container button {
+    float: right;
+    padding: 6px 10px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background: #ddd;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  
+  .topnav1 .search-container button:hover {
+    background: #ccc;
+  }*/
+
+
+
+.leftAccordion {
+    background-color: white;
+    color: #013D44;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    height: 8%;
+    border-bottom: 1px;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-style: solid;
+    border-color: #AFAFAF;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+    .leftActive, .leftAccordion:hover {
+        background-color: #ccc;
+    }
+
+    .leftAccordion:after {
+        content: '\1433';
+        color: #AFAFAF;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+    }
+
+.leftActive:after {
+    content: "\142F";
+}
+
+.leftPanel {
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+
+.left-btn-group button {
+    background-color: white; /* Green background */
+    border: none; /* Green border */
+    color: #5F5F5F; /* White text */
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    width: 100%; /* Set a width if needed */
+    height: 10%;
+    display: block; /* Make the buttons appear below each other */
+    text-align: left;
+}
+
+    .left-btn-group button:not(:last-child) {
+        border-bottom: none; /* Prevent double borders */
+    }
+
+    /* Add a background color on hover */
+    .left-btn-group button:hover {
+        background-color: #AFAFAF;
+    }
+
+
+/*
+  .topnav2 {
+    overflow: hidden;
+    background-color: #FCFCFC;
+    height: 10%;
+    width: 100%;
+    color: #013D44;
+    margin: 0;
+  }
+  .belowHeader{
+    width: 80%;
+    border-style: solid;
+    border-left: 1px;
+    border-right: 1px;
+    border-top: 0px;
+    border-bottom: 0px;
+    border-color: red;
+  }*/
+
+.messages {
+    width: 100%;
+    height: 90%;
+}
+
+
+
+.txtbox input[type=text] {
+    float: left;
+    padding: 6px;
+    margin-left: 16px;
+    border: none;
+    font-size: 17px;
+    width: 90%;
+    border-radius: 12px;
+}
+
+
+
+.rightAccordion {
+    background-color: #D7D7D7;
+    color: #013D44;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    height: 10%;
+    border-bottom: 1px;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-style: solid;
+    border-color: #AFAFAF;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    margin-bottom: 5px;
+}
+
+    .rightActive, .rightAccordion:hover {
+        background-color: #ccc;
+    }
+
+    .rightAccordion:after {
+        content: '\1433';
+        color: #AFAFAF;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+    }
+
+.rightActive:after {
+    content: "\142F";
+}
+
+.rightPanel {
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+
+.right-btn-group button {
+    background-color: white; /* Green background */
+    border: none; /* Green border */
+    color: #5F5F5F; /* White text */
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    width: 100%; /* Set a width if needed */
+    height: 10%;
+    display: block; /* Make the buttons appear below each other */
+    text-align: left;
+}
+
+    .right-btn-group button:not(:last-child) {
+        border-bottom: none; /* Prevent double borders */
+    }
+
+    /* Add a background color on hover */
+    .right-btn-group button:hover {
+        background-color: #AFAFAF;
+    }
+
+
+.container {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.darker {
+    border-color: #ccc;
+    background-color: #ddd;
+}
+
+.container::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.container img {
+    float: left;
+    max-width: 60px;
+    width: 100%;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+    .container img.right {
+        float: right;
+        margin-left: 20px;
+        margin-right: 0;
+    }
+
+.time-right {
+    float: right;
+    color: #aaa;
+}
+
+.time-left {
+    float: left;
+    color: #999;
+}

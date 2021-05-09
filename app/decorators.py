@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 
 def unauthenticated_user(view_func):
@@ -16,7 +16,7 @@ def allowed_user(allowed_roles=[]):
             if request.user.groups.filter(name__in=allowed_roles).exists():
                 return view_func(request, *args, **kwargs)
             else:
-                return HttpResponse('Not authorized to view')
+                return HttpResponseRedirect('/')
             return view_func(request, *args, **kwargs)
         return wrapper_func
     return decorator

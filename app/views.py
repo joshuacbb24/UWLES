@@ -6,11 +6,14 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from django.shortcuts import render, redirect
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from .forms import *
 from .models import *
 from .filters import serviceFilter, directoryFilter
 from .decorators import unauthenticated_user, allowed_user
+from django.views import View
+from django.core.files.storage import FileSystemStorage
+
 
 @login_required(login_url='login')
 def home(request):
@@ -94,17 +97,21 @@ def load_directory(request, pk):
 def signup(request):
     """Renders the signup page."""
     if request.method == 'POST':
-        form = User_Creation_Form(request.POST)
+        form = User_Creation_Form(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.populate_bgColor()
+            user.save()
+
             username = form.cleaned_data.get('username')
             user_password = form.cleaned_data.get('password1')
             user_email = form.cleaned_data.get('email')
+            user_avatar = form.cleaned_data.get('avatar')
             group = Group.objects.get(name="client")
             user = authenticate(username=username, password=user_password)
             user.groups.add(group)
             login(request, user)
-            return redirect('home')
+            return redirect('dashboard')
     else:
         form = User_Creation_Form()
     return render(request, 'app/signup.html', {'form': form})
@@ -182,6 +189,13 @@ def profile(request):
             'object4': obj4,
             'date_joined': date_joined,
     }
+    return render(request, 'app/profile.html', context)
+    context = {}
+    if request.method == 'POST':
+        uploaded_file = request.FILES['document']
+        fs = FileSystemStorage()
+        name = fs.save(uploaded_file.name, uploaded_file)
+        context['url'] = fs.url(name)
     return render(request, 'app/profile.html', context)
 
 @login_required(login_url='login')
@@ -409,7 +423,12 @@ def add_skills(request):
 @login_required(login_url='login')
 def dashboard(request):
     users = Account.objects.exclude(pk=request.user.id)
-    return render(request, 'app/dashboard2.html', {'users': users})
+    rooms = ChatGroup.objects.filter(members=request.user).order_by("group_name")
+    try:
+        user_bg = BgInfo.objects.get(user=request.user.id)
+    except BgInfo.DoesNotExist:
+        user_bg = None
+    return render(request, 'app/dashboard2.html', {'users': users, 'user_bg': user_bg, "rooms": rooms,})
 
 @login_required(login_url='login')
 def room(request):
@@ -426,6 +445,7 @@ def make_client_account(request):
             username = form.cleaned_data.get('username')
             user_password = form.cleaned_data.get('password1')
             user_email = form.cleaned_data.get('email')
+            user_avatar = form.cleaned_data.get('avatar')
             group = Group.objects.get(name="client")
             user = authenticate(username=username, password=user_password)
             user.groups.add(group)
@@ -433,3 +453,39 @@ def make_client_account(request):
     else:
         form = User_Creation_Form()
     return render(request, 'app/signup.html', {'form': form})
+
+@login_required
+def multichat(request):
+    """
+    Root page view. This is essentially a single-page app, if you ignore the
+    login and admin parts.
+    """
+    # Get a list of rooms, ordered alphabetically
+    users = Account.objects.exclude(pk=request.user.id)
+    rooms = ChatGroup.objects.filter(
+        members=request.user).order_by("group_name")
+
+    # Render that in the index template
+    return render(request, "app/multichat.html", {
+        "rooms": rooms, 'users': users,
+    })
+
+# find out if the rendering htmls is correct
+
+
+class BasicUploadView(View):
+    def get(self, request):
+        UploadedFiles_list = UploadedFile.objects.all()
+        return render(request, 'app/file_upload.html', {'UploadedFiles': UploadedFiles_list})
+
+    def post(self, request):
+        form = UploadFileForm(self.request.POST, self.request.FILES)
+        if form.is_valid():
+            # form.save()
+            UploadedFile = form.save()
+            data = {'is_valid': True, 'name': UploadedFile.file.name,
+                    'url': UploadedFile.file.url}
+            # return redirect("/")
+        else:
+            data = {'is_valid': False}
+        return JsonResponse(data)

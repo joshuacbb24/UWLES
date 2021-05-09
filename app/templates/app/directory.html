@@ -10,73 +10,172 @@
 </head>
 <body>
 <style>
-dropbtn {
-         background-color: #4CAF50;
-         color: white;
+    #searchHeader {
+         position: relative;
+         display: grid;
+         grid-template-columns: 40% 60%;
+    }
+
+
+    .headLeft {
+        display: block;
+        position: relative;
+        text-align: left;
+        top:17px;
+    }
+    .headRight {
+        text-align: right;
+    }
+
+     #searchBar, #searchBar2 {
+        display: inline-block;
+        
+    }
+   
+    #filterForm {
+        height: 300px;
+        width: 298px;
+        border: 1px solid #DEDEDE;
+        background: #FFFFFF;
+        padding: 8px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .fieldChild {
+       display: inline-block;
+    }
+
+
+    .filterLabel {
+    display: block;
+    text-align: center;
+    text-transform:uppercase;
+    font-size: 12px;
+    padding: 0px;
+    }
+
+    .filterDiv {
+        display: inline;
+    }
+
+    .filterChoices {
+        display: inline;
+        padding: 8px;
+        
+    }
+
+    .filterImage {
+        position: relative;
+        bottom:4px;
+        right: 5px;
+    }
+
+
+     #id_service_county {
+        border-bottom: 1px solid #DEDEDE;
+        
+    }
+    #id_service_eligbility {
+    }
+
+
+
+
+.dropbtn {
+         position: relative;
+         top:8px;
+         height: 40px;
+         width: 40px;
+         background: #FFFFFF;
+        // color: white;
          padding: 16px;
          font-size: 16px;
-         border: none;
+         border: 1px solid #BDBDBD;
          cursor: pointer;
+         border-radius: 2px;
     }
     .dropbtn:hover, .dropbtn:focus {
             background-color: #3e8e41;
     }
     #myInput {
   box-sizing: border-box;
-  background-image: url('searchicon.png');
+  background-image: url('/static/app/images/search.png');
   background-position: 14px 12px;
   background-repeat: no-repeat;
   font-size: 16px;
   padding: 14px 20px 12px 45px;
-  border: none;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #BDBDBD;
+  //border-bottom: 1px solid #ddd;
+  width: 298.68px;
+  height: 40px;
+  border-radius: 2px;
 }
 
 #myInput:focus {outline: 3px solid #ddd;}
 
 #myInput2 {
   box-sizing: border-box;
-  background-image: url('searchicon.png');
   background-position: 14px 12px;
   background-repeat: no-repeat;
   font-size: 16px;
   padding: 14px 20px 12px 45px;
-  border: none;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #BDBDBD;
+  width: 298.68px;
+  height: 40px;
+  border-radius: 2px
 }
 
 #myInput2:focus {outline: 3px solid #ddd;}
-#searchBar {
-      
+
+.dropFilter{
+    position: relative;
+  display: inline-block;
+ }
+
+ .dropdownFilter-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        font-size: 14px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        text-align: center;
+    }
+
+#dropdownFilter-container li {
+        display: inline-block;
+        padding: 7px;
     }
 
 
-.dropdown {
+.dropdownSearch {
   position: relative;
   display: inline-block;
 }
 
 
 
-.dropdown-content {
+.dropdownSearch-content {
   
-  position: absolute;
+ position: absolute;
   background-color: #f6f6f6;
   min-width: 230px;
   overflow: auto;
   border: 1px solid #ddd;
   z-index: 1;
+   display: none;
+   text-align: left;
 }
 
-.dropdown-content a {
+.dropdownSearch-content a {
   
   color: black;
   padding: 12px 16px;
   text-decoration: none;
-  display: none;
+  display: block;
 }
 
-.dropdown a:hover {background-color: #ddd;}
+.dropdownSearch a:hover {background-color: #ddd;}
 
 .show {display: block;}
     table {
@@ -490,62 +589,80 @@ dropbtn {
 </style>
 
 
-<div class=" filters">
-    <button onclick="filterButton()"><img src="{% static 'app/images/filter.png' %}" class="defaultImage" alt="default resource image"/></button>
-    <div class="filter1" id="filter1">
-           <form method="get" id="filterForm">
-                {{myFilter2.form}}
-            </form>
+<div id="searchHeader">
+
+    <div class="headLeft">
+       <a style="width:40px; bottom:70px; height:17px; color:#979797;">Home</a>
+        <img src="{% static 'app/images/union.png' %}" />
+        <a style="width: 131px; height:17px; color:#676767; ">Resource Directory</a>
     </div>
-</div>
-<div id="searchBar">
+
+    <div class="headRight">
+        <div class=" dropFilter">
+           <button class="dropbtn"  onclick="myFunction()"><img src="{% static 'app/images/filter.png' %}" class="filterImage" alt="default resource image"/></button>
+           <div class="dropdownFilter-content" id="dropdownFilter-container">
+           <form method="get" id="filterForm">
+                
+                {% for field in myFilter2.form %}
+                       <div class="filterChoices">
+                       <label class="filterLabel">{{field.label}}</label>
+                       {{ field }}
+                        </div>
+                   
+                   {% endfor %}
+
+            </form>
+            </div>
+        </div>
+
+                <div id="searchBar">
   
-   <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-  <!--  onkeyup="searchBar()"-->    
-     <div class="dropdown-content" id="dropdown-container"> 
+                   <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()" onfocusin="show()" onfocusout="hide()"> 
+                     <div class="dropdownSearch-content" id="dropdownSearch-container"> 
 
     
-        {% for directory in directories %}
-                  {% for article in directory.dir_articles.all %}
-                        <a href="{{article.article_content}}">{{article.article_name}}</a>
-                  {% endfor %}
+                        {% for directory in directories %}
+                                  {% for article in directory.dir_articles.all %}
+                                        <a href="{{article.article_content}}">{{article.article_name}}</a>
+                                  {% endfor %}
 
-                  {% for service in directory.dir_services.all %}
-                      {% for serv in services %}
-                         {% if serv == service %}
-                            <a href= "{{service.service_url}}">{{service.service_name}}</a>
-                          {% endif %}
-                      {% endfor %}
-                  {% endfor %}
-              {% endfor %}
-     </div>
-  </div>
+                                  {% for service in directory.dir_services.all %}
+                                      {% for serv in services %}
+                                         {% if serv == service %}
+                                            <a href= "{{service.service_url}}">{{service.service_name}}</a>
+                                          {% endif %}
+                                      {% endfor %}
+                                  {% endfor %}
+                              {% endfor %}
+                     </div>
+                  </div>
 
 
       
-    <div id="searchBar2">
+            <div id="searchBar2">
 
-   <input type="text" placeholder="Search by location" id="myInput2" onkeyup="filterFunction2()">
-     <div class="dropdown-content" id="dropdown-container"> 
+           <input type="text" placeholder="Search by location" id="myInput2" onkeyup="filterFunction2()" onfocusin="show2()" onfocusout="hide2()" >
+             <div class="dropdownSearch-content" id="dropdownSearch-container2"> 
 
-        {% for directory in directories %}
-         {% for service in directory.dir_services.all %}
+                {% for directory in directories %}
+                 {% for service in directory.dir_services.all %}
           
-                      {% for serv in services %}
-                         {% if serv == service %}
+                              {% for serv in services %}
+                                 {% if serv == service %}
                   
-                                    <a href= "{{service.service_url}}">{{service.service_city}}</a>
+                                            <a href= "{{service.service_url}}">{{service.service_city}}</a>
                                 
-                         {% endif %}
-                      {% endfor %}
+                                 {% endif %}
+                              {% endfor %}
                    
-                  {% endfor %}
-         {% endfor %}
+                          {% endfor %}
+                 {% endfor %}
               
               
-     </div>
+             </div>
+          </div>
     </div>
-
+  </div>
 <script>
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
@@ -561,41 +678,79 @@ toggle between hiding and showing the dropdown content */
       $("#filterForm").submit();
         });
     });
-
-
-
-function myFunction() {
-  var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("myUL");
-    li = ul.getElementsByTagName("li");
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
+    function myFunction() {
+  document.getElementById("dropdownFilter-container").classList.toggle("show");
 }
 
- function filterButton() {
-        var x = document.getElementById("filter1");
-        if (x.style.display == "none") {
-            x.style.display = "block";
-        } else {
-            x.style.display = "none";
-     }
-    } 
+
+
+
+
+function filterButton() {
+    var x = document.getElementById("filter1");
+    alert("hi");
+  if (x.style.display == "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+    }     
+}
+
+    function show() {
+        var input, filter, ul, li, a, i, div;
+        
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("dropdownSearch-container");
+        a = div.getElementsByTagName("a");
+        div.style.display = "block";
+        
+    }
+
+    
+    function hide() {
+        var input, filter, ul, li, a, i, div;
+        
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("dropdownSearch-container");
+        a = div.getElementsByTagName("a");
+        div.style.display = "none";
+    }
+    
+
+       function show2() {
+        var input, filter, ul, li, a, i, div;
+        
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("dropdownSearch-container2");
+        a = div.getElementsByTagName("a");
+        div.style.display = "block";
+        
+    }
+
+    
+    function hide2() {
+        var input, filter, ul, li, a, i, div;
+        
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("dropdownSearch-container2");
+        a = div.getElementsByTagName("a");
+        div.style.display = "none";
+    }
+
+
+
+
 
     function filterFunction() {
         var input, filter, ul, li, a, i, allHidden;
         allHidden = true;
         input = document.getElementById("myInput");
         filter = input.value.toUpperCase();
-        div = document.getElementById("searchBar");
+        div = document.getElementById("dropdownSearch-container");
         a = div.getElementsByTagName("a");
         for (i = 0; i < a.length; i++) {
             txtValue = a[i].textContent || a[i].innerText;
@@ -607,14 +762,7 @@ function myFunction() {
                 a[i].style.display = "none";
             }
         }
-        if (input.value == "") {
-
-            document.getElementById("dropdown-container").stlye.display = "none";
-        }
-
-        else {
-            document.getElementById("dropdown-container").stlye.display = "block";
-        }
+      
     }
     var toggle1 = false;
 var toggle2 = false;
@@ -786,16 +934,14 @@ $("#myInput2").on("keyup", function() {
             }}
     });
 });
-
-
 </script>
-
+<br/>
 <div class="header">
     <div class="name">Name</div>
     <div class="change1"><div class="atoz" id="atoz" onclick="sortTable()"></div></div>
     <div class="category">Category</div>
     <div class="change2"><div class="atoz2" onclick="sortTable2()"></div></div>
-    <div class="showGrid"></div>
+    <div class="showGrid" onclick="location.href = '{% url 'resourcedirectory' %}';"></div>
  </div>
     <br>
     <br>

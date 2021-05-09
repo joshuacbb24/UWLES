@@ -1,7 +1,7 @@
 :root {
     --main-color: #3c3b3b;
-    --color-dark: #1D2231;
-    --text-grey: #8390A2;
+    --color-dark: #1d2231;
+    --text-grey: #8390a2;
 }
 
 * {
@@ -18,7 +18,7 @@
     left: 0;
     top: 60px;
     height: 100%;
-    background-image: linear-gradient(to bottom, #68D0D1, #015D67, #164E66);
+    background-image: linear-gradient(to bottom, #68d0d1, #015d67, #164e66);
     position: fixed;
     z-index: 10;
 }
@@ -47,33 +47,31 @@
 }
 
     .sidebar-menu a.active {
-        background: #EBF2F2;
+        background: #ebf2f2;
         right: 10px;
-        padding-top: .5rem;
-        padding-bottom: .5rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
         border-radius: 30px 0px 0px 30px;
-        color: #68D0D1;
+        color: #68d0d1;
     }
 
     .sidebar-menu a span:first-child {
         font-size: 1.5rem;
     }
 
-
-
 .running {
     position: relative;
     height: 2.5rem;
     width: 100%;
     bottom: 2.4rem;
-    background-color: #EBF2F2;
+    background-color: #ebf2f2;
     top: 0;
 }
 
     .running .dash {
         position: relative;
         float: left;
-        color: #013D44;
+        color: #013d44;
         line-height: 2.5rem;
         font-size: 1rem;
         padding-left: 1rem;
@@ -84,27 +82,27 @@
         float: right;
         font-size: 1.7rem;
         line-height: 2.5rem;
-        color: #013D44;
+        color: #013d44;
         cursor: pointer;
         padding-right: 16rem;
     }
 
 #grad {
-    background-image: linear-gradient(to right, #68D0D1, #015D67, #164E66);
+    background-image: linear-gradient(to right, #68d0d1, #015d67, #164e66);
 }
 
 .main-content {
     margin-top: 3.8rem;
     margin-left: 75px;
-    margin-right: .5rem;
-    background: #EBF2F2;
+    margin-right: 0.5rem;
+    background: #ebf2f2;
     height: 100vh;
 }
 
 .dash-header {
     display: flex;
-    padding: .8rem 1rem;
-    background-image: linear-gradient(to right, #68D0D1, #015D67, #164E66);
+    padding: 0.8rem 1rem;
+    background-image: linear-gradient(to right, #68d0d1, #015d67, #164e66);
     height: 60px;
     width: 100%;
     top: 0;
@@ -118,7 +116,6 @@
     display: table;
     clear: both;
 }
-
 
 .search-wrapper {
     position: relative;
@@ -139,7 +136,7 @@
 
     .search-wrapper input {
         height: 100%;
-        padding: .5rem;
+        padding: 0.5rem;
         border: none;
         outline: none;
     }
@@ -174,12 +171,31 @@
     color: var(--text-grey);
 }
 
+.profile-pic {
+    max-width: 32px;
+    max-height: 32px;
+    width: 32px;
+    height: 32px;
+    white-space: normal;
+    margin-right: 15px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    line-height: 150px;
+    cursor: context-menu;
+    overflow: hidden;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
 .card-single-one {
     display: grid;
     background: #fff;
     border-radius: 5px;
     color: var(--text-grey);
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     margin-bottom: 30px;
     height: 480px;
 }
@@ -189,7 +205,7 @@
     background: #fff;
     border-radius: 5px;
     color: var(--text-grey);
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     height: 300px;
     margin-bottom: 20px;
 }
@@ -203,7 +219,7 @@
     background: #fff;
     border-radius: 5px;
     color: var(--text-grey);
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     margin-bottom: 30px;
     height: 270px;
 }
@@ -214,7 +230,7 @@
     padding: 1rem;
     border-radius: 5px;
     color: var(--text-grey);
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     height: 508px;
 }
 
@@ -224,7 +240,7 @@
     background: #fff;
     color: var(--text-grey);
     border-radius: 5px;
-    box-shadow: -2px 2px 5px rgba(0,0,0,0.5);
+    box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.5);
     height: 92.5%;
     float: right;
     width: 15.6rem;
@@ -246,8 +262,6 @@
     float: left;
 }
 
-
-
 .menu {
     width: 40%;
     float: left;
@@ -261,12 +275,13 @@
 }
 
 .menu3 {
-    width: 15%;
+    width: 10%;
     float: right;
 }
 
 @media screen and (max-width: 900px) {
-    .menu, .menu2 {
+    .menu,
+    .menu2 {
         width: 70%;
         padding: 0;
     }
@@ -310,60 +325,180 @@
     }
 }
 
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     /* STYLES GO HERE */
 }
 
 /* Smartphones (landscape) ----------- */
-@media only screen and (min-width : 321px) {
+@media only screen and (min-width: 321px) {
     /* STYLES GO HERE */
 }
 
 /* Smartphones (portrait) ----------- */
-@media only screen and (max-width : 320px) {
+@media only screen and (max-width: 320px) {
     /* STYLES GO HERE */
 }
 
 /* iPads (portrait and landscape) ----------- */
-@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
     /* STYLES GO HERE */
 }
 
 /* iPads (landscape) ----------- */
-@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
     /* STYLES GO HERE */
 }
 
 /* iPads (portrait) ----------- */
-@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
     /* STYLES GO HERE */
 }
 
 /* Desktops and laptops ----------- */
-@media only screen and (min-width : 1224px) {
+@media only screen and (min-width: 1200px) {
     /* STYLES GO HERE */
+
+    .card-single-one {
+        display: grid;
+        background: #fff;
+        border-radius: 5px;
+        color: var(--text-grey);
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        margin-bottom: 30px;
+        height: 480px;
+    }
+
+    .card-single-two {
+        display: grid;
+        background: #fff;
+        border-radius: 5px;
+        color: var(--text-grey);
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        height: 300px;
+        margin-bottom: 20px;
+    }
+
+    .card-single-three {
+        display: grid;
+        background: #fff;
+        border-radius: 5px;
+        color: var(--text-grey);
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        margin-bottom: 30px;
+        height: 270px;
+    }
+
+    .card-single-four {
+        display: grid;
+        background: #fff;
+        padding: 1rem;
+        border-radius: 5px;
+        color: var(--text-grey);
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        height: 508px;
+    }
+
+    .card-single-right {
+        position: fixed;
+        display: grid;
+        background: #fff;
+        color: var(--text-grey);
+        border-radius: 5px;
+        box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.5);
+        height: 92.5%;
+        float: right;
+        width: 13.6rem;
+        right: 0;
+        z-index: 6;
+        bottom: 2px;
+    }
+
+    .running #dots {
+        position: relative;
+        float: right;
+        font-size: 1.7rem;
+        line-height: 2.5rem;
+        color: #013d44;
+        cursor: pointer;
+        padding-right: 13.2rem;
+    }
+
+    .open-button {
+        background-color: #015d67;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 1;
+        position: fixed;
+        bottom: 0px;
+        right: 250px;
+        width: 20%;
+    }
+
+    /* The popup chat - hidden by default */
+    .chat-popup {
+        display: none;
+        position: fixed;
+        bottom: 0px;
+        right: 246px;
+        border: 3px solid #f1f1f1;
+        z-index: 9;
+        width: 21%;
+    }
 }
 
 /* Large screens ----------- */
-@media only screen and (min-width : 1824px) {
+@media only screen and (min-width: 1350px) {
     /* STYLES GO HERE */
+    .card-single-right {
+        width: 13.6rem;
+    }
+
+    .running #dots {
+        padding-right: 14rem;
+        position: relative;
+    }
+
+    .open-button {
+        background-color: #015d67;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 1;
+        position: fixed;
+        bottom: 0px;
+        right: 250px;
+        width: 20%;
+    }
+
+    /* The popup chat - hidden by default */
+    .chat-popup {
+        display: none;
+        position: fixed;
+        bottom: 0px;
+        right: 246px;
+        border: 3px solid #f1f1f1;
+        z-index: 9;
+        width: 21%;
+    }
 }
 
 /* iPhone 5 (portrait & landscape)----------- */
-@media only screen and (min-device-width : 320px) and (max-device-width : 568px) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) {
     /* STYLES GO HERE */
 }
 
 /* iPhone 5 (landscape)----------- */
-@media only screen and (min-device-width : 320px) and (max-device-width : 568px) and (orientation : landscape) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (orientation: landscape) {
     /* STYLES GO HERE */
 }
 
 /* iPhone 5 (portrait)----------- */
-@media only screen and (min-device-width : 320px) and (max-device-width : 568px) and (orientation : portrait) {
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (orientation: portrait) {
     /* STYLES GO HERE */
 }
-
 
 .dropdown {
     display: inline-block;
@@ -375,7 +510,7 @@
     position: absolute;
     background-color: #f1f1f1;
     width: 12rem !important;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 9;
     top: 47px;
     right: 0;
@@ -401,10 +536,46 @@
     background-color: #ddd;
 }
 
-
 html,
 body {
     height: 100%;
-    background: #EBF2F2;
+    background: #ebf2f2;
     font-family: Helvetica;
+}
+
+.vl {
+    position: relative;
+    border-left: 1px solid white;
+    height: 100%;
+}
+
+#act {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#ref {
+    text-align: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+#rev {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#cli {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
