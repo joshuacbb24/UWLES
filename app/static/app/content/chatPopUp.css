@@ -19,6 +19,22 @@
   height: 70%;
 }
 
+.list-of-members span,
+b {
+  display: block;
+  font-family: Helvetica;
+  color: black;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+.list-of-members span:hover {
+  background-color: rgb(0, 119, 255);
+}
+
 .left-panel {
   float: left;
   overflow: hidden;
