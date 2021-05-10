@@ -1069,7 +1069,7 @@ $("#myInput2").on("keyup", function() {
                         </div>
                         </td>
                         <td><a href= "{{service.service_url}}">Visit Site <img src="{% static 'app/images/BoxArrow.png' %}" class="defaultImage" alt="default resource image"/></a></td>
-                        <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{service.service_contact_name}}<br/>{{service.service_contact_email}}">Contact Info <img src="{% static 'app/images/ContactInfo.png' %}" class="defaultImage" alt="default resource image"/></a></td>
+                        <td><a href="#" title="Contact Info" data-html="true" data-toggle="popover" data-placement="right" data-content="{{service.service_contact_name}}<br/>{{service.service_contact_email}}</br>{{service.service_contact_phone}}">Contact Info <img src="{% static 'app/images/ContactInfo.png' %}" class="defaultImage" alt="default resource image"/></a></td>
                         <td id="city" class="hidden">{{service.service_city}}</td>
                         <td id="county" class="hidden">{{service.service_county}}</td>
                         <td id="zipcode" class="hidden">{{service.service_zipcode}}</td>
