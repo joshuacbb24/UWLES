@@ -984,8 +984,8 @@ $("#myInput2").on("keyup", function() {
                         <tr>
                         <td id="serviceName">{{service.service_name}}</td>
                         <td>{{directory.dir_name}}</td>
-                        <td><a href="" data-toggle="modal" data-target="#ServiceInfo">View detail <img src="{% static 'app/images/Vector.png' %}" class="defaultImage" alt="default resource image"/></a>
-                        <div class="modal" tabindex="-1" role="dialog" id="ServiceInfo">
+                        <td><a href="" data-toggle="modal" data-target="#ServiceInfo{{service.id}}">View detail <img src="{% static 'app/images/Vector.png' %}" class="defaultImage" alt="default resource image"/></a>
+                        <div class="modal" tabindex="-1" role="dialog" id="ServiceInfo{{service.id}}">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
