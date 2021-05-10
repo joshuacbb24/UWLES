@@ -58,6 +58,7 @@ b {
     top: 0;
     display: none;
     height: 400px;
+    width: 100%;
 }
 
 .rooms-container {
@@ -269,14 +270,15 @@ b {
     align-items: center;
 }
 
-.input-section input[type="text"] {
+.middle-panel input[type="text"] {
     float: left;
     padding: 6px;
     margin-left: 16px;
     border: none;
     font-size: 17px;
-    width: 85%;
+    width: 70%;
     border-radius: 12px;
+    margin-top: 4.5%;
 }
 
 .left-panel-header .search-container {
@@ -284,7 +286,7 @@ b {
     margin-left: 16px;
 }
 
-.left-panel-header input[type="text"] {
+.left-panel-header input[name="search"] {
     padding: 6px;
     margin-top: 8px;
     font-size: 17px;

@@ -4,6 +4,7 @@
     This is the user profile page
 -->
 {% load static %}
+{% load project_templates %}
 {% block content %}
 {% if user.is_authenticated %}
 <head>
@@ -77,12 +78,26 @@
           </div></a>
 				  <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
 				<div class="dropdown-content">
-				  <div id="usermenu">
-				  <h3>{{ user.username }}</h3>
-				  <h4>Caseworker</h4>
-				  </div>
-				  <a href="{% url 'logout' %}">Log out</a>
-				</div>
+            <div id="usermenu">
+            {% if user.id in userlist %}
+                {% for back in background %}
+                    {% if back.user_id == user.id %}
+                        <h3>{{ back.firstname }} {{ back.lastname }}</h3>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <h3>{{ user.username }}</h3>
+            {% endif %}
+			{% if request.user|has_group:"caseworker" %}
+                <h4>Caseworker</h4>
+            {% elif request.user|has_group:"client" %}
+                <h4>Client</h4>
+            {% else %}
+                <h4>Not implemented</h4>
+            {% endif %}
+            </div>
+            <a href="{% url 'logout' %}">Log out</a>
+          </div>
 			</div>
 		</div>
 	  </div>

@@ -195,26 +195,28 @@
       <div class="vl"></div>
       <div class="dropdown">
         <div class="user-wrapper">
-          <a href="{% url 'profile' %}"><div class="profile-pic-wrapper" data-username="{{user.username}}" data-bgcolor="{{user.bgColor}}">
-            {% if user.avatar %}
-            <img class="profile-pic" src="{{user.avatar.url}}">
-            {% endif %}
-          </div></a>
+          <a href="{% url 'profile' %}">
+            <div class="profile-pic-wrapper" data-username="{{user.username}}" data-bgcolor="{{user.bgColor}}">
+              {% if user.avatar %}
+              <img class="profile-pic" src="{{user.avatar.url}}">
+              {% endif %}
+            </div>
+          </a>
           <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
           <div class="dropdown-content">
             <div id="usermenu">
-            {% if user_bg == None %}
-                <h3>{{ user }}</h3>
-            {% else %}
-                <h3>{{ user_bg }}</h3>
-            {% endif %}
-            {% if request.user|has_group:"caseworker" %}
-                <h4>Caseworker</h4>
-            {% elif request.user|has_group:"client" %}
-                <h4>Client</h4>
-            {% else %}
-                <h4>Not implemented</h4>
-            {% endif %}
+              {% if user_bg == None %}
+              <h3>{{ user }}</h3>
+              {% else %}
+              <h3>{{ user_bg }}</h3>
+              {% endif %}
+              {% if request.user|has_group:"caseworker" %}
+              <h4>Caseworker</h4>
+              {% elif request.user|has_group:"client" %}
+              <h4>Client</h4>
+              {% else %}
+              <h4>Not implemented</h4>
+              {% endif %}
             </div>
             <a href="{% url 'logout' %}">Log out</a>
           </div>
@@ -272,10 +274,6 @@
           <div class="rooms">
             {% for room in rooms %}
             <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
-            {% empty %}
-            <p>
-              No chat rooms.
-            </p>
             {% endfor %}
           </div>
         </div>
@@ -347,12 +345,13 @@
     <script>
       function openForm() {
         document.getElementById("myForm").style.display = "block";
-        document.getElementById("opn_btn").style.display = "none";
+        $(".open-button").hide();
       }
 
       function closeForm() {
         document.getElementById("myForm").style.display = "none";
         document.getElementById("opn_btn").style.display = "block";
+        $(".open-button").show();
       }
     </script>
   </div>
@@ -374,6 +373,7 @@
       $(".sidebar").toggle('show hide');
     })
   </script>
+
   <script>
     let clickState = 0;
     $("#go_back").on("click", goback);

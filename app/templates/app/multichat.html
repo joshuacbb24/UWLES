@@ -111,32 +111,39 @@ is empty when first clicked -->
 
     <header class="dash-header">
 
-    <div class="sidebar-header">
-      <span id="sidebar-toggle" class="las la-bars"></span>
-    </div>
-    <div id="leftside">
-      <div class="search-wrapper">
-        <span class="las la-search"></span>
-        <input type="search" placeholder="Search here" />
-      </div>
-      <div class="vl"></div>
-      <div class="dropdown">
-        <div class="user-wrapper">
-          <div class="user-wrapper">
-          <a href="{% url 'profile' %}"><div class="profile-pic-wrapper" data-username="{{user.username}}" data-bgcolor="{{user.bgColor}}">
-            {% if user.avatar %}
-            <img class="profile-pic" src="{{user.avatar.url}}">
-            {% endif %}
-          </div></a>
-          <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
-          <div class="dropdown-content">
+        <div class="sidebar-header">
+            <span id="sidebar-toggle" class="las la-bars"></span>
+        </div>
+        <div id="leftside">
+            <div class="search-wrapper">
+                <span class="las la-search"></span>
+                <input type="search" placeholder="Search here" />
+            </div>
+            <div class="vl"></div>
+            <div class="dropdown">
+                <div class="user-wrapper">
+                    <div class="user-wrapper">
+                        <a href="{% url 'profile' %}">
+                            <div class="profile-pic-wrapper" data-username="{{user.username}}"
+                                data-bgcolor="{{user.bgColor}}">
+                                {% if user.avatar %}
+                                <img class="profile-pic" src="{{user.avatar.url}}">
+                                {% endif %}
+                            </div>
+                        </a>
+                        <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
+                        <div class="dropdown-content">
             <div id="usermenu">
-            {% if user_bg == None %}
-                <h3>{{ user }}</h3>
+            {% if user.id in userlist %}
+                {% for back in background %}
+                    {% if back.user_id == user.id %}
+                        <h3>{{ back.firstname }} {{ back.lastname }}</h3>
+                    {% endif %}
+                {% endfor %}
             {% else %}
-                <h3>{{ user_bg }}</h3>
+                <h3>{{ user.username }}</h3>
             {% endif %}
-            {% if request.user|has_group:"caseworker" %}
+			{% if request.user|has_group:"caseworker" %}
                 <h4>Caseworker</h4>
             {% elif request.user|has_group:"client" %}
                 <h4>Client</h4>
@@ -146,10 +153,10 @@ is empty when first clicked -->
             </div>
             <a href="{% url 'logout' %}">Log out</a>
           </div>
-        </div>
-      </div>
-    </div>
-  </header>
+                    </div>
+                </div>
+            </div>
+    </header>
 
     <div class="main-content">
         <div class="chat-container">
@@ -164,10 +171,6 @@ is empty when first clicked -->
                     <div class="rooms">
                         {% for room in rooms %}
                         <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
-                        {% empty %}
-                        <p>
-                            No chat rooms.
-                        </p>
                         {% endfor %}
                     </div>
                 </div>
@@ -535,6 +538,7 @@ is empty when first clicked -->
                 $("#create-group").hide();
                 $(".chat-log").empty();
                 $(".rightAccordion").show();
+                $(".rightPanel").show();
 
             }
         }
@@ -568,6 +572,9 @@ is empty when first clicked -->
             $("#typed_msg").hide();
             $(".msg_send_btn").hide();
             $(".rightAccordion").hide();
+            $(".rightPanel").hide();
+
+
         });
 
         $("#create-group").click(function () {
