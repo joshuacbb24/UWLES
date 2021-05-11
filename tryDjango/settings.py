@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'f6609b49-691f-4c1e-9887-1b99da0ed9db'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # TODO: Use actually DNS name or set up reverse proxy
 ALLOWED_HOSTS = ['*']
