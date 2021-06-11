@@ -45,6 +45,16 @@
             font-family: Helvetica;
             font-size: 14px;
         }
+
+        .customSuggestionsList>div {
+            min-height: 300px;
+            max-height: 300px;
+            border: 2px solid lightblue;
+            overflow: auto;
+            margin: 5%;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+        }
     </style>
 </head>
 
@@ -53,23 +63,7 @@ show in the dropdown. Maybe an onChange functionality. Make it so dropdown
 is empty when first clicked -->
 
 <!--
-    <div id="members-page">
-        <div id="members-page-content">
-            <i class="las la-window-close" style="right:0; height: 10%; float:right; position: relative;"
-                onclick="document.getElementById('members-page').style.display='none'" id="close"
-                title="Close Modal"></i>
-            <div class="column-two">
-                <ul class="member-list">
-                    <div class="column-one">
-                        <li class="list-of-members"></li>
-                    </div>
-                    <div class="column-three">
-                        <li class="remove-buttons"></li>
-                    </div>
-                </ul>
-            </div>
-        </div>
-    </div>
+
 -->
 
 <body>
@@ -133,26 +127,26 @@ is empty when first clicked -->
                         </a>
                         <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
                         <div class="dropdown-content">
-            <div id="usermenu">
-            {% if user.id in userlist %}
-                {% for back in background %}
-                    {% if back.user_id == user.id %}
-                        <h3>{{ back.firstname }} {{ back.lastname }}</h3>
-                    {% endif %}
-                {% endfor %}
-            {% else %}
-                <h3>{{ user.username }}</h3>
-            {% endif %}
-			{% if request.user|has_group:"caseworker" %}
-                <h4>Caseworker</h4>
-            {% elif request.user|has_group:"client" %}
-                <h4>Client</h4>
-            {% else %}
-                <h4>Not implemented</h4>
-            {% endif %}
-            </div>
-            <a href="{% url 'logout' %}">Log out</a>
-          </div>
+                            <div id="usermenu">
+                                {% if user.id in userlist %}
+                                {% for back in background %}
+                                {% if back.user_id == user.id %}
+                                <h3>{{ back.firstname }} {{ back.lastname }}</h3>
+                                {% endif %}
+                                {% endfor %}
+                                {% else %}
+                                <h3>{{ user.username }}</h3>
+                                {% endif %}
+                                {% if request.user|has_group:"caseworker" %}
+                                <h4>Caseworker</h4>
+                                {% elif request.user|has_group:"client" %}
+                                <h4>Client</h4>
+                                {% else %}
+                                <h4>Not implemented</h4>
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'logout' %}">Log out</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -213,6 +207,7 @@ is empty when first clicked -->
             <div class="right-panel">
                 <button class="rightAccordion" style="display: none;">Members</button>
                 <div class="rightPanel">
+                    <a href="#" class="add-members">Add Members...</a>
                     <ul class="right-btn-group">
                         <li class="list-of-members"></li>
                     </ul>
@@ -242,6 +237,41 @@ is empty when first clicked -->
 <input id="myself" type="hidden" value="{{request.user.username}}" />
 <br />
 
+<div id="members-page">
+
+    <div id="members-page-content">
+        <header>
+            <div><span style="padding-left: 5%;font-size:x-large;">Add Members</span>
+                <i class="las la-window-close" style="right:0; height: 10%; float:right; position: relative;"
+                    onclick="document.getElementById('members-page').style.display='none'" id="close"
+                    title="Close Modal"></i>
+            </div>
+            <div><span class="room-name" style="padding-left: 5%;font-size:large;"></span></div>
+
+        </header>
+
+        <div>
+            <section id="section-manual-suggestions">
+                <input style="margin-left: 5%;" name='tags-manual-suggestions' placeholder='Search Users'>
+            </section>
+
+            <div>
+                <p style="margin-left: 5%;">
+                    <strong>Privacy</strong> <br>
+                    - External users cannot be added <br>
+                    - New members will see previous messages and files
+                </p>
+            </div>
+        </div>
+        <footer style="margin-top: 1%; float: right; margin-right: 5%">
+            <span>
+                <button type="button" class="btn btn-primary" disabled>Add Users</button>
+                <button type="button" class="btn btn-outline-secondary" name='cancel'
+                    onclick="document.getElementById('members-page').style.display='none'">Cancel</button>
+            </span>
+        </footer>
+    </div>
+</div>
 
 
 
@@ -252,6 +282,8 @@ is empty when first clicked -->
     integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA=="
     crossorigin="anonymous"></script>
 <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
+
+
 <script>
 
     $("#caret-icon").on('click', function () {
@@ -267,6 +299,7 @@ is empty when first clicked -->
     let roomId = false;
 
     $(function () {
+
         // Correctly decide between ws:// and wss://
         var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
         var ws_path = ws_scheme + "://" + window.location.host + "/chat/stream/";
@@ -275,6 +308,7 @@ is empty when first clicked -->
         //var socket = new WebSocket(ws_path);
         var socket = new ReconnectingWebSocket(ws_path);
         var roomName = null;
+        var title = null;
         $(".sending-form").on("submit", function () {
 
             event.preventDefault();
@@ -336,7 +370,7 @@ is empty when first clicked -->
             if (data.join) {
                 console.log("Joining room " + data.join);
                 roomName = data.join;
-
+                title = data.title;
 
                 //   console.log("myself value: " + $("#myself").val() + "data.from_user value: " + message.from_user)
 
@@ -476,6 +510,13 @@ is empty when first clicked -->
                 console.log("Cannot handle message!");
             }
         };
+
+        $(".add-members").click(function () {
+            $(".room-name").html("");
+            $(".room-name").html(title);
+            $("#members-page").show();
+        });
+
 
 
         // Says if we joined a room or not by if there's a div for it
@@ -661,6 +702,7 @@ is empty when first clicked -->
             tagTextProp: 'name', // very important since a custom template is used with this property as text
             enforceWhitelist: true,
             skipInvalid: true, // do not remporarily add invalid tags
+
             dropdown: {
                 closeOnSelect: false,
                 enabled: 0,
@@ -696,6 +738,107 @@ is empty when first clicked -->
 
 
 }) ()
+</script>
+<script data-name="manualSuggestions">
+        (function () {
+
+            var input = document.querySelector('input[name=tags-manual-suggestions]');
+            // init Tagify script on the above inputs
+
+            tagify = new Tagify(input, {
+                tagTextProp: 'name', // very important since a custom template is used with this property as text
+
+                templates: {
+                    tag: function (tagData) {
+                        try {
+                            return `
+        <tag title="${tagData.email}"
+                contenteditable='false'
+                spellcheck='false'
+                tabIndex="-1"
+                class="tagify__tag ${tagData.class ? tagData.class : ""}"
+                ${this.getAttributes(tagData)}>
+            <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
+            <div>
+                <div class='tagify__tag__avatar-wrap'>
+                    <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                </div>
+                <span class='tagify__tag-text'>${tagData.value}</span>
+            </div>
+        </tag>`
+                        }
+                        catch (err) { }
+                    },
+
+                    dropdownItem: function (tagData) {
+                        try {
+                            return `
+                                           <div ${this.getAttributes(tagData)}
+                                               class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+                                               tabindex="0"
+                                               role="option">
+                                               ${tagData.avatar ? `
+                                               <div class='tagify__dropdown__item__avatar-wrap'>
+                                                   <img class='tagify__dropdown__item__avatar-wrap' onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                                               </div>` : ''
+                                }
+                                               <strong>${tagData.name}</strong>
+                                               <span>${tagData.email}</span>
+                                           </div>
+                                       `
+                        }
+                        catch (err) { }
+                    }
+
+                },
+
+                dropdown: {
+                    position: "manual",
+                    maxItems: Infinity,
+                    enabled: 0,
+                    searchKeys: ['name', 'email'],  // very important to set by which keys to search for suggesttions when typing
+                    classname: "customSuggestionsList"
+                },
+                enforceWhitelist: true,
+                whitelist: [
+                    {% for user in users %}
+        {
+
+                    value: "{{user.username}}",
+                    name: "{{user.username}}",
+                    avatar: "{% static 'app/images/PngItem_4212266.png' %}",
+                    email: "{{user.email}}"
+                },
+                {% endfor %}    
+        ],
+            blacklist: []
+            })
+
+    tagify.on("dropdown:show", onSuggestionsListUpdate)
+        .on("dropdown:hide", onSuggestionsListHide)
+        .on('dropdown:scroll', onDropdownScroll)
+
+    renderSuggestionsList()
+
+    // ES2015 argument destructuring
+    function onSuggestionsListUpdate({ detail: suggestionsElm }) {
+        console.log(suggestionsElm)
+    }
+
+    function onSuggestionsListHide() {
+        console.log("hide dropdown")
+    }
+
+    function onDropdownScroll(e) {
+        console.log(e.detail)
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
+    function renderSuggestionsList() {
+        tagify.dropdown.show.call(tagify) // load the list
+        tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
+    }
+    }) ()
 </script>
 
 </html>
