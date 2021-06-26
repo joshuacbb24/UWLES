@@ -1,0 +1,683 @@
+{% load static %} {% block extra_head %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
+<link rel="stylesheet" href="{% static 'app/content/tagify.css' %}" />
+<link rel="stylesheet" href="{% static 'app/content/tags.css' %}" />
+<link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
+    rel="stylesheet" />
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="{% static 'app/scripts/jquery.js' %}"></script>
+
+<script src="{% static 'app/scripts/jquery.ui.widget.js' %}"></script>
+<script src="{% static 'app/scripts/jquery.iframe-transport.js' %}"></script>
+<script src="{% static 'app/scripts/jquery.fileupload.js' %}"></script>
+
+<script src="{% static 'app/scripts/tag.js' %}"></script>
+<script src="{% static 'app/scripts/jQuery.tagify.min.js' %}"></script>
+
+
+<script>
+    // if IE, add IE tagify's polyfills
+    !(function (d) {
+        if (!d.currentScript) {
+            var s = d.createElement("script");
+            s.src = "{% static 'app/scripts/tagify.polyfills.min.js' %}";
+            d.head.appendChild(s);
+        }
+    })(document);
+</script>
+
+<style>
+    body {
+        padding-top: 30em;
+    }
+
+    .chat-container {
+        max-width: 1500px;
+        max-height: 590px;
+        min-height: 590px;
+        width: 100%;
+        height: 590px;
+        background: #f8f8f8 none repeat scroll 0 0;
+        border: 1px solid #ccc;
+    }
+
+    .chat-log {
+        position: relative;
+        height: 77.3%;
+        background-color: #f8f8f8;
+        z-index: 1;
+        overflow: auto;
+        border-bottom: 1px solid #c4c4c4;
+    }
+
+    .left-panel {
+        float: left;
+        overflow: hidden;
+        width: 26%;
+        border-right: 1px solid #c4c4c4;
+        height: 550px;
+    }
+
+    .left-panel-header {
+        position: relative;
+        height: 20px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
+        background-color: gray;
+        z-index: 2;
+
+    }
+
+    .middle-panel {
+        position: relative;
+        float: left;
+        width: 48%;
+        height: 550px;
+        overflow: hidden;
+        border-right: 1px solid #c4c4c4;
+    }
+
+    .rooms-container {
+        position: relative;
+        border-bottom: 1px solid #c4c4c4;
+        height: 90%;
+        overflow: auto;
+        background: #f8f8f8 none repeat scroll 0 0;
+    }
+
+    .rooms {
+        position: relative;
+        float: left;
+        overflow: hidden;
+        width: 100%;
+
+    }
+
+    .right-panel {
+        position: relative;
+        float: left;
+        overflow: hidden;
+        width: 26%;
+        height: 510px;
+    }
+
+    .creating-chat-section {
+        border-right: 1px solid #c4c4c4;
+        height: 40px;
+    }
+
+    #create-chat {
+        position: relative;
+        text-align: center;
+
+    }
+
+    .rooms li {
+        border: 1px solid #ddd;
+        background-color: #f6f6f6;
+        padding: 12px;
+        text-decoration: none;
+        font-size: 18px;
+        color: black;
+        display: block;
+        cursor: pointer;
+    }
+
+    .rooms li:hover {
+        background-color: #eee;
+    }
+
+    .input-section {
+        position: relative;
+        bottom: 0;
+    }
+
+    .user-header {
+        position: relative;
+        height: 70px;
+        background-color: white;
+        z-index: 2;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .2);
+    }
+
+    .incoming {
+        position: relative;
+        float: left;
+        margin-bottom: 5px;
+        font-size: 14px;
+        padding: 5px 10px 5px 12px;
+        width: 80%;
+        border-radius: 3px;
+        background: #F0F0F0 none repeat scroll 0 0;
+    }
+
+    .outgoing {
+        position: relative;
+        background: #A0A0A0 none repeat scroll 0 0;
+        border-radius: 3px;
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: #fff;
+        padding: 5px 10px 5px 12px;
+        float: right;
+        width: 80%;
+    }
+
+    .msg_send_btn {
+        background: #4c4c4c none repeat scroll 0 0;
+        border: medium none;
+        border-radius: 50%;
+        color: #fff;
+        cursor: pointer;
+        font-size: 17px;
+        height: 33px;
+        top: 5px;
+        width: 5%;
+    }
+
+    .unread-messages {
+        max-width: 15px;
+        max-height: 15px;
+        width: 15px;
+        height: 15px;
+        white-space: normal;
+        margin-right: 10px;
+        margin-left: 10px;
+        border-radius: 50%;
+        background-color: blue;
+    }
+
+    .profile-pic {
+        max-width: 32px;
+        max-height: 32px;
+        width: 32px;
+        height: 32px;
+        white-space: normal;
+        margin-right: 15px;
+        border-radius: 50%;
+        font-size: 16px;
+        color: #fff;
+        text-align: center;
+        line-height: 150px;
+        cursor: context-menu;
+        overflow: hidden;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+</style>
+{% endblock %}
+{% block title %}MultiChat Example{% endblock %}
+{% block header_text %} MultiChat Example {% endblock %}
+{% block content %}
+
+<!-- Make it autocomplete or somehting like that so not all users
+show in the dropdown. Maybe an onChange functionality. Make it so dropdown
+is empty when first clicked -->
+
+
+
+<div class="chat-container">
+    <div class="left-panel">
+        <div class="left-panel-header">
+
+        </div>
+        <div class="rooms-container">
+            <div class="rooms">
+                {% for room in rooms %}
+                <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
+                {% empty %}
+                <p>
+                    No chat rooms.
+                </p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="creating-chat-section">
+            <button id="create-chat">create new chat</button><br />
+        </div>
+    </div>
+    <div class="middle-panel">
+        <div class="user-header"><button style="display: none;">referral chat</button></div>
+        <section id="users-list" style="display: none; position: relative">
+            <p>
+                <input id="tag-input" style="display: none; position: relative" name="users-list-tags" /><button
+                    style="display: none; position: relative" id="create-group">
+                    Create
+                </button>
+            </p>
+        </section>
+        <div id="#chat-log" class="chat-log"></div>
+        <div class="input-section">
+            <input id="fileupload" type="file" name="file" multiple style="display: none" data-url="{% url 'upload' %}"
+                data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' />
+            <form class="sending-form">
+                <input type="text" style="display: none;" id="typed_msg" placeholder="Type a message" required />
+                <i id="upload-photos-button" class="las la-paperclip"
+                    style="display:none;cursor:pointer;font-size:25px;"></i>
+                <button class="msg_send_btn" style="display: none;" type="submit"><i style="color: white;"
+                        class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+            </form>
+        </div>
+    </div>
+    <div class="right-panel"></div>
+</div>
+<input id="myself" type="hidden" value="{{request.user.username}}" />
+<br />
+{% endblock %} {% block scripts %}
+
+
+
+
+<audio id="chatAudio">
+    <source src="{% static 'app/audio/notification.mp3' %}" type="audio/mpeg">
+</audio>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"
+    integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA=="
+    crossorigin="anonymous"></script>
+<script src="{% static 'app/scripts/default_avatar.js' %}"></script>
+<script>
+    let roomId = false;
+
+    $(function () {
+        // Correctly decide between ws:// and wss://
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+        var ws_path = ws_scheme + "://" + window.location.host + "/chat/stream/";
+        console.log("Connecting to " + ws_path);
+
+        //var socket = new WebSocket(ws_path);
+        var socket = new ReconnectingWebSocket(ws_path);
+
+        // Handle incoming messages
+        socket.onmessage = function (message) {
+            var data = JSON.parse(message.data);
+
+            // Handle errors
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            message = data.message
+
+
+            // Handle joining
+            if (data.join) {
+                console.log("Joining room " + data.join);
+
+                //   console.log("myself value: " + $("#myself").val() + "data.from_user value: " + message.from_user)
+
+                // Hook up send button to send a message
+                $(".sending-form").on("submit", function () {
+
+                    event.preventDefault();
+
+                    socket.send(
+                        JSON.stringify({
+                            "command": "send",
+                            "room": data.join,
+                            "message": document.querySelector('#typed_msg').value
+                        })
+                    );
+                    $("#typed_msg").val("");
+
+                });
+
+
+
+                //hook up sending files
+                /* 1. OPEN THE FILE EXPLORER WINDOW */
+                $("#upload-photos-button").click(function () {
+                    $("#fileupload").click();
+                });
+
+                /* 2. INITIALIZE THE FILE UPLOAD COMPONENT */
+                $("#fileupload").fileupload({
+                    dataType: 'json',
+                    done: function (e, data2) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
+                        if (data2.result.is_valid) {
+                            /*send file to recipient and add a progress bar*/
+                            console.log("file uploaded")
+
+                            const message = 'file <a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
+                            socket.send(
+                                JSON.stringify({
+                                    "command": "send",
+                                    "room": data.join,
+                                    "message": message
+                                })
+                            );
+
+                        }
+
+                    }
+                });
+
+                $(".user-header").html(data.title);
+
+                // Handle leaving
+            } else if (data.leave) {
+                console.log("Leaving room " + data.leave);
+                $("#room-" + data.leave).remove();
+                $(".user-header").empty();
+                $(".chat-log").empty();
+                // Handle getting a message
+            } else if (data.message || data.msg_type != 0) {
+                var msgdiv = $(".chat-log");
+                var ok_msg = "";
+
+
+
+                // msg types are defined in chat/settings.py
+                // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
+                const LEFT_ROOM = 5;
+                switch (data.msg_type) {
+                    case 0:
+                        // Message
+
+                        let text = (typeof data.message == 'object') ? data.message.text : data.message;
+                        let user = (typeof data.message == 'object' && data.message.from_user) ? data.message.from_user : data.username;
+
+                        let avatar = data.message.avatar ? '<img class="profile-pic" src="' + data.message.avatar + '">' : '<div class="profile-pic-wrapper" data-username="' + data.message.from_user + '" data-bgcolor="' + data.message.default + '"></div>'
+                        //if statement for where user.username is not equal to data.message.from_user
+                        let time = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
+                        const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
+                        if (data.message.notification && user != '{{user.username}}') {
+
+                            var x = document.getElementById("chatAudio");
+                            x.play();
+                        }
+
+                        if (cssClass == 'outgoing') {
+                            ok_msg =
+                                `<div class='chat-wrapper'>` +
+                                `<div class='${cssClass}'>` +
+                                `<span class='body'>` +
+                                avatar +
+                                text +
+                                `</span>` +
+                                `</div>` +
+                                `</div>`;
+                        } else {
+                            ok_msg =
+                                `<div class='chat-wrapper'>` +
+                                `<div class='${cssClass}'>` +
+                                `<span class='body'>` +
+                                avatar +
+                                text +
+                                `</span>` +
+                                `</div>` +
+                                `</div>`;
+
+
+
+                        }
+
+                        break;
+                    case 1:
+                        // Warning / Advice messages
+                        ok_msg =
+                            "<div class='contextual-message text-warning'>" +
+                            data.message +
+                            "</div>";
+                        break;
+                    case 2:
+                        // Alert / Danger messages
+                        ok_msg =
+                            "<div class='contextual-message text-danger'>" +
+                            data.message +
+                            "</div>";
+                        break;
+                    case 3:
+                        // "Muted" messages
+                        ok_msg =
+                            "<div class='contextual-message text-muted'>" +
+                            data.message +
+                            "</div>";
+                        break;
+                    case 4:
+                        // User joined room
+                        ok_msg =
+                            "<div class='contextual-message text-muted'>" +
+                            data.username +
+                            " joined the room!" +
+                            "</div>";
+                        break;
+                    case LEFT_ROOM:
+                        // User left room
+                        ok_msg =
+                            "<div class='contextual-message text-muted'>" +
+                            data.username +
+                            " left the room!" +
+                            "</div>";
+                        break;
+                    case "created":
+                        ok_msg =
+                            "<div class='contextual-message text-muted'>room created</div>";
+                        $(".rooms").append(
+                            `<li class="room-link" data-room-id="${data.room_id}"> ${data.name}</li>`
+                        );
+                        break;
+                    case "room_exists":
+                        $("li[data-room-id=" + data.room_id + "]").click();
+                        ok_msg =
+                            "<div class='contextual-message text-muted'>room already exists</div>";
+                        break;
+
+                    default:
+                        console.log("Unsupported message type!");
+                        return;
+                }
+                showDefaultAvatar();
+                $(".chat-log").html();
+                msgdiv.append(ok_msg);
+
+                msgdiv.scrollTop(msgdiv.prop("scrollHeight"));
+            } else {
+                console.log("Cannot handle message!");
+            }
+        };
+
+
+        // Says if we joined a room or not by if there's a div for it
+        inRoom = function (roomId) {
+            return $("#room-" + roomId).length > 0;
+        };
+
+        // Room join/leave
+
+        /* -Show all saved messages when joining a room
+                    -Make it if already in that room either do nothing or reload that room
+                    -if not in that room leave current room, if in one, then join the
+                    room that was clicked on
+                    -If not in room when a message comes in give it an unread class*/
+
+        $(".room-link").click(function () {
+            roomId = $(this).attr("data-room-id");
+            if (inRoom(roomId)) {
+                // Leave room
+
+                $(this).removeClass("joined");
+                socket.send(
+                    JSON.stringify({
+                        command: "leave",
+                        room: roomId,
+                    })
+                );
+                $(".chat-log").empty();
+                //empty chat log
+            } else {
+                // Join room
+
+                $(this).addClass("joined");
+                socket.send(
+                    JSON.stringify({
+                        command: "join",
+                        room: roomId,
+                    })
+                );
+                $("#typed_msg").show();
+                $("#upload-photos-button").show();
+                $(".msg_send_btn").show();
+                $(".user-header").show();
+                $("#create-chat").show();
+                $("#tag-input").hide();
+                $("#users-list").hide();
+                $("#create-group").hide();
+                $(".chat-log").empty();
+            }
+        });
+
+        // Creating Room
+
+        // if room created reset all back to the way it was and add room to list
+        // if no valid input in tag create button is disabled/won't create
+        /* if statement and maybe while statement that will cycle through room names or id's and compare to what
+                         was entered in input and compare it to room names until it doesn't match room will not be created
+                        or if create button is pressed and room already exists will swap to that room*/
+
+        /* Because the name has to be unique a room with the same name
+                        can't be created so if we can return an error message or some
+                        signifer saying room was not created it should be possible to make
+                        a command to do a remote click on that room with the name that
+                        already exists
+                    */
+
+        $("#create-chat").click(function () {
+            if (roomId) {
+                if (inRoom(roomId)) {
+                    // Leave room
+
+                    $(this).removeClass("joined");
+                    socket.send(
+                        JSON.stringify({
+                            command: "leave",
+                            room: roomId,
+                        })
+                    );
+                }
+            }
+            $("#upload-photos-button").hide();
+            $(".user-header").hide();
+            $("#create-chat").hide();
+            $("#tag-input").show();
+            $("#users-list").show();
+            $("#create-group").show();
+            $(".chat-log").empty();
+            $("#typed_msg").hide();
+            $(".msg_send_btn").hide();
+        });
+
+        $("#create-group").click(function () {
+            socket.send(
+                JSON.stringify({
+                    command: "create",
+                    newUsers: JSON.parse($("#tag-input").val()),
+                })
+            );
+            $("#create-chat").show();
+            $("#tag-input").hide();
+            $("#users-list").hide();
+            $("#create-group").hide();
+
+            //join the room that was just created
+            $("li[data-room-id=" + data.room_id + "]").click();
+        });
+
+        // Helpful debugging
+        socket.onopen = function () {
+            console.log("Connected to chat socket");
+        };
+        socket.onclose = function () {
+            console.log("Disconnected from chat socket");
+        };
+    });
+</script>
+
+<script data-name="users-list">
+    // https://www.mockaroo.com/
+    (function () {
+        var x = 1
+        var inputElm = document.querySelector('input[name=users-list-tags]');
+
+        function tagTemplate(tagData) {
+            return `
+        <tag title="${tagData.email}"
+                contenteditable='false'
+                spellcheck='false'
+                tabIndex="-1"
+                class="tagify__tag ${tagData.class ? tagData.class : ""}"
+                ${this.getAttributes(tagData)}>
+            <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
+            <div>
+                <div class='tagify__tag__avatar-wrap'>
+                    <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                </div>
+                <span class='tagify__tag-text'>${tagData.name}</span>
+            </div>
+        </tag>
+    `
+        }
+
+        function suggestionItemTemplate(tagData) {
+            return `
+        <div ${this.getAttributes(tagData)}
+            class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+            tabindex="0"
+            role="option">
+            ${tagData.avatar ? `
+            <div class='tagify__dropdown__item__avatar-wrap'>
+                <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+            </div>` : ''
+                }
+            <strong>${tagData.name}</strong>
+            <span>${tagData.email}</span>
+        </div>
+    `
+        }
+
+        // initialize Tagify on the above input node reference
+        var tagify = new Tagify(inputElm, {
+            tagTextProp: 'name', // very important since a custom template is used with this property as text
+            enforceWhitelist: true,
+            skipInvalid: true, // do not remporarily add invalid tags
+            dropdown: {
+                closeOnSelect: false,
+                enabled: 0,
+                classname: 'users-list',
+                searchKeys: ['name', 'email']  // very important to set by which keys to search for suggesttions when typing
+            },
+            templates: {
+                tag: tagTemplate,
+                dropdownItem: suggestionItemTemplate
+            },
+
+            whitelist: [
+                {% for user in users %}
+        {
+                "value": "{{ user.pk }}",
+                "name": "{{user.username}}",
+                "avatar": "{{user.avatar}}",
+                "email": "{{user.email}}"
+            },
+            {% endfor %}    
+    ]
+    
+})
+
+    tagify.on('dropdown:show dropdown:updated', onDropdownShow)
+
+
+    function onDropdownShow(e) {
+        var dropdownContentElm = e.detail.tagify.DOM.dropdown.content;
+
+    }
+
+
+
+}) ()
+</script>
+{% endblock %}

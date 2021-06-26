@@ -195,6 +195,10 @@ button {
   background-color: #eee;
 }
 
+.active-room {
+  background-color: #eee !important;
+}
+
 .input-section {
   position: relative;
   bottom: 0;
@@ -395,17 +399,18 @@ b {
 .left-panel-header .search-container {
   float: center;
   margin-left: 16px;
+  margin-right: 16px;
 }
 
 .left-panel-header input[type="text"] {
   padding: 6px;
-  margin-top: 8px;
+  margin-top: 5%;
   font-size: 17px;
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
   border-color: #afafaf;
-  width: 80%;
+  width: 100%;
   height: 60%;
 }
 
