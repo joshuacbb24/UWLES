@@ -56,11 +56,6 @@
             box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
         }
 
-        .rightPanel {
-            height: 250px;
-            overflow-y: scroll;
-        }
-
         .rooms-containter::-webkit-scrollbar {
             width: 8px;
             background: #2c3e50;
@@ -159,6 +154,218 @@
         .name-of-room {
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        #ellipsis {
+            position: relative;
+            float: right;
+            bottom: 50px;
+            font-size: 25px;
+            cursor: pointer;
+            display: block;
+
+        }
+
+        .rightPanel {
+            height: 250px;
+            overflow-y: scroll;
+        }
+
+        .remove-button {
+            border-radius: 20%;
+            font-size: 25px;
+            position: relative;
+            cursor: pointer;
+            float: right;
+            right: 2.5px;
+        }
+
+        .remove-button:hover {
+            background-color: lightblue;
+            color: blue;
+        }
+
+
+        #ellipsis:hover,
+        #ellipsis:focus {
+            background-color: #2980B9;
+        }
+
+        .chat-dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: WHITE;
+            width: 160px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+            left: 200px;
+
+        }
+
+        .chat-dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .chat-dropdown {
+            position: relative;
+            display: inline;
+            bottom: 15px;
+            z-index: 5;
+        }
+
+        .chat-dropdown a:hover {
+            background-color: #ddd;
+        }
+
+        .confirmation-modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 2;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+            overflow: hidden;
+        }
+
+        /* Modal Content/Box */
+        #confirmation-page {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #000;
+            width: 30%;
+            height: 30%;
+            z-index: 3;
+            border-radius: 5px;
+            margin-right: 27%;
+            /* Could be more or less, depending on screen size */
+            box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+            overflow: hidden;
+        }
+
+        .edit-chat-modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 2;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+            overflow: hidden;
+        }
+
+        /* Modal Content/Box */
+        #change-name-page {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #000;
+            width: 40%;
+            height: 45%;
+            z-index: 3;
+            border-radius: 5px;
+            margin-right: 27%;
+            /* Could be more or less, depending on screen size */
+            box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+            overflow: hidden;
+        }
+
+        #confirmation-removal-page {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto;
+            /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #000;
+            width: 30%;
+            height: 30%;
+            z-index: 3;
+            border-radius: 5px;
+            margin-right: 33%;
+            /* Could be more or less, depending on screen size */
+            box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+            overflow: hidden;
+        }
+
+        .confirmation-chat-modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 2;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+            padding-top: 60px;
+            overflow: hidden;
+        }
+
+        #add-members {
+            position: absolute;
+            /*left: 630px;*/
+            left: 93%;
+            font-size: xx-large;
+            bottom: 25px !important;
+            display: none;
+        }
+
+        a {
+            color: #21B5B7
+        }
+
+        .incoming-msg-img {
+            float: left;
+            width: 6%;
+        }
+
+        .outgoing-msg-img {
+            float: right;
+            width: 2%;
+            padding-left: 5px;
+        }
+
+        .chat-wrapper {
+            display: inline-block;
+            clear: both;
+            width: calc(100% - 25px);
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -266,23 +473,11 @@ is empty when first clicked -->
                     </div>
                 </div>
                 <div class="rooms-container">
-                    <ul id="rooms" class="rooms">
-                        {% for room in rooms %}
-                        <li class="room-link" data-room-id="{{ room.id }}" name="{{ room.id }}">
-                            <div class="wrap">
-                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                                <div class="room-details">
-                                    <span class="name-of-room">{{ room }}</span>
-                                    <p class="preview">preview of message</p>
-                                </div>
-
-                                <span
-                                    style="position:relative; float: right; bottom: 50px; font-size: 25px;cursor: pointer;"
-                                    id="ellipsis" class="las la-ellipsis-v"></span>
-
-                            </div>
-                        </li>
-                        {% endfor %}
+                    <p style="color:#015D67; font-weight: bold; font-size: large;margin-left: 5%;">
+                        Current Client
+                        Chats</p>
+                    <hr>
+                    <ul id="rooms" class="rooms" style="height: 100%;">
                     </ul>
                 </div>
                 <div class="creating-chat-section">
@@ -292,29 +487,30 @@ is empty when first clicked -->
             <div class="middle-panel">
                 <div class="user-header">
                     <img id="title-img" src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                    <div>
-                        <h4 style="margin-top: 3%;"></h4><button class="showMembers"
-                            style="display: none;">members</button>
+                    <div class="title-wrap">
+                        <b>
+                            <p class="room-title"
+                                style=" width: 50%; color:#015D67; font-weight: bold; font-size: large; overflow:hidden; white-space: nowrap;text-overflow:ellipsis;">
+                            </p>
+                        </b>
+                        <i id="add-members" class="las la-plus-circle" style="color:#015D67;cursor: pointer;"></i>
                     </div>
                     <button class="add-user" style="display: none;">Add User</button>
-
 
                 </div>
                 <section id="users-list" style="display: none; position: relative">
                     <p>
-                        <input id="tag-input" style="display: none; position: relative" name="users-list-tags" /><button
-                            style="display: none; position: relative" id="create-group">
-                            Create
-                        </button>
+                        <input id="tag-input" style="display: none; position: relative" name="users-list-tags" />
                     </p>
                 </section>
-                <div class="chat-log"></div>
+                <div class="chat-log" style="width: 100%;">
+                </div>
                 <div class="input-section">
                     <input id="fileupload" type="file" name="file" multiple style="display: none"
                         data-url="{% url 'upload' %}" data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' />
                     <form class="sending-form">
                         <input type="text" style="display: none;margin-top: 4%;" id="typed_msg"
-                            placeholder="Type a message" required />
+                            placeholder="Type a message" name="chat-message" required />
                         <i id="upload-photos-button" class="las la-paperclip"
                             style="display:none;cursor:pointer;font-size:25px;margin-top: 5%;"></i>
                         <button class="msg_send_btn" style="display: none;" type="submit"><i style="color: white;"
@@ -325,27 +521,29 @@ is empty when first clicked -->
             <div class="right-panel">
                 <button class="rightAccordion" style="display: none;">Members</button>
                 <div class="rightPanel">
-                    <a href="#" class="add-members">Add Members...</a>
+
                     <ul class="right-btn-group">
-                        <li class="list-of-members"></li>
+                        <li class="list-of-members">
+
+                        </li>
                     </ul>
                 </div>
                 <button class="rightAccordion">Files</button>
                 <div class="rightPanel">
-                    <div class="right-btn-group">
-                        <button>File 1</button>
-                        <button>File 2</button>
-                        <button>File 3</button>
-                    </div>
+                    <ul class="right-btn-group">
+                        <li class="list-of-files">
+
+                        </li>
+                    </ul>
                 </div>
 
                 <button class="rightAccordion">Links</button>
                 <div class="rightPanel">
-                    <div class="right-btn-group">
-                        <button>Link 1</button>
-                        <button>Link 2</button>
-                        <button>Link 3</button>
-                    </div>
+                    <ul class="right-btn-group">
+                        <li class="list-of-links">
+
+                        </li>
+                    </ul>
                 </div>
                 <script src="{% static 'app/scripts/rightChat.js' %}"></script>
             </div>
@@ -390,7 +588,74 @@ is empty when first clicked -->
         </footer>
     </div>
 </div>
+<div class="confirmation-modal">
+    <div id="confirmation-page">
+        <div>
+            <p style="margin-left: 5%; padding-top: 5%">
+                <strong>Remove User</strong> <br>
+            <p style="margin-left: 5%; padding-top: 2%">
+                Are you sure you wish to remove this user? <br>
+                They will no longer be a member of this chat. <br>
+            </p>
+            </p>
+        </div>
+        <span style="margin-top: 5%; float: right; margin-right: 5%">
+            <button id="confirmation" type="button" class="btn btn-primary">Confirm</button>
+            <button type="button" class="btn btn-outline-secondary" id="exit-member-removal">Cancel</button>
+        </span>
+    </div>
+</div>
 
+<div class="confirmation-chat-modal">
+    <div id="confirmation-removal-page">
+        <div>
+            <p style="margin-left: 5%; padding-top: 5%">
+                <strong>Remove Chat</strong> <br>
+            <p style="margin-left: 5%; padding-top: 2%">
+                Are you sure you wish to delete this chat? <br>
+                You will no longer be a member of this chat <br>
+                and you will no longer have access to past messages.
+            </p>
+            </p>
+        </div>
+        <span style="margin-top: 5%; float: right; margin-right: 5%">
+            <button id="confirmation" type="button" class="btn btn-primary">Confirm</button>
+            <button type="button" class="btn btn-outline-secondary" id="reverse">Cancel</button>
+        </span>
+    </div>
+</div>
+<div class="edit-chat-modal">
+    <div id="change-name-page">
+        <h3 style="margin-left: 5%;margin-top: 5%;">Edit Chat Name</h3>
+
+        <p style="margin-left: 5%;">
+            <input style="    padding: 6px;
+            margin-top: 5%;
+            font-size: 17px;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 5px;
+            border-color: #afafaf;
+            width: 95%;
+            position: relative;
+            height: 60%;" type="text" placeholder="New Name..." name='new-chat-name' />
+
+        </p>
+        <div>
+            <p style="margin-left: 5%; padding-top: 5%;">
+                <strong>Notice</strong> <br>
+                - Can not name room the same as another <br>
+                - Chat name can not be changed back
+            </p>
+        </div>
+
+        <span style="margin-top: 5%; float: right; margin-right: 5%">
+            <button id="confirmation-of-name" type="button" class="btn btn-primary">Confirm</button>
+            <button type="button" class="btn btn-outline-secondary" id="cancel-name">Cancel</button>
+        </span>
+    </div>
+
+</div>
 
 
 <audio id="chatAudio">
@@ -426,7 +691,14 @@ is empty when first clicked -->
     let inRoom = false;
     let groupName = false;
     let allRooms = [];
-
+    let createroom = false;
+    let socketopen = 0;
+    let text_changed = false;
+    let link = [];
+    let typedmessage = null;
+    let found = null;
+    var prefix = 'https://';
+    let ellipsisClicked = false;
 
     $(function () {
 
@@ -440,22 +712,141 @@ is empty when first clicked -->
         var roomName = null;
         var title = null;
 
+        function validateForm() {
+            if (inputElm.val() < 1) {
+                alert("users must be chosen");
+                return false;
+            }
+        }
+
+        function urlify(typedmessage) {
+            var pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?", "g")
+
+            return typedmessage.replace(pattern, function (url) {
+                found = typedmessage.match(pattern);
+                if (found != null) {
+                    var s = typedmessage;
+                    if (s.substr(0, prefix.length) !== prefix) {
+                        s = prefix + s;
+                    }
+                    else {
+                        s = url;
+                    }
+                    link = found;
+                    text_changed = true;
+                    found = null;
+                    return '<a href="' + s + '">' + url + '</a>';
+                }
+                else {
+                    text_changed = false;
+                    return typedmessage;
+                }
 
 
+            })
+            // or alternatively
+            // return text.replace(urlRegex, '<a href="$1">$1</a>')
+        }
+
+
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('#ellipsis')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+
+
+        function extractify(text) {
+            var pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/[^><]*)?", "g")
+            //var pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?", "g")
+            extract = text.match(pattern);
+            return extract;
+        }
 
 
         $(".sending-form").on("submit", function () {
-
-            event.preventDefault();
-            if (roomName) {
+            typedmessage = document.querySelector('#typed_msg').value;
+            var html = urlify(typedmessage);
+            if (createroom == false) {
+                event.preventDefault();
+                if (roomName) {
+                    if (text_changed) {
+                        socket.send(
+                            JSON.stringify({
+                                "command": "send",
+                                "room": roomName,
+                                "message": html,
+                                "link": true,
+                                "file": false
+                            })
+                        );
+                        $('input[name=chat-message]').val('');
+                        for (var i = 0; i < link.length; i++) {
+                            found = link[i];
+                            $(".list-of-links").append(
+                                `<li>
+                                    <a href="${found}">${html}</a>
+                                    </li>`
+                            );
+                        }
+                        link = [];
+                    }
+                    else {
+                        socket.send(
+                            JSON.stringify({
+                                "command": "send",
+                                "room": roomName,
+                                "message": html,
+                                "link": false,
+                                "file": false
+                            })
+                        );
+                        $('input[name=chat-message]').val('');
+                    }
+                }
+            }
+            else {
+                event.preventDefault();
                 socket.send(
                     JSON.stringify({
-                        "command": "send",
-                        "room": roomName,
-                        "message": document.querySelector('#typed_msg').value
+                        "command": "create",
+                        "message": html,
+                        "newUsers": JSON.parse($("#tag-input").val()),
+                        "link": false,
+                        "file": false
                     })
                 );
+                $("#tag-input").hide();
+                $("#users-list").hide();
+                $("#chat-name").hide();
+                $("#tag-input").empty();
+
+                $(".room-link").removeClass('active-room');
+                $(".msg_send_btn").show();
+                $(".user-header").show();
+                $(".user-header p").hide();
+                $("#title-img").hide();
+                $("#create-chat").show();
+                $("#create-chat").show();
+                $("#typed_msg").show();
+                $("#upload-photos-button").show();
+                $(".rightAccordion").show();
                 $("#typed_msg").empty();
+                $(".rightAccordion").hide();
+                $(".rightPanel").hide();
+                $('input[name=chat-message]').val('');
+                $("#typed_msg").hide();
+                createroom = false;
                 return false;
             }
         });
@@ -471,15 +862,31 @@ is empty when first clicked -->
                 if (data2.result.is_valid) {
                     /*send file to recipient and add a progress bar*/
                     console.log("file uploaded")
-                    const message = 'file <a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
+                    const message = '<a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
                     if (roomName) {
                         socket.send(
                             JSON.stringify({
                                 "command": "send",
                                 "room": roomName,
-                                "message": message
+                                "message": message,
+                                "link": false,
+                                "file": true
                             })
                         );
+                        /*socket.send(
+                            JSON.stringify({
+                                "command": "edit",
+                                "room": roomName,
+                                "message": message,
+                                "link": false,
+                                "file": true
+                            })
+                        );*/
+                        $(".list-of-files").append(
+                            `<li>
+                                <a style=word-wrap:break-word; href="${data2.result.url}" target="_blank">${data2.result.name}</a>
+        	            </li>`)
+
                     }
                 }
 
@@ -516,9 +923,17 @@ is empty when first clicked -->
 
                 //hook up sending files
                 /* 1. OPEN THE FILE EXPLORER WINDOW */
+                var obj = data.title;
+                var extra = ", ";
+                var me = $("#myself").val() + extra;
+                var comma = obj.replace(/-/g, ', ');
+                var new_string = comma.replace(me, "");
+                me = extra + $("#myself").val();
+                new_string = new_string.replace(me, "");
+                new_string = new_string.replace("(removed)", "")
+                new_string = new_string.replace("(additional)", "")
 
-
-                $(".user-header h4").html(data.title);
+                $(".user-header p").html(new_string);
 
                 // Handle leaving
             } else if (data.leave) {
@@ -544,19 +959,67 @@ is empty when first clicked -->
 
                         let text = (data.message.text) ? data.message.text : data.message;
                         let user = (data.message.from_user) ? data.message.from_user : data.username;
+                        let avatar = data.message.avatar ? '<img class="profile-pic" src="' + data.message.avatar + '">' : '<div class="profile-pic-wrapper" data-username="' + data.message.from_user + '" data-bgcolor="' + data.message.default + '"></div>'
+                        //if statement for where user.username is not equal to data.message.from_user
+                        let time = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
                         const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
+                        if (data.message.notification && user != '{{user.username}}') {
 
-                        ok_msg =
-                            `<div class='${cssClass}''>` +
-                            `<span class='username'>` +
-                            user +
-                            `: </span>` +
-                            `<span class='text' > ` +
-                            text +
-                            `</span> ` +
-                            `</div> `;
+                            var x = document.getElementById("chatAudio");
+                            x.play();
+                        }
 
+                        if (cssClass == 'outgoing') {
+                            $(".chat-log").append(
+                                `<div class='chat-wrapper'>` +
+                                `<div class='outgoing-msg-img'>` + avatar + `</div>` +
+                                `<div class='${cssClass}'>` +
+                                text +
 
+                                `</div>` +
+                                `</div>`);
+                        } else {
+                            $(".chat-log").append(
+                                `<div class='chat-wrapper'>` +
+                                `<div class='incoming-msg-img'>` + avatar + `</div>` +
+                                `<div class='${cssClass}'>` +
+                                text +
+
+                                `</div>` +
+                                `</div>`);
+
+                        }
+
+                        if (data.message.is_file) {
+                            $(".list-of-files").append(
+                                `<li>
+            		        <a> ` +
+                                text +
+                                `</a>
+        	            </li>`)
+                        }
+                        else if (data.message.is_link) {
+                            //extract the url from the message
+                            array = extractify(text);
+                            var protoclregex = new RegExp("^https?:\/\/");
+
+                            for (var i = 1; i < array.length; i++) {
+                                var s = '';
+                                s = array[i];
+                                var t = array[i];
+                                extract = t.match(protoclregex);
+                                console.log("the t variable", t, extract);
+
+                                if (!extract) {
+                                    s = prefix + s;
+                                }
+                                theString = array[i];
+                                $(".list-of-links").append(
+                                    `<li>
+            		        <a href="${s}">${theString}</a>
+        	            </li>`)
+                            }
+                        }
                         break;
 
                     case 1:
@@ -597,17 +1060,34 @@ is empty when first clicked -->
                              "</div>";
                          break;*/
                     case "created":
+                        var obj = data.name;
+                        var extra = ", ";
+                        var me = $("#myself").val() + extra;
+                        var comma = obj.replace(/-/g, ', ');
+                        var new_string = comma.replace(me, "");
+                        me = extra + $("#myself").val();
+                        new_string = new_string.replace(me, "");
 
                         $(".rooms").append(
                             `<li class="room-link" data-room-id="${data.room}" name="${data.room}">
                             <div class="wrap">
                                 <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                                 <div class="room-details">
-                                    <span class="name-of-room">${data.name}</span>
-                                    <p class="preview">preview of message</p>
+                                    <span class="name-of-room">${new_string}</span>
+                                    <p class="preview">${data.message}</p>
                                 </div>
-                                <span id="ellipsis" class="las la-ellipsis-v"></span>
+                                <span
+                                    id="ellipsis" class="las la-ellipsis-v">
+                                    </span>
+                                <div class="chat-dropdown"> 
+                                   
+                                    <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
+                                                <a edit-button-value="${data.room}" class="edit-button">Edit Name</a>
+                                    <a delete-button-value="${data.room}" class="delete-button">Delete Room</a>
+                                            </div>
+                                </div>
                             </div>
+
                         </li>`);
                         break;
                     case "room_exists":
@@ -626,7 +1106,7 @@ is empty when first clicked -->
 
                         $(".list-of-members").append(
                             `       <li>
-            		        <span class="profile-link"><b>${people.username}</b></span>
+            		        <span class="profile-link">${people.username}<i data-id="${people.id}" id="user-${people.id}"  class="las la-minus remove-button"></i></span>
         	            </li>`
 
                         );
@@ -639,7 +1119,7 @@ is empty when first clicked -->
                                 </li>`      //attach user id to remove button
                         );*/
 
-                        console.log("name", nameofmembers);
+                        removeduserclicked(`user-${people.id}`);
 
                         break;
                     case "get_users":
@@ -658,23 +1138,34 @@ is empty when first clicked -->
                     case "get_additional":
 
                         //var newTitle = data.adder
-                        socket.send(
-                            JSON.stringify({
-                                command: "rooms",
-                            })
-                        );
 
-                        let roomexists = true;
-                        for (var i = 0; i < allRooms.length; i++) {
-                            names = allRooms[i];
-                            if (data.room == names) {
-                                roomexists = true;
-                            }
-                        }
-                        console.log("elements", allRooms);
+                        var obj = data.name;
+                        var extra = ", ";
+                        var me = $("#myself").val() + extra;
+                        var comma = obj.replace(/-/g, ', ');
+                        var new_string = comma.replace(me, "");
+                        me = extra + $("#myself").val();
+                        new_string = new_string.replace(me, "");
+                        new_string = new_string.replace("(removed)", "")
+                        new_string = new_string.replace("(additional)", "")
+                        //location.reload();
+                        /*socket.send(
+                            JSON.stringify({
+                                command: "join",
+                                room: roomId,
+                            })
+                        );*/
+
+                        //if ()){
+                        //let roomexists = true
+                        //}
+
+                        let roomexists = null;
+                        roomexists = $("li[data-room-id=" + data.room + "]");
+
                         if (roomId == data.room) {
-                            $(".user-header h4").html("");
-                            $(".user-header h4").html(data.name);
+                            $(".room-title").html("");
+                            $(".room-title").html(new_string);
 
                             $(".list-of-members").empty();
 
@@ -684,21 +1175,110 @@ is empty when first clicked -->
                                     room: roomId,
                                 })
                             );
+                            $("li[data-room-id=" + data.room + "]").click();
                         }
-
-                        if (roomexists == true) {
-                            $("li[data-room-id=" + data.room + "]").html("");
-                            $("li[data-room-id=" + data.room + "]").html(data.name);
-
-                        }
-                        /*else (roomexists == false)
-                        {
-                                $(".rooms").append(
-                                    `<li class="room-link" data-room-id="${data.room}" name="${data.room}"> ${data.name}</li>`
-                                );
+                        /*else if (roomexists != null && data.edited == false) {
+                            $("[room-name-value=" + data.room + "]").html("");
+                            $("[room-name-value=" + data.room + "]").html(data.name);
                         }*/
+                        else if (roomexists == null) {
+
+                            $(".rooms").append(
+                                `<li class="room-link" data-room-id="${data.room}" name="${data.room}">
+                            <div class="wrap">
+                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                <div class="room-details">
+                                    <span room-name-value="${data.room}" class="name-of-room">${new_string}</span>
+                                    <p message-preview-value="${data.room}" class="preview">new message</p>
+                                </div>
+                                <span
+                                     ellipsis-value="${data.room}" id="ellipsis" class="las la-ellipsis-v">
+                                    </span>
+                                <div class="chat-dropdown"> 
+                                    
+                                    <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
+                                                <a edit-button-value="${data.room}" class="edit-button">Edit Name</a>
+                                    <a delete-button-value="${data.room}" class="delete-button">Delete Room</a>
+                                            </div>
+                                </div>
+                            </div>
+
+                        </li>`);
+                        }
 
 
+                        break;
+                    case "remove_user":
+
+                        //var newTitle = data.adder
+
+                        var obj = data.name;
+                        var extra = ", ";
+                        var me = $("#myself").val() + extra;
+                        var comma = obj.replace(/-/g, ', ');
+                        var new_string = comma.replace(me, "");
+                        me = extra + $("#myself").val();
+                        new_string = new_string.replace(me, "");
+                        new_string = new_string.replace("(removed)", "")
+                        new_string = new_string.replace("(additional)", "")
+                        //location.reload();
+                        /*socket.send(
+                            JSON.stringify({
+                                command: "join",
+                                room: roomId,
+                            })
+                        );*/
+
+                        //if ()){
+                        //let roomexists = true
+                        //}
+
+                        //let roomexists = null;
+                        //roomexists = $("li[data-room-id=" + data.room + "]");
+
+                        /*if (roomId == data.room) {
+                            $(".room-title").html("");
+                            $(".room-title").html(new_string);
+
+                            $(".list-of-members").empty();
+
+                            socket.send(
+                                JSON.stringify({
+                                    command: "members",
+                                    room: roomId,
+                                })
+                            );
+                            $("li[data-room-id=" + data.room + "]").click();
+                        }
+                        /*else if (roomexists != null && data.edited == false) {
+                            $("[room-name-value=" + data.room + "]").html("");
+                            $("[room-name-value=" + data.room + "]").html(data.name);
+                        }*/
+                        /*else if (roomexists == null) {
+
+                            $(".rooms").append(
+                                `<li class="room-link" data-room-id="${data.room}" name="${data.room}">
+    <div class="wrap">
+        <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+        <div class="room-details">
+            <span room-name-value="${data.room}" class="name-of-room">${new_string}</span>
+            <p message-preview-value="${data.room}" class="preview">new message</p>
+        </div>
+        <div class="chat-dropdown"> 
+            <span
+             ellipsis-value="${data.room}" id="ellipsis" class="las la-ellipsis-v">
+            </span>
+            <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
+                        <a edit-button-value="${data.room}" class="edit-button">Edit Name</a>
+            <a delete-button-value="${data.room}" class="delete-button">Delete Room</a>
+                    </div>
+        </div>
+    </div>
+
+</li>`);
+                        }
+
+*/
                         break;
 
                     case "get_rooms":
@@ -707,6 +1287,38 @@ is empty when first clicked -->
                         allRooms[o] = roomie.id;
                         o++;
 
+                        var obj = roomie.name;
+                        var extra = ", ";
+                        var me = $("#myself").val() + extra;
+                        var comma = obj.replace(/-/g, ', ');
+                        var new_string = comma.replace(me, "");
+                        me = extra + $("#myself").val();
+                        new_string = new_string.replace(me, "");
+                        new_string = new_string.replace("(removed)", "")
+                        new_string = new_string.replace("(additional)", "")
+
+
+                        $(".rooms").append(
+                            `<li class="room-link" data-room-id="${roomie.id}" name="${roomie.id}">
+                            <div class="wrap">
+                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                <div class="room-details">
+                                    <span room-name-value="${roomie.id}" class="name-of-room">${new_string}</span>
+                                    <p message-preview-value="${roomie.id}" class="preview">new message</p>
+                                </div>
+                                <span
+                                     ellipsis-value="${roomie.id}" id="ellipsis" class="las la-ellipsis-v">
+                                    </span>
+                                <div class="chat-dropdown">
+                                            <div chat-dropdown-value="${roomie.id}" class="chat-dropdown-content">
+                                                <a edit-button-value="${roomie.id}" class="edit-button" id="edit-${roomie.id}">Edit Name</a>
+                                    <a delete-button-value="${roomie.id}" class="delete-button" id="delete-${roomie.id}">Delete Room</a>
+                                            </div>
+                                </div>
+                            </div>
+
+                        </li>`);
+                        menuclicked(`delete-${roomie.id}`, `edit-${roomie.id}`);
                         break;
 
                     case "print_title":
@@ -715,6 +1327,12 @@ is empty when first clicked -->
                         title = new_title.name;
                         console.log("title", title);
                         break;
+
+                    case "edit":
+                        var target_li = $("li[data-room-id=" + data.room_id + "]");
+                        var target = target_li.getElementsByClassName("preview");
+                        $(target).html("");
+                        $(target).html(data.message);
 
                     default:
                         console.log("Unsupported message type!");
@@ -731,7 +1349,11 @@ is empty when first clicked -->
             }
         };
 
-        $(".add-members").click(function () {
+        $("#add-members").click(function () {
+            if (hideellipsis) {
+                $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+
+            }
             whitelist_2 = [];
             x = 0;
             y = 0;
@@ -804,64 +1426,156 @@ is empty when first clicked -->
                     -If not in room when a message comes in give it an unread class*/
 
 
+
+        function editbuttonclicked() {
+            ellipsisClicked = true;
+            hideellipsis = true;
+            chatDropdownId = $(this).attr("ellipsis-value");
+            $("[chat-dropdown-value=" + chatDropdownId + "]").toggle('show hide');
+
+        }
+        $(document).on('click', '#ellipsis', editbuttonclicked);
+
+        function menuclicked(deletechat, edit) {
+            $("#" + deletechat).click(function () {
+                deleteroom = $(this).attr("delete-button-value");
+                //modal show
+                $(".confirmation-chat-modal").show();
+                $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+
+            });
+            $("#" + edit).click(function () {
+                editroom = $(this).attr("edit-button-value");
+                //modal show
+                $(".edit-chat-modal").show();
+                $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+                console.log("was clicked");
+            });
+
+
+        }
+        function removeduserclicked(userclicked) {
+            $("#" + userclicked).click(function () {
+                removeduser = $(this).attr("data-id");
+                //modal show
+                $(".confirmation-modal").show();
+                $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+            });
+        }
+        $("#confirm").click(function () {
+
+            socket.send(
+                JSON.stringify({
+                    command: "remove",
+                    room: roomId,
+                    user: removeduser
+
+                })
+            );
+            $(".confirmation-modal").hide();
+        });
+        $("#confirmation").click(function () {
+
+            socket.send(
+                JSON.stringify({
+                    command: "delete",
+                    room: deleteroom,
+                })
+            );
+            $(".confirmation-chat-modal").hide();
+        });
+        $("#confirmation-of-name").click(function () {
+
+            socket.send(
+                JSON.stringify({
+                    command: "edit",
+                    room: editroom,
+                    newName: newChat,
+                })
+            );
+            $(".edit-chat-modal").hide();
+        });
+        $("#exit-member-removal").click(function () {
+            $(".confirmation-modal").hide();
+
+        })
+        $("#reverse").click(function () {
+            $(".confirmation-chat-modal").hide();
+        })
+        $("#cancel-name").click(function () {
+            $(".edit-chat-modal").hide();
+        })
         function roomClick() {
-            roomId = $(this).attr("data-room-id");
-            groupName = $(this).attr("data-room-name");
+            if (ellipsisClicked == false) {
+                roomId = $(this).attr("data-room-id");
+                groupName = $(this).attr("data-room-name");
 
-            if (inRoom(roomId)) {
-                // Leave room
+                if (inRoom(roomId)) {
+                    // Leave room
 
-                $(this).removeClass("joined");
-                socket.send(
-                    JSON.stringify({
-                        command: "leave",
-                        room: roomId,
-                    })
-                );
-                $(".chat-log").empty();
-                //empty chat log
-            } else {
-                // Join room
+                    $(this).removeClass("joined");
+                    socket.send(
+                        JSON.stringify({
+                            command: "leave",
+                            room: roomId,
+                        })
+                    );
+                    $(".chat-log").empty();
+                    //empty chat log
+                } else {
+                    // Join room
+                    $(".list-of-members").empty();
+                    $(".list-of-links").empty();
+                    $(".list-of-files").empty();
+
+                    $(this).addClass("joined");
+                    socket.send(
+                        JSON.stringify({
+                            command: "join",
+                            room: roomId,
+                        })
+                    );
 
 
-                $(this).addClass("joined");
-                socket.send(
-                    JSON.stringify({
-                        command: "join",
-                        room: roomId,
-                    })
-                );
 
 
-                $(".list-of-members").empty();
+                    socket.send(
+                        JSON.stringify({
+                            command: "members",
+                            room: roomId,
+                        })
+                    );
 
-                socket.send(
-                    JSON.stringify({
-                        command: "members",
-                        room: roomId,
-                    })
-                );
+                    socket.send(
+                        JSON.stringify({
+                            command: "users",
+                        })
+                    );
+                    $(this).addClass('active-room').siblings().removeClass('active-room');
 
-                socket.send(
-                    JSON.stringify({
-                        command: "users",
-                    })
-                );
-                $(this).addClass('active-room').siblings().removeClass('active-room');
+                    $("#title-img").show();
+                    $("#typed_msg").show();
+                    $("#upload-photos-button").show();
+                    $(".msg_send_btn").show();
+                    $(".user-header").show();
+                    $(".user-header p").show();
+                    $("#create-chat").show();
+                    $("#tag-input").hide();
+                    $("#users-list").hide();
+                    $("#chat-name").hide();
+                    $(".chat-log").empty();
+                    $(".rightAccordion").show();
+                    $(".rightPanel").show();
+                    $("#add-members").show();
+                    if (hideellipsis) {
+                        $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
 
-                $("#title-img").show();
-                $("#typed_msg").show();
-                $("#upload-photos-button").show();
-                $(".msg_send_btn").show();
-                $(".user-header").show();
-                $("#create-chat").show();
-                $("#tag-input").hide();
-                $("#users-list").hide();
-                $("#create-group").hide();
-                $(".chat-log").empty();
-                $(".rightAccordion").show();
-                $(".rightPanel").show();
-                console.log(memberlist);
+                    }
+                    console.log(memberlist);
+                }
+            }
+            else {
+                ellipsisClicked = false;
             }
         }
         $(document).on('click', '.room-link', roomClick)
@@ -882,19 +1596,24 @@ is empty when first clicked -->
                     );
                 }
             }
+            if (hideellipsis) {
+                $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+
+            }
             $("#title-img").hide();
-            $("#upload-photos-button").hide();
+            $("#upload-photos-button").show();
             $(".user-header").hide();
             $("#create-chat").hide();
             $("#tag-input").show();
             $("#users-list").show();
-            $("#create-group").show();
+            $("#chat-name").show();
             $(".chat-log").empty();
-            $("#typed_msg").hide();
-            $(".msg_send_btn").hide();
+            $("#typed_msg").show();
+            $(".msg_send_btn").show();
             $(".rightAccordion").hide();
             $(".rightPanel").hide();
-
+            getallusers();
+            createroom = true;
         });
 
 
@@ -903,18 +1622,23 @@ is empty when first clicked -->
 
 
         function myFunction() {
+            if (hideellipsis) {
+                $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+
+            }
             var input, filter, ul, li, a, i, txtValue;
-            input = document.getElementById("myInput");
-            filter = input.value.toUpperCase();
-            ul = document.getElementById("rooms");
-            li = ul.getElementsByTagName("li");
-            for (i = 0; i < li.length; i++) {
-                a = li[i];
-                txtValue = a.textContent || a.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    li[i].style.display = "";
-                } else {
-                    li[i].style.display = "none";
+            search_input = $('input[name=search]');
+            search_input.onkeyup = function () {
+                filter = search_input.value.toUpperCase();
+                ul = document.getElementById("rooms");
+                li = ul.getElementsByTagName("li");
+                for (i = 0; i < li.length; i++) {
+                    var name = li[i].getElementsByClassName('name-of-room')[0].innerHTML;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
                 }
             }
         }
@@ -923,6 +1647,14 @@ is empty when first clicked -->
         // Helpful debugging
         socket.onopen = function () {
             console.log("Connected to chat socket");
+            socketopen++;
+            if (socketopen == 1) {
+                socket.send(
+                    JSON.stringify({
+                        "command": "rooms",
+                    })
+                );
+            }
         };
         socket.onclose = function () {
             console.log("Disconnected from chat socket");
@@ -948,20 +1680,20 @@ is empty when first clicked -->
                     tag: function (tagData) {
                         try {
                             return `
-<tag title="${tagData.email}"
-    contenteditable='false'
-    spellcheck='false'
-    tabIndex="-1"
-    class="tagify__tag ${tagData.class ? tagData.class : ""}"
-    ${this.getAttributes(tagData)}>
-<x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
-<div>
-    <div class='tagify__tag__avatar-wrap'>
-        <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
-    </div>
-    <span class='tagify__tag-text'>${tagData.name}</span>
-</div>
-</tag>`
+                                <tag title="${tagData.email}"
+                                    contenteditable='false'
+                                    spellcheck='false'
+                                    tabIndex="-1"
+                                    class="tagify__tag ${tagData.class ? tagData.class : ""}"
+                                    ${this.getAttributes(tagData)}>
+                                <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
+                                <div>
+                                    <div class='tagify__tag__avatar-wrap'>
+                                        <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                                    </div>
+                                    <span class='tagify__tag-text'>${tagData.name}</span>
+                                </div>
+                                </tag>`
                         }
                         catch (err) { }
                     },
@@ -1073,76 +1805,76 @@ is empty when first clicked -->
         }
 
 
+        function getallusers() {
+            var inputElm = document.querySelector('input[name=users-list-tags]');
 
-        var inputElm = document.querySelector('input[name=users-list-tags]');
+            function tagTemplate(tagData) {
+                return `
+                    <tag title="${tagData.email}"
+                            contenteditable='false'
+                            spellcheck='false'
+                            tabIndex="-1"
+                            class="tagify__tag ${tagData.class ? tagData.class : ""}"
+                            ${this.getAttributes(tagData)}>
+                        <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
+                        <div>
+                            <div class='tagify__tag__avatar-wrap'>
+                                <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                            </div>
+                            <span class='tagify__tag-text'>${tagData.name}</span>
+                        </div>
+                    </tag>
+                    `
+            }
 
-        function tagTemplate(tagData) {
-            return `
-<tag title="${tagData.email}"
-        contenteditable='false'
-        spellcheck='false'
-        tabIndex="-1"
-        class="tagify__tag ${tagData.class ? tagData.class : ""}"
-        ${this.getAttributes(tagData)}>
-    <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
-    <div>
-        <div class='tagify__tag__avatar-wrap'>
-            <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
-        </div>
-        <span class='tagify__tag-text'>${tagData.name}</span>
-    </div>
-</tag>
-`
-        }
-
-        function suggestionItemTemplate(tagData) {
-            return `
-<div ${this.getAttributes(tagData)}
-    class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
-    tabindex="0"
-    role="option">
-    ${tagData.avatar ? `
-    <div class='tagify__dropdown__item__avatar-wrap'>
-        <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
-    </div>` : ''
-                }
-    <strong>${tagData.name}</strong>
-    <span>${tagData.email}</span>
-</div>
-`
-        }
-
-
-        // initialize Tagify on the above input node reference
-        var tagify2 = new Tagify(inputElm, {
-            tagTextProp: 'name', // very important since a custom template is used with this property as text
-            enforceWhitelist: true,
-            skipInvalid: true, // do not remporarily add invalid tags
-
-            dropdown: {
-                closeOnSelect: false,
-                enabled: 0,
-                classname: 'users-list',
-                searchKeys: ['name', 'email']  // very important to set by which keys to search for suggesttions when typing
-            },
-            templates: {
-                tag: tagTemplate,
-                dropdownItem: suggestionItemTemplate
-            },
-
-            whitelist: [
-                {% for user in users %}
-{
-                "value": "{{ user.pk }}",
-                "name": "{{user.username}}",
-                "avatar": "{% static 'app/images/PngItem_4212266.png' %}",
-                "email": "{{user.email}}"
-            },
-            {% endfor %}    
-]
+            function suggestionItemTemplate(tagData) {
+                return `
+                <div ${this.getAttributes(tagData)}
+                    class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+                    tabindex="0"
+                    role="option">
+                    ${tagData.avatar ? `
+                    <div class='tagify__dropdown__item__avatar-wrap'>
+                        <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+                    </div>` : ''
+                    }
+                    <strong>${tagData.name}</strong>
+                    <span>${tagData.email}</span>
+                </div>
+                `
+            }
 
 
-})
+            // initialize Tagify on the above input node reference
+            var tagify2 = new Tagify(inputElm, {
+                tagTextProp: 'name', // very important since a custom template is used with this property as text
+                enforceWhitelist: true,
+                skipInvalid: true, // do not remporarily add invalid tags
+
+                dropdown: {
+                    closeOnSelect: false,
+                    enabled: 0,
+                    classname: 'users-list',
+                    searchKeys: ['name', 'email']  // very important to set by which keys to search for suggesttions when typing
+                },
+                templates: {
+                    tag: tagTemplate,
+                    dropdownItem: suggestionItemTemplate
+                },
+
+                whitelist: [
+                    {% for user in users %}
+            {
+                    "value": "{{ user.pk }}",
+                    "name": "{{user.username}}",
+                    "avatar": "{% static 'app/images/PngItem_4212266.png' %}",
+                    "email": "{{user.email}}"
+                },
+                {% endfor %}    
+            ]
+
+
+    })
 
     tagify2.on('dropdown:show dropdown:updated', onDropdownShow)
 
@@ -1151,35 +1883,12 @@ is empty when first clicked -->
         var dropdownContentElm = e.detail.tagify2.DOM.dropdown.content;
 
     }
-
-    $("#create-group").on('click', function () {
-        socket.send(
-            JSON.stringify({
-                command: "create",
-                newUsers: JSON.parse($("#tag-input").val()),
-            })
-        );
-
-        $("#tag-input").hide();
-        $("#users-list").hide();
-        $("#tag-input").empty();
-        $("#create-group").hide();
-
-        //join the room that was just created
+    $(".sending-form").on("submit", tagify2.removeAllTags.bind(tagify2));
 
 
-        $("li[data-room-id=" + data.room_id + "]").click();
 
-        $(".msg_send_btn").show();
-        $(".user-header").show();
-        $("#create-chat").show();
-        $("#create-chat").show();
-        $("#typed_msg").show();
-        $("#upload-photos-button").show();
-        $(".rightAccordion").show();
-    });
-    $("#create-group").on('click', tagify2.removeAllTags.bind(tagify2));
-    });
+}
+    })
 </script>
 
 

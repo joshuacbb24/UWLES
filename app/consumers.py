@@ -3,7 +3,7 @@ from django.conf import settings
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from .exceptions import ClientError
-from .utils import get_room_or_error, save_message, create_group, fetch_recent, fetch_members, fetch_users, add_group, fetch_rooms, fetch_title, RoomExistsException
+from .utils import get_room_or_error, save_message, create_group, fetch_recent, fetch_members, fetch_users, add_group, fetch_rooms, fetch_title, delete_room, delete_user, RoomExistsException
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -53,7 +53,12 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         'id': message.id,
                         'text': message.message,
                         'from_user': message.from_user.username,
-                        'sent_at': message.sent_at.strftime("%Y-%m-%d %H:%M:%S %p")
+                        'avatar': message.from_user.avatar.url if message.from_user.avatar else '',
+                        'default': message.from_user.bgColor,
+                        'notification': False,
+                        'sent_at': message.sent_at.strftime("%m-%d %H:%M %p"),
+                        'is_link': message.is_link,
+                        'is_file': message.is_file,
                     }, 'msg_type': 0, })
             elif command == "leave":
                 # Leave the room
@@ -94,7 +99,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     await self.send_json({'rooms': {
                         'id': group.id,
                         'name': group.group_name,
-                        'members': group.members,
                     }, 'msg_type': 'get_rooms', })
             elif command == "users":
                 # get users in database
@@ -111,14 +115,51 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 await self.send_json({'room': {
                     'name': room_title.group_name,
                 }, 'msg_type': 'print_title', })
+            elif command == "delete":
+                room, users = await delete_room(content["room"], self.scope["user"])
+                for user in users:
+                    # Send a message to this user's channel
+                    channel_name = self.user_channels.get(user.username)
+                    if channel_name:
+                        await self.channel_layer.send(
+                            channel_name,
+                            {
+                                "type": "chat.delete",
+                                "room_id": room.id,
+                                'name': room.group_name,
+                                "username": user.username,
+                            }
+                        )
+            elif command == "edit":
+                users = await fetch_members(content["room"])
+                for user in users:
+                    # Send a message to this user's channel
+                    channel_name = self.user_channels.get(user.username)
+                    if channel_name:
+                        await self.channel_layer.send(
+                            channel_name,
+                            {
+                                "type": "chat.edit",
+                                "room_id": content["room"],
+                                "username": user.username,
+                                "message": content["message"],
+                                "is_link": content["link"],
+                                "is_file": content["file"]
+                            }
+                        )
+            elif command == "remove":
+                await delete_user(content["room"], content["old_user"])
+                await self.send_json({
+                    'msg_type': 'remove_user', })
             elif command == "send":
-                message = await save_message(content["room"], self.scope["user"], content["message"])
-                await self.send_room(content["room"], content["message"])
+                message = await save_message(content["room"], self.scope["user"], content["message"], content["link"], content["file"])
+                await self.send_room(content["room"], content["message"], content["link"], content["file"], notification=True)
             elif command == "create":
                 # maybe a primary key for name
                 # json parse new users for name of chat
                 try:
                     room, users = await create_group(content["newUsers"], self.scope["user"])
+                    message = await save_message(room.id, self.scope["user"], content["message"], content["link"], content["file"])
                     # Add users to room channel
                     print('user channels', self.user_channels)
                     for user in users:
@@ -132,9 +173,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                                     "room_id": room.id,
                                     'name': room.group_name,
                                     "username": user.username,
+                                    "message": content["message"],
+                                    "notification": True
                                 }
                             )
-                    # await self.send_json({'room_id': room.id, 'name': room.group_name, 'msg_type': 'created'})
+                # await self.send_json({'room_id': room.id, 'name': room.group_name, 'msg_type': 'created'})
                 except RoomExistsException as inst:
                     await self.send_json({'msg_type': 'room_exists', 'room_name': inst.room.group_name, 'room_id': inst.room.id})
         except ClientError as e:
@@ -213,7 +256,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             "leave": str(room.id),
         })
 
-    async def send_room(self, room_id, message):
+    async def send_room(self, room_id, message, link, file, notification=False):
         """
         Called by receive_json when someone sends a message to a room.
         """
@@ -228,7 +271,12 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "type": "chat.message",
                 "room_id": room_id,
                 "username": self.scope["user"].username,
+                "default":  self.scope["user"].bgColor,
+                "avatar":  self.scope['user'].avatar.url,
+                "notification": notification,
                 "message": message,
+                "is_link": link,
+                "is_file": file
             }
         )
     # Handlers for messages sent over the channel layer
@@ -245,6 +293,23 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "room": event["room_id"],
                 "name": event["name"],
                 "username": event["username"],
+                "message": event["message"]
+            },
+        )
+
+    async def chat_edit(self, event):
+        """
+        Called when someone has added people to a chat.
+        """
+        # Send a message down to the client
+        await self.send_json(
+            {
+                "msg_type": "edit",
+                "room": event["room_id"],
+                "username": event["username"],
+                "message": event["message"],
+                "is_link": event["is_link"],
+                "is_file": event["is_file"],
             },
         )
 
@@ -252,6 +317,16 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         await self.send_json(
             {
                 "msg_type": "get_additional",
+                "room": event["room_id"],
+                "name": event["name"],
+                "username": event["username"],
+            },
+        )
+
+    async def chat_delete(self, event):
+        await self.send_json(
+            {
+                "msg_type": "delete_room",
                 "room": event["room_id"],
                 "name": event["name"],
                 "username": event["username"],
@@ -295,5 +370,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "room": event["room_id"],
                 "username": event["username"],
                 "message": event["message"],
+                "avatar": event['avatar'],
+                "default": event['default'],
+                "notification": event['notification'],
             },
         )

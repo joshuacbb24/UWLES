@@ -1,0 +1,8 @@
+-Worked on the layout & functionality of the dashboard and user-intake form
+-added avatars to the users
+-Created a functional chat capable of:s
+	-working synchronously and asynchronously
+	-uploading and sending files
+	-creating either group or single chats
+	-shows users in the chat
+-created a pop-up version of the chat for the dashboard

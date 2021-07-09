@@ -1,0 +1,1 @@
+when you join a room send a request for members and append them to the hidden accordian list for members

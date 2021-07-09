@@ -33,7 +33,7 @@ def get_room_or_error(room_id, user):
 
 
 @database_sync_to_async
-def save_message(room_id, user, message):
+def save_message(room_id, user, message, link, file):
     """
     Save message data to database
     """
@@ -45,9 +45,15 @@ def save_message(room_id, user, message):
         room = ChatGroup.objects.get(pk=room_id)
     except ChatGroup.DoesNotExist:
         raise ClientError("ROOM_INVALID")
-
-    message = Messages.objects.create(
-        chat_group=room, from_user=user, message=message)
+    if link == True:
+        message = Messages.objects.create(
+            chat_group=room, from_user=user, message=message, is_link=True, is_file=False)
+    elif file == True:
+        message = Messages.objects.create(
+            chat_group=room, from_user=user, message=message, is_link=False, is_file=True)
+    else:
+        message = Messages.objects.create(
+            chat_group=room, from_user=user, message=message, is_link=False, is_file=False)
 
     return message
 
@@ -165,12 +171,7 @@ def add_group(room_id, newUsers, user):
             users.append(chat_member.username)
 
         name = "-".join(users)
-
-        rooms = ChatGroup.objects.filter(group_name=name)
-        if rooms.exists():
-
-            raise RoomExistsException(rooms.first())
-
+        name = name + "(additional)"
         people.group_name = name
         people.save()
 
@@ -188,11 +189,16 @@ def fetch_rooms(user):
     """
     # find the room they requested (by ID)
     try:
-        all_entries = ChatGroup.objects.filter(members=user)
-        for x in all_entries:
-            last_message = Messages.objects.get(
-                chat_group=x.group_name).order_by('date-sent')[0]
-        return list(all_entries)
+        messages = []
+        members = []
+        groups = ChatGroup.objects.filter(members=user)
+        all_entries = list(groups)
+        # for x in all_entries:
+        #    last_message = Messages.objects.filter(
+        #        chat_group=x.group_name).latest('sent_at')
+        #    messages.append(last_message)
+
+        return list(groups)
 
     except ChatGroup.DoesNotExist:
 
@@ -200,7 +206,7 @@ def fetch_rooms(user):
 
 
 @database_sync_to_async
-def delete_user(room_id, old_user):
+def delete_room(room_id, myself):
     """
     get list of members in room
     """
@@ -208,7 +214,7 @@ def delete_user(room_id, old_user):
     try:
         users = []
         room = ChatGroup.objects.get(pk=room_id)
-        room.members.remove(old_user['value'])
+        room.members.remove(myself)
         room.save()
 
         chat_members = list(room.members.all())
@@ -217,12 +223,6 @@ def delete_user(room_id, old_user):
             users.append(chat_member.username)
 
         name = "-".join(users)
-
-        rooms = ChatGroup.objects.filter(group_name=name)
-
-        if rooms.exists():
-
-            raise RoomExistsException(rooms.first())
 
         room.group_name = name
         room.save()
@@ -247,3 +247,48 @@ def fetch_title(room_id):
     except ChatGroup.DoesNotExist:
 
         raise ClientError("ROOM DOES NOT EXIST")
+
+
+@database_sync_to_async
+def delete_user(room_id, old_user):
+    """
+    get list of members in room
+    """
+    # find the room they requested (by ID)
+    try:
+        users = []
+        messages = []
+        suffix = "(removed)"
+        room = ChatGroup.objects.get(pk=room_id)
+        old_name = room.group_name + suffix
+        room.members.remove(old_user)
+        room.save()
+
+        chat_members = room.members.all()
+        old_messages = Messages.objects.filter(chat_group=room_id)
+
+        for chat_member in chat_members:
+            users.append(chat_member.username)
+
+        name = "-".join(users)
+
+        room.group_name = name
+        room.save()
+
+        new_room = ChatGroup.objects.create(group_name=old_name)
+        new_room.members.add(old_user)
+        new_room.save()
+
+        for old_message in old_messages:
+            old_message.pk = None
+            old_message.chat_group = new_room
+            old_message.save()
+
+        """ if you set the pk of a django key to null you remove the ref to the row in the database if you
+        then save that obj you get a new row in the database
+        """
+    except ChatGroup.DoesNotExist:
+
+        raise ClientError("Members do not exist")
+
+    return room, list(room.members.all())

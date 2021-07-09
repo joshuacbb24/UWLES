@@ -79,10 +79,11 @@ class Channels(models.Model):
 
 
 class ChatGroup(models.Model):
-    group_name = models.CharField(max_length=100, null=True, unique=True)
+    group_name = models.CharField(max_length=100, null=True, unique=False)
     created_by = models.ForeignKey(Account, on_delete=models.PROTECT)
     members = models.ManyToManyField(Account, related_name="all_group_members")
     created_at = models.DateTimeField(auto_now_add=True)
+    edited = models.BooleanField(default=False)
 
     def __str__(self):
         return self.group_name
