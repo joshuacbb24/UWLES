@@ -292,3 +292,15 @@ def delete_user(room_id, old_user):
         raise ClientError("Members do not exist")
 
     return room, list(room.members.all())
+
+
+@database_sync_to_async
+def editname(room_id, new_name):
+    try:
+        nameOfRoom = ''
+
+    except ChatGroup.DoesNotExist:
+
+        raise ClientError("Members do not exist")
+
+    return nameOfRoom

@@ -172,24 +172,12 @@ button {
 
 #create-chat {
   position: relative;
-  text-align: center;
+  text-align: left;
   width: 90%;
   margin-left: 5%;
-}
+  padding-left: 7%;
+  color: #015D67;
 
-#create-chat:after {
-  content: "\FF0B";
-  float: right;
-  font-size: 40px;
-  color: #afafaf;
-  font-weight: bold;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 90%;
-  -ms-transform: translate(-90%, -50%);
-  transform: translate(-90%, -50%);
-  /*margin-right: 16px;*/
 }
 
 .rooms li {

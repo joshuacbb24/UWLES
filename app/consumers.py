@@ -3,7 +3,7 @@ from django.conf import settings
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 from .exceptions import ClientError
-from .utils import get_room_or_error, save_message, create_group, fetch_recent, fetch_members, fetch_users, add_group, fetch_rooms, fetch_title, delete_room, delete_user, RoomExistsException
+from .utils import get_room_or_error, save_message, create_group, fetch_recent, fetch_members, fetch_users, add_group, fetch_rooms, fetch_title, delete_room, delete_user, editname, RoomExistsException
 
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -131,6 +131,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                             }
                         )
             elif command == "edit":
+                new_name = await editname(content["room"], content["newName"])
                 users = await fetch_members(content["room"])
                 for user in users:
                     # Send a message to this user's channel
@@ -142,15 +143,24 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                                 "type": "chat.edit",
                                 "room_id": content["room"],
                                 "username": user.username,
-                                "message": content["message"],
-                                "is_link": content["link"],
-                                "is_file": content["file"]
+                                "name": room.group_name,
                             }
                         )
             elif command == "remove":
-                await delete_user(content["room"], content["old_user"])
-                await self.send_json({
-                    'msg_type': 'remove_user', })
+                room, users = await delete_user(content["room"], content["old_user"])
+                for user in users:
+                    # Send a message to this user's channel
+                    channel_name = self.user_channels.get(user.username)
+                    if channel_name:
+                        await self.channel_layer.send(
+                            channel_name,
+                            {
+                                "type": "chat.remove",
+                                "room_id": content["room"],
+                                "username": user.username,
+                                "name": room.group_name,
+                            }
+                        )
             elif command == "send":
                 message = await save_message(content["room"], self.scope["user"], content["message"], content["link"], content["file"])
                 await self.send_room(content["room"], content["message"], content["link"], content["file"], notification=True)
@@ -307,9 +317,21 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "msg_type": "edit",
                 "room": event["room_id"],
                 "username": event["username"],
-                "message": event["message"],
-                "is_link": event["is_link"],
-                "is_file": event["is_file"],
+                "name": event["name"],
+            },
+        )
+
+    async def chat_remove(self, event):
+        """
+        Called when someone has added people to a chat.
+        """
+        # Send a message down to the client
+        await self.send_json(
+            {
+                "msg_type": "remove_user",
+                "room": event["room_id"],
+                "username": event["username"],
+                "name": event["name"],
             },
         )
 

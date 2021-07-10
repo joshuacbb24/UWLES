@@ -481,7 +481,16 @@ is empty when first clicked -->
                     </ul>
                 </div>
                 <div class="creating-chat-section">
-                    <button style="margin-top: 3.3%;" id="create-chat">create new chat</button><br />
+                    <button style="margin-top: 3.3%;" id="create-chat"><strong>Open New Chat </strong><i style="  float: right;
+                        font-size: 30px;
+                        color: #015D67;
+                        font-weight: bold;
+                        margin: 0;
+                        position: absolute;
+                        top: 50%;
+                        left: 90%;
+                        -ms-transform: translate(-90%, -50%);
+                        transform: translate(-90%, -50%);" class="las la-plus-circle"></i></button><br />
                 </div>
             </div>
             <div class="middle-panel">
@@ -699,6 +708,7 @@ is empty when first clicked -->
     let found = null;
     var prefix = 'https://';
     let ellipsisClicked = false;
+    let hideellipsis = false;
 
     $(function () {
 
@@ -1082,13 +1092,14 @@ is empty when first clicked -->
                                 <div class="chat-dropdown"> 
                                    
                                     <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
-                                                <a edit-button-value="${data.room}" class="edit-button">Edit Name</a>
-                                    <a delete-button-value="${data.room}" class="delete-button">Delete Room</a>
+                                    <a edit-button-value="${data.room}" class="edit-button" id="edit-${data.room}">Edit Name</a>
+                                    <a delete-button-value="${data.room}" class="delete-button" id="delete-${data.room}">Delete Room</a>
                                             </div>
                                 </div>
                             </div>
 
                         </li>`);
+                        menuclicked(`delete-${data.room}`, `edit-${data.room}`);
                         break;
                     case "room_exists":
                         $("li[data-room-id=" + data.room_id + "]").click();
@@ -1146,6 +1157,7 @@ is empty when first clicked -->
                         var new_string = comma.replace(me, "");
                         me = extra + $("#myself").val();
                         new_string = new_string.replace(me, "");
+                        new_string = new_string.replace("(deleted)", "")
                         new_string = new_string.replace("(removed)", "")
                         new_string = new_string.replace("(additional)", "")
                         //location.reload();
@@ -1197,8 +1209,9 @@ is empty when first clicked -->
                                 <div class="chat-dropdown"> 
                                     
                                     <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
-                                                <a edit-button-value="${data.room}" class="edit-button">Edit Name</a>
-                                    <a delete-button-value="${data.room}" class="delete-button">Delete Room</a>
+
+                                    <a edit-button-value="${data.room}" class="edit-button" id="edit-${data.room}">Edit Name</a>
+                                    <a delete-button-value="${data.room}" class="delete-button" id="delete-${data.room}">Delete Room</a>
                                             </div>
                                 </div>
                             </div>
@@ -1206,7 +1219,7 @@ is empty when first clicked -->
                         </li>`);
                         }
 
-
+                        menuclicked(`delete-${data.room}`, `edit-${data.room}`);
                         break;
                     case "remove_user":
 
@@ -1219,6 +1232,7 @@ is empty when first clicked -->
                         var new_string = comma.replace(me, "");
                         me = extra + $("#myself").val();
                         new_string = new_string.replace(me, "");
+                        new_string = new_string.replace("(deleted)", "")
                         new_string = new_string.replace("(removed)", "")
                         new_string = new_string.replace("(additional)", "")
                         //location.reload();
@@ -1271,12 +1285,15 @@ is empty when first clicked -->
             <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
                         <a edit-button-value="${data.room}" class="edit-button">Edit Name</a>
             <a delete-button-value="${data.room}" class="delete-button">Delete Room</a>
+                                                            <a edit-button-value="${data.room}" class="edit-button" id="edit-${data.room}">Edit Name</a>
+                                    <a delete-button-value="${data.room}" class="delete-button" id="delete-${data.room}">Delete Room</a>
                     </div>
         </div>
     </div>
 
 </li>`);
                         }
+                        menuclicked(`delete-${data.room}`, `edit-${data.room}`);
 
 */
                         break;
@@ -1294,6 +1311,7 @@ is empty when first clicked -->
                         var new_string = comma.replace(me, "");
                         me = extra + $("#myself").val();
                         new_string = new_string.replace(me, "");
+                        new_string = new_string.replace("(deleted)", "")
                         new_string = new_string.replace("(removed)", "")
                         new_string = new_string.replace("(additional)", "")
 
@@ -1352,6 +1370,9 @@ is empty when first clicked -->
         $("#add-members").click(function () {
             if (hideellipsis) {
                 $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+                hideellipsis = false;
+            }
+            else {
 
             }
             whitelist_2 = [];
@@ -1569,6 +1590,9 @@ is empty when first clicked -->
                     $("#add-members").show();
                     if (hideellipsis) {
                         $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+                        hideellipsis = false;
+                    }
+                    else {
 
                     }
                     console.log(memberlist);
@@ -1598,8 +1622,12 @@ is empty when first clicked -->
             }
             if (hideellipsis) {
                 $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+                hideellipsis = false;
+            }
+            else {
 
             }
+
             $("#title-img").hide();
             $("#upload-photos-button").show();
             $(".user-header").hide();
@@ -1624,6 +1652,9 @@ is empty when first clicked -->
         function myFunction() {
             if (hideellipsis) {
                 $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+                hideellipsis = false;
+            }
+            else {
 
             }
             var input, filter, ul, li, a, i, txtValue;
