@@ -254,7 +254,7 @@
             height: 30%;
             z-index: 3;
             border-radius: 5px;
-            margin-right: 27%;
+            margin-right: 33%;
             /* Could be more or less, depending on screen size */
             box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
             overflow: hidden;
@@ -647,7 +647,7 @@ is empty when first clicked -->
             border-color: #afafaf;
             width: 95%;
             position: relative;
-            height: 60%;" type="text" placeholder="New Name..." name='new-chat-name' />
+            height: 60%;" type="text" placeholder="New Name..." name='new-chat-name' id="chatName" />
 
         </p>
         <div>
@@ -659,7 +659,7 @@ is empty when first clicked -->
         </div>
 
         <span style="margin-top: 5%; float: right; margin-right: 5%">
-            <button id="confirmation-of-name" type="button" class="btn btn-primary">Confirm</button>
+            <button id="confirmation-of-name" type="button" class="btn btn-primary" disabled>Confirm</button>
             <button type="button" class="btn btn-outline-secondary" id="cancel-name">Cancel</button>
         </span>
     </div>
@@ -709,6 +709,10 @@ is empty when first clicked -->
     var prefix = 'https://';
     let ellipsisClicked = false;
     let hideellipsis = false;
+    var newChat = document.querySelector('input[name=new-chat-name]');
+    let removeduser = null;
+    var allnewusers = [];
+
 
     $(function () {
 
@@ -1079,7 +1083,7 @@ is empty when first clicked -->
                         new_string = new_string.replace(me, "");
 
                         $(".rooms").append(
-                            `<li class="room-link" data-room-id="${data.room}" name="${data.room}">
+                            `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                             <div class="wrap">
                                 <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                                 <div class="room-details">
@@ -1114,6 +1118,7 @@ is empty when first clicked -->
                         // $(".avatar-list").append(
                         //`<li><img src="" alt="user" class="profile-photo-lg"></li>`
                         // );
+                        $(".list-of-members").empty();
 
                         $(".list-of-members").append(
                             `       <li>
@@ -1133,6 +1138,80 @@ is empty when first clicked -->
                         removeduserclicked(`user-${people.id}`);
 
                         break;
+                    case "delete_room":
+                        removedelement = $("li[data-room-id=" + data.room + "]");
+                        var list = document.getElementById("rooms");
+                        var obj = data.name;
+                        var extra = ", ";
+                        var me = $("#myself").val() + extra;
+                        var comma = obj.replace(/-/g, ', ');
+                        var new_string = comma.replace(me, "");
+                        me = extra + $("#myself").val();
+                        new_string = new_string.replace(me, "");
+                        new_string = new_string.replace("(deleted)", "")
+                        new_string = new_string.replace("(removed)", "")
+                        new_string = new_string.replace("(additional)", "")
+                        if ($("#myself").val() == data.username && roomId == data.room) {
+
+                            socket.send(
+                                JSON.stringify({
+                                    command: "leave",
+                                    room: roomId,
+                                })
+                            );
+                            $("#title-img").hide();
+                            $("#typed_msg").hide();
+                            $("#upload-photos-button").hide();
+                            $(".msg_send_btn").hide();
+                            $(".user-header").show();
+                            $(".user-header p").hide();
+                            $("#create-chat").hide();
+                            $("#tag-input").hide();
+                            $("#users-list").hide();
+                            $("#chat-name").hide();
+                            $(".chat-log").empty();
+                            $(".rightAccordion").hide();
+                            $(".rightPanel").hide();
+                            $("#add-members").hide();
+
+                            list.removeChild(removedelement);
+                        }
+                        else if ($("#myself").val() == data.username && roomId != data.room) {
+                            list.removeChild(removedelement);
+                        }
+
+                        else if ($("#myself").val() != data.username) {
+
+                            if (data.edited && roomId == data.room) {
+
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "members",
+                                        room: roomId,
+                                    })
+                                );
+                                $("li[data-room-id=" + data.room + "]").click();
+                            }
+                            else if (!data.edited && roomId == data.room) {
+
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "members",
+                                        room: roomId,
+                                    })
+                                );
+                                $("[room-name-value=" + data.room + "]").html("");
+                                $("[room-name-value=" + data.room + "]").html(new_string);
+                                $(".room-title").html("");
+                                $(".room-title").html(new_string);
+                                $("li[data-room-id=" + data.room + "]").click();
+                            }
+                            else if (!data.edited && roomId != data.room) {
+                                $("[room-name-value=" + data.room + "]").html("");
+                                $("[room-name-value=" + data.room + "]").html(new_string);
+                            }
+                        }
+                        menuclicked(`delete-${data.room}`, `edit-${data.room}`);
                     case "get_users":
 
                         var allusers = data.user
@@ -1149,7 +1228,7 @@ is empty when first clicked -->
                     case "get_additional":
 
                         //var newTitle = data.adder
-
+                        var list = document.getElementById("rooms");
                         var obj = data.name;
                         var extra = ", ";
                         var me = $("#myself").val() + extra;
@@ -1160,71 +1239,72 @@ is empty when first clicked -->
                         new_string = new_string.replace("(deleted)", "")
                         new_string = new_string.replace("(removed)", "")
                         new_string = new_string.replace("(additional)", "")
-                        //location.reload();
-                        /*socket.send(
-                            JSON.stringify({
-                                command: "join",
-                                room: roomId,
-                            })
-                        );*/
 
-                        //if ()){
-                        //let roomexists = true
-                        //}
+                        for (var i = 0; i < nameofmembers; i++) {
+                            if ($("#myself").val() == arrayofusers[i]) {
 
-                        let roomexists = null;
-                        roomexists = $("li[data-room-id=" + data.room + "]");
-
-                        if (roomId == data.room) {
-                            $(".room-title").html("");
-                            $(".room-title").html(new_string);
-
-                            $(".list-of-members").empty();
-
-                            socket.send(
-                                JSON.stringify({
-                                    command: "members",
-                                    room: roomId,
-                                })
-                            );
-                            $("li[data-room-id=" + data.room + "]").click();
-                        }
-                        /*else if (roomexists != null && data.edited == false) {
-                            $("[room-name-value=" + data.room + "]").html("");
-                            $("[room-name-value=" + data.room + "]").html(data.name);
-                        }*/
-                        else if (roomexists == null) {
-
-                            $(".rooms").append(
-                                `<li class="room-link" data-room-id="${data.room}" name="${data.room}">
-                            <div class="wrap">
-                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-                                <div class="room-details">
-                                    <span room-name-value="${data.room}" class="name-of-room">${new_string}</span>
-                                    <p message-preview-value="${data.room}" class="preview">new message</p>
-                                </div>
-                                <span
-                                     ellipsis-value="${data.room}" id="ellipsis" class="las la-ellipsis-v">
-                                    </span>
-                                <div class="chat-dropdown"> 
-                                    
-                                    <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
-
-                                    <a edit-button-value="${data.room}" class="edit-button" id="edit-${data.room}">Edit Name</a>
-                                    <a delete-button-value="${data.room}" class="delete-button" id="delete-${data.room}">Delete Room</a>
+                                $(".rooms").append(
+                                    `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
+                                        <div class="wrap">
+                                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                            <div class="room-details">
+                                                <span room-name-value="${data.room}" class="name-of-room">${new_string}</span>
+                                                <p message-preview-value="${data.room}" class="preview">new message</p>
                                             </div>
-                                </div>
-                            </div>
+                                            <span
+                                                ellipsis-value="${data.room}" id="ellipsis" class="las la-ellipsis-v">
+                                                </span>
+                                            <div class="chat-dropdown"> 
+                                                
+                                                <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
 
-                        </li>`);
+                                                <a edit-button-value="${data.room}" class="edit-button" id="edit-${data.room}">Edit Name</a>
+                                                <a delete-button-value="${data.room}" class="delete-button" id="delete-${data.room}">Delete Room</a>
+                                                        </div>
+                                            </div>
+                                        </div>
+
+                                        </li>`);
+                            }
+                            if (data.edited && roomId == data.room) {
+
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "members",
+                                        room: roomId,
+                                    })
+                                );
+                                $("li[data-room-id=" + data.room + "]").click();
+                            }
+                            else if (!data.edited && roomId == data.room) {
+                                $("[room-name-value=" + data.room + "]").html("");
+                                $("[room-name-value=" + data.room + "]").html(new_string);
+                                $(".room-title").html("");
+                                $(".room-title").html(new_string);
+
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "members",
+                                        room: roomId,
+                                    })
+                                );
+                                $("li[data-room-id=" + data.room + "]").click();
+                            }
+                            else if (!data.edited && roomId != data.room) {
+                                $("[room-name-value=" + data.room + "]").html("");
+                                $("[room-name-value=" + data.room + "]").html(new_string);
+                            }
                         }
+
 
                         menuclicked(`delete-${data.room}`, `edit-${data.room}`);
                         break;
                     case "remove_user":
 
                         //var newTitle = data.adder
-
+                        let old_room = $("li[data-room-id=" + data.room + "]");
+                        let old_room_edit_id = ("a[id=edit-" + data.room + "]");
+                        let old_room_delete_id = ("a[id=delete-" + data.room + "]");
                         var obj = data.name;
                         var extra = ", ";
                         var me = $("#myself").val() + extra;
@@ -1235,67 +1315,77 @@ is empty when first clicked -->
                         new_string = new_string.replace("(deleted)", "")
                         new_string = new_string.replace("(removed)", "")
                         new_string = new_string.replace("(additional)", "")
-                        //location.reload();
-                        /*socket.send(
-                            JSON.stringify({
-                                command: "join",
-                                room: roomId,
-                            })
-                        );*/
 
-                        //if ()){
-                        //let roomexists = true
-                        //}
-
-                        //let roomexists = null;
-                        //roomexists = $("li[data-room-id=" + data.room + "]");
-
-                        /*if (roomId == data.room) {
-                            $(".room-title").html("");
-                            $(".room-title").html(new_string);
-
-                            $(".list-of-members").empty();
-
+                        if ($("#myself").val() == data.removed_user && roomId == data.room) {
+                            socket.send(
+                                JSON.stringify({
+                                    command: "leave",
+                                    room: roomId,
+                                })
+                            );
+                            old_room.setAttribute("data-room-id", data.new_room);
+                            old_room.setAttribute("name", data.new_room);
+                            old_room.setAttribute("room-name-value", data.new_room);
+                            old_room.setAttribute("message-preview-value", data.new_room);
+                            old_room.setAttribute("ellipsis-value", data.new_room);
+                            old_room.setAttribute("chat-dropdown-value", data.new_room);
+                            old_room.setAttribute("edit-button-value", data.new_room);
+                            old_room.setAttribute("delete-button-value", data.new_room);
+                            old_room_edit_id.setAttribute("id", data.new_room);
+                            old_room_delete_id.setAttribute("id", data.new_room);
+                            $("li[data-room-id=" + data.new_room + "]").click();
                             socket.send(
                                 JSON.stringify({
                                     command: "members",
                                     room: roomId,
                                 })
                             );
-                            $("li[data-room-id=" + data.room + "]").click();
                         }
-                        /*else if (roomexists != null && data.edited == false) {
-                            $("[room-name-value=" + data.room + "]").html("");
-                            $("[room-name-value=" + data.room + "]").html(data.name);
-                        }*/
-                        /*else if (roomexists == null) {
-
-                            $(".rooms").append(
-                                `<li class="room-link" data-room-id="${data.room}" name="${data.room}">
-    <div class="wrap">
-        <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
-        <div class="room-details">
-            <span room-name-value="${data.room}" class="name-of-room">${new_string}</span>
-            <p message-preview-value="${data.room}" class="preview">new message</p>
-        </div>
-        <div class="chat-dropdown"> 
-            <span
-             ellipsis-value="${data.room}" id="ellipsis" class="las la-ellipsis-v">
-            </span>
-            <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
-                        <a edit-button-value="${data.room}" class="edit-button">Edit Name</a>
-            <a delete-button-value="${data.room}" class="delete-button">Delete Room</a>
-                                                            <a edit-button-value="${data.room}" class="edit-button" id="edit-${data.room}">Edit Name</a>
-                                    <a delete-button-value="${data.room}" class="delete-button" id="delete-${data.room}">Delete Room</a>
-                    </div>
-        </div>
-    </div>
-
-</li>`);
+                        else if ($("#myself").val() == data.removed_user && roomId != data.room) {
+                            old_room.setAttribute("data-room-id", data.new_room);
+                            old_room.setAttribute("name", data.new_room);
+                            old_room.setAttribute("room-name-value", data.new_room);
+                            old_room.setAttribute("message-preview-value", data.new_room);
+                            old_room.setAttribute("ellipsis-value", data.new_room);
+                            old_room.setAttribute("chat-dropdown-value", data.new_room);
+                            old_room.setAttribute("edit-button-value", data.new_room);
+                            old_room.setAttribute("delete-button-value", data.new_room);
+                            old_room_edit_id.setAttribute("id", data.new_room);
+                            old_room_delete_id.setAttribute("id", data.new_room);
                         }
-                        menuclicked(`delete-${data.room}`, `edit-${data.room}`);
+                        else if ($("#myself").val() != data.removed_user) {
+                            if (data.edited && roomId == data.room) {
 
-*/
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "members",
+                                        room: roomId,
+                                    })
+                                );
+                                $("li[data-room-id=" + data.room + "]").click();
+                            }
+                            else if (!data.edited && roomId == data.room) {
+
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "members",
+                                        room: roomId,
+                                    })
+                                );
+                                $("[room-name-value=" + data.room + "]").html("");
+                                $("[room-name-value=" + data.room + "]").html(new_string);
+                                $(".room-title").html("");
+                                $(".room-title").html(new_string);
+                                $("li[data-room-id=" + data.room + "]").click();
+                            }
+                            else if (!data.edited && roomId != data.room) {
+                                $("[room-name-value=" + data.room + "]").html("");
+                                $("[room-name-value=" + data.room + "]").html(new_string);
+                            }
+                        }
+
+                        menuclicked(`delete-${data.new_room}`, `edit-${data.new_room}`);
+
                         break;
 
                     case "get_rooms":
@@ -1317,7 +1407,7 @@ is empty when first clicked -->
 
 
                         $(".rooms").append(
-                            `<li class="room-link" data-room-id="${roomie.id}" name="${roomie.id}">
+                            `<li id="room-link" class="room-link" data-room-id="${roomie.id}" name="${roomie.id}">
                             <div class="wrap">
                                 <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                                 <div class="room-details">
@@ -1348,9 +1438,9 @@ is empty when first clicked -->
 
                     case "edit":
                         var target_li = $("li[data-room-id=" + data.room_id + "]");
-                        var target = target_li.getElementsByClassName("preview");
-                        $(target).html("");
-                        $(target).html(data.message);
+                        var nameOfChat = target_li.getElementsByClassName("name-of-room");
+                        $(nameOfChat).html("");
+                        $(nameOfChat).html(data.name);
 
                     default:
                         console.log("Unsupported message type!");
@@ -1469,6 +1559,17 @@ is empty when first clicked -->
                 editroom = $(this).attr("edit-button-value");
                 //modal show
                 $(".edit-chat-modal").show();
+
+                newChat.addEventListener('change', onChangeName)
+
+                function onChangeName(e) {
+                    if (newChat.value != 0) {
+                        document.getElementById('confirmation-of-name').disabled = false;
+                    } else {
+                        document.getElementById('confirmation-of-name').disabled = true;
+                    }
+                }
+
                 $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
                 console.log("was clicked");
             });
@@ -1506,12 +1607,12 @@ is empty when first clicked -->
             $(".confirmation-chat-modal").hide();
         });
         $("#confirmation-of-name").click(function () {
-
+            newChatName = document.querySelector('#chatName').value;
             socket.send(
                 JSON.stringify({
                     command: "edit",
                     room: editroom,
-                    newName: newChat,
+                    newName: newChatName,
                 })
             );
             $(".edit-chat-modal").hide();
@@ -1818,6 +1919,11 @@ is empty when first clicked -->
             $("#canc").on('click', tagify.removeAllTags.bind(tagify));
 
             $("#submit-users").on('click', function () {
+                let arrayofnewusers = JSON.parse($("#user-input").val())
+                for (var i = 0; i < arrayofnewusers; i++) {
+                    var el = arrayofnewusers[i];
+                    arrayofusers[i] = el.name;
+                }
                 socket.send(
                     JSON.stringify({
                         command: "add",

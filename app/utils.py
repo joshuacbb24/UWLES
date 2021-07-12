@@ -87,6 +87,7 @@ def create_group(newUsers, user):
                                         group_name=name)
         for member in newUsers:
             room.members.add(member['value'])
+            print("tag value", member['value'])
         room.members.add(user)
 
     except ChatGroup.DoesNotExist:
@@ -158,28 +159,31 @@ def add_group(room_id, newUsers, user):
         # room.users.add(user)
         mem = ChatGroup.objects.get(pk=room_id)
         users = []
-
         for member in newUsers:
             mem.members.add(member['value'])
             mem.save()
 
-        people = ChatGroup.objects.get(pk=room_id)
+        if mem.edited == True:
 
-        chat_members = list(people.members.all())
+            name = mem.group_name
 
-        for chat_member in chat_members:
-            users.append(chat_member.username)
+        else:
+            chat_members = mem.members.all()
 
-        name = "-".join(users)
-        name = name + "(additional)"
-        people.group_name = name
-        people.save()
+            for chat_member in chat_members:
+
+                users.append(chat_member.username)
+
+            name = "-".join(users)
+
+        mem.group_name = name + "(additional)"
+        mem.save()
 
     except ChatGroup.DoesNotExist:
 
         raise ClientError("ROOM_INVALID")
 
-    return people, list(people.members.all())
+    return mem, list(mem.members.all())
 
 
 @database_sync_to_async
@@ -216,15 +220,19 @@ def delete_room(room_id, myself):
         room = ChatGroup.objects.get(pk=room_id)
         room.members.remove(myself)
         room.save()
+        if room.edited == True:
+            name = room.group_name
 
-        chat_members = list(room.members.all())
+        else:
+            chat_members = room.members.all()
 
-        for chat_member in chat_members:
-            users.append(chat_member.username)
+            for chat_member in chat_members:
 
-        name = "-".join(users)
+                users.append(chat_member.username)
 
-        room.group_name = name
+            name = "-".join(users)
+
+        room.group_name = name + "(deleted)"
         room.save()
 
     except ChatGroup.DoesNotExist:
@@ -234,7 +242,7 @@ def delete_room(room_id, myself):
     return room, list(room.members.all())
 
 
-@database_sync_to_async
+@ database_sync_to_async
 def fetch_title(room_id):
     """
     get list of members in room
@@ -249,7 +257,7 @@ def fetch_title(room_id):
         raise ClientError("ROOM DOES NOT EXIST")
 
 
-@database_sync_to_async
+@ database_sync_to_async
 def delete_user(room_id, old_user):
     """
     get list of members in room
@@ -264,15 +272,22 @@ def delete_user(room_id, old_user):
         room.members.remove(old_user)
         room.save()
 
-        chat_members = room.members.all()
         old_messages = Messages.objects.filter(chat_group=room_id)
 
-        for chat_member in chat_members:
-            users.append(chat_member.username)
+        if room.edited == True:
 
-        name = "-".join(users)
+            name = room.group_name
 
-        room.group_name = name
+        else:
+            chat_members = room.members.all()
+
+            for chat_member in chat_members:
+
+                users.append(chat_member.username)
+
+            name = "-".join(users)
+
+        room.group_name = name + suffix
         room.save()
 
         new_room = ChatGroup.objects.create(group_name=old_name)
@@ -291,16 +306,20 @@ def delete_user(room_id, old_user):
 
         raise ClientError("Members do not exist")
 
-    return room, list(room.members.all())
+    return room, list(room.members.all()), new_room
 
 
-@database_sync_to_async
+@ database_sync_to_async
 def editname(room_id, new_name):
     try:
-        nameOfRoom = ''
+        nameOfRoom = new_name
+        room = ChatGroup.objects.get(pk=room_id)
+        room.group_name = nameOfRoom
+        room.edited = True
+        room.save()
 
     except ChatGroup.DoesNotExist:
 
         raise ClientError("Members do not exist")
 
-    return nameOfRoom
+    return room, nameOfRoom

@@ -78,6 +78,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                                     "room_id": room.id,
                                     'name': room.group_name,
                                     "username": user.username,
+                                    "edited": room.edited,
+
                                 }, )
                     # await self.send_json({'room_id': room.id, 'name': room.group_name, 'msg_type': 'created'})
                 except RoomExistsException as inst:
@@ -128,10 +130,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                                 "room_id": room.id,
                                 'name': room.group_name,
                                 "username": user.username,
+                                "edited": room.edited
                             }
                         )
             elif command == "edit":
-                new_name = await editname(content["room"], content["newName"])
+                room, new_name = await editname(content["room"], content["newName"])
                 users = await fetch_members(content["room"])
                 for user in users:
                     # Send a message to this user's channel
@@ -143,11 +146,13 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                                 "type": "chat.edit",
                                 "room_id": content["room"],
                                 "username": user.username,
-                                "name": room.group_name,
+                                "name": new_name,
+                                "edited": room.edited
+
                             }
                         )
             elif command == "remove":
-                room, users = await delete_user(content["room"], content["old_user"])
+                room, users, newRoom = await delete_user(content["room"], content["old_user"])
                 for user in users:
                     # Send a message to this user's channel
                     channel_name = self.user_channels.get(user.username)
@@ -159,11 +164,14 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                                 "room_id": content["room"],
                                 "username": user.username,
                                 "name": room.group_name,
+                                "edited": room.edited,
+                                "removed_user": content["old_user"],
+                                "new_room": newRoom.id
                             }
                         )
             elif command == "send":
                 message = await save_message(content["room"], self.scope["user"], content["message"], content["link"], content["file"])
-                await self.send_room(content["room"], content["message"], content["link"], content["file"], notification=True)
+                await self.send_room(content["room"], message, notification=True)
             elif command == "create":
                 # maybe a primary key for name
                 # json parse new users for name of chat
@@ -266,7 +274,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             "leave": str(room.id),
         })
 
-    async def send_room(self, room_id, message, link, file, notification=False):
+    async def send_room(self, room_id, message, notification=False):
         """
         Called by receive_json when someone sends a message to a room.
         """
@@ -280,13 +288,14 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             {
                 "type": "chat.message",
                 "room_id": room_id,
-                "username": self.scope["user"].username,
-                "default":  self.scope["user"].bgColor,
-                "avatar":  self.scope['user'].avatar.url,
+                "username": message.from_user,
+                "default":  message.from_user.bgColor,
+                "avatar":  message.from_user.avatar.url if message.from_user.avatar else '',
                 "notification": notification,
-                "message": message,
-                "is_link": link,
-                "is_file": file
+                "message": message.message,
+                "sent_at": message.sent_at,
+                "is_link": message.is_link,
+                "is_file": message.is_file
             }
         )
     # Handlers for messages sent over the channel layer
@@ -303,7 +312,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "room": event["room_id"],
                 "name": event["name"],
                 "username": event["username"],
-                "message": event["message"]
+                "message": event["message"],
+                "edited": event['edited']
             },
         )
 
@@ -318,6 +328,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "room": event["room_id"],
                 "username": event["username"],
                 "name": event["name"],
+                "edited": event['edited']
             },
         )
 
@@ -332,6 +343,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "room": event["room_id"],
                 "username": event["username"],
                 "name": event["name"],
+                "edited": event['edited'],
+                "removed_user": event["removed_user"],
+                "new_room": event["new_room"]
             },
         )
 
@@ -352,6 +366,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "room": event["room_id"],
                 "name": event["name"],
                 "username": event["username"],
+                "edited": event['edited']
             },
         )
 
@@ -394,6 +409,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "message": event["message"],
                 "avatar": event['avatar'],
                 "default": event['default'],
+                "sent_at": event['sent_at'],
                 "notification": event['notification'],
             },
         )
