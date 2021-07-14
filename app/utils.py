@@ -119,8 +119,9 @@ def fetch_members(room_id):
     # find the room they requested (by ID)
     try:
         people = ChatGroup.objects.get(pk=room_id)
+        room = ChatGroup.objects.get(pk=room_id)
 
-        return list(people.members.all())
+        return list(people.members.all()), room
 
     except ChatGroup.DoesNotExist:
 
@@ -176,7 +177,7 @@ def add_group(room_id, newUsers, user):
 
             name = "-".join(users)
 
-        mem.group_name = name + "(additional)"
+        mem.group_name = name + "additional"
         mem.save()
 
     except ChatGroup.DoesNotExist:
@@ -232,14 +233,16 @@ def delete_room(room_id, myself):
 
             name = "-".join(users)
 
-        room.group_name = name + "(deleted)"
+        user_account = Account.objects.get(username=myself)
+
+        room.group_name = name + "deleted"
         room.save()
 
     except ChatGroup.DoesNotExist:
 
         raise ClientError("Members do not exist")
 
-    return room, list(room.members.all())
+    return room, list(room.members.all()), user_account
 
 
 @ database_sync_to_async
@@ -266,7 +269,7 @@ def delete_user(room_id, old_user):
     try:
         users = []
         messages = []
-        suffix = "(removed)"
+        suffix = "removed"
         room = ChatGroup.objects.get(pk=room_id)
         old_name = room.group_name + suffix
         room.members.remove(old_user)
@@ -289,8 +292,12 @@ def delete_user(room_id, old_user):
 
         room.group_name = name + suffix
         room.save()
-
-        new_room = ChatGroup.objects.create(group_name=old_name)
+        print("something")
+        user_account = Account.objects.get(pk=old_user)
+        new_room = ChatGroup.objects.create(
+            group_name=old_name, created_by=user_account)
+        new_room.solitary = True
+        print("new room", new_room)
         new_room.members.add(old_user)
         new_room.save()
 
@@ -303,10 +310,10 @@ def delete_user(room_id, old_user):
         then save that obj you get a new row in the database
         """
     except ChatGroup.DoesNotExist:
-
+        print("except")
         raise ClientError("Members do not exist")
 
-    return room, list(room.members.all()), new_room
+    return room, list(room.members.all()), user_account, new_room
 
 
 @ database_sync_to_async

@@ -152,8 +152,9 @@
         }
 
         .name-of-room {
-            text-overflow: ellipsis;
+            overflow: hidden;
             white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         #ellipsis {
@@ -367,6 +368,10 @@
             width: calc(100% - 25px);
             font-size: 0.9em;
         }
+
+        .file_image {
+            display: inline;
+        }
     </style>
 </head>
 
@@ -469,7 +474,7 @@ is empty when first clicked -->
             <div class="left-panel">
                 <div class="left-panel-header">
                     <div class="search-container">
-                        <input id="myInput" type="text" placeholder="Search.." name="search" onkeyup="myFunction()">
+                        <input id="myInput" type="text" placeholder="Search.." name="search" onkeyup="SearchFunction()">
                     </div>
                 </div>
                 <div class="rooms-container">
@@ -609,7 +614,7 @@ is empty when first clicked -->
             </p>
         </div>
         <span style="margin-top: 5%; float: right; margin-right: 5%">
-            <button id="confirmation" type="button" class="btn btn-primary">Confirm</button>
+            <button id="confirm" type="button" class="btn btn-primary">Confirm</button>
             <button type="button" class="btn btn-outline-secondary" id="exit-member-removal">Cancel</button>
         </span>
     </div>
@@ -647,7 +652,8 @@ is empty when first clicked -->
             border-color: #afafaf;
             width: 95%;
             position: relative;
-            height: 60%;" type="text" placeholder="New Name..." name='new-chat-name' id="chatName" />
+            height: 60%;" type="text" placeholder="New Name..." name='new-chat-name' id="chatName"
+                onkeyup="onChangeName()" maxlength="100" />
 
         </p>
         <div>
@@ -709,10 +715,61 @@ is empty when first clicked -->
     var prefix = 'https://';
     let ellipsisClicked = false;
     let hideellipsis = false;
-    var newChat = document.querySelector('input[name=new-chat-name]');
     let removeduser = null;
     var allnewusers = [];
+    let emptyroom = false;
+    var newChat = document.getElementById('chatName');
 
+    function onChangeName() {
+        if (newChat.value != 0) {
+            document.getElementById('confirmation-of-name').disabled = false;
+        } else {
+            document.getElementById('confirmation-of-name').disabled = true;
+        }
+
+        /*
+        function onChangeName() {
+        alphanumeric = new RegexValidator(r'^[0-9a-zA-Z]*$')
+        search_input = $("#myInput")[0];
+        var filter = newChat.value.toUpperCase();
+        for (i = 0; i < filter.length; i++) {
+            if (filter[i] is not in alphanumeric) {
+                error modal pops up saying only alphanumerics are allowed and show examples of incorrect output
+                document.getElementById('confirmation-of-name').disabled = true;
+            } else{
+                if (newChat.value != 0) {
+                    document.getElementById('confirmation-of-name').disabled = false;
+                }
+                else {
+                    document.getElementById('confirmation-of-name').disabled = true;
+                }
+            }
+        }
+    }
+        */
+    }
+
+
+    function SearchFunction() {
+        if (hideellipsis) {
+            $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
+            hideellipsis = false;
+        }
+
+        search_input = $("#myInput")[0];
+        var filter = search_input.value.toUpperCase();
+        var ul = document.getElementById("rooms");
+        var li = ul.getElementsByClassName("room-link");
+        for (i = 0; i < li.length; i++) {
+            var a = li[i].getElementsByTagName("span")[0];
+            var txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
 
     $(function () {
 
@@ -809,7 +866,7 @@ is empty when first clicked -->
                             found = link[i];
                             $(".list-of-links").append(
                                 `<li>
-                                    <a href="${found}">${html}</a>
+                                    <a href="${found}"><i class="las la-link" style="display: inline;">${html}</i></a>
                                     </li>`
                             );
                         }
@@ -944,8 +1001,9 @@ is empty when first clicked -->
                 var new_string = comma.replace(me, "");
                 me = extra + $("#myself").val();
                 new_string = new_string.replace(me, "");
-                new_string = new_string.replace("(removed)", "")
-                new_string = new_string.replace("(additional)", "")
+                new_string = new_string.replace("deleted", "")
+                new_string = new_string.replace("removed", "")
+                new_string = new_string.replace("additional", "")
 
                 $(".user-header p").html(new_string);
 
@@ -1005,12 +1063,46 @@ is empty when first clicked -->
                         }
 
                         if (data.message.is_file) {
-                            $(".list-of-files").append(
-                                `<li>
-            		        <a> ` +
-                                text +
-                                `</a>
-        	            </li>`)
+                            var ext = text.split(".");
+                            var extension = ext[ext.length - 1];
+                            extension = extension.toLowerCase();
+                            if (extension == 'pdf' || extension == 'doc' || extension == 'docx' || extension == 'txt' || extension == 'odt' || extension == 'ppt' || extension == 'pptx' || extension == 'html') {
+                                $(".list-of-files").append(
+                                    `<li>
+            		                <a> 
+                                    <span class="file_image"><img id="doc" src="{% static 'app/images/documents.png' %}"></span>` +
+                                    text +
+                                    `</a>
+        	                        </li>`)
+                            }
+                            else if (extension == 'jpg' || extension == 'png' || extension == 'gif' || extension == 'jpeg') {
+                                $(".list-of-files").append(
+                                    `<li>
+            		                <a> 
+                                    <span class="file_image"><img id="pic" src="{% static 'app/images/images.png' %}"></span>` +
+                                    text +
+                                    `</a>
+        	                        </li>`)
+                            }
+                            else if (extension == 'mov' || extension == 'mp4' || extension == 'wmv' || extension == 'avi' || extension == 'flv' || extension == 'mkv' || extension == 'mpeg') {
+                                $(".list-of-files").append(
+                                    `<li>
+            		                <a> 
+                                    <span class="file_image"><img id="vid" src="{% static 'app/images/movies.png' %}"></span>` +
+                                    text +
+                                    `</a>
+        	                        </li>`)
+                            }
+                            else {
+                                $(".list-of-files").append(
+                                    `<li>
+            		                <a> 
+                                    <span class="file_image"><img id="etc" src="{% static 'app/images/file.png' %}"></span>` +
+                                    text +
+                                    `</a>
+        	                        </li>`)
+                            }
+
                         }
                         else if (data.message.is_link) {
                             //extract the url from the message
@@ -1030,7 +1122,7 @@ is empty when first clicked -->
                                 theString = array[i];
                                 $(".list-of-links").append(
                                     `<li>
-            		        <a href="${s}">${theString}</a>
+            		        <a href="${s}"><i class="las la-link" style="display: inline;">${theString}</i></a>
         	            </li>`)
                             }
                         }
@@ -1085,10 +1177,10 @@ is empty when first clicked -->
                         $(".rooms").append(
                             `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                             <div class="wrap">
-                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                <img id="img-${data.room}" src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                                 <div class="room-details">
-                                    <span class="name-of-room">${new_string}</span>
-                                    <p class="preview">${data.message}</p>
+                                    <span style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" room-name-value="${data.room}" class="name-of-room" id="name-of-room">${new_string}</span>
+                                    <p message-preview-value="${data.room}" class="preview">${data.message}</p>
                                 </div>
                                 <span
                                     id="ellipsis" class="las la-ellipsis-v">
@@ -1118,28 +1210,42 @@ is empty when first clicked -->
                         // $(".avatar-list").append(
                         //`<li><img src="" alt="user" class="profile-photo-lg"></li>`
                         // );
-                        $(".list-of-members").empty();
 
-                        $(".list-of-members").append(
-                            `       <li>
+                        if (!people.solitary) {
+
+                            $("#upload-photos-button").show();
+                            $(".msg_send_btn").show();
+                            $("#typed_msg").show();
+                            $("#add-members").show();
+
+                            $(".list-of-members").append(
+                                `       <li>
             		        <span class="profile-link">${people.username}<i data-id="${people.id}" id="user-${people.id}"  class="las la-minus remove-button"></i></span>
         	            </li>`
 
-                        );
+                            );
 
-                        nameofmembers[x] = people.username;
-                        x++;
+                            nameofmembers[x] = people.username;
+                            x++;
 
-                        /*$(".remove-buttons").append(
-                            `<li style="padding-bottom: 18px;"><button data-id="${people.id}" class="remove-user">Remove User</button>
-                                </li>`      //attach user id to remove button
-                        );*/
+                            /*$(".remove-buttons").append(
+                                `<li style="padding-bottom: 18px;"><button data-id="${people.id}" class="remove-user">Remove User</button>
+                                    </li>`      //attach user id to remove button
+                            );*/
 
-                        removeduserclicked(`user-${people.id}`);
+                            removeduserclicked(`user-${people.id}`);
+                        }
+                        else {
+                            $("#upload-photos-button").hide();
+                            $(".msg_send_btn").hide();
+                            $("#typed_msg").hide();
+                            $("#add-members").hide();
+                            $(".list-of-members").empty();
 
+                        }
                         break;
                     case "delete_room":
-                        removedelement = $("li[data-room-id=" + data.room + "]");
+                        removedelement = $("li[data-room-id=" + data.room + "]")[0];
                         var list = document.getElementById("rooms");
                         var obj = data.name;
                         var extra = ", ";
@@ -1148,10 +1254,10 @@ is empty when first clicked -->
                         var new_string = comma.replace(me, "");
                         me = extra + $("#myself").val();
                         new_string = new_string.replace(me, "");
-                        new_string = new_string.replace("(deleted)", "")
-                        new_string = new_string.replace("(removed)", "")
-                        new_string = new_string.replace("(additional)", "")
-                        if ($("#myself").val() == data.username && roomId == data.room) {
+                        new_string = new_string.replace("deleted", "")
+                        new_string = new_string.replace("removed", "")
+                        new_string = new_string.replace("additional", "")
+                        if ($("#myself").val() == data.removed_user && roomId == data.room) {
 
                             socket.send(
                                 JSON.stringify({
@@ -1176,24 +1282,29 @@ is empty when first clicked -->
 
                             list.removeChild(removedelement);
                         }
-                        else if ($("#myself").val() == data.username && roomId != data.room) {
+                        else if ($("#myself").val() == data.removed_user && roomId != data.room) {
                             list.removeChild(removedelement);
                         }
 
-                        else if ($("#myself").val() != data.username) {
+                        else if ($("#myself").val() != data.removed_user) {
 
                             if (data.edited && roomId == data.room) {
-
+                                $(".list-of-members").empty();
                                 socket.send(
                                     JSON.stringify({
                                         command: "members",
                                         room: roomId,
                                     })
                                 );
-                                $("li[data-room-id=" + data.room + "]").click();
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "join",
+                                        room: roomId,
+                                    })
+                                );
                             }
                             else if (!data.edited && roomId == data.room) {
-
+                                $(".list-of-members").empty();
                                 socket.send(
                                     JSON.stringify({
                                         command: "members",
@@ -1204,7 +1315,12 @@ is empty when first clicked -->
                                 $("[room-name-value=" + data.room + "]").html(new_string);
                                 $(".room-title").html("");
                                 $(".room-title").html(new_string);
-                                $("li[data-room-id=" + data.room + "]").click();
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "join",
+                                        room: roomId,
+                                    })
+                                );
                             }
                             else if (!data.edited && roomId != data.room) {
                                 $("[room-name-value=" + data.room + "]").html("");
@@ -1212,6 +1328,7 @@ is empty when first clicked -->
                             }
                         }
                         menuclicked(`delete-${data.room}`, `edit-${data.room}`);
+                        break;
                     case "get_users":
 
                         var allusers = data.user
@@ -1236,19 +1353,65 @@ is empty when first clicked -->
                         var new_string = comma.replace(me, "");
                         me = extra + $("#myself").val();
                         new_string = new_string.replace(me, "");
-                        new_string = new_string.replace("(deleted)", "")
-                        new_string = new_string.replace("(removed)", "")
-                        new_string = new_string.replace("(additional)", "")
+                        new_string = new_string.replace("deleted", "")
+                        new_string = new_string.replace("removed", "")
+                        new_string = new_string.replace("additional", "")
 
-                        for (var i = 0; i < nameofmembers; i++) {
+
+                        for (var i = 0; i < nameofmembers.length; i++) {
+
+                            if ($("#myself").val() == nameofmembers[i]) {
+                                if (data.edited && roomId == data.room) {
+                                    $(".list-of-members").empty();
+                                    socket.send(
+                                        JSON.stringify({
+                                            command: "members",
+                                            room: roomId,
+                                        })
+                                    );
+                                    socket.send(
+                                        JSON.stringify({
+                                            command: "join",
+                                            room: data.room,
+                                        })
+                                    );
+                                }
+                                else if (!data.edited && roomId == data.room) {
+                                    $("[room-name-value=" + data.room + "]").html("");
+                                    $("[room-name-value=" + data.room + "]").html(new_string);
+                                    $(".room-title").html("");
+                                    $(".room-title").html(new_string);
+                                    $(".list-of-members").empty();
+                                    socket.send(
+                                        JSON.stringify({
+                                            command: "members",
+                                            room: roomId,
+                                        })
+                                    );
+                                    socket.send(
+                                        JSON.stringify({
+                                            command: "join",
+                                            room: data.room,
+                                        })
+                                    );
+                                }
+                                else if (!data.edited && roomId != data.room) {
+                                    $("[room-name-value=" + data.room + "]").html("");
+                                    $("[room-name-value=" + data.room + "]").html(new_string);
+                                }
+
+
+                            }
+                        }
+                        for (var j = 0; j < arrayofusers.length; j++) {
                             if ($("#myself").val() == arrayofusers[i]) {
 
                                 $(".rooms").append(
                                     `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                                         <div class="wrap">
-                                            <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                            <img id="img-${data.room}" src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                                             <div class="room-details">
-                                                <span room-name-value="${data.room}" class="name-of-room">${new_string}</span>
+                                                <span style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" room-name-value="${data.room}" class="name-of-room" id="name-of-room">${new_string}</span>
                                                 <p message-preview-value="${data.room}" class="preview">new message</p>
                                             </div>
                                             <span
@@ -1266,45 +1429,17 @@ is empty when first clicked -->
 
                                         </li>`);
                             }
-                            if (data.edited && roomId == data.room) {
 
-                                socket.send(
-                                    JSON.stringify({
-                                        command: "members",
-                                        room: roomId,
-                                    })
-                                );
-                                $("li[data-room-id=" + data.room + "]").click();
-                            }
-                            else if (!data.edited && roomId == data.room) {
-                                $("[room-name-value=" + data.room + "]").html("");
-                                $("[room-name-value=" + data.room + "]").html(new_string);
-                                $(".room-title").html("");
-                                $(".room-title").html(new_string);
-
-                                socket.send(
-                                    JSON.stringify({
-                                        command: "members",
-                                        room: roomId,
-                                    })
-                                );
-                                $("li[data-room-id=" + data.room + "]").click();
-                            }
-                            else if (!data.edited && roomId != data.room) {
-                                $("[room-name-value=" + data.room + "]").html("");
-                                $("[room-name-value=" + data.room + "]").html(new_string);
-                            }
                         }
-
 
                         menuclicked(`delete-${data.room}`, `edit-${data.room}`);
                         break;
                     case "remove_user":
 
                         //var newTitle = data.adder
-                        let old_room = $("li[data-room-id=" + data.room + "]");
-                        let old_room_edit_id = ("a[id=edit-" + data.room + "]");
-                        let old_room_delete_id = ("a[id=delete-" + data.room + "]");
+                        let old_room = $("li[data-room-id=" + data.room + "]")[0];
+                        let old_room_edit_id = $("#edit-" + data.room)[0];
+                        let old_room_delete_id = $("#delete-" + data.room)[0];
                         var obj = data.name;
                         var extra = ", ";
                         var me = $("#myself").val() + extra;
@@ -1312,9 +1447,9 @@ is empty when first clicked -->
                         var new_string = comma.replace(me, "");
                         me = extra + $("#myself").val();
                         new_string = new_string.replace(me, "");
-                        new_string = new_string.replace("(deleted)", "")
-                        new_string = new_string.replace("(removed)", "")
-                        new_string = new_string.replace("(additional)", "")
+                        new_string = new_string.replace("deleted", "")
+                        new_string = new_string.replace("removed", "")
+                        new_string = new_string.replace("additional", "")
 
                         if ($("#myself").val() == data.removed_user && roomId == data.room) {
                             socket.send(
@@ -1333,7 +1468,12 @@ is empty when first clicked -->
                             old_room.setAttribute("delete-button-value", data.new_room);
                             old_room_edit_id.setAttribute("id", data.new_room);
                             old_room_delete_id.setAttribute("id", data.new_room);
-                            $("li[data-room-id=" + data.new_room + "]").click();
+                            socket.send(
+                                JSON.stringify({
+                                    command: "join",
+                                    room: data.room,
+                                })
+                            );
                             socket.send(
                                 JSON.stringify({
                                     command: "members",
@@ -1355,28 +1495,38 @@ is empty when first clicked -->
                         }
                         else if ($("#myself").val() != data.removed_user) {
                             if (data.edited && roomId == data.room) {
-
+                                $(".list-of-members").empty();
                                 socket.send(
                                     JSON.stringify({
                                         command: "members",
                                         room: roomId,
                                     })
                                 );
-                                $("li[data-room-id=" + data.room + "]").click();
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "join",
+                                        room: data.room,
+                                    })
+                                );
                             }
                             else if (!data.edited && roomId == data.room) {
-
+                                $(".list-of-members").empty();
                                 socket.send(
                                     JSON.stringify({
                                         command: "members",
-                                        room: roomId,
+                                        room: data.room,
                                     })
                                 );
                                 $("[room-name-value=" + data.room + "]").html("");
                                 $("[room-name-value=" + data.room + "]").html(new_string);
                                 $(".room-title").html("");
                                 $(".room-title").html(new_string);
-                                $("li[data-room-id=" + data.room + "]").click();
+                                socket.send(
+                                    JSON.stringify({
+                                        command: "join",
+                                        room: data.room,
+                                    })
+                                );
                             }
                             else if (!data.edited && roomId != data.room) {
                                 $("[room-name-value=" + data.room + "]").html("");
@@ -1401,17 +1551,17 @@ is empty when first clicked -->
                         var new_string = comma.replace(me, "");
                         me = extra + $("#myself").val();
                         new_string = new_string.replace(me, "");
-                        new_string = new_string.replace("(deleted)", "")
-                        new_string = new_string.replace("(removed)", "")
-                        new_string = new_string.replace("(additional)", "")
+                        new_string = new_string.replace("deleted", "")
+                        new_string = new_string.replace("removed", "")
+                        new_string = new_string.replace("additional", "")
 
 
                         $(".rooms").append(
                             `<li id="room-link" class="room-link" data-room-id="${roomie.id}" name="${roomie.id}">
                             <div class="wrap">
-                                <img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
+                                <img id="img-${roomie.id}" src="http://emilcarlsson.se/assets/louislitt.png" alt="" />
                                 <div class="room-details">
-                                    <span room-name-value="${roomie.id}" class="name-of-room">${new_string}</span>
+                                    <span style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" room-name-value="${roomie.id}" class="name-of-room" id="name-of-room">${new_string}</span>
                                     <p message-preview-value="${roomie.id}" class="preview">new message</p>
                                 </div>
                                 <span
@@ -1437,10 +1587,31 @@ is empty when first clicked -->
                         break;
 
                     case "edit":
-                        var target_li = $("li[data-room-id=" + data.room_id + "]");
-                        var nameOfChat = target_li.getElementsByClassName("name-of-room");
-                        $(nameOfChat).html("");
-                        $(nameOfChat).html(data.name);
+                        var target_li = $("li[data-room-id=" + data.room + "]")[0];
+                        var nameOfChat = target_li.getElementsByTagName("span")[0];
+
+                        if (roomId == data.room) {
+                            $(nameOfChat).html("");
+                            $(nameOfChat).html(data.name);
+                            $(".room-title").html("");
+                            $(".room-title").html(data.name);
+                            socket.send(
+                                JSON.stringify({
+                                    command: "join",
+                                    room: data.room,
+                                })
+                            );
+                        }
+                        else {
+                            $(nameOfChat).html("");
+                            $(nameOfChat).html(data.name);
+                        }
+                        break;
+
+                    case "get_room_symbol":
+                    //let avatar = data.rooms.avatar ? '<img class="profile-pic" src="' + data.rooms.avatar + '">' : '<div class="profile-pic-wrapper" data-username="' + data.rooms.member_of_chat + '" data-bgcolor="' + data.message.default + '"></div>'
+                    //let imgelement = $("#img-" + data.rooms.id);
+                    //let lengthofusers = data.rooms.length;
 
                     default:
                         console.log("Unsupported message type!");
@@ -1560,15 +1731,7 @@ is empty when first clicked -->
                 //modal show
                 $(".edit-chat-modal").show();
 
-                newChat.addEventListener('change', onChangeName)
 
-                function onChangeName(e) {
-                    if (newChat.value != 0) {
-                        document.getElementById('confirmation-of-name').disabled = false;
-                    } else {
-                        document.getElementById('confirmation-of-name').disabled = true;
-                    }
-                }
 
                 $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
                 console.log("was clicked");
@@ -1581,7 +1744,6 @@ is empty when first clicked -->
                 removeduser = $(this).attr("data-id");
                 //modal show
                 $(".confirmation-modal").show();
-                $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
             });
         }
         $("#confirm").click(function () {
@@ -1590,7 +1752,7 @@ is empty when first clicked -->
                 JSON.stringify({
                     command: "remove",
                     room: roomId,
-                    user: removeduser
+                    old_user: removeduser
 
                 })
             );
@@ -1615,6 +1777,7 @@ is empty when first clicked -->
                     newName: newChatName,
                 })
             );
+            $('input[name=new-chat-name]').val('');
             $(".edit-chat-modal").hide();
         });
         $("#exit-member-removal").click(function () {
@@ -1629,6 +1792,7 @@ is empty when first clicked -->
         })
         function roomClick() {
             if (ellipsisClicked == false) {
+
                 roomId = $(this).attr("data-room-id");
                 groupName = $(this).attr("data-room-name");
 
@@ -1649,6 +1813,7 @@ is empty when first clicked -->
                     $(".list-of-members").empty();
                     $(".list-of-links").empty();
                     $(".list-of-files").empty();
+                    $(".chat-log").empty();
 
                     $(this).addClass("joined");
                     socket.send(
@@ -1657,9 +1822,6 @@ is empty when first clicked -->
                             room: roomId,
                         })
                     );
-
-
-
 
                     socket.send(
                         JSON.stringify({
@@ -1676,19 +1838,17 @@ is empty when first clicked -->
                     $(this).addClass('active-room').siblings().removeClass('active-room');
 
                     $("#title-img").show();
-                    $("#typed_msg").show();
-                    $("#upload-photos-button").show();
-                    $(".msg_send_btn").show();
                     $(".user-header").show();
                     $(".user-header p").show();
                     $("#create-chat").show();
                     $("#tag-input").hide();
                     $("#users-list").hide();
                     $("#chat-name").hide();
-                    $(".chat-log").empty();
                     $(".rightAccordion").show();
                     $(".rightPanel").show();
-                    $("#add-members").show();
+
+
+
                     if (hideellipsis) {
                         $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
                         hideellipsis = false;
@@ -1750,30 +1910,7 @@ is empty when first clicked -->
 
 
 
-        function myFunction() {
-            if (hideellipsis) {
-                $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
-                hideellipsis = false;
-            }
-            else {
 
-            }
-            var input, filter, ul, li, a, i, txtValue;
-            search_input = $('input[name=search]');
-            search_input.onkeyup = function () {
-                filter = search_input.value.toUpperCase();
-                ul = document.getElementById("rooms");
-                li = ul.getElementsByTagName("li");
-                for (i = 0; i < li.length; i++) {
-                    var name = li[i].getElementsByClassName('name-of-room')[0].innerHTML;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        li[i].style.display = "";
-                    } else {
-                        li[i].style.display = "none";
-                    }
-                }
-            }
-        }
 
 
         // Helpful debugging
@@ -1920,7 +2057,7 @@ is empty when first clicked -->
 
             $("#submit-users").on('click', function () {
                 let arrayofnewusers = JSON.parse($("#user-input").val())
-                for (var i = 0; i < arrayofnewusers; i++) {
+                for (var i = 0; i < arrayofnewusers.length; i++) {
                     var el = arrayofnewusers[i];
                     arrayofusers[i] = el.name;
                 }

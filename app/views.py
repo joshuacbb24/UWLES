@@ -507,6 +507,7 @@ class BasicUploadView(View):
         form = UploadFileForm(self.request.POST, self.request.FILES)
         if form.is_valid():
             # form.save()
+
             UploadedFile = form.save()
             data = {'is_valid': True, 'name': UploadedFile.file.name,
                     'url': UploadedFile.file.url}
