@@ -90,6 +90,20 @@ def create_group(newUsers, user):
             print("tag value", member['value'])
         room.members.add(user)
 
+        avatararrs = room.members.all()
+        avatararray = []
+        for avatararr in avatararrs:
+
+            if avatararr.username == user.username:
+                continue
+            else:
+                avatararray.append(
+                    {'username': avatararr.username,
+                        'avatar': avatararr.avatar.url if avatararr.avatar else '',
+                        'default': avatararr.bgColor})
+        # temporarily add avatars to group so that it is received only on the front end
+        room.avatars = avatararray
+
     except ChatGroup.DoesNotExist:
 
         raise ClientError("ROOM_INVALID")
@@ -197,11 +211,25 @@ def fetch_rooms(user):
         messages = []
         members = []
         groups = ChatGroup.objects.filter(members=user)
-        all_entries = list(groups)
+        #all_entries = list(groups)
         # for x in all_entries:
         #    last_message = Messages.objects.filter(
         #        chat_group=x.group_name).latest('sent_at')
         #    messages.append(last_message)
+        for group in groups:
+            avatararrs = group.members.all()
+            avatararray = []
+            for avatararr in avatararrs:
+
+                if avatararr.username == user.username:
+                    continue
+                else:
+                    avatararray.append(
+                        {'username': avatararr.username,
+                            'avatar': avatararr.avatar.url if avatararr.avatar else '',
+                            'default': avatararr.bgColor})
+            # temporarily add avatars to group so that it is received only on the front end
+            group.avatars = avatararray
 
         return list(groups)
 

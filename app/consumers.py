@@ -98,29 +98,16 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     }, 'msg_type': 'get_members', })
             elif command == "rooms":
                 # get the members of the room
-                avatararrs = []
+
                 groups = await fetch_rooms(self.scope["user"])
                 for group in groups:
-                    avatararrs = group.members.all()
+
                     await self.send_json({'rooms': {
                         'id': group.id,
                         'name': group.group_name,
+                        'avatars': group.avatars,
                     }, 'msg_type': 'get_rooms', })
-                    # for avatararr in avatararrs:
-                    #    print("avatararr", avatararr)
-                    #    print("avatararr", avatararr.username)
-                    #    print("self.scope[user]", self.scope["user"])
-                    #    if avatararr.username == self.scope["user"]:
-                    #        continue
-                    #    else:
-                    #        await self.send_json({'rooms': {
-                    #            'id': group.id,
-                    #            'name': group.group_name,
-                    #            'member_of_chat': avatararr.username,
-                    #            'avatar': avatararr.avatar.url if avatararr.avatar else '',
-                    #            'default': avatararr.bgColor,
-                    #            'length': avatararrs.len()
-                    #        }, 'msg_type': 'get_room_symbol', })
+
             elif command == "users":
                 # get users in database
                 users = await fetch_users(self.scope["user"])
@@ -241,6 +228,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                                     "username": user.username,
                                     "message": content["message"],
                                     "notification": True,
+                                    'avatars': room.avatars,
                                 }
                             )
                 # await self.send_json({'room_id': room.id, 'name': room.group_name, 'msg_type': 'created'})
@@ -361,7 +349,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "name": event["name"],
                 "username": event["username"],
                 "message": event["message"],
-                "notification": event["notification"]
+                "notification": event["notification"],
+                'avatars': event['avatars'],
             },
         )
 

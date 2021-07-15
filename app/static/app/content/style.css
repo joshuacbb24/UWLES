@@ -171,7 +171,28 @@
     color: var(--text-grey);
 }
 
-.profile-pic {
+.avatars .profile-pic-wrapper{
+    position: relative !important;
+    max-width: 35px !important;
+    max-height: 35px !important;
+    width: 35px !important;
+    height: 35px !important;
+    white-space: normal !important;
+    border-radius: 50% !important;
+    font-size: 16px !important;
+    color: #fff !important;
+    border: 2px solid #fff;
+    text-align: center !important;
+    line-height: 150px !important;
+    cursor: context-menu !important;
+    overflow: hidden !important;
+    justify-content: center !important;
+    flex-direction: row !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.user-wrapper .profile-pic {
     max-width: 32px;
     max-height: 32px;
     width: 32px;
@@ -188,6 +209,30 @@
     justify-content: center;
     display: flex;
     align-items: center;
+}
+
+.chat-wrapper .profile-pic {
+    max-width: 32px;
+    max-height: 32px;
+    width: 32px;
+    height: 32px;
+    white-space: normal;
+    margin-right: 15px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    line-height: 150px;
+    cursor: context-menu;
+    overflow: hidden;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.avatars .profile-pic-wrapper, .profile-pic:not(:last-child) {
+    position: relative !important;
+    margin-right: -45px !important;
 }
 
 .card-single-one {
