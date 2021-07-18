@@ -15,7 +15,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     http://channels.readthedocs.io/en/latest/topics/consumers.html
     """
     user_channels = {}
-    timeformat = "%m-%d %H:%M %p"
+    timeformat = "%b %d, %I:%M %p"
 
     # WebSocket event handlers
 
@@ -94,7 +94,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         'id': member.id,
                         'username': member.username,
                         'email': member.email,
-                        "solitary": theroom.solitary
+                        "solitary": theroom.solitary,
+                        'avatar': member.avatar.url if member.avatar else '',
+                        'default': member.bgColor,
                     }, 'msg_type': 'get_members', })
             elif command == "rooms":
                 # get the members of the room
@@ -106,6 +108,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         'id': group.id,
                         'name': group.group_name,
                         'avatars': group.avatars,
+                        'preview': group.preview,
                     }, 'msg_type': 'get_rooms', })
 
             elif command == "users":
@@ -206,7 +209,22 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     )
             elif command == "send":
                 message = await save_message(content["room"], self.scope["user"], content["message"], content["link"], content["file"])
+                roomusers, newroom = await fetch_members(content["room"])
                 await self.send_room(content["room"], message, notification=True)
+                for roomuser in roomusers:
+                    channel_name = self.user_channels.get(roomuser.username)
+                    print("username inside send", channel_name)
+                    if channel_name:
+                        print("username inside send if", channel_name)
+                        await self.channel_layer.send(
+                            channel_name,
+                            {
+                                "type": "chat.send",
+                                "room_id": content["room"],
+                                "notification": True,
+                                "message": message.message,
+                            }
+                        )
             elif command == "create":
                 # maybe a primary key for name
                 # json parse new users for name of chat
@@ -227,8 +245,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                                     'name': room.group_name,
                                     "username": user.username,
                                     "message": content["message"],
-                                    "notification": True,
                                     'avatars': room.avatars,
+                                    "notification": True,
+                                    "created_by": content["created_by"]
                                 }
                             )
                 # await self.send_json({'room_id': room.id, 'name': room.group_name, 'msg_type': 'created'})
@@ -310,7 +329,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             "leave": str(room.id),
         })
 
-    async def send_room(self, room_id, message, notification=False):
+    async def send_room(self, room_id, message, notification):
         """
         Called by receive_json when someone sends a message to a room.
         """
@@ -319,6 +338,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             raise ClientError("ROOM_ACCESS_DENIED")
         # Get the room and send to the group about it
         room = await get_room_or_error(room_id, self.scope["user"])
+        print("notification", notification)
         await self.channel_layer.group_send(
             room.group_name,
             {
@@ -351,6 +371,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "message": event["message"],
                 "notification": event["notification"],
                 'avatars': event['avatars'],
+                "created_by": event["created_by"]
             },
         )
 
@@ -395,6 +416,18 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "edited": event['edited']
 
 
+            },
+        )
+
+    async def chat_send(self, event):
+
+        print("reached inside send")
+        await self.send_json(
+            {
+                "msg_type": "sent_to_others",
+                "room": event["room_id"],
+                "notification": event["notification"],
+                "message": event["message"],
             },
         )
 

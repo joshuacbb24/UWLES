@@ -135,11 +135,11 @@ def fetch_members(room_id):
         people = ChatGroup.objects.get(pk=room_id)
         room = ChatGroup.objects.get(pk=room_id)
 
-        return list(people.members.all()), room
-
     except ChatGroup.DoesNotExist:
 
         raise ClientError("NO_GROUPS")
+
+    return list(people.members.all()), room
 
 
 @database_sync_to_async
@@ -208,7 +208,6 @@ def fetch_rooms(user):
     """
     # find the room they requested (by ID)
     try:
-        messages = []
         members = []
         groups = ChatGroup.objects.filter(members=user)
         #all_entries = list(groups)
@@ -219,6 +218,12 @@ def fetch_rooms(user):
         for group in groups:
             avatararrs = group.members.all()
             avatararray = []
+            message = []
+            last_message = Messages.objects.filter(
+                chat_group=group.id).latest('sent_at')
+            message.append(last_message.message)
+            print("message", message)
+            group.preview = message
             for avatararr in avatararrs:
 
                 if avatararr.username == user.username:

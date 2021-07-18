@@ -10,31 +10,29 @@
 }
 
 .chat-log {
-  position: relative;
+  position: absolute;
   height: 80.5%;
   z-index: 1;
   border-bottom: 1px solid #c4c4c4;
   border: 1px solid #dedede;
   background-color: #F5F5F5	;
   /*border-radius: 5px;*/
-}
-.chat-messages{
   overflow-y: auto;
 }
-.chat-messages::-webkit-scrollbar {
+.chat-log::-webkit-scrollbar {
   width: 10px;
 }
-.chat-messages::-webkit-scrollbar-track {
+.chat-log::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey; 
   border-radius: 10px;
   background: #f1f1f1; 
 
 }
-.chat-messages::-webkit-scrollbar-thumb {
+.chat-log::-webkit-scrollbar-thumb {
   background: #888; 
   border-radius: 10px;
 }
-.chat-messages::-webkit-scrollbar-thumb:hover {
+.chat-log::-webkit-scrollbar-thumb:hover {
   background: #555; }
 .left-panel {
   float: left;
@@ -46,7 +44,7 @@
 
 .left-panel-header {
   position: relative;
-  height: 10%;
+  height: 15%;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
   overflow: hidden;
   background-color: #fcfcfc;
@@ -67,7 +65,7 @@
 .rooms-container {
   position: relative;
   border-bottom: 1px solid #c4c4c4;
-  height: 70.5%;
+  height: 73.5%;
   background: white;
 
 }
@@ -178,7 +176,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 18px;
-  margin-bottom: 5px;
+  bottom: 6px;
   cursor: pointer;
   border-radius: 10px;
 
@@ -202,11 +200,7 @@
   background-color: #eee !important;
 }
 
-.input-section {
-  position: relative;
-  bottom: 1px;
 
-}
 
 .user-header {
   position: relative;
@@ -231,15 +225,15 @@
   margin-top: 5px;
   font-size: 14px;
   padding: 5px 10px 5px 12px;
-  width: 55%;
+  min-width: 30%;
+  max-width:40%;
   border-radius: 3px;
   background: white;
   word-wrap: break-word;
   color: black;
 }
 
-.list-of-members span,
-b {
+.list-of-members span{
   display: block;
   font-family: Helvetica;
   color: black;
@@ -251,7 +245,7 @@ b {
 
 }
 
-.list-of-members span:hover {
+.profile-link:hover, .profile-link .profile-pic-wrapper:hover{
   background-color: rgb(0, 119, 255);
   color: white;
 }
@@ -267,19 +261,22 @@ b {
   padding: 5px 10px 5px 12px;
   float: right;
   word-wrap: break-word;
-  width: 55%;
+  min-width: 30%;
+  max-width:40%;
 }
 
 .msg_send_btn {
-  background: #4c4c4c none repeat scroll 0 0;
+  position: relative;
+  background: #015D67;
   border: medium none;
   border-radius: 50%;
   color: #fff;
   cursor: pointer;
   font-size: 17px;
   height: 33px;
-  top: 5px;
+  top: -4px;
   width: 5%;
+  /* bottom: 4px;*/
 }
 
 .unread-messages {
@@ -376,7 +373,12 @@ b {
     transform: scale(1);
   }
 }
+.input-section {
+  position: absolute;
+  width: 100%;
+  bottom: 25px;
 
+}
 .input-section input[type="text"] {
   float: left;
   padding: 6px;

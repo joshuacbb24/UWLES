@@ -56,6 +56,16 @@
             box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
         }
 
+        .profile-link .profile-pic-wrapper.profile-pic {
+            margin-top: 10px;
+            justify-content: center !important;
+            align-items: center !important;
+            white-space: nowrap !important;
+            /* padding-bottom: 91px; */
+            vertical-align: middle !important;
+            /* padding-right: 32px;*/
+        }
+
         .rooms-containter::-webkit-scrollbar {
             width: 8px;
             background: #2c3e50;
@@ -128,6 +138,10 @@
             flex-direction: row;
         }
 
+        .unread {
+            background-color: #FFFFE0;
+        }
+
         #avatars img {
             width: 100%;
             height: 100%;
@@ -168,9 +182,9 @@
 
             font-size: 0.9em;
             cursor: pointer;
-            height: 80px;
-            max-height: 80px;
-            min-height: 80px;
+            height: 72px;
+            max-height: 72px;
+            min-height: 72px;
             text-overflow: ellipsis;
         }
 
@@ -192,7 +206,7 @@
 
         .rightPanel {
             height: 250px;
-            overflow-y: scroll;
+            overflow-y: auto;
         }
 
         .remove-button {
@@ -202,6 +216,7 @@
             cursor: pointer;
             float: right;
             right: 2.5px;
+            bottom: 39px;
         }
 
         .remove-button:hover {
@@ -395,6 +410,67 @@
         .file_image {
             display: inline;
         }
+
+        #doc {
+            position: relative;
+            height: 5%;
+            width: 5%;
+        }
+
+        #pic {
+            position: relative;
+            height: 5%;
+            width: 5%;
+        }
+
+        #vid {
+            position: relative;
+            height: 5%;
+            width: 5%;
+        }
+
+        #etc {
+            position: relative;
+            height: 5%;
+            width: 5%;
+        }
+
+        .time_date {
+            color: #747474;
+            display: inline-flex;
+            font-size: 12px;
+        }
+
+        .oldermessage {
+            margin-right: -33px;
+        }
+
+        .newermessage {
+            margin-right: -54px;
+        }
+
+        .oldermessage2 {
+            margin-left: -33px;
+        }
+
+        .newermessage2 {
+            margin-left: -54px;
+        }
+
+        .la,
+        .lab,
+        .lad,
+        .lal,
+        .lar,
+        .las {
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            display: inline-block;
+            font-style: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            /* line-height: 1; */
+        }
     </style>
 </head>
 
@@ -496,15 +572,24 @@ is empty when first clicked -->
         <div class="chat-container">
             <div class="left-panel">
                 <div class="left-panel-header">
+
                     <div class="search-container">
                         <input id="myInput" type="text" placeholder="Search.." name="search" onkeyup="SearchFunction()">
                     </div>
-                </div>
-                <div class="rooms-container">
-                    <p style="color:#015D67; font-weight: bold; font-size: large;margin-left: 5%;">
+                    <p
+                        style="color:#015D67; font-weight: bold; font-size: large;margin-left: 5%; margin-top: 29px; margin-bottom: 0.5rem;">
                         Current Client
-                        Chats</p>
-                    <hr>
+                        Chats
+
+
+                    </p>
+                    <hr style="color:black; margin-top:0;margin-bottom: 0;overflow: hidden;     width: 90%;
+                        margin-left: 5%; border-top:2px solid black">
+                </div>
+
+
+                <div class="rooms-container">
+
                     <ul id="rooms" class="rooms" style="height: 100%;">
                     </ul>
                 </div>
@@ -542,7 +627,6 @@ is empty when first clicked -->
                 </div>
 
                 <div class="chat-log" style="width: 100%;">
-                    <div class="chat-messages"></div>
                 </div>
                 <div class="input-section">
                     <input id="fileupload" type="file" name="file" multiple style="display: none"
@@ -552,8 +636,9 @@ is empty when first clicked -->
                             placeholder="Type a message" name="chat-message" required />
                         <i id="upload-photos-button" class="las la-paperclip"
                             style="display:none;cursor:pointer;font-size:25px;margin-top: 5%;"></i>
-                        <button class="msg_send_btn" style="display: none;" type="submit"><i style="color: white;"
-                                class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+                        <button class="msg_send_btn" style="display: none;" type="submit"><i
+                                style="color: white;font-size: 22px;" class="las la-paper-plane"
+                                aria-hidden="true"></i></button>
                     </form>
                 </div>
             </div>
@@ -740,6 +825,7 @@ is empty when first clicked -->
     var prefix = 'https://';
     let ellipsisClicked = false;
     let hideellipsis = false;
+    let timeid = 0;
     let removeduser = null;
     var allnewusers = [];
     let emptyroom = false;
@@ -747,6 +833,8 @@ is empty when first clicked -->
     let avatararray = [];
     let arrayofusers = [];
     let a = 0;
+    let ext = null;
+    let extension = null;
 
     function onChangeName() {
         if (newChat.value != 0) {
@@ -798,7 +886,19 @@ is empty when first clicked -->
             }
         }
     }
+    /*function mySubmitFunction(e) {
+        e.preventDefault();
+        var userinput = document.querySelector('input[name=users-list-tags]');
+        if (createroom == true) {
+            if (userinput.value < 1) {
+                return false;
+            }
+        }
 
+        else {
+            return true;
+        }
+    }*/
     $(function () {
 
         // Correctly decide between ws:// and wss://
@@ -811,15 +911,10 @@ is empty when first clicked -->
         var roomName = null;
         var title = null;
 
-        function validateForm() {
-            if (inputElm.val() < 1) {
-                alert("users must be chosen");
-                return false;
-            }
-        }
+
 
         function urlify(typedmessage) {
-            var pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?", "g")
+            var pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/[^><]*)?", "g")
 
             return typedmessage.replace(pattern, function (url) {
                 found = typedmessage.match(pattern);
@@ -884,17 +979,19 @@ is empty when first clicked -->
                             JSON.stringify({
                                 "command": "send",
                                 "room": roomName,
+                                "from_user": $("#myself").val(),
                                 "message": html,
                                 "link": true,
                                 "file": false
                             })
                         );
+
                         $('input[name=chat-message]').val('');
                         for (var i = 0; i < link.length; i++) {
                             found = link[i];
                             $(".list-of-links").append(
                                 `<li>
-                                    <a href="${found}"><i class="las la-link" style="display: inline;">${html}</i></a>
+                                    <i class="las la-link" style="display: inline;"><a href="${found}">${html}</a></i>
                                     </li>`
                             );
                         }
@@ -905,6 +1002,7 @@ is empty when first clicked -->
                             JSON.stringify({
                                 "command": "send",
                                 "room": roomName,
+                                "from_user": $("#myself").val(),
                                 "message": html,
                                 "link": false,
                                 "file": false
@@ -921,6 +1019,7 @@ is empty when first clicked -->
                         "command": "create",
                         "message": html,
                         "newUsers": JSON.parse($("#tag-input").val()),
+                        "created_by": $("#myself").val(),
                         "link": false,
                         "file": false
                     })
@@ -945,7 +1044,6 @@ is empty when first clicked -->
                 $('input[name=chat-message]').val('');
                 $("#typed_msg").hide();
                 createroom = false;
-                return false;
             }
         });
 
@@ -961,33 +1059,91 @@ is empty when first clicked -->
                     /*send file to recipient and add a progress bar*/
                     console.log("file uploaded")
                     const message = '<a style=word-wrap:break-word; href="' + data2.result.url + '" target="_blank">' + data2.result.name + '</a>'
-                    if (roomName) {
+                    if (createroom == false) {
+                        if (roomName) {
+                            socket.send(
+                                JSON.stringify({
+                                    "command": "send",
+                                    "room": roomName,
+                                    "message": message,
+                                    "from_user": $("#myself").val(),
+                                    "link": false,
+                                    "file": true
+                                })
+                            );
+                            ext = message.split(".");
+                            extension = ext[ext.length - 1];
+                            extension = extension.replace("</a>", "")
+                            extension = extension.toLowerCase();
+                            if (extension == 'pdf' || extension == 'doc' || extension == 'docx' || extension == 'txt' || extension == 'odt' || extension == 'ppt' || extension == 'pptx' || extension == 'html' || extension == 'rtf') {
+                                $(".list-of-files").append(
+                                    `<li>
+            		                <a style=word-wrap:break-word; href="${data2.result.url}" target="_blank">  
+                                    <span class="file_image"><img id="doc" src="{% static 'app/images/documents.png' %}"></span>` + data2.result.name +
+                                    `</a>
+        	                        </li>`)
+                            }
+                            else if (extension == 'jpg' || extension == 'png' || extension == 'gif' || extension == 'jpeg') {
+                                $(".list-of-files").append(
+                                    `<li>
+            		                <a style=word-wrap:break-word; href="${data2.result.url}" target="_blank">  
+                                    <span class="file_image"><img id="pic" src="{% static 'app/images/images.png' %}"></span>` + data2.result.name +
+                                    `</a>
+        	                        </li>`)
+                            }
+                            else if (extension == 'mov' || extension == 'mp4' || extension == 'wmv' || extension == 'avi' || extension == 'flv' || extension == 'mkv' || extension == 'mpeg') {
+                                $(".list-of-files").append(
+                                    `<li>
+            		                <a style=word-wrap:break-word; href="${data2.result.url}" target="_blank">  
+                                    <span class="file_image"><img id="vid" src="{% static 'app/images/movies.png' %}"></span>` + data2.result.name +
+                                    `</a>
+        	                        </li>`)
+                            }
+                            else {
+                                $(".list-of-files").append(
+                                    `<li>
+            		                <a style=word-wrap:break-word; href="${data2.result.url}" target="_blank">  
+                                    <span class="file_image"><img id="etc" src="{% static 'app/images/file.png' %}"></span>` + data2.result.name +
+                                    `</a>
+        	                        </li>`)
+                            }
+                        }
+                    }
+                    else {
                         socket.send(
                             JSON.stringify({
-                                "command": "send",
-                                "room": roomName,
+                                "command": "create",
+                                "newUsers": JSON.parse($("#tag-input").val()),
                                 "message": message,
+                                "created_by": $("#myself").val(),
                                 "link": false,
                                 "file": true
                             })
                         );
-                        /*socket.send(
-                            JSON.stringify({
-                                "command": "edit",
-                                "room": roomName,
-                                "message": message,
-                                "link": false,
-                                "file": true
-                            })
-                        );*/
-                        $(".list-of-files").append(
-                            `<li>
-                                <a style=word-wrap:break-word; href="${data2.result.url}" target="_blank">${data2.result.name}</a>
-        	            </li>`)
+                        $("#tag-input").hide();
+                        $("#users-list").hide();
+                        $("#chat-name").hide();
+                        $("#tag-input").empty();
 
+                        $(".room-link").removeClass('active-room');
+                        $(".user-header").show();
+                        $(".user-header p").hide();
+                        $("#title-img").hide();
+                        $("#create-chat").show();
+                        $("#create-chat").show();
+                        $("#upload-photos-button").hide();
+                        $("#msg_send_btn").hide();
+                        $(".rightAccordion").show();
+                        $("#typed_msg").empty();
+                        $(".rightAccordion").hide();
+                        $(".rightPanel").hide();
+                        $('input[name=chat-message]').val('');
+                        $("#typed_msg").hide();
+                        createroom = false;
                     }
-                }
 
+
+                }
             }
         });
 
@@ -1040,11 +1196,11 @@ is empty when first clicked -->
                 roomName = null;
                 $("#room-" + data.leave).remove();
                 $(".user-header").empty();
-                $(".chat-messages").empty();
+                $(".chat-log").empty();
 
                 // Handle getting a message
             } else if (data.message || data.msg_type != 0) {
-                var msgdiv = $(".chat-messages");
+                var msgdiv = $(".chat-log");
                 var ok_msg = "";
 
 
@@ -1058,42 +1214,100 @@ is empty when first clicked -->
 
                         let text = (data.message.text) ? data.message.text : data.message;
                         let user = (data.message.from_user) ? data.message.from_user : data.username;
-                        let avatarofchatlog = data.message.avatar ? '<img class="profile-pic" src="' + data.message.avatar + '">' : '<div class="profile-pic-wrapper" data-username="' + data.message.from_user + '" data-bgcolor="' + data.message.default + '"></div>'
+                        let useravatar = (data.message.avatar) ? data.message.avatar : data.avatar;
+                        let defaultcolor = (data.message.default) ? data.message.default : data.default;
+                        let avatarofchatlog = useravatar ? '<img class="profile-pic" src="' + useravatar + '">' : '<div class="profile-pic-wrapper" data-username="' + user + '" data-bgcolor="' + defaultcolor + '"></div>'
                         //if statement for where user.username is not equal to data.message.from_user
                         let time = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
+                        let iftime = (data.message.sent_at) ? data.message.sent_at : data.sent_at;
                         const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
-                        if (data.message.notification && user != '{{user.username}}') {
+                        var d = new Date();
+                        var month = d.toLocaleString('default', { month: 'short' }); //months from 1-12
+                        var day = d.getDate();
+                        var date = "";
+                        date = month + " " + day + ",";
+                        if (time.match(date)) {
+                            time = time.replace(date, "");
+                        }
+                        else {
+                            /*var timeregex = new RegExp("^[0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
+                            time = time.replace(timeregex, "");*/
+                            time = time.substr(0, time.lastIndexOf(",") + 1);
+                            time = time.replace(",", "");
 
+                        }
+                        if (data.notification) {
+                            $("[message-preview-value=" + roomId + "]").html("");
+                            $("[message-preview-value=" + roomId + "]").html(text);
+                        }
+
+                        else if (data.notification && user != $("#myself").val()) {
                             var x = document.getElementById("chatAudio");
                             x.play();
+
                         }
 
                         if (cssClass == 'outgoing') {
-                            $(".chat-messages").append(
+                            $(".chat-log").append(
                                 `<div class='chat-wrapper'>` +
                                 `<div class='outgoing-msg-img'>` + avatarofchatlog + `</div>` +
                                 `<div class='${cssClass}'>` +
                                 text +
 
                                 `</div>` +
+                                `<br>` +
+                                `<br>` +
+                                `<span class='time_date' id='time-${timeid}'style="float:right;white-space: pre;">` +
+                                time +
+                                `</span>` +
                                 `</div>`);
+                            if (iftime.match(date)) {
+                                let idoftime = "time-" + timeid;
+                                var marginid = document.getElementById(idoftime);
+                                marginid.classList.add("newermessage");
+                                timeid++;
+                            }
+                            else {
+                                let idoftime = "time-" + timeid;
+                                var marginid = document.getElementById(idoftime);
+                                marginid.classList.add("oldermessage");
+                                timeid++;
+                            }
                         } else {
-                            $(".chat-messages").append(
+                            $(".chat-log").append(
                                 `<div class='chat-wrapper'>` +
                                 `<div class='incoming-msg-img'>` + avatarofchatlog + `</div>` +
                                 `<div class='${cssClass}'>` +
                                 text +
 
                                 `</div>` +
+                                `<br>` +
+                                `<br>` +
+                                `<span class='time_date' id='time-${timeid}' style="float:left;white-space: pre;">` +
+                                time +
+                                `</span>` +
                                 `</div>`);
-
+                            if (iftime.match(date)) {
+                                let idoftime = "time-" + timeid;
+                                var marginid = document.getElementById(idoftime);
+                                marginid.classList.add("newermessage2");
+                                timeid++;
+                            }
+                            else {
+                                let idoftime = "time-" + timeid;
+                                var marginid = document.getElementById(idoftime);
+                                marginid.classList.add("oldermessage2");
+                                timeid++;
+                            }
                         }
 
+
                         if (data.message.is_file) {
-                            var ext = text.split(".");
-                            var extension = ext[ext.length - 1];
+                            ext = text.split(".");
+                            extension = ext[ext.length - 1];
+                            extension = extension.replace("</a>", "")
                             extension = extension.toLowerCase();
-                            if (extension == 'pdf' || extension == 'doc' || extension == 'docx' || extension == 'txt' || extension == 'odt' || extension == 'ppt' || extension == 'pptx' || extension == 'html') {
+                            if (extension == 'pdf' || extension == 'doc' || extension == 'docx' || extension == 'txt' || extension == 'odt' || extension == 'ppt' || extension == 'pptx' || extension == 'html' || extension == 'rtf') {
                                 $(".list-of-files").append(
                                     `<li>
             		                <a> 
@@ -1149,10 +1363,12 @@ is empty when first clicked -->
                                 theString = array[i];
                                 $(".list-of-links").append(
                                     `<li>
-            		        <a href="${s}"><i class="las la-link" style="display: inline;">${theString}</i></a>
+                                        <i class="las la-link" style="display: inline;"><a href="${s}">${theString}</a></i>
         	            </li>`)
                             }
                         }
+
+                        showDefaultAvatar();
                         break;
 
                     case 1:
@@ -1176,22 +1392,12 @@ is empty when first clicked -->
                             data.message +
                             "</div>";
                         break;
-                    /* case 4:
-                         // User joined room
-                         ok_msg =
-                             "<div class='contextual-message text-muted'>" +
-                             data.username +
-                             " joined the room!" +
-                             "</div>";
-                         break;
-                     case LEFT_ROOM:
-                         // User left room
-                         ok_msg =
-                             "<div class='contextual-message text-muted'>" +
-                             data.username +
-                             " left the room!" +
-                             "</div>";
-                         break;*/
+                    case 4:
+                        // User joined room
+                        break;
+                    case 5:
+                        // User left room
+                        break;
                     case "created":
                         var obj = data.name;
                         var extra = ", ";
@@ -1215,13 +1421,7 @@ is empty when first clicked -->
                             return avatar
                         }
                         for (var i = 0; i < data.avatars.length; i++) {
-                            /*<div class="profile-pic-wrapper" data-username="{{user.username}}" data-bgcolor="{{user.bgColor}}">
-                            {% if user.avatar %}
-                            <img class="profile-pic" src="{{user.avatar.url}}">
-                            {% endif %}
-                            </div>*/
 
-                            // Only show avatars for the first three users in the chat
                             if (i > 2) {
                                 break
                             }
@@ -1236,6 +1436,7 @@ is empty when first clicked -->
                         a++;
 
                         let extraUserscreate = data.avatars.length - i;
+
                         $(".rooms").append(
                             `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                             <div class="wrap">
@@ -1259,7 +1460,14 @@ is empty when first clicked -->
                             </div>
 
                         </li>`);
-
+                        if ($("#myself").val() != data.created_by) {
+                            var noticeofcreatedchat = document.getElementById("chatAudio");
+                            var newroom = $("li[data-room-id=" + data.room + "]")[0];
+                            newroom.style.backgroundColor = "#FFFFE0";
+                            noticeofcreatedchat.play();
+                        }
+                        //maybe it's this that causes the problem
+                        showDefaultAvatar();
                         editbuttonclicked(`ellipsis-${data.room}`);
                         menuclicked(`delete-${data.room}`, `edit-${data.room}`);
 
@@ -1270,8 +1478,21 @@ is empty when first clicked -->
                             "<div class='contextual-message text-muted'>room already exists</div>";
                         break;
 
+                    case "sent_to_others":
+                        console.log("reached inside send_to_others");
+                        if (roomId != data.room) {
+                            var unreadroom = $("li[data-room-id=" + data.room + "]")[0];
+                            var otherppl = document.getElementById("chatAudio");
+                            unreadroom.style.backgroundColor = "#FFFFE0";
+                            $("[message-preview-value=" + data.room + "]").html("");
+                            $("[message-preview-value=" + data.room + "]").html(message);
+                            otherppl.play();
+                        }
+
+                        break;
                     case "get_members":
                         var people = data.member
+                        let avatarofmembers = people.avatar ? '<img class="profile-pic" src="' + people.avatar + '">' : '<div class="profile-pic-wrapper" style="display: inline; width: 10%;" data-username="' + people.username + '" data-bgcolor="' + people.default + '"></div>'
 
 
                         // $(".avatar-list").append(
@@ -1287,11 +1508,10 @@ is empty when first clicked -->
 
                             $(".list-of-members").append(
                                 `       <li>
-            		        <span class="profile-link">${people.username}<i data-id="${people.id}" id="user-${people.id}"  class="las la-minus remove-button"></i></span>
+                                    <span class="profile-link">${avatarofmembers}<p class="profile-name">${people.username}</p><i data-id="${people.id}" id="user-${people.id}"  class="las la-minus remove-button"></i></span>
         	            </li>`
 
                             );
-
                             nameofmembers[xisweird] = people.username;
                             xisweird++;
 
@@ -1299,7 +1519,7 @@ is empty when first clicked -->
                                 `<li style="padding-bottom: 18px;"><button data-id="${people.id}" class="remove-user">Remove User</button>
                                     </li>`      //attach user id to remove button
                             );*/
-
+                            showDefaultAvatar();
                             removeduserclicked(`user-${people.id}`);
                         }
                         else {
@@ -1342,7 +1562,7 @@ is empty when first clicked -->
                             $("#tag-input").hide();
                             $("#users-list").hide();
                             $("#chat-name").hide();
-                            $(".chat-messages").empty();
+                            $(".chat-log").empty();
                             $(".rightAccordion").hide();
                             $(".rightPanel").hide();
                             $("#add-members").hide();
@@ -1388,7 +1608,7 @@ is empty when first clicked -->
                                 $("[room-name-value=" + data.room + "]").html(new_string);
                             }
                         }
-                        menuclicked(`delete-${data.room}`, `edit-${data.room}`);
+                        //menuclicked(`delete-${data.room}`, `edit-${data.room}`);
                         break;
                     case "get_users":
 
@@ -1479,11 +1699,12 @@ is empty when first clicked -->
                                         </div>
 
                                         </li>`);
+                                editbuttonclicked(`ellipsis-${data.room}`);
+                                menuclicked(`delete-${data.room}`, `edit-${data.room}`);
                             }
 
                         }
-                        editbuttonclicked(`ellipsis-${data.room}`);
-                        menuclicked(`delete-${data.room}`, `edit-${data.room}`);
+
                         break;
                     case "remove_user":
 
@@ -1532,6 +1753,8 @@ is empty when first clicked -->
                                     room: data.new_room,
                                 })
                             );
+                            editbuttonclicked(`ellipsis-${data.new_room}`);
+                            menuclicked(`delete-${data.new_room}`, `edit-${data.new_room}`);
                         }
                         else if ($("#myself").val() == data.removed_user && roomId != data.room) {
                             old_room.setAttribute("data-room-id", data.new_room);
@@ -1544,6 +1767,9 @@ is empty when first clicked -->
                             old_room.setAttribute("delete-button-value", data.new_room);
                             old_room_edit_id.setAttribute("id", data.new_room);
                             old_room_delete_id.setAttribute("id", data.new_room);
+
+                            editbuttonclicked(`ellipsis-${data.new_room}`);
+                            menuclicked(`delete-${data.new_room}`, `edit-${data.new_room}`);
                         }
                         else if ($("#myself").val() != data.removed_user) {
                             if (data.edited && roomId == data.room) {
@@ -1573,8 +1799,7 @@ is empty when first clicked -->
                                 $("[room-name-value=" + data.room + "]").html(new_string);
                             }
                         }
-                        editbuttonclicked(`ellipsis-${data.new_room}`);
-                        menuclicked(`delete-${data.new_room}`, `edit-${data.new_room}`);
+
 
                         break;
 
@@ -1595,6 +1820,7 @@ is empty when first clicked -->
                         new_string = new_string.replace("removed", "")
                         new_string = new_string.replace("additional", "")
                         let avatardiv = ""
+                        let preview = ""
                         console.log("room data", data.rooms);
 
                         function avatarhtml(userdata) {
@@ -1629,15 +1855,21 @@ is empty when first clicked -->
                         }
                         a++;
                         let extraUsers = data.rooms.avatars.length - i;
+
+                        for (var j = 0; j < data.rooms.preview.length; j++) {
+
+                            preview = data.rooms.preview[j];
+
+                        }
                         $(".rooms").append(
                             `<li id="room-link" class="room-link" data-room-id="${roomie.id}" name="${roomie.id}">
                             <div class="wrap">
-                                <div avatar-value="${data.room}" class="avatars">
+                                <div avatar-value="${roomie.id}" class="avatars">
                                 ${avatardiv}
                                 </div>
                                 <div class="room-details">
                                     <span style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" room-name-value="${roomie.id}" class="name-of-room" id="name-of-room">${new_string}</span>
-                                    <p message-preview-value="${roomie.id}" class="preview">new message</p>
+                                    <p message-preview-value="${roomie.id}" class="preview">${preview}</p>
                                 </div>
                                 <span
                                      ellipsis-value="${roomie.id}" id="ellipsis-${roomie.id}" class="las la-ellipsis-v ellipsis">
@@ -1685,7 +1917,7 @@ is empty when first clicked -->
                         return;
                 }
 
-                $(".chat-messages").html();
+                $(".chat-log").html();
                 if (data.msg_type != "created")
                     msgdiv.append(ok_msg);
 
@@ -1876,9 +2108,13 @@ is empty when first clicked -->
             $("#members-page").hide();
 
         });
+        $("#canc").on('click', function () {
+            document.getElementById('members-page').style.display = 'none'
+        });
         function roomClick() {
             let b = 0;
             xisweird = 0;
+
             if (ellipsisClicked == false) {
 
                 roomId = $(this).attr("data-room-id");
@@ -1894,14 +2130,16 @@ is empty when first clicked -->
                             room: roomId,
                         })
                     );
-                    $(".chat-messages").empty();
+                    $(".chat-log").empty();
                     //empty chat log
                 } else {
                     // Join room
+                    var readroom = $("li[data-room-id=" + roomId + "]")[0];
+                    readroom.style.backgroundColor = "#FFF"
                     $(".list-of-members").empty();
                     $(".list-of-links").empty();
                     $(".list-of-files").empty();
-                    $(".chat-messages").empty();
+                    $(".chat-log").empty();
 
                     $(this).addClass("joined");
                     socket.send(
@@ -1992,7 +2230,7 @@ is empty when first clicked -->
             $("#tag-input").show();
             $("#users-list").show();
             $("#chat-name").show();
-            $(".chat-messages").empty();
+            $(".chat-log").empty();
             $("#typed_msg").show();
             $(".msg_send_btn").show();
             $(".rightAccordion").hide();
@@ -2145,9 +2383,7 @@ is empty when first clicked -->
                 tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
             }
 
-            $("#canc").on('click', function () {
-                document.getElementById('members-page').style.display = 'none'
-            });
+
 
             $("#canc").on('click', tagify.removeAllTags.bind(tagify));
 
