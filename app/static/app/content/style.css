@@ -14,7 +14,7 @@
 }
 
 .sidebar {
-    width: 60px;
+    width: 51px;
     left: 0;
     top: 60px;
     height: 100%;
@@ -35,22 +35,29 @@
     }
 
 .sidebar-menu li {
-    width: 100%;
-    padding-left: 1rem;
+    width: 90%;
+    padding-left: 0rem;
     margin-bottom: 1rem;
+    float: right;
+    position: relative;
 }
 
 .sidebar-menu a {
     display: block;
     color: #fff;
     font-size: 1.1rem;
+    position: relative !important;
+    width: 100% !important;
+    padding-left: 8px;
 }
 
     .sidebar-menu a.active {
-        background: #ebf2f2;
-        right: 10px;
+        background: #FFF;
+        right: 0px;
         padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
+        /*padding-top: 11.5px;*/
+        padding-bottom: 2.5px;
+        /*padding-bottom: 4.5px;*/
         border-radius: 30px 0px 0px 30px;
         color: #68d0d1;
     }
@@ -228,7 +235,7 @@
     align-items: center;
 }
 
-.profile-link .profile-pic {
+.profile-link .profile-pic{
     max-width: 26px;
     max-height: 26px;
     width: 25px;
@@ -245,12 +252,31 @@
     align-items: center;
     bottom: 9px;
 }
+.profile-link img{
+    max-width: 26px;
+    max-height: 26px;
+    width: 25px;
+    height: 25px;
+    white-space: normal;
+    margin-right: 15px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    justify-content: center;
+    float: left;
+    align-items: center;
+    top: 1px;
+}
 
 .profile-link {
     display: inline-flex;
 }
 .profile-name {
     margin-left: 32px;
+    white-space: nowrap;
+    display: inline-flex;
 }
 .avatars .profile-pic-wrapper, .profile-pic:not(:last-child) {
     position: relative !important;

@@ -1,0 +1,13 @@
+(july)
+-add unread functionality
+-show if user is online or not
+
+things to think about:
+-if a single chat show status on profile picture and maybe a show members button to show whose active in that chat
+
+
+
+
+
+
+

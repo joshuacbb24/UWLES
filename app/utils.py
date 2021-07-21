@@ -1,7 +1,7 @@
 from channels.db import database_sync_to_async
 
 from .exceptions import ClientError
-from .models import ChatGroup, Messages, Account
+from .models import ChatGroup, Messages, Account, OfflineMessage
 
 
 class RoomExistsException(Exception):
@@ -33,7 +33,7 @@ def get_room_or_error(room_id, user):
 
 
 @database_sync_to_async
-def save_message(room_id, user, message, link, file):
+def save_message(room_id, user, message, link, file, notice):
     """
     Save message data to database
     """
@@ -47,13 +47,16 @@ def save_message(room_id, user, message, link, file):
         raise ClientError("ROOM_INVALID")
     if link == True:
         message = Messages.objects.create(
-            chat_group=room, from_user=user, message=message, is_link=True, is_file=False)
+            chat_group=room, from_user=user, message=message, is_link=True, is_file=False, is_notice=False)
     elif file == True:
         message = Messages.objects.create(
-            chat_group=room, from_user=user, message=message, is_link=False, is_file=True)
+            chat_group=room, from_user=user, message=message, is_link=False, is_file=True, is_notice=False)
+    elif notice == True:
+        message = Messages.objects.create(
+            chat_group=room, from_user=user, message=message, is_link=False, is_file=True, is_notice=True)
     else:
         message = Messages.objects.create(
-            chat_group=room, from_user=user, message=message, is_link=False, is_file=False)
+            chat_group=room, from_user=user, message=message, is_link=False, is_file=False, is_notice=False)
 
     return message
 
@@ -73,8 +76,10 @@ def create_group(newUsers, user):
        # for u in newUsers:
        # room.users.add(models.Account.objects.get(username=u.strip()))
         # room.users.add(user)
-        users = [x['name'] for x in newUsers]
+        users = []
         users.append(user.username)
+        for x in newUsers:
+            users.append(x['name'])
 
         name = "-".join(users)
 
@@ -94,13 +99,10 @@ def create_group(newUsers, user):
         avatararray = []
         for avatararr in avatararrs:
 
-            if avatararr.username == user.username:
-                continue
-            else:
-                avatararray.append(
-                    {'username': avatararr.username,
-                        'avatar': avatararr.avatar.url if avatararr.avatar else '',
-                        'default': avatararr.bgColor})
+            avatararray.append(
+                {'username': avatararr.username,
+                    'avatar': avatararr.avatar.url if avatararr.avatar else '',
+                    'default': avatararr.bgColor})
         # temporarily add avatars to group so that it is received only on the front end
         room.avatars = avatararray
 
@@ -135,9 +137,9 @@ def fetch_members(room_id):
         people = ChatGroup.objects.get(pk=room_id)
         room = ChatGroup.objects.get(pk=room_id)
 
-    except ChatGroup.DoesNotExist:
+    except Account.DoesNotExist:
 
-        raise ClientError("NO_GROUPS")
+        raise ClientError("NO_ACCOUNTS")
 
     return list(people.members.all()), room
 
@@ -191,8 +193,25 @@ def add_group(room_id, newUsers, user):
 
             name = "-".join(users)
 
-        mem.group_name = name + "additional"
+        mem.group_name = name + "-additional"
         mem.save()
+
+        avatararrs = mem.members.all()
+        avatararray = []
+        message = []
+        last_message = Messages.objects.filter(
+            chat_group=room_id).latest('sent_at')
+        message.append(last_message.message)
+        print("message", message)
+        mem.preview = message
+        for avatararr in avatararrs:
+
+            avatararray.append(
+                {'username': avatararr.username,
+                    'avatar': avatararr.avatar.url if avatararr.avatar else '',
+                    'default': avatararr.bgColor})
+        # temporarily add avatars to group so that it is received only on the front end
+        mem.avatars = avatararray
 
     except ChatGroup.DoesNotExist:
 
@@ -210,12 +229,14 @@ def fetch_rooms(user):
     try:
         members = []
         groups = ChatGroup.objects.filter(members=user)
-        #all_entries = list(groups)
-        # for x in all_entries:
-        #    last_message = Messages.objects.filter(
-        #        chat_group=x.group_name).latest('sent_at')
-        #    messages.append(last_message)
         for group in groups:
+            unreadroom = OfflineMessage.objects.filter(
+                offline_user=user, chat_group=group)
+            if unreadroom.exists():
+                group.unread = True
+            else:
+                group.unread = False
+
             avatararrs = group.members.all()
             avatararray = []
             message = []
@@ -226,13 +247,13 @@ def fetch_rooms(user):
             group.preview = message
             for avatararr in avatararrs:
 
-                if avatararr.username == user.username:
-                    continue
-                else:
-                    avatararray.append(
-                        {'username': avatararr.username,
-                            'avatar': avatararr.avatar.url if avatararr.avatar else '',
-                            'default': avatararr.bgColor})
+                # if avatararr.username == user.username:
+                #    continue
+                # else:
+                avatararray.append(
+                    {'username': avatararr.username,
+                        'avatar': avatararr.avatar.url if avatararr.avatar else '',
+                        'default': avatararr.bgColor})
             # temporarily add avatars to group so that it is received only on the front end
             group.avatars = avatararray
 
@@ -268,8 +289,19 @@ def delete_room(room_id, myself):
 
         user_account = Account.objects.get(username=myself)
 
-        room.group_name = name + "deleted"
+        room.group_name = name + "-deleted"
         room.save()
+
+        avatararrs = room.members.all()
+        avatararray = []
+        for avatararr in avatararrs:
+
+            avatararray.append(
+                {'username': avatararr.username,
+                    'avatar': avatararr.avatar.url if avatararr.avatar else '',
+                    'default': avatararr.bgColor})
+        # temporarily add avatars to group so that it is received only on the front end
+        room.avatars = avatararray
 
     except ChatGroup.DoesNotExist:
 
@@ -302,7 +334,7 @@ def delete_user(room_id, old_user):
     try:
         users = []
         messages = []
-        suffix = "removed"
+        suffix = "-removed"
         room = ChatGroup.objects.get(pk=room_id)
         old_name = room.group_name + suffix
         room.members.remove(old_user)
@@ -342,6 +374,28 @@ def delete_user(room_id, old_user):
         """ if you set the pk of a django key to null you remove the ref to the row in the database if you
         then save that obj you get a new row in the database
         """
+        avatararrs = room.members.all()
+        avatararray = []
+        for avatararr in avatararrs:
+
+            avatararray.append(
+                {'username': avatararr.username,
+                    'avatar': avatararr.avatar.url if avatararr.avatar else '',
+                    'default': avatararr.bgColor})
+        # temporarily add avatars to group so that it is received only on the front end
+        room.avatars = avatararray
+
+        avatarremove = new_room.members.all()
+        avatararrayremove = []
+        for avatar in avatarremove:
+
+            avatararrayremove.append(
+                {'username': avatar.username,
+                    'avatar': avatar.avatar.url if avatar.avatar else '',
+                    'default': avatar.bgColor})
+        # temporarily add avatars to group so that it is received only on the front end
+        new_room.avatars = avatararrayremove
+
     except ChatGroup.DoesNotExist:
         print("except")
         raise ClientError("Members do not exist")
@@ -363,3 +417,37 @@ def editname(room_id, new_name):
         raise ClientError("Members do not exist")
 
     return room, nameOfRoom
+
+
+@ database_sync_to_async
+def unread(room_id, new_name, message):
+    try:
+        room = ChatGroup.objects.get(pk=room_id)
+        offlineuser = OfflineMessage.objects.filter(
+            chat_group=room, offline_user=new_name)
+        if offlineuser.exists():
+            return
+        OfflineMessage.objects.create(
+            chat_group=room, offline_user=new_name, message=message)
+
+    except Account.DoesNotExist:
+
+        raise ClientError("NO_ACCOUNT")
+
+
+@ database_sync_to_async
+def fetch_unread(room_id, new_name):
+    try:
+        room = ChatGroup.objects.get(pk=room_id)
+        offlineuser = OfflineMessage.objects.filter(
+            chat_group=room, offline_user=new_name)
+        OfflineMessage.objects.filter(
+            chat_group=room, offline_user=new_name).delete()
+        if offlineuser.exists():
+            return offlineuser
+        else:
+            return False
+
+    except OfflineMessage.DoesNotExist:
+
+        raise ClientError("NO_MESSAGES")

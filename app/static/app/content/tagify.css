@@ -506,6 +506,7 @@
     z-index: 9999;
     transform: translateY(1px);
     overflow: hidden;
+    z-index: 2;
 }
 
     .tagify__dropdown[placement="top"] {
@@ -538,6 +539,7 @@
     border-top-width: 0;
     box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.2);
     transition: 0.25s cubic-bezier(0, 1, 0.5, 1);
+    z-index: 2;
 }
 
     .tagify__dropdown__wrapper:hover {
