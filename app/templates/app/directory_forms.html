@@ -1,0 +1,1047 @@
+{% load static %}
+{% load project_templates %}
+<div class="modal box1 fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Resource</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <label for="editorgs">Choose an organization to edit</label>
+                <select name="editorgs" id="editorgsdd">
+                    {% for org in swme.organization.all %}
+                    <option value="org{{ forloop.counter }}">{{ org }}</option>
+                    {% endfor %}
+                </select>
+                <div class="edit-selected-orgs-title">Choose an organization to edit.</div>
+                <div class="edit-orgs-box">
+                    {% for org in swme.organization.all %}
+                        <div class="{% cycle 'edit-org-option1' 'edit-org-option2' 'edit-org-option3' 'edit-org-option4' %}" value="org{{ forloop.counter }}">
+                            <div class="edit-orgs-org-circle">
+                                {% if org.org_image %}
+                                    <img src="{{ org.org_image.url }}">
+                                {% endif %}
+                            </div>
+                            <div class="edit-orgs-org-title">
+                                {{ org }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="button" id="selecteditorg" data-dismiss="modal">Continue</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ formset2.management_form }}
+    <div id="form_set3">
+        {% for formx in formset2.forms %}
+
+        <div class="modal box1 fade" id="editform{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Organization</h5>
+                        <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="page-circle-1 completed-current"></div>
+                        <div class="page-circle-1-title current-bold">Background Information</div>
+                        <div class="page-line-1"></div>
+
+                        <div class="page-circle-2"></div>
+                        <div class="page-circle-2-title" type="button" id="editForm1-circle-2">Additional Information</div>
+                        <div class="page-line-2"></div>
+
+                        <div class="page-circle-3"></div>
+                        <div class="page-circle-3-title" type="button" id="editForm1-circle-3">Add Organization's Tags</div>
+                        <div class="page-line-3"></div>
+
+                        <div class="page-circle-4"></div>
+                        <div class="page-circle-4-title" type="button" id="editForm1-circle-4">Background Information</div>
+                        <div class="page-line-4"></div>
+
+                        <div class="page-circle-5"></div>
+                        <div class="page-circle-5-title" type="button" id="editForm1-circle-5">Sub Directories + Collaborators</div>
+                        <div class="page-line-5"></div>
+
+                        <div class="page-circle-6"></div>
+                        <div class="page-circle-6-title" type="button" id="editForm1-circle-6">Confirmation / Submission</div>
+
+                        {{ formx.org_name }}
+                        <div class="orgName">Full Organization Name</div>
+                        {{ formx.website }}
+                        <div class="webName">Website URL</div>
+                        {{ formx.org_phone }}
+                        <div class="phoneName">Primary Phone</div>
+                        {{ formx.org_email }}
+                        <div class="emailName">Primary Email</div>
+
+                        {{ formx.description }}
+                        <div class="eligName">Eligibility (Select all that apply)</div>
+                        {% for checkbox in formx.eligibility %}
+                        {{ checkbox }}
+                        {% endfor %}
+                        {{ formx.street }}
+                        <div class="streetName">Street</div>
+                        {{ formx.apt_number }}
+                        <div class="aptName">Apt./Unit Number</div>
+                        {{ formx.county }}
+                        <div class="countyName">County</div>
+                        {{ formx.city }}
+                        <div class="cityName">City</div>
+                        {{ formx.state }}
+                        <div class="stateName">State</div>
+                        {{ formx.zipcode }}
+                        <div class="zipName">Zipcode</div>
+
+                        <label class="custom-file-upload">
+                            {{ formx.org_image }}
+                            <i class="bi bi-cloud-arrow-up"></i> Add Image
+                            <span id="file-selected"></span>
+                        </label>
+
+                        <div class="form-error-box--before-pt1{{ forloop.counter0 }}">
+          
+                        </div>
+                        <input type="hidden" name="orgs-{{ forloop.counter0 }}-id" value="{{ orglist|index:forloop.counter0 }}" id="id_orgs-{{ forloop.counter0 }}-id" />
+                        <button class="continueBtn1" id="orgbtn2" type="button" value="{{ forloop.counter0 }}">Continue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal box1 fade" id="editFormPT2{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+                  <h5 class="modal-title" id="exampleModalLabel">Edit Organization</h5>
+                  <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="page-circle-1 completed"></div>
+                    <div class="page-circle-1-title" type="button" id="editForm2-circle-1">Background Information</div>
+                    <div class="page-line-1 completed-line"></div>
+        
+                    <div class="page-circle-2 completed-current"></div>
+                    <div class="page-circle-2-title current-bold">Additional Information</div>
+                    <div class="page-line-2"></div>
+        
+                    <div class="page-circle-3"></div>
+                    <div class="page-circle-3-title" type="button" id="editForm2-circle-3">Add Organization's Tags</div>
+                    <div class="page-line-3"></div>
+        
+                    <div class="page-circle-4"></div>
+                    <div class="page-circle-4-title" type="button" id="editForm2-circle-4">Background Information</div>
+                    <div class="page-line-4"></div>
+        
+                    <div class="page-circle-5"></div>
+                    <div class="page-circle-5-title" type="button" id="editForm2-circle-5">Sub Directories + Collaborators</div>
+                    <div class="page-line-5"></div>
+        
+                    <div class="page-circle-6"></div>
+                    <div class="page-circle-6-title" type="button" id="editForm2-circle-6">Confirmation / Submission</div>
+        
+                    {{ formx.mail_street }}
+                    <div class="mailstreetName">Street (Mail)</div>
+                    {{ formx.mail_apt_number }}
+                    <div class="mailaptName">Apt./Unit Number (Mail)</div>
+                    {{ formx.mail_city }}
+                    <div class="mailcityName">City (Mail)</div>
+                    {{ formx.mail_state }}
+                    <dic class="mailstateName">State (Mail)</dic>
+                    {{ formx.mail_zipcode }}
+                    <div class="mailzipName">Zipcode (Mail)</div>
+          
+                    {{ formx.contact_name }}
+                    <div class="cnameName">Full Name</div>
+                    {{ formx.contact_phone }}
+                    <div class="cphoneName">Primary Phone</div>
+                    {{ formx.contact_title }}
+                    <div class="ctitleName">Title</div>
+                    {{ formx.contact_email }}
+                    <div class="cemailName">Primary Email</div>
+        
+                    <div class="languagesName">Languages Available (Select all that apply)</div>
+                    {% for checkbox in formx.languages %}
+                        {{ checkbox }}
+                    {% endfor %}
+        
+                    <div class="areasName">Areas Served (Select all that apply)</div>
+                    {% for checkbox in formx.areas_served %}
+                        {{ checkbox }}
+                    {% endfor %}
+
+                    <div class="form-error-box--before2-pt2{{ forloop.counter0 }}">
+          
+                    </div>
+                <button class="continueBtn2" type="button" id="orgbtn2pt2" value="{{ forloop.counter0 }}">Continue</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+    <div class="modal box1 fade" id="editorgForm2{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+    <h5 class="modal-title" id="exampleModalLabel">Edit Organization</h5>
+    <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="page-circle-1 completed"></div>
+    <div class="page-circle-1-title" type="button" data-toggle="modal" data-target="#editform{{ forloop.counter }}" data-dismiss="modal">Background Information</div>
+    <div class="page-line-1 completed-line"></div>
+
+    <div class="page-circle-2 completed"></div>
+    <div class="page-circle-2-title" type="button" data-toggle="modal" data-target="#editFormPT2{{ forloop.counter0 }}" data-dismiss="modal">Additional Information</div>
+    <div class="page-line-2 completed-line"></div>
+
+    <div class="page-circle-3 completed-current"></div>
+    <div class="page-circle-3-title current-bold">Add Organization's Tags</div>
+    <div class="page-line-3"></div>
+
+    <div class="page-circle-4"></div>
+    <div class="page-circle-4-title" type="button" data-toggle="modal" data-target="#editorgForm3{{ forloop.counter0 }}" data-dismiss="modal">Background Information</div>
+    <div class="page-line-4"></div>
+
+    <div class="page-circle-5"></div>
+    <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#editorgForm4{{ forloop.counter0 }}" data-dismiss="modal">Sub Directories + Collaborators</div>
+    <div class="page-line-5"></div>
+
+    <div class="page-circle-6"></div>
+    <div class="page-circle-6-title" type="button" data-toggle="modal" data-target="#editorgForm5{{ forloop.counter0 }}" data-dismiss="modal">Confirmation / Submission</div>
+
+  <div class="orgTags">
+      <div class="orgTagsTitle">Add Tags</div>
+      <div class="orgTagsDesc">Search and add services to tag with your organization</div>
+      <div class="fakecontainer">
+      {% for boxes in formx.org_tags %}
+        <div class="hideboxes2">
+            {{ boxes }}
+        </div>
+      {% endfor %}
+      </div>
+      <div class="orgTagDropdown" tabindex="100">
+          <i class="fa fa-search fa-lg" id="tagsSearchIcon"></i>
+          <input type="text" placeholder="Search for tags" id="orgtagInput2" onkeyup="filtertagFunction2()"/>
+          <div id="tagsDropdown2" class="orgTagDropdown-content2{{ forloop.counter0 }}">
+              {% for tag in tagarray3|index:forloop.counter0 %}
+                <a class="tagA" value="{{ tag.id }}">{{ tag.tag }}</a>
+              {% endfor %}
+          </div>
+      </div>
+
+      <div class="orgTagsAdd" type="button" data-toggle="modal" data-target="#editexampleModal">+</div>
+    <div class="tagBox2{{ forloop.counter0 }}">
+        {% for tagx in tagarray2|index:forloop.counter0 %}
+            {% if tagx.tag|length <= 10 %}
+                <div class="tag1" value="{{ tagx.id }}">{{ tagx }}</div>
+            {% else %}
+                <div class="tag2" value="{{ tagx.id }}">{{ tagx }}</div>
+            {% endif %}
+        {% endfor %}
+    </div>
+  </div>
+      <button class="continueBtn3" id="orgbtn3" type="button" data-dismiss="modal" value="{{ forloop.counter0 }}">Continue</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal box1 fade" id="editorgForm3{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+      <h5 class="modal-title" id="exampleModalLabel">Edit Organization</h5>
+      <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+        <div class="page-circle-1 completed"></div>
+        <div class="page-circle-1-title" type="button" data-toggle="modal" data-target="#editform{{ forloop.counter }}" data-dismiss="modal">Background Information</div>
+        <div class="page-line-1 completed-line"></div>
+
+        <div class="page-circle-2 completed"></div>
+        <div class="page-circle-2-title" type="button" data-toggle="modal" data-target="#editFormPT2{{ forloop.counter0 }}" data-dismiss="modal">Additional Information</div>
+        <div class="page-line-2 completed-line"></div>
+
+        <div class="page-circle-3 completed"></div>
+        <div class="page-circle-3-title" type="button" data-toggle="modal" data-target="#editorgForm2{{ forloop.counter0 }}" data-dismiss="modal">Add Organization's Tags</div>
+        <div class="page-line-3 completed-line"></div>
+
+        <div class="page-circle-4 completed-current"></div>
+        <div class="page-circle-4-title current-bold">Background Information</div>
+        <div class="page-line-4"></div>
+
+        <div class="page-circle-5"></div>
+        <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#editorgForm4{{ forloop.counter0 }}" data-dismiss="modal">Sub Directories + Collaborators</div>
+        <div class="page-line-5"></div>
+
+        <div class="page-circle-6"></div>
+        <div class="page-circle-6-title" type="button" data-toggle="modal" data-target="#editorgForm5{{ forloop.counter0 }}" data-dismiss="modal">Confirmation / Submission</div>
+        <div class="orgDetails">
+            <div class="orgDetailsTitle">Organization Details</div>
+            <div class="orgEdit" type="button">Edit<i class="bi bi-pencil-fill"></i></div>
+            <div class="orgNameTitle">Organization Name: </div><div id="display_org_name2{{ forloop.counter0 }}"></div>
+            <div class="orgWebTitle">Organization Website: </div><div id="display_website2{{ forloop.counter0 }}"></div>
+            <div class="orgPhoneTitle">Organization Phone: </div><div id="display_org_phone2{{ forloop.counter0 }}"></div>
+            <div class="orgEmailTitle">Organizaiton Email: </div><div id="display_org_email2{{ forloop.counter0 }}"></div>
+            <div class="orgDescTitle">Organization Description: </div><div id="display_description2{{ forloop.counter0 }}"></div>
+            <div class="orgEligTitle">Eligibility: </div><div id="display_eligibility2{{ forloop.counter0 }}"></div>
+            <div class="orgAreasTitle">Areas Served: </div><div id="display_areas_served2{{ forloop.counter0 }}"></div>
+            <div class="orgLangTitle">Languages: </div><div id="display_languages2{{ forloop.counter0 }}"></div>
+            <div class="orgDetailsLine"></div><div id="display_org_name2{{ forloop.counter0 }}"></div><div id="display_org_name2{{ forloop.counter0 }}"></div>
+            <div class="orgLocTitle">Location:</div><div id="display_street2{{ forloop.counter0 }}"></div><div id="display_county2{{ forloop.counter0 }}"></div><div id="display_city2{{ forloop.counter0 }}"></div>
+            <div class="orgMailTitle">Mailing Address:</div><div id="display_mailstreet2{{ forloop.counter0 }}"></div><div id="display_mailcity2{{ forloop.counter0 }}"></div>
+            <div class="orgPrimeTitle">Primary Contact:</div><div id="display_contact_name2{{ forloop.counter0 }}"></div><div id="display_contact_email2{{ forloop.counter0 }}"></div><div id="display_contact_phone2{{ forloop.counter0 }}"></div>
+        </div>
+    </div>
+        <button class="continueBtn4" id="orgbtn4" type="button" data-dismiss="modal" value="{{ forloop.counter0 }}">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal box1 fade" id="editorgForm4{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+    <h5 class="modal-title" id="exampleModalLabel">Edit Organization</h5>
+    <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="page-circle-1 completed"></div>
+    <div class="page-circle-1-title" type="button" data-toggle="modal" data-target="#editform{{ forloop.counter }}" data-dismiss="modal">Background Information</div>
+    <div class="page-line-1 completed-line"></div>
+
+    <div class="page-circle-2 completed"></div>
+    <div class="page-circle-2-title" type="button" data-toggle="modal" data-target="#editFormPT2{{ forloop.counter0 }}" data-dismiss="modal">Additional Information</div>
+    <div class="page-line-2 completed-line"></div>
+
+    <div class="page-circle-3 completed"></div>
+    <div class="page-circle-3-title" type="button" data-toggle="modal" data-target="#editorgForm2{{ forloop.counter0 }}" data-dismiss="modal">Add Organization's Tags</div>
+    <div class="page-line-3 completed-line"></div>
+
+    <div class="page-circle-4 completed"></div>
+    <div class="page-circle-4-title" type="button" data-toggle="modal" data-target="#editorgForm3{{ forloop.counter0 }}" data-dismiss="modal">Background Information</div>
+    <div class="page-line-4 completed-line"></div>
+
+    <div class="page-circle-5 completed-current"></div>
+    <div class="page-circle-5-title current-bold">Sub Directories + Collaborators</div>
+    <div class="page-line-5"></div>
+
+    <div class="page-circle-6"></div>
+    <div class="page-circle-6-title" type="button" data-toggle="modal" data-target="#editorgForm5{{ forloop.counter0 }}" data-dismiss="modal">Confirmation / Submission</div>
+
+      <div class="addToDirTitle">Add To Directories (All That Apply):</div>
+        <div class="add-to-dir__layout">
+        {% for checkbox in form2.sub_dirs %}
+            {% if checkbox.id_for_label == 'id_sub_dirs_0' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Addiction & Recovery Services</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_1' %} <label class="add-to-dir__box2">{{ checkbox }}<div class="add-to-box2" id="deselected">Counseling & Case Management</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_2' %} <label class="add-to-dir__box3">{{ checkbox }}<div class="add-to-box3" id="deselected">Disaster Relief</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_3' %} <label class="add-to-dir__box4">{{ checkbox }}<div class="add-to-box4" id="deselected">Domestic Violence & Sexual Assault</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_4' %} <label class="add-to-dir__box5">{{ checkbox }}<div class="add-to-box5" id="deselected">Emergency Shelter</div></label>
+
+            {% elif checkbox.id_for_label == 'id_sub_dirs_5' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Faith-Based Community Help</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_6' %} <label class="add-to-dir__box2">{{ checkbox }}<div class="add-to-box2" id="deselected">Food Assistance</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_7' %} <label class="add-to-dir__box3">{{ checkbox }}<div class="add-to-box3" id="deselected">Health & Fitness</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_8' %} <label class="add-to-dir__box4">{{ checkbox }}<div class="add-to-box4" id="deselected">Hospitals/Emergency Care/Medical Care</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_9' %} <label class="add-to-dir__box5">{{ checkbox }}<div class="add-to-box5" id="deselected">Housing and Housing Repair</div></label>
+        
+            {% elif checkbox.id_for_label == 'id_sub_dirs_10' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Local Farmers Markets</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_11' %} <label class="add-to-dir__box2">{{ checkbox }}<div class="add-to-box2" id="deselected">Mental & Behavioral Health</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_12' %} <label class="add-to-dir__box3">{{ checkbox }}<div class="add-to-box3" id="deselected">Nicotine/Tobacco Cessation Resources</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_13' %} <label class="add-to-dir__box4">{{ checkbox }}<div class="add-to-box4" id="deselected">Pharmacies</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_14' %} <label class="add-to-dir__box5">{{ checkbox }}<div class="add-to-box5" id="deselected">Primary Care Centers</div></label>
+            
+            {% elif checkbox.id_for_label == 'id_sub_dirs_15' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Adults & Senior Adults</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_16' %} <label class="add-to-dir__box2">{{ checkbox }}<div class="add-to-box2" id="deselected">Children</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_17' %} <label class="add-to-dir__box3">{{ checkbox }}<div class="add-to-box3" id="deselected">Youth</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_18' %} <label class="add-to-dir__box4">{{ checkbox }}<div class="add-to-box4" id="deselected">Disabilities</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_19' %} <label class="add-to-dir__box5">{{ checkbox }}<div class="add-to-box5" id="deselected">Walk In Clinics</div></label>
+
+            {% else %}
+                <p>Error</p>
+            {% endif %}
+        {% endfor %}
+        </div>
+      <div class="addCollaborators">Add Collaborators</div>
+      <div class="addCollabBox">
+          {{ formx.collaborators }}
+          {% for collab in collab_accounts %}
+            {% if user.username != collab.username %}
+                <a class="org-collab__A" value="{{ collab.id }}">{{ collab.username }}</a>
+            {% endif %}
+          {% endfor %}
+      </div>
+      {% for dir in subdirslist|index:forloop.counter0 %}
+            <p style="visibility: hidden" class="hiddendirs">{{ dir }}</p>
+      {% endfor %}
+  <button class="continueBtn5" type="submit" id="checkthis3{{ forloop.counter0 }}" value="{{ forloop.counter0 }}" name="submit_formx">Submit</button>
+  <button class="continueBtn5" id="orgbtn4" type="button" data-dismiss="modal" value="{{ forloop.counter0 }}">Continue</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal box1 fade" id="editorgForm5{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+      <h5 class="modal-title" id="exampleModalLabel">Edit Organization</h5>
+      <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="page-circle-1 completed"></div>
+      <div class="page-circle-1-title" type="button" data-toggle="modal" data-target="#editform{{ forloop.counter }}" data-dismiss="modal">Background Information</div>
+      <div class="page-line-1 completed-line"></div>
+
+      <div class="page-circle-2 completed"></div>
+      <div class="page-circle-2-title" type="button" data-toggle="modal" data-target="#editFormPT2{{ forloop.counter0 }}" data-dismiss="modal">Additional Information</div>
+      <div class="page-line-2 completed-line"></div>
+
+      <div class="page-circle-3 completed"></div>
+      <div class="page-circle-3-title" type="button" data-toggle="modal" data-target="#editorgForm2{{ forloop.counter0 }}" data-dismiss="modal">Add Organization's Tags</div>
+      <div class="page-line-3 completed-line"></div>
+
+      <div class="page-circle-4 completed"></div>
+      <div class="page-circle-4-title" type="button" data-toggle="modal" data-target="#editorgForm3{{ forloop.counter0 }}" data-dismiss="modal">Background Information</div>
+      <div class="page-line-4 completed-line"></div>
+
+      <div class="page-circle-5 completed"></div>
+      <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#editorgForm4{{ forloop.counter0 }}" data-dismiss="modal">Sub Directories + Collaborators</div>
+      <div class="page-line-5 completed-line"></div>
+
+      <div class="page-circle-6 completed-current"></div>
+      <div class="page-circle-6-title current-bold">Confirmation / Submission</div>
+
+    
+      <div class="confirmation-question">Are you sure you want to edit </div>
+      <div class="confirmation-org-title"></div>
+
+      <button type="submit" class="confirmation-accept" id="checkthis3{{ forloop.counter0 }}" value="{{ forloop.counter0 }}" name="submit_formx">Yes, edit organization.</button>
+      <div type="button" data-dismiss="modal" class="confirmation-decline">No, disregard.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endfor %}
+    </div>
+
+    <div class="modal box2 fade" id="editexampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New tag</h5>
+            </div>
+        <div class="modal-body">
+            {{ formset3.management_form }}
+            <div id="form_set2">
+                {% for form in formset3.forms %}
+                    <table class='no_error' value="{{ forloop.counter0 }}">
+                        {{ form.as_table }}
+                    </table>
+                {% endfor %}
+            </div>
+            <input type="button" value="Add More" id="add_more2" class="addNewTagButton">
+            <div id="empty_form2" style="display:none">
+                <table class='no_error'>
+                    {{ formset3.empty_form.as_table }}
+                </table>
+            </div>
+            <button type="button" class="testbtn4">Remove Last</button>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="testbtn3" data-dismiss-modal="modal2edit">Add Tags</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+
+<div class="modal box1 fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Resource Directory Listing</h5>
+        <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+        <div class="addOrg"><div class="addTitle">New Organization</div><div class="addCircle"><i class="bi bi-building" id="addOrgIcon"></i></div><div class="addDesc">Create a new directory listing for a social or healthcare organization, nonprofit, or agency</div><div class="addSelect" type="button" data-toggle="modal" data-target="#orgForm1" data-dismiss="modal"><div class="addSelectTitle">Select</div></div></div>
+        <div class="addDoc"><div class="addTitle">New Document</div><div class="addCircle"><i class="bi bi-files" id="addDocIcon"></i></div><div class="addDesc">Upload new documents, images, and files from your computer available only to you</div><div class="addSelect" type="button" data-toggle="modal" data-target="#fileForm1" data-dismiss="modal"><div class="addSelectTitle">Select</div></div></div>
+    </div>
+    </div>
+</div>
+</div>
+
+<div class="modal box1 fade" id="orgForm1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+    <h5 class="modal-title" id="exampleModalLabel">New Organization</h5>
+    <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="page-circle-1 completed-current"></div>
+    <div class="page-circle-1-title current-bold">Background Information</div>
+    <div class="page-line-1"></div>
+
+    <div class="page-circle-2"></div>
+    <div class="page-circle-2-title" id="orgForm1-circle-2" type="button">Additional Information</div>
+    <div class="page-line-2"></div>
+
+    <div class="page-circle-3"></div>
+    <div class="page-circle-3-title" id="orgForm1-circle-3" type="button">Add Organization's Tags</div>
+    <div class="page-line-3"></div>
+
+    <div class="page-circle-4"></div>
+    <div class="page-circle-4-title" id="orgForm1-circle-4" type="button">Review Information</div>
+    <div class="page-line-4"></div>
+
+    <div class="page-circle-5"></div>
+    <div class="page-circle-5-title" id="orgForm1-circle-5" type="button">Sub Directories + Collaborators</div>
+    <div class="page-line-5"></div>
+
+    <div class="page-circle-6"></div>
+    <div class="page-circle-6-title" id="orgForm1-circle-6" type="button">Confirmation / Submission</div>
+
+      {{ form1.org_name }}
+      <div class="orgName">Full Organization Name<div class="form-required">*</div></div>
+      {{ form1.website }}
+      <div class="webName">Website URL<div class="form-required">*</div></div>
+      {{ form1.org_phone }}
+      <div class="phoneName">Primary Phone<div class="form-required">*</div></div>
+      {{ form1.org_email }}
+      <div class="emailName">Primary Email<div class="form-required">*</div></div>
+
+      {{ form1.description }}
+      <div class="eligName">Eligibility (Select all that apply)<div class="form-required">*</div></div>
+      {% for checkbox in form1.eligibility %}
+          {{ checkbox }}
+      {% endfor %}
+
+      {{ form1.street }}
+      <div class="streetName">Street<div class="form-required">*</div></div>
+      {{ form1.apt_number }}
+      <div class="aptName">Apt./Unit Number</div>
+      {{ form1.county }}
+      <div class="countyName">County<div class="form-required">*</div></div>
+      {{ form1.city }}
+      <div class="cityName">City<div class="form-required">*</div></div>
+      {{ form1.state }}
+      <div class="stateName">State<div class="form-required">*</div></div>
+      {{ form1.zipcode }}
+      <div class="zipName">Zipcode<div class="form-required">*</div></div>
+
+      <label class="custom-file-upload">
+          {{ form1.org_image }}
+          <i class="bi bi-cloud-arrow-up"></i> Add Image
+          <span id="file-selected"></span>
+      </label>
+
+      <div class="form-error-box--before">
+          
+      </div>
+      {% if form1.errors %}
+      <div class="form-error-box">
+        {% for field in form1 %}
+            {% for error in field.errors %}
+                <div class="form-error-box-card"><div class="form-error-box-ex">!</div>{{ field.label }}: {{ error|escape }}</div>
+                <p class="hide-errors">{{ field.id_for_label }}</p>
+            {% endfor %}
+        {% endfor %}
+      </div>
+      {% endif %}
+  <button class="continueBtn" id="continue-1" type="button">Continue</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal box1 fade" id="orgFormPT2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+      <h5 class="modal-title" id="exampleModalLabel">New Organization</h5>
+      <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+        <div class="page-circle-1 completed"></div>
+        <div class="page-circle-1-title" id="orgForm2-circle-1" type="button">Background Information</div>
+        <div class="page-line-1 completed-line"></div>
+
+        <div class="page-circle-2 completed-current"></div>
+        <div class="page-circle-2-title current-bold">Additional Information</div>
+        <div class="page-line-2"></div>
+
+        <div class="page-circle-3"></div>
+        <div class="page-circle-3-title" id="orgForm2-circle-3" type="button">Add Organization's Tags</div>
+        <div class="page-line-3"></div>
+
+        <div class="page-circle-4"></div>
+        <div class="page-circle-4-title" id="orgForm2-circle-4" type="button">Review Information</div>
+        <div class="page-line-4"></div>
+
+        <div class="page-circle-5"></div>
+        <div class="page-circle-5-title" id="orgForm2-circle-5" type="button">Sub Directories + Collaborators</div>
+        <div class="page-line-5"></div>
+
+        <div class="page-circle-6"></div>
+        <div class="page-circle-6-title" id="orgForm2-circle-6" type="button">Confirmation / Submission</div>
+
+        {{ form1.mail_street }}
+        <div class="mailstreetName">Street (Mail)</div>
+        {{ form1.mail_apt_number }}
+        <div class="mailaptName">Apt./Unit Number (Mail)</div>
+        {{ form1.mail_city }}
+        <div class="mailcityName">City (Mail)</div>
+        {{ form1.mail_state }}
+        <dic class="mailstateName">State (Mail)</dic>
+        {{ form1.mail_zipcode }}
+        <div class="mailzipName">Zipcode (Mail)</div>
+
+        {{ form1.contact_name }}
+        <div class="cnameName">Full Name<div class="form-required">*</div></div>
+        {{ form1.contact_phone }}
+        <div class="cphoneName">Primary Phone<div class="form-required">*</div></div>
+        {{ form1.contact_title }}
+        <div class="ctitleName">Title<div class="form-required">*</div></div>
+        {{ form1.contact_email }}
+        <div class="cemailName">Primary Email<div class="form-required">*</div></div>
+
+        <div class="languagesName">Languages Available (Select all that apply)<div class="form-required">*</div></div>
+        {% for checkbox in form1.languages %}
+            {{ checkbox }}
+        {% endfor %}
+
+        <div class="areasName">Areas Served (Select all that apply)<div class="form-required">*</div></div>
+        {% for checkbox in form1.areas_served %}
+            {{ checkbox }}
+        {% endfor %}
+
+        <div class="form-error-box--before2">
+          
+        </div>
+
+    <button class="continueBtn" id="continue-2" type="button" onclick="showInput()";>Continue</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal box1 fade" id="orgForm2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+      <h5 class="modal-title" id="exampleModalLabel">New Organization</h5>
+      <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+        <div class="page-circle-1 completed"></div>
+        <div class="page-circle-1-title" type="button" data-toggle="modal" data-target="#orgForm1" data-dismiss="modal">Background Information</div>
+        <div class="page-line-1 completed-line"></div>
+
+        <div class="page-circle-2 completed"></div>
+        <div class="page-circle-2-title" type="button" data-toggle="modal" data-target="#orgFormPT2" data-dismiss="modal">Additional Information</div>
+        <div class="page-line-2 completed-line"></div>
+
+        <div class="page-circle-3 completed-current"></div>
+        <div class="page-circle-3-title current-bold">Add Organization's Tags</div>
+        <div class="page-line-3"></div>
+
+        <div class="page-circle-4"></div>
+        <div class="page-circle-4-title" type="button" data-toggle="modal" data-target="#orgForm2PT2" data-dismiss="modal">Review Information</div>
+        <div class="page-line-4"></div>
+
+        <div class="page-circle-5"></div>
+        <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Sub Directories + Collaborators</div>
+        <div class="page-line-5"></div>
+
+        <div class="page-circle-6"></div>
+        <div class="page-circle-6-title" type="button" data-toggle="modal" data-target="#orgForm3PT2" data-dismiss="modal">Confirmation / Submission</div>
+    <div class="orgTags">
+        <div class="orgTagsTitle">Add Tags</div>
+        <div class="orgTagsDesc">Search and add services to tag with your organization</div>
+        {% for boxes in form1.org_tags %}
+          <div class="hideboxes">
+              {{ boxes }}
+          </div>
+        {% endfor %}
+        <div class="orgTagDropdown" tabindex="100">
+            <i class="fa fa-search fa-lg" id="tagsSearchIcon"></i>
+            <input type="text" placeholder="Search for tags" id="orgtagInput" onkeyup="filtertagFunction()"/>
+            <div id="tagsDropdown" class="orgTagDropdown-content">
+                {% for tag in tags %}
+                  <a class="tagA" value="{{ tag.id }}">{{ tag.tag }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!--<div class="orgTagsSearch"><i class="fa fa-search" id="tagsSearchIcon"></i><div class="tagsSearchText">Search</div></div>-->
+        <div class="orgTagsAdd" type="button" data-toggle="modal" data-target="#exampleModal">+</div>
+        <!--<div class="orgTagsSuggested">Suggested Tags</div>-->
+      <div class="tagBox">
+
+      </div>
+    </div>
+    <button class="continueBtn" type="button" data-toggle="modal" data-target="#orgForm2PT2" data-dismiss="modal" onclick="showInput();">Continue</button>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<div class="modal box1 fade" id="orgForm2PT2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+    <h5 class="modal-title" id="exampleModalLabel">New Organization</h5>
+    <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="page-circle-1 completed"></div>
+    <div class="page-circle-1-title" type="button" data-toggle="modal" data-target="#orgForm1" data-dismiss="modal">Background Information</div>
+    <div class="page-line-1 completed-line"></div>
+
+    <div class="page-circle-2 completed"></div>
+    <div class="page-circle-2-title" type="button" data-toggle="modal" data-target="#orgFormPT2" data-dismiss="modal">Additional Information</div>
+    <div class="page-line-2 completed-line"></div>
+
+    <div class="page-circle-3 completed"></div>
+    <div class="page-circle-3-title" type="button" data-toggle="modal" data-target="#orgForm2" data-dismiss="modal">Add Organization's Tags</div>
+    <div class="page-line-3 completed-line"></div>
+
+    <div class="page-circle-4 completed-current"></div>
+    <div class="page-circle-4-title current-bold">Review Information</div>
+    <div class="page-line-4"></div>
+
+    <div class="page-circle-5"></div>
+    <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Sub Directories + Collaborators</div>
+    <div class="page-line-5"></div>
+
+    <div class="page-circle-6"></div>
+    <div class="page-circle-6-title" type="button" data-toggle="modal" data-target="#orgForm3PT2" data-dismiss="modal">Confirmation / Submission</div>
+    
+  <div class="orgDetails">
+      <div class="orgDetailsTitle">Organization Details</div>
+      <div class="orgEdit" type="button" data-toggle="modal" data-target="#orgForm1" data-dismiss="modal">Edit<i class="bi bi-pencil-fill"></i></div>
+      <div class="orgNameTitle">Organization Name: </div><div id="display_org_name"></div>
+      <div class="orgWebTitle">Organization Website: </div><div id="display_website"></div>
+      <div class="orgPhoneTitle">Organization Phone: </div><div id="display_org_phone"></div>
+      <div class="orgEmailTitle">Organizaiton Email: </div><div id="display_org_email"></div>
+      <div class="orgDescTitle">Organization Description: </div><div id="display_description"></div>
+      <div class="orgEligTitle">Eligibility: </div><div id="display_eligibility"></div>
+      <div class="orgAreasTitle">Areas Served: </div><div id="display_areas_served"></div>
+      <div class="orgLangTitle">Languages: </div><div id="display_languages"></div>
+      <div class="orgDetailsLine"></div><div id="display_org_name"></div><div id="display_org_name"></div>
+      <div class="orgLocTitle">Location:</div><div id="display_street"></div><div id="display_county"></div><div id="display_city"></div>
+      <div class="orgMailTitle">Mailing Address:</div><div id="display_mailstreet"></div><div id="display_mailcity"></div>
+      <div class="orgPrimeTitle">Primary Contact:</div><div id="display_contact_name"></div><div id="display_contact_email"></div><div id="display_contact_phone"></div>
+  </div>
+  <button class="continueBtn" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Continue</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal box2 fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add New tag</h5>
+            </div>
+        <div class="modal-body">
+            {{ formset.management_form }}
+            <div id="form_set">
+                {% for form in formset.forms %}
+                    <table class='no_error'>
+                        {{ form.as_table }}
+                    </table>
+                {% endfor %}
+            </div>
+            <input type="button" value="Add More" id="add_more" class="addNewTagButton">
+            <div id="empty_form" style="display:none">
+                <table class='no_error'>
+                    {{ formset.empty_form.as_table }}
+                </table>
+            </div>
+            <button type="button" class="testbtn2">Remove Last</button>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="testbtn" data-dismiss-modal="modal2">Add Tags</button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+
+<div class="modal box1 fade" id="orgForm3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+    <h5 class="modal-title" id="exampleModalLabel">New Organization</h5>
+    <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="modal-body">
+    <div class="page-circle-1 completed"></div>
+    <div class="page-circle-1-title" type="button" data-toggle="modal" data-target="#orgForm1" data-dismiss="modal">Background Information</div>
+    <div class="page-line-1 completed-line"></div>
+
+    <div class="page-circle-2 completed"></div>
+    <div class="page-circle-2-title" type="button" data-toggle="modal" data-target="#orgFormPT2" data-dismiss="modal">Additional Information</div>
+    <div class="page-line-2 completed-line"></div>
+
+    <div class="page-circle-3 completed"></div>
+    <div class="page-circle-3-title" type="button" data-toggle="modal" data-target="#orgForm2" data-dismiss="modal">Add Organization's Tags</div>
+    <div class="page-line-3 completed-line"></div>
+
+    <div class="page-circle-4 completed"></div>
+    <div class="page-circle-4-title" type="button" data-toggle="modal" data-target="#orgForm2PT2" data-dismiss="modal">Review Information</div>
+    <div class="page-line-4 completed-line"></div>
+
+    <div class="page-circle-5 completed-current"></div>
+    <div class="page-circle-5-title current-bold">Sub Directories + Collaborators</div>
+    <div class="page-line-5"></div>
+
+    <div class="page-circle-6"></div>
+    <div class="page-circle-6-title" type="button" data-toggle="modal" data-target="#orgForm3PT2" data-dismiss="modal">Confirmation / Submission</div>
+
+
+    <div class="addToDirTitle">Add To Directories (All That Apply):</div>
+    <div class="add-to-dir__layout">
+        {% for checkbox in form2.sub_dirs %}
+            {% if checkbox.id_for_label == 'id_sub_dirs_0' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Addiction & Recovery Services</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_1' %} <label class="add-to-dir__box2">{{ checkbox }}<div class="add-to-box2" id="deselected">Counseling & Case Management</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_2' %} <label class="add-to-dir__box3">{{ checkbox }}<div class="add-to-box3" id="deselected">Disaster Relief</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_3' %} <label class="add-to-dir__box4">{{ checkbox }}<div class="add-to-box4" id="deselected">Domestic Violence & Sexual Assault</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_4' %} <label class="add-to-dir__box5">{{ checkbox }}<div class="add-to-box5" id="deselected">Emergency Shelter</div></label>
+
+            {% elif checkbox.id_for_label == 'id_sub_dirs_5' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Faith-Based Community Help</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_6' %} <label class="add-to-dir__box2">{{ checkbox }}<div class="add-to-box2" id="deselected">Food Assistance</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_7' %} <label class="add-to-dir__box3">{{ checkbox }}<div class="add-to-box3" id="deselected">Health & Fitness</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_8' %} <label class="add-to-dir__box4">{{ checkbox }}<div class="add-to-box4" id="deselected">Hospitals/Emergency Care/Medical Care</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_9' %} <label class="add-to-dir__box5">{{ checkbox }}<div class="add-to-box5" id="deselected">Housing and Housing Repair</div></label>
+        
+            {% elif checkbox.id_for_label == 'id_sub_dirs_10' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Local Farmers Markets</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_11' %} <label class="add-to-dir__box2">{{ checkbox }}<div class="add-to-box2" id="deselected">Mental & Behavioral Health</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_12' %} <label class="add-to-dir__box3">{{ checkbox }}<div class="add-to-box3" id="deselected">Nicotine/Tobacco Cessation Resources</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_13' %} <label class="add-to-dir__box4">{{ checkbox }}<div class="add-to-box4" id="deselected">Pharmacies</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_14' %} <label class="add-to-dir__box5">{{ checkbox }}<div class="add-to-box5" id="deselected">Primary Care Centers</div></label>
+            
+            {% elif checkbox.id_for_label == 'id_sub_dirs_15' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Adults & Senior Adults</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_16' %} <label class="add-to-dir__box2">{{ checkbox }}<div class="add-to-box2" id="deselected">Children</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_17' %} <label class="add-to-dir__box3">{{ checkbox }}<div class="add-to-box3" id="deselected">Youth</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_18' %} <label class="add-to-dir__box4">{{ checkbox }}<div class="add-to-box4" id="deselected">Disabilities</div></label>
+            {% elif checkbox.id_for_label == 'id_sub_dirs_19' %} <label class="add-to-dir__box5">{{ checkbox }}<div class="add-to-box5" id="deselected">Walk In Clinics</div></label>
+
+            {% else %}
+                <p>Error</p>
+            {% endif %}
+      {% endfor %}
+    </div>
+      <div class="addCollaborators">Add Collaborators</div>
+      <div class="addCollabBox">
+          {{ form1.collaborators }}
+          {% for collab in collab_accounts %}
+            {% if user.username != collab.username %}
+                <a class="org-collab__A" value="{{ collab.id }}">{{ collab.username }}</a>
+            {% endif %}
+          {% endfor %}
+      </div>
+  <button class="continueBtn" type="button" data-toggle="modal" data-target="#orgForm3PT2" data-dismiss="modal">Continue</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal box1 fade" id="orgForm3PT2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="addCircle2"><i class="bi bi-building" id="addOrgIcon2"></i></div>
+      <h5 class="modal-title" id="exampleModalLabel">New Organization</h5>
+      <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="page-circle-1 completed"></div>
+      <div class="page-circle-1-title" type="button" data-toggle="modal" data-target="#orgForm1" data-dismiss="modal">Background Information</div>
+      <div class="page-line-1 completed-line"></div>
+
+      <div class="page-circle-2 completed"></div>
+      <div class="page-circle-2-title" type="button" data-toggle="modal" data-target="#orgFormPT2" data-dismiss="modal">Additional Information</div>
+      <div class="page-line-2 completed-line"></div>
+
+      <div class="page-circle-3 completed"></div>
+      <div class="page-circle-3-title" type="button" data-toggle="modal" data-target="#orgForm2" data-dismiss="modal">Add Organization's Tags</div>
+      <div class="page-line-3 completed-line"></div>
+
+      <div class="page-circle-4 completed"></div>
+      <div class="page-circle-4-title" type="button" data-toggle="modal" data-target="#orgForm2PT2" data-dismiss="modal">Review Information</div>
+      <div class="page-line-4 completed-line"></div>
+
+      <div class="page-circle-5 completed"></div>
+      <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Sub Directories + Collaborators</div>
+      <div class="page-line-5 completed-line"></div>
+
+      <div class="page-circle-6 completed-current"></div>
+      <div class="page-circle-6-title current-bold">Confirmation / Submission</div>
+
+    
+      <div class="confirmation-question">Are you sure you want to create </div>
+      <div id="confirmation-org-title"></div>
+        
+      <button type="submit" class="confirmation-accept" id="checkthis" name="submit_form1">Yes, create organization.</button>
+      <div type="button" data-dismiss="modal" class="confirmation-decline">No, disregard.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+<!--<div class="modal box1 fade" id="fileForm1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="addCircle2"><i class="bi bi-files" id="addFileIcon2"></i></div>
+    <h5 class="modal-title" id="exampleModalLabel">New Document</h5>
+    <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+  </div>
+  <div class="modal-body">
+      <input type="file" name="my_file" id="my-file" multiple>
+      <div class="drop-zone" id="dropzone">
+          <span class="drop-zone__prompt">Drop your image here, or browse computer</span>
+          {{ formset4.management_form }}
+          <div id="form_set_file">
+              {% for form in formset4 %}
+                {{ form }}
+              {% endfor %}
+          </div>
+          <div id="empty_form_file">
+              {{ formset4.empty_form }}
+          </div>
+          <div id="file-list">
+
+          </div>
+          <select name="folders" id="folderSelect">
+              {% for folder in myfolders %}
+                {% if folder.name != 'All Files' and folder.name != 'Shared With Me' %}
+                    <option value="{{ folder.name }}">{{ folder.name }}</option>
+                {% endif %}
+              {% endfor %}
+          </select>
+      </div>
+  <button class="continueBtn" id="fileSubmit" type="submit">Continue</button>
+  </div>
+</div>
+</div>
+</div>-->
+
+<div class="modal box1 fade" id="fileForm1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="addCircle2"><i class="bi bi-files" id="addFileIcon2"></i></div>
+        <h5 class="modal-title" id="exampleModalLabel">New Document</h5>
+        <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+          <input type="file" name="my_file" id="my-file" multiple>
+          <div class="drop-zone" id="dropzone">
+              <span class="drop-zone__prompt">Drop your image here, or browse computer</span>
+          </div>
+          {{ formset4.management_form }}
+              <div id="form_set_file">
+                  {% for form in formset4 %}
+                    {{ form }}
+                  {% endfor %}
+              </div>
+              <div id="empty_form_file">
+                  {{ formset4.empty_form }}
+              </div>
+          <div id="file-list">
+    
+          </div>
+          <select name="folders" id="folderSelect">
+            {% for folder in myfolders %}
+              {% if folder.name != 'All Files' and folder.name != 'Shared With Me' %}
+                  <option value="{{ folder.name }}">{{ folder.name }}</option>
+              {% endif %}
+            {% endfor %}
+        </select>
+      <button class="continueBtn" id="fileSubmit" type="submit">Continue</button>
+      </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal box3 fade" id="collabModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Collaborators</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <ul name="collaborators" id="collaboratorsChoice">
+                    {% for account in collab_accounts %}
+                        {% if account != user %}
+                            <li class="file-collab--remove">
+                                <label for="collabCheck{{ account }}">
+                                    <input type="checkbox" value="{{ account.id }}" id="collabCheck{{ account }}"  name="collabCheckboxes"/>
+                                    {{ account }}
+                                </label>
+                            </li>
+                            <li class="file-collab__A" value="{{ account.id }}">{{ account }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <button type="button" class="collabButton" data-dismiss="modal">click me!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal box3 fade" id="filetagModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tags</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <ul name="filetags" id="filetagsChoice">
+                    {% for tag in tags %}
+                            <li class="file-tag--remove">
+                                <label for="filetagCheck{{ tag }}">
+                                    <input type="checkbox" value="{{ tag.id }}" id="filetagCheck{{ tag }}"  name="filetagCheckboxes"/>
+                                    {{ tag }}
+                                </label>
+                            </li>
+                            <li class="file-tag__A" value="{{ tag.id }}">{{ tag }}</li>
+                    {% endfor %}
+                </ul>
+                <button type="button" class="filetagButton" data-dismiss="modal">click me!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</form>

@@ -1,0 +1,319 @@
+.chat-container {
+    max-width: 1500px;
+    width: 100%;
+    height: 90%;
+    background: #f8f8f8 none repeat scroll 0 0;
+    border: 1px solid #ccc;
+}
+
+.chat-log {
+    position: relative;
+    z-index: 1;
+    overflow: auto;
+    border-bottom: 1px solid #c4c4c4;
+    border: 2px solid #dedede;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    height: 70%;
+}
+
+.list-of-members span,
+b {
+    display: block;
+    font-family: Helvetica;
+    color: black;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+    .list-of-members span:hover {
+        background-color: rgb(0, 119, 255);
+    }
+
+.left-panel {
+    float: left;
+    overflow: hidden;
+    border-right: 1px solid #c4c4c4;
+    width: 100%;
+    height: 400px;
+}
+
+.left-panel-header {
+    position: relative;
+    height: 10%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    background-color: #fcfcfc;
+}
+
+.middle-panel {
+    position: relative;
+    float: left;
+    overflow: hidden;
+    border-right: 1px solid #c4c4c4;
+    top: 0;
+    display: none;
+    height: 400px;
+    width: 100%;
+}
+
+.rooms-container {
+    border-bottom: 1px solid #c4c4c4;
+    overflow: auto;
+    background: #f8f8f8 none repeat scroll 0 0;
+    height: 85%;
+    width: 100%;
+    position: absolute;
+}
+
+.rooms {
+    position: relative;
+    float: left;
+    overflow: hidden;
+    width: 100%;
+}
+
+.right-panel {
+    position: relative;
+    float: left;
+    overflow: hidden;
+    width: 26%;
+    height: 400px;
+    background-color: #d7d7d7;
+}
+
+.rightAccordion {
+    background-color: #d7d7d7;
+    color: #013d44;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    height: 10%;
+    border-bottom: 1px;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-style: solid;
+    border-color: #afafaf;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+    margin-bottom: 5px;
+    display: none;
+}
+
+    .rightActive,
+    .rightAccordion:hover {
+        background-color: #ccc;
+    }
+
+    .rightAccordion:after {
+        content: "\1433";
+        color: #afafaf;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+    }
+
+.rightActive:after {
+    content: "\142F";
+}
+
+.rightPanel {
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.right-btn-group button {
+    background-color: white;
+    /* Green background */
+    border: none;
+    /* Green border */
+    color: #5f5f5f;
+    /* White text */
+    padding: 10px 24px;
+    /* Some padding */
+    cursor: pointer;
+    /* Pointer/hand icon */
+    width: 100%;
+    /* Set a width if needed */
+    height: 10%;
+    display: block;
+    /* Make the buttons appear below each other */
+    text-align: left;
+}
+
+    .right-btn-group button:not(:last-child) {
+        border-bottom: none;
+        /* Prevent double borders */
+    }
+
+    /* Add a background color on hover */
+    .right-btn-group button:hover {
+        background-color: #afafaf;
+    }
+
+.creating-chat-section {
+    height: 5%;
+}
+
+#create-chat {
+    position: relative;
+    text-align: center;
+}
+
+.rooms li {
+    border: 1px solid #ddd;
+    background-color: #f6f6f6;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    color: black;
+    display: block;
+    cursor: pointer;
+}
+
+    .rooms li:hover {
+        background-color: #eee;
+    }
+
+.input-section {
+    position: relative;
+    bottom: 0;
+}
+
+.user-header {
+    position: relative;
+    height: 10%;
+    background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    padding-top: 0.01px;
+}
+
+    .user-header:after {
+        font-size: 50px;
+        color: #afafaf;
+        font-weight: bold;
+        float: right;
+    }
+
+.incoming {
+    position: relative;
+    float: left;
+    margin-bottom: 5px;
+    font-size: 14px;
+    padding: 5px 10px 5px 12px;
+    width: 80%;
+    border-radius: 3px;
+    background: #a0a0a0 none repeat scroll 0 0;
+}
+
+.outgoing {
+    position: relative;
+    background: grey none repeat scroll 0 0;
+    border-radius: 3px;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #fff;
+    padding: 5px 10px 5px 12px;
+    float: right;
+    width: 80%;
+}
+
+.msg_send_btn {
+    background: #4c4c4c none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    font-size: 17px;
+    height: 33px;
+    top: 5px;
+    width: 5%;
+}
+
+.unread-messages {
+    max-width: 15px;
+    max-height: 15px;
+    width: 15px;
+    height: 15px;
+    white-space: normal;
+    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 50%;
+    background-color: blue;
+}
+
+.profile-pic {
+    max-width: 32px;
+    max-height: 32px;
+    width: 32px;
+    height: 32px;
+    white-space: normal;
+    margin-right: 15px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    line-height: 150px;
+    cursor: context-menu;
+    overflow: hidden;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.middle-panel input[type="text"] {
+    float: left;
+    padding: 6px;
+    margin-left: 16px;
+    border: none;
+    font-size: 17px;
+    width: 70%;
+    border-radius: 12px;
+    margin-top: 4.5%;
+}
+
+.left-panel-header .search-container {
+    float: center;
+    margin-left: 16px;
+}
+
+.left-panel-header input[name="search"] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #afafaf;
+    width: 80%;
+    height: 60%;
+}
+
+.left-panel-header .search-container button {
+    float: center;
+    padding: 6px 10px;
+    margin-top: 8px;
+    background: #afafaf;
+    font-size: 17px;
+    cursor: pointer;
+    height: 55%;
+}
+
+    .left-panel-header .search-container button:hover {
+        background: #ccc;
+    }
+
+body {
+    margin: 0;
+    background-color: #ebf2f2;
+    font-family: effra, Helvetica;
+}

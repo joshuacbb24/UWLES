@@ -1,10 +1,17 @@
 """
 Definition of models.
 """
+import geocoder
 import random
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group
+from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils import timezone
+
+mapbox_access_token = 'pk.eyJ1IjoidXdsZXN0ZXN0YWRtaW4iLCJhIjoiY2twdTYzZnU0MHdidjJ2cG0xM2h0dXJsdyJ9.lktGtwWKbT-GAmSUOQNEdA'
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, password=None):
@@ -244,53 +251,138 @@ class Services(models.Model):
     def __str__(self):
         return self.service_name
 
-
-class ServicesProvided(models.Model):
+class PillTags(models.Model):
     tag = models.CharField(max_length = 25, unique = True)
-
+    
     def __str__(self):
         return self.tag
 
-class SkillsExpertise(models.Model):
-    tag = models.CharField(max_length = 25, unique = True)
+class Eligibility(models.Model):
+    ELIGIBILITY_CHOICES = (
+        ('All Ages', 'All Ages'),
+        ('Youth(under 12)', 'Youth(under 12)'),
+        ('Teens(13-17)', 'Teens(13-17)'),
+        ('Adults(18+)', 'Adults(18+)'),
+        ('Seniors(60+)', 'Seniors(60+)'),
+        )
+    eligibility = models.CharField(max_length = 75, choices = ELIGIBILITY_CHOICES)
 
     def __str__(self):
-        return self.tag
+        return self.eligibility
 
-class IndividualListing(models.Model):
-    first_name = models.CharField(max_length = 30)
-    last_name = models.CharField(max_length = 30)
-    phone_number = models.CharField(max_length = 10)
-    email = models.EmailField(max_length = 60)
-    address = models.CharField(max_length = 100)
-    city = models.CharField(max_length = 25)
-    state = models.CharField(max_length = 20)
-    zipcode = models.CharField(max_length = 10)
-    description = models.CharField(max_length = 500)
-    services_provided = models.ManyToManyField(ServicesProvided, blank = True,  related_name = "servicesprovided")
-    skills_expertise = models.ManyToManyField(SkillsExpertise, blank = True, related_name = "skillsexpertise")
+class Counties(models.Model):
+    COUNTY_CHOICES = (
+        ('Worcester', 'Worcester'),
+        ('Wicomico', 'Wicomico'),
+        ('Somerset', 'Somerset'),
+        ('Dorchester', 'Dorchester'),
+    )
+    county = models.CharField(max_length=20, choices=COUNTY_CHOICES, primary_key=True)
 
-    class Meta:
-        unique_together = (('first_name', 'last_name', 'email'))
-      
     def __str__(self):
-        fullname = self.first_name + self.last_name
-        return fullname
+        return self.county
 
-class OrganizationListing(models.Model):
+class Languages(models.Model):
+    LANGUAGE_CHOICES = (
+        ('English', 'English'),
+        ('Spanish', 'Spanish'),
+    )
+    language = models.CharField(max_length=20, choices=LANGUAGE_CHOICES, primary_key=True)
+
+    def __str__(self):
+        return self.language
+
+class Organizations(models.Model):
+    COUNTY_CHOICES = (
+        ('Worcester', 'Worcester'),
+        ('Wicomico', 'Wicomico'),
+        ('Somerset', 'Somerset'),
+        ('Dorchester', 'Dorchester'),
+        )
+    STATE_CHOICES = (
+        ('MD', 'MD'),
+        )
+    LANGUAGE_CHOICES = (
+        ('English', 'English'),
+        ('Spanish', 'Spanish'),
+    )
     org_name = models.CharField(max_length = 100, unique = True)
-    phone_number = models.CharField(max_length = 10)
-    email = models.EmailField(max_length = 60)
-    website = models.CharField(max_length = 100, default='default.org')
-    address = models.CharField(max_length = 100)
-    city = models.CharField(max_length = 25)
-    state = models.CharField(max_length = 20)
-    zipcode = models.CharField(max_length = 10)
+    website = models.CharField(max_length = 100)
+    org_phone = models.CharField(max_length = 10)
+    org_email = models.EmailField(max_length = 60)
+    org_fax = models.CharField(max_length = 10, blank = True)
     description = models.CharField(max_length = 500)
-    services_provided = models.ManyToManyField(ServicesProvided, blank = True,  related_name = "providedservices")
+    eligibility = models.ManyToManyField(Eligibility)
+
+    street = models.CharField(max_length = 100)
+    apt_number = models.CharField(max_length = 10, blank = True, null = True)
+    city = models.CharField(max_length = 25)
+    state = models.CharField(max_length = 20, choices = STATE_CHOICES)
+    zipcode = models.CharField(max_length = 10)
+    county = models.CharField(max_length = 10, choices = COUNTY_CHOICES)
+
+    mail_street = models.CharField(max_length = 100, blank = True, null = True)
+    mail_apt_number = models.CharField(max_length = 10, blank = True, null = True)
+    mail_city = models.CharField(max_length = 25, blank = True, null = True)
+    mail_state = models.CharField(max_length = 20, choices = STATE_CHOICES, blank = True, null = True)
+    mail_zipcode = models.CharField(max_length = 10, blank = True, null = True)
+    mail_county = models.CharField(max_length = 10, choices = COUNTY_CHOICES, blank = True, null = True)
+
+    contact_name = models.CharField(max_length = 70)
+    contact_phone = models.CharField(max_length = 10)
+    contact_title = models.CharField(max_length = 50)
+    contact_email = models.EmailField(max_length = 60)
+
+    org_tags = models.ManyToManyField(PillTags, blank = True)
+    org_image = models.ImageField(null = True, blank = True, upload_to = 'org_pics')
+
+    collaborators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
+
+    languages = models.ManyToManyField(Languages, blank=True)
+
+    areas_served = models.ManyToManyField(Counties, blank=True)
+
+    lat = models.FloatField(blank = True, null = True)
+    long = models.FloatField(blank = True, null = True)
 
     def __str__(self):
         return self.org_name
+
+    def save(self, *args, **kwargs):
+        address = self.street + "," + self.city + "," + self.state + " " + self.zipcode
+        g = geocoder.mapbox(address, key = mapbox_access_token)
+        g = g.latlng
+        self.lat = g[0]
+        self.long = g[1]
+        return super(Organizations, self).save(*args, **kwargs)
+
+    def addextra(testmodel, pills):
+        list = Organizations.objects.get(org_name=testmodel)
+        for pill in pills:
+            list.org_tags.add(pill)
+
+class FileListing(models.Model):
+    file = models.FileField(unique = True)
+    title = models.CharField(max_length = 50)
+    description = models.CharField(max_length = 100)
+
+class SubDirectory(models.Model):
+    name = models.CharField(max_length = 50, unique = True)
+    description = models.CharField(max_length = 200)
+    subdirectory_organization = models.ManyToManyField(Organizations, blank = True, related_name = "organizations")
+
+    def __str__(self):
+        return self.name
+
+    def add_org(org, subdirs):
+        test1 = SubDirectory.objects.all()
+        test2 = test1.difference(subdirs)
+        for subdir in subdirs:
+            list = SubDirectory.objects.get(name=subdir)
+            list.subdirectory_organization.add(org)
+        for subdir in test2:
+            list = SubDirectory.objects.get(name=subdir)
+            list.subdirectory_organization.remove(org)
 
 class ResourceDirectory(models.Model):
     dir_name = models.CharField(max_length = 50, unique = True)
@@ -305,3 +397,176 @@ class UploadedFile(models.Model):
     file = models.FileField()
     owner = models.ForeignKey(Account, null=True, on_delete=models.PROTECT)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+class TestModel(models.Model):
+    name = models.CharField(max_length = 10, unique = True)
+    testtags = models.ManyToManyField(PillTags, blank = True)
+
+    def __str__(self):
+        return self.name
+
+    def addextra(testmodel, pills):
+        list = TestModel.objects.get(name=testmodel)
+        for pill in pills:
+            list.testtags.add(pill)
+
+class DirectoryFiles(models.Model):
+    file = models.FileField(upload_to='file_directory/', blank = False)
+    document_name = models.CharField(max_length = 50, blank = True)
+    description = models.CharField(max_length = 200, blank = True)
+    tags = models.ManyToManyField(PillTags, blank = True)
+
+    def __str__(self):
+        return str(self.id)
+
+class FileSubFolder(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length = 50, blank = False)
+    file = models.ManyToManyField(DirectoryFiles, blank = True)
+    subfolder = models.ManyToManyField('self', blank = True, symmetrical=False)
+    
+    class Meta:
+        unique_together = (('user', 'name'))
+
+    def __str__(self):
+        return str(self.user) + "'s " + str(self.name)
+
+    def add_to_folder(file, user, folder):
+        my_folder = FileSubFolder.objects.get(name=folder, user=user)
+        my_folder.file.add(file)
+        my_all_folder = FileFolder.objects.get(name="All Files", user=user)
+        my_all_folder.file.add(file)
+
+    def findpath(folder, user):
+        hasParent = True
+        original_folder = FileSubFolder.objects.get(id=folder, user=user)
+        my_folder = FileSubFolder.objects.get(id=folder, user=user)
+        my_path = {}
+        while(hasParent):
+            try:
+                parent_folder = FileSubFolder.objects.get(subfolder=my_folder)
+                try:
+                    normal_folder = FileFolder.objects.get(subfolder=parent_folder)
+                except FileFolder.DoesNotExist:
+                    normal_folder = None
+                if (normal_folder == None):
+                    pass
+                else:
+                    my_path[normal_folder] = [normal_folder.id, 1]
+                my_folder = parent_folder
+                my_path[my_folder] = [my_folder.id, 2]
+            except FileSubFolder.DoesNotExist:
+                try:
+                    normal_folder = FileFolder.objects.get(subfolder=my_folder)
+                except FileFolder.DoesNotExist:
+                    normal_folder = None
+                if (normal_folder == None):
+                    pass
+                else:
+                    my_path[normal_folder] = [normal_folder.id, 1]
+                hasParent = False
+                my_path[original_folder] = [original_folder.id, 2]
+        return my_path
+
+    def delete(self):
+        for sub in self.subfolder.all():
+            sub.delete()
+        super(FileSubFolder, self).delete()
+
+class FileFolder(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length = 50, blank = False)
+    file = models.ManyToManyField(DirectoryFiles, blank = True)
+    subfolder = models.ManyToManyField(FileSubFolder, blank = True)
+
+    class Meta:
+        unique_together = (('user', 'name'))
+
+    def __str__(self):
+        return str(self.user) + "'s " + str(self.name)
+
+    @receiver(post_save, sender=get_user_model())
+    def create_defaults(sender, instance, created, **kwargs):
+        if created:
+            FileFolder.objects.create(user=instance, name="All Files")
+            FileFolder.objects.create(user=instance, name="Shared With Me")
+            FileFolder.objects.create(user=instance, name="Personal")
+
+    def add_to_folder(file, user, folder):
+        my_folder = FileFolder.objects.get(name=folder, user=user)
+        my_folder.file.add(file)
+        my_all_folder = FileFolder.objects.get(name="All Files", user=user)
+        my_all_folder.file.add(file)
+
+    def delete(self):
+        for sub in self.subfolder.all():
+            sub.delete()
+        super(FileFolder, self).delete()
+
+class SharedWithMe(models.Model):
+    name = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
+    organization = models.ManyToManyField(Organizations, blank = True)
+    file = models.ManyToManyField(DirectoryFiles, blank = True)
+
+    def __str__(self):
+        return str(self.name) + " 's organizations"
+
+    def addorg(collabs, org):
+        test1 = Account.objects.filter(is_caseworker=True)
+        test2 = test1.difference(collabs)
+        for collab in collabs:
+            try:
+                obj = SharedWithMe.objects.get(name=collab)
+            except SharedWithMe.DoesNotExist:
+                obj = SharedWithMe(name=collab)
+                obj.save()
+
+            obj.organization.add(org)
+        for collab in test2:
+            try:
+                obj = SharedWithMe.objects.get(name=collab)
+            except SharedWithMe.DoesNotExist:
+                obj = SharedWithMe(name=collab)
+                obj.save()
+            obj.organization.remove(org)
+
+    def addindorg(collab, org):
+        try:
+            obj = SharedWithMe.objects.get(name=collab)
+        except SharedWithMe.DoesNotExist:
+            obj = SharedWithMe(name=collab)
+            obj.save()
+
+        obj.organization.add(org)
+
+    def addfile(collabs, file):
+        for collab in collabs:
+            try:
+                obj = SharedWithMe.objects.get(name=collab)
+            except SharedWithMe.DoesNotExist:
+                obj = SharedWithMe(name=collab)
+                obj.save()
+
+            obj.file.add(file)
+            FileFolder.add_to_folder(file, collab, "Shared With Me")
+
+    def addindfile(collab, file):
+        try:
+            obj = SharedWithMe.objects.get(name=collab)
+        except SharedWithMe.DoesNotExist:
+            obj = SharedWithMe(name=collab)
+            obj.save()
+
+        obj.file.add(file)
+        FileFolder.add_to_folder(file, collab, "Shared With Me")
+
+class RecentFiles(models.Model):
+    file = models.ForeignKey(DirectoryFiles, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    time_viewed = models.DateField()
+
+    def save(self, *args, **kwargs):
+        '''On save, update view time (time_viewed)'''
+        self.time_viewed = timezone.now()
+        return super(RecentFiles, self).save(*args, **kwargs)
+

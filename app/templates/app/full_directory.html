@@ -1,0 +1,805 @@
+﻿{% extends 'app/format.html' %}
+{% block header1 %}
+    <a href="{% url 'dashboard' %}">
+        <span id="fist-element" class="las la-home"></span>
+    </a>
+{% endblock %}
+{% block header2 %}
+    <a href="{% url 'fulldirectory' %}" class="active">
+        <span class="las la-book"></span>
+    </a>
+{% endblock %}
+{% block header3 %}
+    <a href="{% url 'multichat' %}">
+        <span class="las la-comment-alt"></span>
+    </a>
+{% endblock %}
+{% block header4 %}
+    <a href="">
+        <span class="las la-user-friends"></span>
+    </a>
+{% endblock %}
+{% block header5 %}
+    <a href="">
+        <span class="las la-plus-circle"></span>
+    </a>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+{% load project_templates %}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://kit.fontawesome.com/f0b88b09a7.js" crossorigin="anonymous"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/directory.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/myModal.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/addOptions.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/moreOptions.css' %}"/>
+
+    <style>
+        .fa-wine-bottle{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-male{
+            position: relative;
+            top: 50%;
+            left: 40%;
+            transform: translate(-100%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-female{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-baby{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-couch{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-wheelchair{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-cloud-showers-heavy{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-fist-raised{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-building{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-pray{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-utensils{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }   
+
+        .fa-heartbeat{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-hospital{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-house-damage{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-seedling{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-brain{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-smoking{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-pills{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-hand-holding-medical{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-clinic-medical{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+        .fa-child{
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FFBA00;
+        }
+
+
+    </style>
+    <script>
+        function filtercatFunction() {
+        var input, filter, div, a, i;
+        input = document.getElementById("searchbar");
+        filter = input.value.toUpperCase();
+        a = document.getElementsByClassName("h2title")
+        b = document.getElementsByClassName("listname");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                $(a[i]).parent().css("display", "")
+                $(b[i]).parent().css("display", "")
+            } else {
+                $(a[i]).parent().css("display", "none")
+                $(b[i]).parent().css("display", "none")
+            }
+        }
+    }
+    </script>
+</head>
+<body>
+    <div class="directoryBar"></div>
+    <div class="fullActive">Full Directory</div>
+    <a href="{% url 'orgdirectory' %}" class="orgHidden">Organizational Directory</a>
+    <a href="{% url 'documentdirectory' %}" class="fileHidden">Documents Directory</a>
+
+    <!--<div class="searchbar"><i class="fa fa-search" aria-hidden="true" id="searchBarIcon"></i></div>-->
+    <div class="searchbarcontainer">
+        <input type="text" placeholder="Search for category..." class="searchbar" id="searchbar" onkeyup="filtercatFunction()">
+        <i class="fa fa-search" aria-hidden="true" id="searchBarIcon"></i>
+    </div>
+    <!--<select class="locationDD">
+        <option value="0">Location</option>
+        <option value="1">Wicomico</option>
+        <option value="2">Worcester</option>
+        <option value="3">Somerset</option>
+        <option value="4">Dorchester</option>
+    </select>
+
+    <select class="eligibilityDD">
+        <option value="0">Eligibility</option>
+        <option value="1">All Ages</option>
+        <option value="2">Children</option>
+        <option value="3">Adults</option>
+        <option value="4">Seniors</option>
+    </select>-->
+
+    <button class="addBox" type="button" data-toggle="modal" data-target="#addModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> New</p></button>
+    <button class="editBox" type="button" data-toggle="modal" data-target="#editModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> Edit</p></button>
+
+    {% include "app/directory_forms.html" %}
+
+    <div class="divideLine"></div>
+
+    <div class="gridBox" id="visible"></div>
+    <div class="gridPH" id="gridIcon"><i class="fa fa-th" aria-hidden="true"></i></div>
+
+    <div class="listBox" id="hidden"></div>
+    <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
+
+    <a href="{% url 'fulldirectory' %}" class="dirPath">Full Directory</a>
+
+    <div class="gridLayout" id="visible" name="gridlayout">
+        <div class="dirCard"><div class="circle"><i class="fas fa-wine-bottle fa-2x"></i></div><h2 class="h2title">{{ addiction.name }}</h2><p class="ptext">{{ addiction.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' addiction.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-male fa-2x"></i><i class="fas fa-female fa-2x"></i></div><h2 class="h2title">{{ adults.name }}</h2><p class="ptext">{{ adults.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' adults.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-baby fa-2x"></i></div><h2 class="h2title">{{ children.name }}</h2><p class="ptext">{{ children.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' children.id 1 %}'">Explore</button></div>
+
+        <div class="dirCard"><div class="circle"><i class="fas fa-couch fa-2x"></i></div><h2 class="h2title">{{ counseling.name }}</h2><p class="ptext">{{ counseling.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' counseling.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-wheelchair fa-2x"></i></div><h2 class="h2title">{{ disabilities.name }}</h2><p class="ptext">{{ disabilities.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' disabilities.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-cloud-showers-heavy fa-2x"></i></div><h2 class="h2title">{{ disaster.name }}</h2><p class="ptext">{{ disaster.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' disaster.id 1 %}'">Explore</button></div>
+
+        <div class="dirCard"><div class="circle"><i class="fas fa-fist-raised fa-2x"></i></div><h2 class="h2title">{{ domestic.name }}</h2><p class="ptext">{{ domestic.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' domestic.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-building fa-2x"></i></div><h2 class="h2title">{{ emergency.name }}</h2><p class="ptext">{{ emergency.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' emergency.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-pray fa-2x"></i></div><h2 class="h2title">{{ faith.name }}</h2><p class="ptext">{{ faith.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' faith.id 1 %}'">Explore</button></div>
+
+        <div class="dirCard"><div class="circle"><i class="fas fa-utensils fa-2x"></i></div><h2 class="h2title">{{ food.name }}</h2><p class="ptext">{{ food.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' food.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-heartbeat fa-2x"></i></div><h2 class="h2title">{{ health.name }}</h2><p class="ptext">{{ health.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' health.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-hospital fa-2x"></i></div><h2 class="h2title">{{ hospitals.name }}</h2><p class="ptext">{{ hospitals.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' hospitals.id 1 %}'">Explore</button></div>
+
+        <div class="dirCard"><div class="circle"><i class="fas fa-house-damage fa-2x"></i></div><h2 class="h2title">{{ housing.name }}</h2><p class="ptext">{{ housing.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' housing.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-seedling fa-2x"></i></div><h2 class="h2title">{{ local.name }}</h2><p class="ptext">{{ local.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' local.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-brain fa-2x"></i></div><h2 class="h2title">{{ mental.name }}</h2><p class="ptext">{{ mental.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' mental.id 1 %}'">Explore</button></div>
+
+        <div class="dirCard"><div class="circle"><i class="fas fa-smoking fa-2x"></i></div><h2 class="h2title">{{ nicotine.name }}</h2><p class="ptext">{{ nicotine.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' nicotine.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-pills fa-2x"></i></div><h2 class="h2title">{{ pharmacies.name }}</h2><p class="ptext">{{ pharmacies.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' pharmacies.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-hand-holding-medical fa-2x"></i></div><h2 class="h2title">{{ primary_care.name }}</h2><p class="ptext">{{ primary_care.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' primary_care.id 1 %}'">Explore</button></div>
+
+        <div class="dirCard"><div class="circle"><i class="fas fa-clinic-medical fa-2x"></i></div><h2 class="h2title">{{ walk_in.name }}</h2><p class="ptext">{{ walk_in.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' walk_in.id 1 %}'">Explore</button></div>
+        <div class="dirCard"><div class="circle"><i class="fas fa-child fa-2x"></i></div><h2 class="h2title">{{ youth.name }}</h2><p class="ptext">{{ youth.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' youth.id 1 %}'">Explore</button></div>
+    </div>
+
+    <div class="listCategory" id="hidden">Category</div>
+    <!--<div class="listOrder" id="hidden"><div class="listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="Arrow"></i><div class="listZ">Z</div></div>-->
+    <div class="listDsc" id="hidden">Description</div>
+    <div class="listLayout" id="hidden">
+        <div class="dir-list"><div class="listName">{{ addiction.name }}</div><div class="listDescript">{{ addiction.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' addiction.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ adults.name }}</div><div class="listDescript">{{ adults.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' adults.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ children.name }}</div><div class="listDescript">{{ children.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' children.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ counseling.name }}</div><div class="listDescript">{{ counseling.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' counseling.id 2 %}'">Explore</button></div>
+
+        <div class="dir-list"><div class="listName">{{ disabilities.name }}</div><div class="listDescript">{{ disabilities.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' disabilities.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ disaster.name }}</div><div class="listDescript">{{ disaster.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' disaster.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ domestic.name }}</div><div class="listDescript">{{ domestic.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' domestic.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ emergency.name }}</div><div class="listDescript">{{ emergency.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' emergency.id 2 %}'">Explore</button></div>
+
+        <div class="dir-list"><div class="listName">{{ faith.name }}</div><div class="listDescript">{{ faith.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' faith.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ food.name }}</div><div class="listDescript">{{ food.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' food.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ health.name }}</div><div class="listDescript">{{ health.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' health.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ hospitals.name }}</div><div class="listDescript">{{ hospitals.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' hospitals.id 2 %}'">Explore</button></div>
+
+        <div class="dir-list"><div class="listName">{{ housing.name }}</div><div class="listDescript">{{ housing.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' housing.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ local.name }}</div><div class="listDescript">{{ local.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' local.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ mental.name }}</div><div class="listDescript">{{ mental.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' mental.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ nicotine.name }}</div><div class="listDescript">{{nicotine.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' nicotine.id 2 %}'">Explore</button></div>
+
+        <div class="dir-list"><div class="listName">{{ pharmacies.name }}</div><div class="listDescript">{{ pharmacies.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' pharmacies.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ primary_care.name }}</div><div class="listDescript">{{ primary_care.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' primary_care.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ walk_in.name }}</div><div class="listDescript">{{ walk_in.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' walk_in.id 2 %}'">Explore</button></div>
+        <div class="dir-list"><div class="listName">{{ youth.name }}</div><div class="listDescript">{{ youth.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' youth.id 2 %}'">Explore</button></div>
+    </div>
+
+    <script src="{% static 'app/scripts/directory.js' %}"></script>
+    <script src="{% static 'app/scripts/formvalidation.js' %}"></script>
+    <script src="{% static 'app/scripts/test2.js' %}"></script>
+    <script src="{% static 'app/scripts/test.js' %}"></script>
+    <script>
+        document.formHasErrors = {% if form1.errors %}true{% else %}false{% endif %}
+
+        $('#id_org_name').on('input', function (){
+            var id_org_name = $(this).val();
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'org_name': id_org_name
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.is_taken){
+                        $('#id_org_name').addClass('error-review')
+                        $('.orgName').addClass('error-review-label')
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-name-error'><div class='form-error-box-ex' id='form-error-org-name-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.name_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-name-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-name-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                    else{
+                        if ($('#id_org_name').hasClass('error-review')){
+                            $('#id_org_name').removeClass('error-review')
+                            $('.orgName').removeClass('error-review-label')
+                            $('.form-error-box--before').children('#form-error-org-name-error').remove()
+                        }
+                    }
+                }
+            });
+        });
+
+    $('#id_website').on('input', function (){
+        var id_website = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_website': id_website
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.web_invalid){
+                    $('#id_website').addClass('error-review')
+                    $('.webName').addClass('error-review-label')
+                    if ($('#form-error-org-website-error').length == 0){
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-website-error'><div class='form-error-box-ex' id='form-error-org-website-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.website_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-website-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-website-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_website').hasClass('error-review')){
+                        $('#id_website').removeClass('error-review')
+                        $('.webName').removeClass('error-review-label')
+                        $('.form-error-box--before').children('#form-error-org-website-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-website]').on('input', function (){
+        var id_website = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editform/g, '');
+        thisvalue--;
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_website': id_website
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.web_invalid){
+                    $('[id^=id_orgs][id$=-website]').addClass('error-review')
+                    $('.webName').addClass('error-review-label')
+                    if ($('#form-error-org-website-error').length == 0){
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-website-error'><div class='form-error-box-ex' id='form-error-org-website-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.website_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-website-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-website-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs][id$=-website]').hasClass('error-review')){
+                        $('[id^=id_orgs][id$=-website]').removeClass('error-review')
+                        $('.webName').removeClass('error-review-label')
+                        $('.form-error-box--before-pt1' + thisvalue).children('#form-error-org-website-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_org_phone').on('input', function (){
+        var id_org_phone = $(this).val();
+        id_org_phone = id_org_phone.replace(/\(|\)|\-/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_phone': id_org_phone
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.phone_invalid){
+                    $('#id_org_phone').addClass('error-review')
+                    $('.phoneName').addClass('error-review-label')
+                    if ($('#form-error-org-phone-error').length == 0){
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-phone-error'><div class='form-error-box-ex' id='form-error-org-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.phone_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_org_phone').hasClass('error-review')){
+                        $('#id_org_phone').removeClass('error-review')
+                        $('.phoneName').removeClass('error-review-label')
+                        $('.form-error-box--before').children('#form-error-org-phone-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-org_phone]').on('input', function (){
+        var id_org_phone = $(this).val();
+        id_org_phone = id_org_phone.replace(/\(|\)|\-/g, '');
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editform/g, '');
+        thisvalue--;
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_phone': id_org_phone
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.phone_invalid){
+                    $('[id^=id_orgs-][id$=-org_phone]').addClass('error-review')
+                    $('.phoneName').addClass('error-review-label')
+                    if ($('#form-error-org-phone-error').length == 0){
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-phone-error'><div class='form-error-box-ex' id='form-error-org-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.phone_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-org_phone]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-org_phone]').removeClass('error-review')
+                        $('.phoneName').removeClass('error-review-label')
+                        $('.form-error-box--before-pt1' + thisvalue).children('#form-error-org-phone-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_org_email').on('input', function (){
+        var id_org_email = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_email': id_org_email
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.email_invalid){
+                    $('#id_org_email').addClass('error-review')
+                    $('.emailName').addClass('error-review-label')
+                    if ($('#form-error-org-email-error').length == 0){
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-email-error'><div class='form-error-box-ex' id='form-error-org-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.email_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-email-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_org_email').hasClass('error-review')){
+                        $('#id_org_email').removeClass('error-review')
+                        $('.emailName').removeClass('error-review-label')
+                        $('.form-error-box--before').children('#form-error-org-email-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-org_email]').on('input', function (){
+        var id_org_email = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editform/g, '');
+        thisvalue--;
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_email': id_org_email
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.email_invalid){
+                    $('[id^=id_orgs-][id$=-org_email]').addClass('error-review')
+                    $('.emailName').addClass('error-review-label')
+                    if ($('#form-error-org-email-error').length == 0){
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-email-error'><div class='form-error-box-ex' id='form-error-org-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.email_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-email-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-org_email]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-org_email]').removeClass('error-review')
+                        $('.emailName').removeClass('error-review-label')
+                        $('.form-error-box--before-pt1' + thisvalue).children('#form-error-org-email-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_zipcode').on('input', function (){
+        var id_zipcode = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_zipcode': id_zipcode
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.zipcode_invalid){
+                    $('#id_zipcode').addClass('error-review')
+                    $('.zipName').addClass('error-review-label')
+                    if ($('#form-error-org-zipcode-error').length == 0){
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-zipcode-error'><div class='form-error-box-ex' id='form-error-org-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.zipcode_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_zipcode').hasClass('error-review')){
+                        $('#id_zipcode').removeClass('error-review')
+                        $('.zipName').removeClass('error-review-label')
+                        $('.form-error-box--before').children('#form-error-org-zipcode-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-zipcode]').on('input', function (){
+        var id_zipcode = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editform/g, '');
+        thisvalue--;
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_zipcode': id_zipcode
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.zipcode_invalid){
+                    $('[id^=id_orgs-][id$=-zipcode]').addClass('error-review')
+                    $('.zipName').addClass('error-review-label')
+                    if ($('#form-error-org-zipcode-error').length == 0){
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-zipcode-error'><div class='form-error-box-ex' id='form-error-org-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.zipcode_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-zipcode]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-zipcode]').removeClass('error-review')
+                        $('.zipName').removeClass('error-review-label')
+                        $('.form-error-box--before-pt1' + thisvalue).children('#form-error-org-zipcode-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_contact_phone').on('input', function (){
+        var id_contact_phone = $(this).val();
+        id_contact_phone = id_contact_phone.replace(/\(|\)|\-/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'contact_phone': id_contact_phone
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.cphone_invalid){
+                    $('#id_contact_phone').addClass('error-review')
+                    $('.cphoneName').addClass('error-review-label')
+                    if ($('#form-error-org-contact-phone-error').length == 0){
+                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-contact-phone-error'><div class='form-error-box-ex' id='form-error-org-contact-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cphone_msg + "</div>")
+                        $('.form-error-box--before2').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_contact_phone').hasClass('error-review')){
+                        $('#id_contact_phone').removeClass('error-review')
+                        $('.cphoneName').removeClass('error-review-label')
+                        $('.form-error-box--before2').children('#form-error-org-contact-phone-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-contact_phone]').on('input', function (){
+        var id_contact_phone = $(this).val();
+        id_contact_phone = id_contact_phone.replace(/\(|\)|\-/g, '');
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editFormPT2/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'contact_phone': id_contact_phone
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.cphone_invalid){
+                    $('[id^=id_orgs-][id$=-contact_phone]').addClass('error-review')
+                    $('.cphoneName').addClass('error-review-label')
+                    if ($('#form-error-org-contact-phone-error').length == 0){
+                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-contact-phone-error'><div class='form-error-box-ex' id='form-error-org-contact-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cphone_msg + "</div>")
+                        $('.form-error-box--before2-pt2' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-contact_phone]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-contact_phone]').removeClass('error-review')
+                        $('.cphoneName').removeClass('error-review-label')
+                        $('.form-error-box--before2-pt2' + thisvalue).children('#form-error-org-contact-phone-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_contact_email').on('input', function (){
+        var id_contact_email = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'contact_email': id_contact_email
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.cemail_invalid){
+                    $('#id_contact_email').addClass('error-review')
+                    $('.cemailName').addClass('error-review-label')
+                    if ($('#form-error-org-contact-email-error').length == 0){
+                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-contact-email-error'><div class='form-error-box-ex' id='form-error-org-contact-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cemail_msg + "</div>")
+                        $('.form-error-box--before2').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_contact_email').hasClass('error-review')){
+                        $('#id_contact_email').removeClass('error-review')
+                        $('.cemailName').removeClass('error-review-label')
+                        $('.form-error-box--before2').children('#form-error-org-contact-email-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-contact_email]').on('input', function (){
+        var id_contact_email = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editFormPT2/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'contact_email': id_contact_email
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.cemail_invalid){
+                    $('[id^=id_orgs-][id$=-contact_email]').addClass('error-review')
+                    $('.cemailName').addClass('error-review-label')
+                    if ($('#form-error-org-contact-email-error').length == 0){
+                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-contact-email-error'><div class='form-error-box-ex' id='form-error-org-contact-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cemail_msg + "</div>")
+                        $('.form-error-box--before2-pt2' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-contact_email]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-contact_email]').removeClass('error-review')
+                        $('.cemailName').removeClass('error-review-label')
+                        $('.form-error-box--before2-pt2' + thisvalue).children('#form-error-org-contact-email-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_mail_zipcode').on('input', function (){
+        var id_mail_zipcode = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'mail_zipcode': id_mail_zipcode
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.mzipcode_invalid){
+                    $('#id_mail_zipcode').addClass('error-review')
+                    $('.mailzipName').addClass('error-review-label')
+                    if ($('#form-error-org-mail-zipcode-error').length == 0){
+                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-mail-zipcode-error'><div class='form-error-box-ex' id='form-error-org-mail-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.mzipcode_msg + "</div>")
+                        $('.form-error-box--before2').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_mail_zipcode').hasClass('error-review')){
+                        $('#id_mail_zipcode').removeClass('error-review')
+                        $('.mailzipName').removeClass('error-review-label')
+                        $('.form-error-box--before2').children('#form-error-org-mail-zipcode-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-mail_zipcode]').on('input', function (){
+        var id_mail_zipcode = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editFormPT2/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'mail_zipcode': id_mail_zipcode
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.mzipcode_invalid){
+                    $('[id^=id_orgs-][id$=-mail_zipcode]').addClass('error-review')
+                    $('.mailzipName').addClass('error-review-label')
+                    if ($('#form-error-org-mail-zipcode-error').length == 0){
+                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-mail-zipcode-error'><div class='form-error-box-ex' id='form-error-org-mail-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.mzipcode_msg + "</div>")
+                        $('.form-error-box--before2-pt2' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-mail_zipcode]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-mail_zipcode]').removeClass('error-review')
+                        $('.mailzipName').removeClass('error-review-label')
+                        $('.form-error-box--before2-pt2' + thisvalue).children('#form-error-org-mail-zipcode-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    </script>
+    <script src="{% static 'app/scripts/form_errors.js' %}"></script>
+</body>
+{% endblock %}

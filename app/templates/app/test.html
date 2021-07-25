@@ -1,0 +1,178 @@
+﻿<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/dropfile.css' %}" />
+    <script src="{% static 'app/scripts/jquery.js' %}"></script>
+    <style>
+
+    </style>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">click me</button>
+    </form>
+    <script>
+        $('#id_org_name').on('input', function (){
+            var id_org_name = $(this).val();
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'org_name': id_org_name
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.is_taken){
+                        document.getElementById('id_org_name').style.backgroundColor = "red"
+                    }
+                    else{
+                        document.getElementById('id_org_name').style.backgroundColor = "#e7e7e7";
+                    }
+                }
+            });
+        });
+
+        $('#id_website').on('input', function (){
+            var id_website = $(this).val();
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'org_website': id_website
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.web_invalid){
+                        document.getElementById('id_website').style.backgroundColor = "red"
+                    }
+                    else{
+                        document.getElementById('id_website').style.backgroundColor = "#e7e7e7";
+                    }
+                }
+            });
+        });
+
+        $('#id_org_phone').on('input', function (){
+            var id_org_phone = $(this).val();
+            id_org_phone = id_org_phone.replace(/\(|\)|\-/g, '');
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'org_phone': id_org_phone
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.phone_invalid){
+                        document.getElementById('id_org_phone').style.backgroundColor = "red"
+                    }
+                    else{
+                        document.getElementById('id_org_phone').style.backgroundColor = "#e7e7e7";
+                    }
+                }
+            });
+        });
+
+        $('#id_org_email').on('input', function (){
+            var id_org_email = $(this).val();
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'org_email': id_org_email
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.email_invalid){
+                        document.getElementById('id_org_email').style.backgroundColor = "red"
+                    }
+                    else{
+                        document.getElementById('id_org_email').style.backgroundColor = "#e7e7e7";
+                    }
+                }
+            });
+        });
+
+        $('#id_zipcode').on('input', function (){
+            var id_zipcode = $(this).val();
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'org_zipcode': id_zipcode
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.zipcode_invalid){
+                        document.getElementById('id_zipcode').style.backgroundColor = "red"
+                    }
+                    else{
+                        document.getElementById('id_zipcode').style.backgroundColor = "#e7e7e7";
+                    }
+                }
+            });
+        });
+
+
+        $('#id_contact_phone').on('input', function (){
+            var id_contact_phone = $(this).val();
+            id_contact_phone = id_contact_phone.replace(/\(|\)|\-/g, '');
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'contact_phone': id_contact_phone
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.cphone_invalid){
+                        document.getElementById('id_contact_phone').style.backgroundColor = "red"
+                    }
+                    else{
+                        document.getElementById('id_contact_phone').style.backgroundColor = "#e7e7e7";
+                    }
+                }
+            });
+        });
+
+        $('#id_contact_email').on('input', function (){
+            var id_contact_email = $(this).val();
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'contact_email': id_contact_email
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.cemail_invalid){
+                        document.getElementById('id_contact_email').style.backgroundColor = "red"
+                    }
+                    else{
+                        document.getElementById('id_contact_email').style.backgroundColor = "#e7e7e7";
+                    }
+                }
+            });
+        });
+
+        $('#id_mail_zipcode').on('input', function (){
+            var id_mail_zipcode = $(this).val();
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'mail_zipcode': id_mail_zipcode
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.mzipcode_invalid){
+                        document.getElementById('id_mail_zipcode').style.backgroundColor = "red"
+                    }
+                    else{
+                        document.getElementById('id_mail_zipcode').style.backgroundColor = "#e7e7e7";
+                    }
+                }
+            });
+        });
+
+
+
+    </script>
+    <script src="{% static 'app/scripts/formvalidation.js' %}"></script>
+</body>
+</html>

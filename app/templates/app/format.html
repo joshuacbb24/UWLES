@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="{% static 'app/content/format.css' %}" />
     <script src="{% static 'app/scripts/main.js' %}"></script>
     <script src="{% static 'app/scripts/jquery.js' %}"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="{% static 'app/scripts/format.js' %}"></script>
     <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
 
@@ -16,33 +17,27 @@
 <body>
 <div class="sidebar">
 
-
   <div class="sidebar-menu">
       <ul>
           <li>
-              <a href="{% url 'dashboard' %}">
-                  <span id="fist-element" class="las la-home"></span>
-              </a>
+              {% block header1 %}
+              {% endblock %}
           </li>
           <li>
-              <a href="{% url 'resourcedirectory' %}">
-                  <span class="las la-book"></span>
-              </a>
+              {% block header2 %}
+              {% endblock %}
           </li>
           <li>
-              <a href="{% url 'multichat' %}">
-                  <span class="las la-comment-alt"></span>
-              </a>
+              {% block header3 %}
+              {% endblock %}
           </li>
           <li>
-              <a href="{% url 'clientlist' %}">
-                  <span class="las la-user-friends"></span>
-              </a>
+              {% block header4 %}
+              {% endblock %}
           </li>
           <li>
-            <a href="{% url 'userinfo' %}">
-                <span class="las la-plus-circle"></span>
-            </a>
+            {% block header5 %}
+            {% endblock %}
         </li>
       </ul>
   </div>

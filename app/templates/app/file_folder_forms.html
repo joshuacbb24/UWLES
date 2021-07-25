@@ -1,0 +1,214 @@
+{% load static %}
+{% load project_templates %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="modal box3 fade" id="addFolderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create New Folder</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" maxlength="50" name="add-folder-name">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="addfolderbtn">Submit</button>
+            </div>
+            </div>
+        </div>
+        </div>
+</form>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="modal box3 fade" id="shareFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Share File</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="share-file-id" value="">
+                <ul name="share-collaborators" id="sharecollaboratorsChoice">
+                    {% for account in collab_accounts %}
+                        {% if account != user %}
+                            <li class="share-collab--remove">
+                                <label for="sharecollabCheck{{ account }}">
+                                    <input type="checkbox" value="{{ account.id }}" id="sharecollabCheck{{ account }}"  name="sharecollabCheckboxes"/>
+                                    {{ account }}
+                                </label>
+                            </li>
+                            <li class="share-collab__A" value="{{ account.id }}">{{ account }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="sharefilebtn">Submit</button>
+            </div>
+            </div>
+        </div>
+        </div>
+</form>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="modal box3 fade" id="moveFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Move File To</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="move-file-id" value="">
+                {% for folder in myfiles %}
+                    {% if folder.name != 'All Files' and folder.name != 'Shared With Me' %}
+                        <input type="radio" id="move-folder{{ folder.id }}" name="move-folder-value" value="{{ folder.name }}">
+                        <label for="move-folder{{ folder.id }}">{{ folder.name }}</label>
+                        {% for subfolder in folder.subfolder.all %}
+                            <br>
+                            <input type="radio" id="move-subfolder{{ subfolder.id }}" name="move-folder-value" value="{{ subfolder.name }}">
+                            <label for="move-subfolder{{ subfolder.id }}">{{ subfolder.name }}</label>
+                            {% for sub2folder in subfolder.subfolder.all %}
+                                <br>
+                                <input type="radio" id="move-sub2folder{{ sub2folder.id }}" name="move-folder-value" value="{{ sub2folder.name }}">
+                                <label for="move-sub2folder{{ sub2folder.id }}">{{ sub2folder.name }}</label>
+                            {% endfor %}
+                        {% endfor %}
+                        <br>
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="movefilebtn">Submit</button>
+            </div>
+            </div>
+        </div>
+        </div>
+</form>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="modal box3 fade" id="copyFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Move File To</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="copy-file-id" value="">
+                {% for folder in myfiles %}
+                    {% if folder.name != 'All Files' and folder.name != 'Shared With Me' %}
+                        <input type="checkbox" id="copy-folder{{ folder.id }}" name="folder-value" value="{{ folder.name }}">
+                        <label for="copy-folder{{ folder.id }}">{{ folder.name }}</label>
+                        {% for subfolder in folder.subfolder.all %}
+                            <br>
+                            <input type="checkbox" id="copy-subfolder{{ subfolder.id }}" name="subfolder-value" value="{{ subfolder.name }}">
+                            <label for="copy-subfolder{{ subfolder.id }}">{{ subfolder.name }}</label>
+                            {% for sub2folder in subfolder.subfolder.all %}
+                                <br>
+                                <input type="checkbox" id="copy-sub2folder{{ sub2folder.id }}" name="sub2folder-value" value="{{ sub2folder.name }}">
+                                <label for="copy-sub2folder{{ sub2folder.id }}">{{ sub2folder.name }}</label>
+                            {% endfor %}
+                        {% endfor %}
+                        <br>
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="copyfilebtn">Submit</button>
+            </div>
+            </div>
+        </div>
+        </div>
+</form>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="modal box3 fade" id="renameFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Rename File</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="rename-file-id" value="">
+                <input type="text" maxlength="50" name="rename-file-name">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="renamefilebtn">Submit</button>
+            </div>
+            </div>
+        </div>
+        </div>
+</form>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="modal box3 fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are You Sure You Want To Delete?</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="delete-file-id" value="">
+                <label for="delete-file-true">Yes, delete this file.</label>
+                <input type="checkbox" name="delete-file-true">
+                <button class="delete-this-true" type="submit">Yes, delete.</button>
+                <div class="delete-this-false" data-dismiss="modal">No, do not.</div>
+            </div>
+            </div>
+        </div>
+        </div>
+</form>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="modal box3 fade" id="renameFolderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Rename File</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="rename-folder-id" value="">
+                <input type="text" maxlength="50" name="rename-folder-name">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="renamefolderbtn">Submit</button>
+            </div>
+            </div>
+        </div>
+        </div>
+</form>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="modal box3 fade" id="deleteFolderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Are You Sure You Want To Delete?</h5>
+                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="delete-folder-id" value="">
+                <label for="delete-folder-true">Yes, delete this file.</label>
+                <input type="checkbox" name="delete-folder-true">
+                <button class="delete-this-folder-true" type="submit">Yes, delete.</button>
+                <div class="delete-this-false" data-dismiss="modal">No, do not.</div>
+            </div>
+            </div>
+        </div>
+        </div>
+</form>

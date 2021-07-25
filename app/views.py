@@ -4,16 +4,21 @@ Definition of views.
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
+from datetime import datetime, timedelta
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, JsonResponse, HttpResponse
 from .forms import *
 from .models import *
-from .filters import serviceFilter, directoryFilter
+from .filters import *
 from .decorators import unauthenticated_user, allowed_user
 from django.views import View
 from django.core.files.storage import FileSystemStorage
-
+from django.core import serializers
+from django.utils import timezone
+from django.urls import reverse
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 @login_required(login_url='login')
 def home(request):
@@ -107,7 +112,7 @@ def signup(request):
             user_password = form.cleaned_data.get('password1')
             user_email = form.cleaned_data.get('email')
             user_avatar = form.cleaned_data.get('avatar')
-            group = Group.objects.get(name="client")
+            group = Group.objects.get(name="caseworker")
             user = authenticate(username=username, password=user_password)
             user.groups.add(group)
             login(request, user)
@@ -164,7 +169,6 @@ def user_information(request):
               }
     return render(request, 'app/userinfo.html', context)
 
-
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker', 'client'])
 def profile(request):
@@ -209,8 +213,6 @@ def clientlist(request):
         list = []
         for objs in obj3:
             list.append(objs.user_id)
-        print(list)
-        print(obj2)
     except ClientList.DoesNotExist:
         obj1 = None
         obj2 = None
@@ -367,19 +369,6 @@ def resource_directory(request):
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
-def add_individual(request):
-    form1 = Add_Individual(request.POST)
-    if request.method == 'POST':
-        if form1.is_valid():
-            form1.save()
-            return redirect('/')
-    context = {
-        'form1': form1,
-        }
-    return render(request, 'app/add_individuals.html', context)
-
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['caseworker'])
 def add_organization(request):
     form1 = Add_Organization(request.POST)
     if request.method == 'POST':
@@ -390,35 +379,6 @@ def add_organization(request):
         'form1': form1,
         }
     return render(request, 'app/add_organizations.html', context)
-
-
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['caseworker'])
-def add_services(request):
-    form1 = Add_Services()
-    if request.method == 'POST':
-        form1 = Add_Services(request.POST)
-        if form1.is_valid():
-            form1.save()
-            return redirect('/')
-    context = {
-        'form1': form1,
-        }
-    return render(request, 'app/add_services.html', context)
-
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['caseworker'])
-def add_skills(request):
-    form1 = Add_SkillsExpertise()
-    if request.method == 'POST':
-        form1 = Add_SkillsExpertise(request.POST)
-        if form1.is_valid():
-            form1.save()
-            return redirect('/')
-    context = {
-        'form1': form1,
-        }
-    return render(request, 'app/add_skills.html', context)
 
 @login_required(login_url='login')
 def dashboard(request):
@@ -454,7 +414,7 @@ def make_client_account(request):
         form = User_Creation_Form()
     return render(request, 'app/signup.html', {'form': form})
 
-@login_required
+@login_required(login_url='login')
 def multichat(request):
     """
     Root page view. This is essentially a single-page app, if you ignore the
@@ -472,7 +432,6 @@ def multichat(request):
 
 # find out if the rendering htmls is correct
 
-
 class BasicUploadView(View):
     def get(self, request):
         UploadedFiles_list = UploadedFile.objects.all()
@@ -489,3 +448,1295 @@ class BasicUploadView(View):
         else:
             data = {'is_valid': False}
         return JsonResponse(data)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['caseworker'])
+def full_directory(request):
+    user = request.user
+    swme = SharedWithMe.objects.get(name=user)
+    myorgs = Organizations.objects.filter(id__in=swme.organization.all())
+    myfolders = FileFolder.objects.filter(user=user)
+    collab_accounts = Account.objects.filter(is_caseworker = True)
+
+    addiction = SubDirectory.objects.get(name="Addiction & Recovery Services")
+    counseling = SubDirectory.objects.get(name="Counseling & Case Management")
+    disaster = SubDirectory.objects.get(name="Disaster Relief")
+    domestic = SubDirectory.objects.get(name="Domestic Violence & Sexual Assault")
+    emergency = SubDirectory.objects.get(name="Emergency Shelter")
+    faith = SubDirectory.objects.get(name="Faith-Based Community Help")
+    food = SubDirectory.objects.get(name="Food Assistance")
+    health = SubDirectory.objects.get(name="Health & Fitness")
+    hospitals = SubDirectory.objects.get(name="Hospitals/Emergency Care/Medical Care")
+    housing = SubDirectory.objects.get(name="Housing and Housing Repair")
+    local = SubDirectory.objects.get(name="Local Farmers Markets")
+    mental = SubDirectory.objects.get(name="Mental & Behavioral Health")
+    nicotine = SubDirectory.objects.get(name="Nicotine/Tobacco Cessation Resources")
+    pharmacies = SubDirectory.objects.get(name="Pharmacies")
+    primary_care = SubDirectory.objects.get(name="Primary Care Centers")
+    adults = SubDirectory.objects.get(name="Adults & Senior Adults")
+    children = SubDirectory.objects.get(name="Children")
+    youth = SubDirectory.objects.get(name="Youth")
+    disabilities = SubDirectory.objects.get(name="Disabilities")
+    walk_in = SubDirectory.objects.get(name="Walk In Clinics")
+
+    tags = PillTags.objects.all()
+    tagarray = []
+    collabarray = []
+
+    orglist = []
+    for org in myorgs:
+        orglist.append(org.id)
+
+    tagarray2  = []
+    for thisorg in myorgs:
+        tagarray2.append(thisorg.org_tags.all())
+
+    tagarray3 = []
+    m = 0
+    for tag in tagarray2:
+        tagarray3.append(tags.difference(tag))
+        m += 1
+
+    subdirslist = [[]]
+    subdirslist2 = []
+    j = 0
+    for thisorg in myorgs:
+        thisdir = SubDirectory.objects.filter(subdirectory_organization=thisorg)
+        for dirx in thisdir:
+            subdirslist2.append(dirx.name)
+        subdirslist.insert(j, subdirslist2)
+        subdirslist2 = []
+        j += 1
+    data = {}
+    formset4 = DirFilesFormset(queryset=DirectoryFiles.objects.none(), prefix='file')
+
+    if request.is_ajax() and request.method == "POST":
+        formset4 = DirFilesFormset(request.POST, request.FILES, prefix='file')
+        for form in formset4:
+            if form.is_valid():
+                if (form.cleaned_data.get('file') != None):
+                    m = form.save()
+                    this_file = DirectoryFiles.objects.get(file = m.file)
+                    collaborators = form.cleaned_data.get('file_collaborators')
+                    myfolder = form.cleaned_data.get('folder')
+                    FileFolder.add_to_folder(this_file, user, myfolder)
+                    SharedWithMe.addfile(collaborators, this_file)
+            else:
+                print(form.errors)
+
+        return JsonResponse(data)
+
+    elif request.method == "POST":
+        form1 = Add_Organization(request.POST, request.FILES)
+        form2 = AddOrgToSubDir(request.POST)
+        formset = AddTagsFormset(request.POST, prefix='tags')
+        formset2 = AddOrgsFormset(request.POST, request.FILES, queryset=myorgs, prefix='orgs')
+        formset3 = AddTagsFormset(request.POST, prefix='tags2')
+        if 'submit_formx' in request.POST:
+            if formset2.is_valid() and formset3.is_valid() and form2.is_valid():
+                for formz in formset3:
+                    if formz.cleaned_data.get('tag'):
+                        tags = formz.cleaned_data.get('tag')
+                        formz.save()
+                        pill = PillTags.objects.get(tag=tags)
+                        tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        subdirs = form2.cleaned_data.get('sub_dirs')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SubDirectory.add_org(this_org, subdirs)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset2.is_valid() and formset3.is_valid() == False and form2.is_valid():
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        subdirs = form2.cleaned_data.get('sub_dirs')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SubDirectory.add_org(this_org, subdirs)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+            
+            elif formset2.is_valid() and formset3.is_valid() == False and form2.is_valid():
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            else:
+                print(formset2.errors)
+                print(formset3.errors)
+                print(form2.errors)
+                print("not working")
+
+        elif 'submit_form1' in request.POST:
+            if form1.is_valid() and form2.is_valid() and formset.is_valid():
+                org = form1.cleaned_data.get('org_name')
+                for form in formset:
+                    if form.cleaned_data.get('tag'):
+                        tags = form.cleaned_data.get('tag')
+                        form.save()
+                        pill = PillTags.objects.get(tag=tags)
+                        tagarray.append(pill)
+
+                collaborators = form1.cleaned_data.get('collaborators')
+                form1.save()
+                subdirs = form2.cleaned_data.get('sub_dirs')
+                this_org = Organizations.objects.get(org_name=org)
+                SharedWithMe.addorg(collaborators, this_org)
+                SharedWithMe.addindorg(user, this_org)
+                SubDirectory.add_org(this_org, subdirs)
+                Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset.is_valid() == False and form1.is_valid() and form2.is_valid():
+                org = form1.cleaned_data.get('org_name')
+                for form in formset:
+                    if form.is_valid():
+                        if form.cleaned_data.get('tag'):
+                            tags = form.cleaned_data.get('tag')
+                            form.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                    else:
+                        pass
+
+                collaborators = form1.cleaned_data.get('collaborators')
+                form1.save()
+                subdirs = form2.cleaned_data.get('sub_dirs')
+                this_org = Organizations.objects.get(org_name=org)
+                SharedWithMe.addorg(collaborators, this_org)
+                SubDirectory.add_org(this_org, subdirs)
+                Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset.is_valid() == False and form1.is_valid() and form2.is_valid() == False:
+                org = form1.cleaned_data.get('org_name')
+                for form in formset:
+                    if form.is_valid():
+                        if form.cleaned_data.get('tag'):
+                            tags = form.cleaned_data.get('tag')
+                            form.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                    else:
+                        pass
+
+                collaborators = form1.cleaned_data.get('collaborators')
+                form1.save()
+                this_org = Organizations.objects.get(org_name=org)
+                SharedWithMe.addorg(collaborators, this_org)
+                Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+        else:
+            print("not working")
+    
+    else:
+        form1 = Add_Organization()
+        form2 = AddOrgToSubDir()
+        formset = AddTagsFormset(queryset=PillTags.objects.none(), prefix='tags')
+        formset2 = AddOrgsFormset(queryset=myorgs, prefix='orgs')
+        formset3 = AddTagsFormset(queryset=PillTags.objects.none(), prefix='tags2')
+
+    context = {
+            'addiction': addiction,
+            'counseling': counseling,
+            'disaster': disaster,
+            'domestic': domestic,
+            'emergency': emergency,
+            'faith': faith,
+            'food': food,
+            'health': health,
+            'hospitals': hospitals,
+            'housing': housing,
+            'local': local,
+            'mental': mental,
+            'nicotine': nicotine,
+            'pharmacies': pharmacies,
+            'primary_care': primary_care,
+            'adults': adults,
+            'children': children,
+            'youth': youth,
+            'disabilities': disabilities,
+            'walk_in': walk_in,
+
+            'form1': form1,
+            'form2': form2,
+            'formset': formset,
+            'tags': tags,
+            'formset2': formset2,
+            'formset3': formset3,
+            'swme': swme,
+            'orglist': orglist,
+            'tagarray2': tagarray2,
+            'subdirslist': subdirslist,
+            'tagarray3': tagarray3,
+            'formset4': formset4,
+            'myfolders': myfolders,
+            'collab_accounts': collab_accounts,
+        }
+    return render(request, 'app/full_directory.html', context)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['caseworker'])
+def sub_directory(request, pk, option):
+    try:
+        directory = SubDirectory.objects.filter(id=pk)
+    except SubDirectory.DoesNotExist:
+        directory = None
+    organizations = Organizations.objects.all()
+    myFilter1 = subDirectoryFilter(request.GET, queryset=directory)
+    directories = myFilter1.qs
+    myFilter2 = organizationFilter(request.GET, queryset=organizations)
+    organizations = myFilter2.qs
+
+    context = {
+        'directories': directories,
+        'organizations': organizations,
+        'myFilter1': myFilter1,
+        'myFilter2': myFilter2,
+        'option': option,
+        }
+
+    return render(request, 'app/subdirectory.html', context)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['caseworker'])
+def org_directory(request):
+    organizations = Organizations.objects.all()
+
+    user = request.user
+    swme = SharedWithMe.objects.get(name=user)
+    myorgs = Organizations.objects.filter(id__in=swme.organization.all())
+    myfolders = FileFolder.objects.filter(user=user)
+    collab_accounts = Account.objects.filter(is_caseworker = True)
+
+    tags = PillTags.objects.all()
+    tagarray = []
+    collabarray = []
+
+    orglist = []
+    for org in myorgs:
+        orglist.append(org.id)
+
+    tagarray2  = []
+    for thisorg in myorgs:
+        tagarray2.append(thisorg.org_tags.all())
+
+    tagarray3 = []
+    m = 0
+    for tag in tagarray2:
+        tagarray3.append(tags.difference(tag))
+        m += 1
+
+    subdirslist = [[]]
+    subdirslist2 = []
+    j = 0
+    for thisorg in myorgs:
+        thisdir = SubDirectory.objects.filter(subdirectory_organization=thisorg)
+        for dirx in thisdir:
+            subdirslist2.append(dirx.name)
+        subdirslist.insert(j, subdirslist2)
+        subdirslist2 = []
+        j += 1
+
+    data = {}
+    formset4 = DirFilesFormset(queryset=DirectoryFiles.objects.none(), prefix='file')
+
+    if request.is_ajax() and request.method == "POST":
+        formset4 = DirFilesFormset(request.POST, request.FILES, prefix='file')
+        for form in formset4:
+            if form.is_valid():
+                if (form.cleaned_data.get('file') != None):
+                    m = form.save()
+                    this_file = DirectoryFiles.objects.get(file = m.file)
+                    collaborators = form.cleaned_data.get('file_collaborators')
+                    myfolder = form.cleaned_data.get('folder')
+                    FileFolder.add_to_folder(this_file, user, myfolder)
+                    SharedWithMe.addfile(collaborators, this_file)
+            else:
+                print(form.errors)
+
+        return JsonResponse(data)
+
+    elif request.method == "POST":
+        form1 = Add_Organization(request.POST, request.FILES)
+        form2 = AddOrgToSubDir(request.POST)
+        formset = AddTagsFormset(request.POST, prefix='tags')
+        formset2 = AddOrgsFormset(request.POST, request.FILES, queryset=myorgs, prefix='orgs')
+        formset3 = AddTagsFormset(request.POST, prefix='tags2')
+        if 'submit_formx' in request.POST:
+            if formset2.is_valid() and formset3.is_valid() and form2.is_valid():
+                for formz in formset3:
+                    if formz.cleaned_data.get('tag'):
+                        tags = formz.cleaned_data.get('tag')
+                        formz.save()
+                        pill = PillTags.objects.get(tag=tags)
+                        tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        subdirs = form2.cleaned_data.get('sub_dirs')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SubDirectory.add_org(this_org, subdirs)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset2.is_valid() and formset3.is_valid() == False and form2.is_valid():
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        subdirs = form2.cleaned_data.get('sub_dirs')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SubDirectory.add_org(this_org, subdirs)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+            
+            elif formset2.is_valid() and formset3.is_valid() == False and form2.is_valid():
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            else:
+                print(formset2.errors)
+                print(formset3.errors)
+                print(form2.errors)
+                print("not working")
+
+        elif 'submit_form1' in request.POST:
+            if form1.is_valid() and form2.is_valid() and formset.is_valid():
+                org = form1.cleaned_data.get('org_name')
+                for form in formset:
+                    if form.cleaned_data.get('tag'):
+                        tags = form.cleaned_data.get('tag')
+                        form.save()
+                        pill = PillTags.objects.get(tag=tags)
+                        tagarray.append(pill)
+
+                collaborators = form1.cleaned_data.get('collaborators')
+                form1.save()
+                subdirs = form2.cleaned_data.get('sub_dirs')
+                this_org = Organizations.objects.get(org_name=org)
+                SharedWithMe.addorg(collaborators, this_org)
+                SharedWithMe.addindorg(user, this_org)
+                SubDirectory.add_org(this_org, subdirs)
+                Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset.is_valid() == False and form1.is_valid() and form2.is_valid():
+                org = form1.cleaned_data.get('org_name')
+                for form in formset:
+                    if form.is_valid():
+                        if form.cleaned_data.get('tag'):
+                            tags = form.cleaned_data.get('tag')
+                            form.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                    else:
+                        pass
+
+                collaborators = form1.cleaned_data.get('collaborators')
+                form1.save()
+                subdirs = form2.cleaned_data.get('sub_dirs')
+                this_org = Organizations.objects.get(org_name=org)
+                SharedWithMe.addorg(collaborators, this_org)
+                SubDirectory.add_org(this_org, subdirs)
+                Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset.is_valid() == False and form1.is_valid() and form2.is_valid() == False:
+                org = form1.cleaned_data.get('org_name')
+                for form in formset:
+                    if form.is_valid():
+                        if form.cleaned_data.get('tag'):
+                            tags = form.cleaned_data.get('tag')
+                            form.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                    else:
+                        pass
+
+                collaborators = form1.cleaned_data.get('collaborators')
+                form1.save()
+                this_org = Organizations.objects.get(org_name=org)
+                SharedWithMe.addorg(collaborators, this_org)
+                Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+        else:
+            print("not working")
+    
+    else:
+        form1 = Add_Organization()
+        form2 = AddOrgToSubDir()
+        formset = AddTagsFormset(queryset=PillTags.objects.none(), prefix='tags')
+        formset2 = AddOrgsFormset(queryset=myorgs, prefix='orgs')
+        formset3 = AddTagsFormset(queryset=PillTags.objects.none(), prefix='tags2')
+
+    context = {
+        'form1': form1,
+        'form2': form2,
+        'formset': formset,
+        'tags': tags,
+        'formset2': formset2,
+        'formset3': formset3,
+        'swme': swme,
+        'orglist': orglist,
+        'tagarray2': tagarray2,
+        'subdirslist': subdirslist,
+        'tagarray3': tagarray3,
+        'formset4': formset4,
+        'myfolders': myfolders,
+        'collab_accounts': collab_accounts,
+        'organizations': organizations,
+        }
+
+    return render(request, 'app/orgdirectory.html', context)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['caseworker'])
+def org_sub_directory(request, pk):
+    try:
+        organization = Organizations.objects.get(id=pk)
+    except Organizations.DoesNotExist:
+        organization = None
+    context = {
+        'organization': organization,
+        }
+
+    return render(request, 'app/org_view_directory.html', context)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['caseworker'])
+def document_directory(request):
+    user = request.user
+    swme = SharedWithMe.objects.get(name=user)
+    myorgs = Organizations.objects.filter(id__in=swme.organization.all())
+    myfolders = FileFolder.objects.filter(user=user)
+    collab_accounts = Account.objects.filter(is_caseworker = True)
+    files = DirectoryFiles.objects.all()
+    myfiles = FileFolder.objects.filter(user=user)
+
+    tags = PillTags.objects.all()
+    tagarray = []
+
+    orglist = []
+    for org in myorgs:
+        orglist.append(org.id)
+
+    tagarray2  = []
+    for thisorg in myorgs:
+        tagarray2.append(thisorg.org_tags.all())
+
+    tagarray3 = []
+    m = 0
+    for tag in tagarray2:
+        tagarray3.append(tags.difference(tag))
+        m += 1
+
+    subdirslist = [[]]
+    subdirslist2 = []
+    j = 0
+    for thisorg in myorgs:
+        thisdir = SubDirectory.objects.filter(subdirectory_organization=thisorg)
+        for dirx in thisdir:
+            subdirslist2.append(dirx.name)
+        subdirslist.insert(j, subdirslist2)
+        subdirslist2 = []
+        j += 1
+
+    data = {}
+    formset4 = DirFilesFormset(queryset=DirectoryFiles.objects.none(), prefix='file')
+
+    some_day_last_week = timezone.now().date() - timedelta(days=7)
+    monday_of_last_week = some_day_last_week - timedelta(days=(some_day_last_week.isocalendar()[2] - 1))
+
+    recent_files = RecentFiles.objects.filter(time_viewed__gte=monday_of_last_week, user=user)
+
+    if request.is_ajax() and request.method == "POST":
+        print(request.POST)
+        formset4 = DirFilesFormset(request.POST, request.FILES, prefix='file')
+        if 'downloadbtn' in request.POST:
+            fileid = request.POST['fileid']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            try:
+                obj = RecentFiles.objects.get(file=fileobj, user=user)
+                obj.save()
+            except RecentFiles.DoesNotExist:
+                obj = RecentFiles(file=fileobj, user=user)
+                obj.save()
+            data = {
+                'msg': 'hello',
+            }
+            return JsonResponse(data)
+
+        else:
+            for form in formset4:
+                if form.is_valid():
+                    if (form.cleaned_data.get('file') != None):
+                        m = form.save()
+                        this_file = DirectoryFiles.objects.get(file = m.file)
+                        collaborators = form.cleaned_data.get('file_collaborators')
+                        myfolder = form.cleaned_data.get('folder')
+                        FileFolder.add_to_folder(this_file, user, myfolder)
+                        SharedWithMe.addfile(collaborators, this_file)
+                else:
+                    print(form.errors)
+
+            return JsonResponse(data)
+
+    elif request.method == "POST":
+        form1 = Add_Organization(request.POST, request.FILES)
+        form2 = AddOrgToSubDir(request.POST)
+        formset = AddTagsFormset(request.POST, prefix='tags')
+        formset2 = AddOrgsFormset(request.POST, request.FILES, queryset=myorgs, prefix='orgs')
+        formset3 = AddTagsFormset(request.POST, prefix='tags2')
+
+        if 'add-folder-name' in request.POST:
+            foldername = request.POST['add-folder-name']
+            new_folder = FileFolder(name=foldername, user=user)
+            new_folder.save()
+            return HttpResponseRedirect('document_directory')
+
+        elif 'share-file-id' in request.POST:
+            fileid = request.POST['share-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            collaborators = request.POST.getlist('sharecollabCheckboxes')
+            for collaborator in collaborators:
+                collabaccount = Account.objects.get(id=collaborator)
+                SharedWithMe.addindfile(collabaccount, fileobj)
+            return HttpResponseRedirect('document_directory')
+
+        elif 'move-file-id' in request.POST:
+            fileid = request.POST['move-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            foldername = request.POST['move-folder-value']
+            try:
+                folder = FileFolder.objects.get(name=foldername, user=user)
+            except FileFolder.DoesNotExist:
+                folder = FileSubFolder.objects.get(name=foldername, user=user)
+            originalfolder = FileFolder.objects.get(file=fileobj)
+            originalfolder.file.remove(fileobj)
+            folder.file.add(fileobj)
+
+        elif 'copy-file-id' in request.POST:
+            fileid = request.POST['copy-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            if 'folder-value' not in request.POST:
+                folders = ""
+            else:
+                folders = request.POST.getlist('folder-value')
+            if 'subfolder-value' not in request.POST:
+                subfolders = ""
+            else:
+                subfolders = request.POST.getlist('subfolder-value')
+            if 'sub2folder-value' not in request.POST:
+                sub2folders = ""
+            else:
+                sub2folders = request.POST.getlist('sub2folder-value')  
+            for fold in folders:
+                folder = FileFolder.objects.get(name=fold, user=user)
+                folder.file.add(fileobj)
+            for subfold in subfolders:
+                subfolder = FileSubFolder.objects.get(name=subfold, user=user)
+                subfolder.file.add(fileobj)
+            for sub2fold in sub2folders:
+                sub2folder = FileSubFolder.objects.get(name=sub2fold, user=user)
+                sub2folder.file.add(fileobj)
+            return HttpResponseRedirect('document_directory')
+
+        elif 'rename-file-name' in request.POST:
+            fileid = request.POST['rename-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            newname = request.POST['rename-file-name']
+            print(fileobj.document_name)
+            fileobj.document_name = newname
+            fileobj.save()
+            return HttpResponseRedirect('document_directory')
+
+        elif 'delete-file-id' in request.POST:
+            fileid = request.POST['delete-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            fileobj.delete()
+            return HttpResponseRedirect('document_directory')
+
+        elif 'rename-folder-name' in request.POST:
+            folderid = request.POST['rename-folder-id']
+            folderobj = FileFolder.objects.get(id=folderid)
+            newname = request.POST['rename-folder-name']
+            folderobj.name = newname
+            folderobj.save()
+            return HttpResponseRedirect('document_directory')
+
+        elif 'delete-folder-id' in request.POST:
+            folderid = request.POST['delete-folder-id']
+            folderobj = FileFolder.objects.get(id=folderid)
+            mychildren = folderobj.subfolder.all()
+            mychildren.delete()
+            folderobj.delete()
+            return HttpResponseRedirect('document_directory')
+
+        elif 'submit_formx' in request.POST:
+            if formset2.is_valid() and formset3.is_valid() and form2.is_valid():
+                for formz in formset3:
+                    if formz.cleaned_data.get('tag'):
+                        tags = formz.cleaned_data.get('tag')
+                        formz.save()
+                        pill = PillTags.objects.get(tag=tags)
+                        tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        subdirs = form2.cleaned_data.get('sub_dirs')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SubDirectory.add_org(this_org, subdirs)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset2.is_valid() and formset3.is_valid() == False and form2.is_valid():
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        subdirs = form2.cleaned_data.get('sub_dirs')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SubDirectory.add_org(this_org, subdirs)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+            
+            elif formset2.is_valid() and formset3.is_valid() == False and form2.is_valid():
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            else:
+                print(formset2.errors)
+                print(formset3.errors)
+                print(form2.errors)
+                print("not working")
+
+        elif 'submit_form1' in request.POST:
+            if form1.is_valid() and form2.is_valid() and formset.is_valid():
+                org = form1.cleaned_data.get('org_name')
+                for form in formset:
+                    if form.cleaned_data.get('tag'):
+                        tags = form.cleaned_data.get('tag')
+                        form.save()
+                        pill = PillTags.objects.get(tag=tags)
+                        tagarray.append(pill)
+
+                collaborators = form1.cleaned_data.get('collaborators')
+                form1.save()
+                subdirs = form2.cleaned_data.get('sub_dirs')
+                this_org = Organizations.objects.get(org_name=org)
+                SharedWithMe.addorg(collaborators, this_org)
+                SharedWithMe.addindorg(user, this_org)
+                SubDirectory.add_org(this_org, subdirs)
+                Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset.is_valid() == False and form1.is_valid() and form2.is_valid():
+                org = form1.cleaned_data.get('org_name')
+                for form in formset:
+                    if form.is_valid():
+                        if form.cleaned_data.get('tag'):
+                            tags = form.cleaned_data.get('tag')
+                            form.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                    else:
+                        pass
+
+                collaborators = form1.cleaned_data.get('collaborators')
+                form1.save()
+                subdirs = form2.cleaned_data.get('sub_dirs')
+                this_org = Organizations.objects.get(org_name=org)
+                SharedWithMe.addorg(collaborators, this_org)
+                SubDirectory.add_org(this_org, subdirs)
+                Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset.is_valid() == False and form1.is_valid() and form2.is_valid() == False:
+                org = form1.cleaned_data.get('org_name')
+                for form in formset:
+                    if form.is_valid():
+                        if form.cleaned_data.get('tag'):
+                            tags = form.cleaned_data.get('tag')
+                            form.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                    else:
+                        pass
+
+                collaborators = form1.cleaned_data.get('collaborators')
+                form1.save()
+                this_org = Organizations.objects.get(org_name=org)
+                SharedWithMe.addorg(collaborators, this_org)
+                Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+        else:
+            print("not working")
+    
+    else:
+        form1 = Add_Organization()
+        form2 = AddOrgToSubDir()
+        formset = AddTagsFormset(queryset=PillTags.objects.none(), prefix='tags')
+        formset2 = AddOrgsFormset(queryset=myorgs, prefix='orgs')
+        formset3 = AddTagsFormset(queryset=PillTags.objects.none(), prefix='tags2')
+
+    context = {
+            'form1': form1,
+            'form2': form2,
+            'formset': formset,
+            'tags': tags,
+            'formset2': formset2,
+            'formset3': formset3,
+            'swme': swme,
+            'orglist': orglist,
+            'tagarray2': tagarray2,
+            'subdirslist': subdirslist,
+            'tagarray3': tagarray3,
+            'formset4': formset4,
+            'myfolders': myfolders,
+            'collab_accounts': collab_accounts,
+            'files': files,
+            'myfiles': myfiles,
+            'recent_files': recent_files,
+        }
+    return render(request, 'app/document_directory.html', context)
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['caseworker'])
+def document_directory_folder(request, pk, option):
+    reverseurl = reverse('document_folder_directory', kwargs={'pk': pk, 'option': option})
+    user = request.user
+    my_path = None
+    if option == 1:
+        try:
+            folder = FileFolder.objects.get(id=pk)
+        except FileFolder.DoesNotExist:
+            folder = None
+    elif option == 2:
+        try:
+            folder = FileSubFolder.objects.get(id=pk)
+        except FileSubFolder.DoesNotExist:
+            folder = None
+        my_path = FileSubFolder.findpath(pk, user)
+
+    swme = SharedWithMe.objects.get(name=user)
+    myorgs = Organizations.objects.filter(id__in=swme.organization.all())
+    mysubfolders = folder.subfolder.all()
+    print(mysubfolders)
+    myfolders = FileFolder.objects.filter(user=user)
+    collab_accounts = Account.objects.filter(is_caseworker = True)
+    files = DirectoryFiles.objects.all()
+    myfiles = FileFolder.objects.filter(user=user)
+
+    tags = PillTags.objects.all()
+    tagarray = []
+
+    orglist = []
+    for org in myorgs:
+        orglist.append(org.id)
+
+    tagarray2  = []
+    for thisorg in myorgs:
+        tagarray2.append(thisorg.org_tags.all())
+
+    tagarray3 = []
+    m = 0
+    for tag in tagarray2:
+        tagarray3.append(tags.difference(tag))
+        m += 1
+
+    subdirslist = [[]]
+    subdirslist2 = []
+    j = 0
+    for thisorg in myorgs:
+        thisdir = SubDirectory.objects.filter(subdirectory_organization=thisorg)
+        for dirx in thisdir:
+            subdirslist2.append(dirx.name)
+        subdirslist.insert(j, subdirslist2)
+        subdirslist2 = []
+        j += 1
+
+    data = {}
+    formset4 = DirFilesFormset(queryset=DirectoryFiles.objects.none(), prefix='file')
+
+    
+    if request.is_ajax() and request.method == "POST":
+        print(request.POST)
+        formset4 = DirFilesFormset(request.POST, request.FILES, prefix='file')
+        if 'downloadbtn' in request.POST:
+            fileid = request.POST['fileid']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            print("Successfully in first one")
+            try:
+                obj = RecentFiles.objects.get(file=fileobj, user=user)
+                obj.save()
+            except RecentFiles.DoesNotExist:
+                obj = RecentFiles(file=fileobj, user=user)
+                obj.save()
+            data = {
+                'msg': 'hello',
+            }
+            return JsonResponse(data)
+        else:
+            print("not working properly wtf")
+            for form in formset4:
+                if form.is_valid():
+                    if (form.cleaned_data.get('file') != None):
+                        m = form.save()
+                        this_file = DirectoryFiles.objects.get(file = m.file)
+                        collaborators = form.cleaned_data.get('file_collaborators')
+                        myfolder = form.cleaned_data.get('folder')
+                        FileFolder.add_to_folder(this_file, user, myfolder)
+                        SharedWithMe.addfile(collaborators, this_file)
+                else:
+                    print(form.errors)
+
+            return JsonResponse(data)
+
+    elif request.method == "POST":
+        print(request.POST)
+        form1 = Add_Organization(request.POST, request.FILES)
+        form2 = AddOrgToSubDir(request.POST)
+        formset = AddTagsFormset(request.POST, prefix='tags')
+        formset2 = AddOrgsFormset(request.POST, request.FILES, queryset=myorgs, prefix='orgs')
+        formset3 = AddTagsFormset(request.POST, prefix='tags2')
+
+        if 'add-folder-name' in request.POST:
+            foldername = request.POST['add-folder-name']
+            new_folder = FileSubFolder(name=foldername, user=user)
+            new_folder.save()
+            print(folder)
+            print(new_folder)
+            folder.subfolder.add(new_folder)
+            return HttpResponseRedirect(reverseurl)
+
+        elif 'share-file-id' in request.POST:
+            fileid = request.POST['share-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            collaborators = request.POST.getlist('sharecollabCheckboxes')
+            for collaborator in collaborators:
+                collabaccount = Account.objects.get(id=collaborator)
+                SharedWithMe.addindfile(collabaccount, fileobj)
+            return HttpResponseRedirect(reverseurl)
+
+        elif 'move-file-id' in request.POST:
+            fileid = request.POST['move-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            foldername = request.POST['move-folder-value']
+            if option == 1:
+                originalfolder = FileFolder.objects.get(id=pk)
+            elif option == 2:
+                originalfolder = FileSubFolder.objects.get(id=pk)
+            try:
+                folder = FileFolder.objects.get(name=foldername, user=user)
+            except FileFolder.DoesNotExist:
+                folder = FileSubFolder.objects.get(name=foldername, user=user)
+            originalfolder.file.remove(fileobj)
+            folder.file.add(fileobj)
+            return HttpResponseRedirect(reverseurl)
+
+        elif 'copy-file-id' in request.POST:
+            fileid = request.POST['copy-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            if 'folder-value' not in request.POST:
+                folders = ""
+            else:
+                folders = request.POST.getlist('folder-value')
+            if 'subfolder-value' not in request.POST:
+                subfolders = ""
+            else:
+                subfolders = request.POST.getlist('subfolder-value')
+            if 'sub2folder-value' not in request.POST:
+                sub2folders = ""
+            else:
+                sub2folders = request.POST.getlist('sub2folder-value')  
+            for fold in folders:
+                folder = FileFolder.objects.get(name=fold, user=user)
+                folder.file.add(fileobj)
+            for subfold in subfolders:
+                subfolder = FileSubFolder.objects.get(name=subfold, user=user)
+                subfolder.file.add(fileobj)
+            for sub2fold in sub2folders:
+                sub2folder = FileSubFolder.objects.get(name=sub2fold, user=user)
+                sub2folder.file.add(fileobj)
+            return HttpResponseRedirect(reverseurl)
+
+        elif 'rename-file-name' in request.POST:
+            fileid = request.POST['rename-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            newname = request.POST['rename-file-name']
+            print(fileobj.document_name)
+            fileobj.document_name = newname
+            fileobj.save()
+            return HttpResponseRedirect(reverseurl)
+
+        elif 'delete-file-id' in request.POST:
+            fileid = request.POST['delete-file-id']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            allfolder = FileFolder.objects.get(user=user, name="All Files")
+            print(allfolder)
+            if option == 1:
+                filefolder = FileFolder.objects.get(id=pk)
+            elif option == 2:
+                filefolder = FileSubFolder.objects.get(id=pk)
+            filefolder.file.remove(fileobj)
+            allfolder.file.remove(fileobj)
+            return HttpResponseRedirect(reverseurl)
+
+        elif 'rename-folder-name' in request.POST:
+            folderid = request.POST['rename-folder-id']
+            folderobj = FileSubFolder.objects.get(id=folderid)
+            newname = request.POST['rename-folder-name']
+            folderobj.name = newname
+            folderobj.save()
+            return HttpResponseRedirect(reverseurl)
+
+        elif 'delete-folder-id' in request.POST:
+            folderid = request.POST['delete-folder-id']
+            folderobj = FileSubFolder.objects.get(id=folderid)
+            folderobj.delete()
+            return HttpResponseRedirect(reverseurl)
+
+        if form1.is_valid() and form2.is_valid() and formset.is_valid():
+            org = form1.cleaned_data.get('org_name')
+            for form in formset:
+                if form.cleaned_data.get('tag'):
+                    tags = form.cleaned_data.get('tag')
+                    form.save()
+                    pill = PillTags.objects.get(tag=tags)
+                    tagarray.append(pill)
+
+            collaborators = form1.cleaned_data.get('collaborators')
+            form1.save()
+            subdirs = form2.cleaned_data.get('sub_dirs')
+            this_org = Organizations.objects.get(org_name=org)
+            SharedWithMe.addorg(collaborators, this_org)
+            SubDirectory.add_org(this_org, subdirs)
+            Organizations.addextra(org, tagarray)
+            return redirect('dashboard')
+
+        elif formset.is_valid() == False and form1.is_valid() and form2.is_valid():
+            org = form1.cleaned_data.get('org_name')
+            for form in formset:
+                if form.is_valid():
+                    if form.cleaned_data.get('tag'):
+                        tags = form.cleaned_data.get('tag')
+                        form.save()
+                        pill = PillTags.objects.get(tag=tags)
+                        tagarray.append(pill)
+                else:
+                    pass
+
+            return redirect('dashboard')
+
+            collaborators = form1.cleaned_data.get('collaborators')
+            form1.save()
+            subdirs = form2.cleaned_data.get('sub_dirs')
+            this_org = Organizations.objects.get(org_name=org)
+            SharedWithMe.addorg(collaborators, this_org)
+            SubDirectory.add_org(this_org, subdirs)
+            Organizations.addextra(org, tagarray)
+            return redirect('dashboard')
+        
+        elif formset2.is_valid() and formset3.is_valid() and form2.is_valid():
+            for formz in formset3:
+                if formz.cleaned_data.get('tag'):
+                    tags = formz.cleaned_data.get('tag')
+                    formz.save()
+                    pill = PillTags.objects.get(tag=tags)
+                    tagarray.append(pill)
+            for formz in formset2:
+                if (formz.has_changed() == True):
+                    org = formz.cleaned_data.get('org_name')
+                    if formz.is_valid():
+                        formz.save()
+                    collaborators = formz.cleaned_data.get('collaborators')
+                    subdirs = form2.cleaned_data.get('sub_dirs')
+                    this_org = Organizations.objects.get(org_name=org)
+                    SharedWithMe.addorg(collaborators, this_org)
+                    SubDirectory.add_org(this_org, subdirs)
+                    Organizations.addextra(org, tagarray)
+                else:
+                    pass
+
+            return redirect('test3')
+
+        elif formset2.is_valid() and form1.is_valid() and form2.is_valid():
+            print("fourth one")
+
+        else:
+            return redirect('dashboard')
+    
+    else:
+        form1 = Add_Organization()
+        form2 = AddOrgToSubDir()
+        formset = AddTagsFormset(queryset=PillTags.objects.none(), prefix='tags')
+        formset2 = AddOrgsFormset(queryset=myorgs, prefix='orgs')
+        formset3 = AddTagsFormset(queryset=PillTags.objects.none(), prefix='tags2')
+
+    context = {
+        'form1': form1,
+        'form2': form2,
+        'formset': formset,
+        'tags': tags,
+        'formset2': formset2,
+        'formset3': formset3,
+        'swme': swme,
+        'orglist': orglist,
+        'tagarray2': tagarray2,
+        'subdirslist': subdirslist,
+        'tagarray3': tagarray3,
+        'formset4': formset4,
+        'myfolders': myfolders,
+        'mysubfolders': mysubfolders,
+        'collab_accounts': collab_accounts,
+        'files': files,
+        'myfiles': myfiles,
+        'folder': folder,
+        'my_path': my_path,
+        }
+
+    return render(request, 'app/document_folder_directory.html', context)
+
+def testpage(request):
+    form = Add_Organization()
+
+    context = {
+        'form': form,
+        }
+    return render(request, 'app/test.html', context)
+
+def validate_org(request):
+    org_name = request.GET.get('org_name', None)
+    test_name = Organizations.objects.filter(org_name=org_name).exists()
+    if(test_name):
+        name_msg = "An organization with this name already exists!"
+    else:
+        name_msg = ""
+    '''-------------------------------------------------------------------------------------'''
+    org_website = request.GET.get('org_website', None)
+    web_str = str(org_website)
+    if (web_str.endswith(".com") or web_str.endswith(".org") or web_str.endswith(".edu")):
+        org_website = False
+        website_msg = ""
+    else:
+        org_website = True
+        website_msg = "Must be a valid website"
+    '''-------------------------------------------------------------------------------------'''
+    org_phone = request.GET.get('org_phone', None)
+    phone_str = str(org_phone)
+    if (phone_str.isdigit() and len(phone_str) == 10):
+        org_phone = False
+        phone_msg = ""
+    else:
+        org_phone = True
+        phone_msg = "Phone Number Invalid (Must be 10 numbers)"
+    '''-------------------------------------------------------------------------------------'''
+    org_email = request.GET.get('org_email', None)
+    email_str = str(org_email)
+    try:
+        validate_email(email_str)
+    except ValidationError:
+        org_email = True
+        email_msg = "Must be a valid email"
+    else:
+        org_email = False
+        email_msg = ""
+    '''-------------------------------------------------------------------------------------'''
+    org_zipcode = request.GET.get('org_zipcode', None)
+    zipcode_str = str(org_zipcode)
+    if (zipcode_str.isdigit() and len(zipcode_str) == 5):
+        org_zipcode = False
+        zipcode_msg = ""
+    else:
+        org_zipcode = True
+        zipcode_msg = "Zipcode Invalid (Must be 5 numbers)"
+    '''-------------------------------------------------------------------------------------'''
+    contact_phone = request.GET.get('contact_phone', None)
+    cphone_str = str(contact_phone)
+    if (cphone_str.isdigit() and len(cphone_str) == 10):
+        contact_phone = False
+        cphone_msg = ""
+    else:
+        contact_phone = True
+        cphone_msg = "Phone Number Invalid (Must be 10 numbers)"
+    '''-------------------------------------------------------------------------------------'''
+    contact_email = request.GET.get('contact_email', None)
+    cemail_str = str(contact_email)
+    try:
+        validate_email(cemail_str)
+    except ValidationError:
+        contact_email = True
+        cemail_msg = "Must be a valid email"
+    else:
+        contact_email = False
+        cemail_msg = ""
+    '''-------------------------------------------------------------------------------------'''
+    mail_zipcode = request.GET.get('mail_zipcode', None)
+    mzipcode_str = str(mail_zipcode)
+    if (mzipcode_str.isdigit() and len(mzipcode_str) == 5):
+        mail_zipcode = False
+        mzipcode_msg = ""
+    else:
+        mail_zipcode = True
+        mzipcode_msg = "Zipcode Invalid (Must be 5 numbers)"
+    '''-------------------------------------------------------------------------------------'''
+
+    data = {
+        'is_taken': test_name,
+        'web_invalid': org_website,
+        'phone_invalid': org_phone,
+        'email_invalid': org_email,
+        'zipcode_invalid': org_zipcode,
+        'cphone_invalid': contact_phone,
+        'cemail_invalid': contact_email,
+        'mzipcode_invalid': mail_zipcode,
+
+        'name_msg': name_msg,
+        'website_msg': website_msg,
+        'phone_msg': phone_msg,
+        'email_msg': email_msg,
+        'zipcode_msg': zipcode_msg,
+        'cphone_msg': cphone_msg,
+        'cemail_msg': cemail_msg,
+        'mzipcode_msg': mzipcode_msg,
+    }
+    return JsonResponse(data)
+
+def testpage2(request):
+    #form = DirFileForm()
+    #data = {}
+    #if request.is_ajax() and request.method == 'POST':
+        #form = DirFileForm(request.POST, request.FILES)
+        #if form.is_valid():
+            #form.save()
+            #data['name'] = form.cleaned_data.get('document_name')
+            #data['status'] = 'ok'
+            #return JsonResponse(data)
+    #context = {
+        #'form': form,
+        #}
+    data = {}
+    formset = DirFilesFormset(queryset=DirectoryFiles.objects.none(), prefix='file')
+    if request.is_ajax and request.method == 'POST':
+        formset = DirFilesFormset(request.POST, request.FILES, prefix='file')
+        for form in formset:
+            if form.is_valid():
+                if (form.cleaned_data.get('file') != None):
+                    form.save()
+        return JsonResponse(data)
+    context = {
+        'formset': formset,
+        }
+    return render(request, 'app/test2.html', context)

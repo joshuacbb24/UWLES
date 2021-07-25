@@ -1,0 +1,2034 @@
+﻿{% extends 'app/format.html' %}
+
+{% block header1 %}
+    <a href="{% url 'dashboard' %}">
+        <span id="fist-element" class="las la-home"></span>
+    </a>
+{% endblock %}
+{% block header2 %}
+    <a href="{% url 'fulldirectory' %}" class="active">
+        <span class="las la-book"></span>
+    </a>
+{% endblock %}
+{% block header3 %}
+    <a href="{% url 'multichat' %}">
+        <span class="las la-comment-alt"></span>
+    </a>
+{% endblock %}
+{% block header4 %}
+    <a href="">
+        <span class="las la-user-friends"></span>
+    </a>
+{% endblock %}
+{% block header5 %}
+    <a href="">
+        <span class="las la-plus-circle"></span>
+    </a>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+{% load project_templates %}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <script src="{% static 'app/scripts/filter_org.js' %}"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+<style>
+    body {
+        overflow-x: hidden;
+    }
+   .directoryBar {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 10px;
+
+        position: absolute;
+        width: 1090px;
+        height: 50px;
+        top: 20px;
+        left: 250px;
+
+        background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+        border-radius: 4px;
+    }
+    .fullActive {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 260px;
+
+        background: #EBF2F2;
+        box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+        border-radius: 4px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        padding-top: 6px;
+        color: #013D44;
+
+        cursor: pointer;
+
+    }
+    .orgActive {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 370px;
+        
+        background: #EBF2F2;
+        box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+        border-radius: 4px;
+    }
+    .profileActive {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 730px;
+
+        background: #EBF2F2;
+        box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+        border-radius: 4px;
+    }
+    .fileActive {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 1090px;
+        
+        background: #EBF2F2;
+        box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+        border-radius: 4px;
+    }
+
+    .orgHidden {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 620px;
+
+        background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01cm;
+        text-transform: capitalize;
+        padding-top: 6px;
+        color: #878787;
+    }
+
+        .orgHidden:hover {
+            cursor: pointer;
+            background: #E6EEF0;
+        }
+
+    .fileHidden {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 980px;
+
+        background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01cm;
+        text-transform: capitalize;
+        padding-top: 6px;
+        color: #878787;
+    }
+
+        .fileHidden:hover {
+            cursor: pointer;
+            background: #E6EEF0;
+        }
+
+
+        .searchbarcontainer{
+    position: absolute;
+    height: 40px;
+    width: 1600px;
+    top: 100px;
+    background: #FFFFFF;
+    border: 1px solid #878787;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.searchbar {
+    position: absolute;
+    height: 37px;
+    width: 1600px;
+    padding-left: 50px;
+    background: #FFFFFF;
+    border: none;
+}
+
+#searchBarIcon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: black;
+}
+    .locationDD {
+        position: absolute;
+        top: 180px;
+        height: 35px;
+        width: 104px;
+
+        background: #FFFFFF;
+        border: 0.5px solid #5F5F5F;
+        box-sizing: border-box;
+        border-radius: 4px;
+    }
+
+    .eligibilityDD {
+        position: absolute;
+        top: 180px;
+        height: 35px;
+        width: 104px;
+        left: 140px;
+
+        background: #FFFFFF;
+        border: 0.5px solid #5F5F5F;
+        box-sizing: border-box;
+        border-radius: 4px;
+    }
+
+    .DDcontent {
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 24px;
+        align-items: center;
+        text-align: center;
+        color: #5F5F5F;
+    }
+
+    .addBox {
+        position: absolute;
+        top: 180px;
+        left: 1390px;
+        height: 35px;
+        width: 72px;
+        background: #015D67;
+    }
+
+    .addContent {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        color: #FFFFFF;
+        letter-spacing: 0.01cm;
+    }
+
+    #addIcon {
+  
+    }
+
+    .divideLine {
+        position: absolute;
+        width: 0px;
+        height: 30px;
+        left: 1480px;
+        top: 180px;
+        border: 1px solid #979797
+    }
+
+    .gridBox {
+        position: absolute;
+        left: 1498px;
+        top: 180px;
+        width: 44px;
+        height: 35px;
+        background: #DEDEDE;
+        border-radius: 2px;
+    }
+
+    #gridIcon {
+        position: absolute;
+        left: 1510px;
+        top: 190px;
+        color: black;
+    }
+
+     #gridIcon2 {
+        position: absolute;
+        left: 1510px;
+        top: 190px;
+        color: #AFAFAF;
+    }
+
+    .listBox {
+        position: absolute;
+        left: 1554px;
+        top: 180px;
+        width: 44px;
+        height: 35px;
+        background: #DEDEDE;
+        border-radius: 2px;
+    }
+
+    #listIcon {
+        position: absolute;
+        left: 1570px;
+        top: 190px;
+        width: 22px;
+        height: 18px;
+        color: black;
+    }
+
+     #listIcon2 {
+        position: absolute;
+        left: 1570px;
+        top: 190px;
+        width: 22px;
+        height: 18px;
+        color: #AFAFAF;
+    }
+
+    .dirPath {
+        position: absolute;
+        top: 260px;
+        width: 110px;
+        height: 20px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 17px;
+
+        color: #979797;
+        cursor: pointer;
+    }
+
+    .gridLayout {
+        position: absolute;
+        top: 300px;
+        width: 1620px;
+        height: 1000px;
+    }
+
+
+    .card1 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card2 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 580px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card3 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 1160px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card4 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 260px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card5 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 260px;
+        left: 580px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card6 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 1160px;
+        top: 260px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card7 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 520px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card8 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 520px;
+        left: 580px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card9 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 1160px;
+        top: 520px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card10 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 780px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card11 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 780px;
+        left: 580px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card12 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 1160px;
+        top: 780px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .circle {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        background: rgba(255, 186, 0, 0.2);
+    }
+
+    #AgingIcon {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    #EducationIcon {
+        position: absolute;
+        top: 15px;
+        left: 10px;
+        color: #FFBA00;
+    }
+
+    #FoodIcon {
+        position: absolute;
+        top: 15px;
+        left: 17px;
+        color: #FFBA00;
+    }
+
+    #FamilyIcon {
+        position: absolute;
+        top: 15px;
+        left: 13px;
+        color: #FFBA00;
+    }
+
+    #DomesticIcon {
+        position: absolute;
+        top: 14px;
+        left: 17px;
+        color: #FFBA00;
+    }
+
+    #EmploymentIcon {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    #HealthIcon {
+        position: absolute;
+        top: 16px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    #HousingIcon {
+        position: absolute;
+        top: 14px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    #LegalIcon {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        color: #FFBA00;
+    }
+
+    #UtilityIcon {
+        position: absolute;
+        top: 15px;
+        left: 20px;
+        color: #FFBA00;
+    }
+
+    #MentalIcon {
+        position: absolute;
+        top: 15px;
+        left: 16px;
+        color: #FFBA00;
+    }
+
+    #VeteransIcon {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    .h2title {
+        position: absolute;
+        top: 50px;
+        left: 120px;
+        
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 20px;
+        color: #015D67;
+    }
+
+    .ptext {
+        position: absolute;
+        top: 100px;
+        left: 30px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01cm;
+
+        color: #707070;
+    }
+
+    .explorebtn {
+        position: absolute;
+        top: 150px;
+        left: 30px;
+        width: 100px;
+        height: 35px;
+
+        background: #015D67;
+        border-radius: 6px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01cm;
+
+        color: #FFFFFF
+    }
+
+    .resourceLayout {
+        position: absolute;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: left;
+        list-style: none;
+        top: 300px;
+        width: 1680px;
+        min-height: 240px;
+    }
+
+    .orgCard {
+        width: 520px;
+        height: 200px;
+        margin-right: 40px;
+        margin-bottom: 40px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .resourceCard1 {
+        width: 520px;
+        height: 200px;
+        margin-bottom: 60px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .resourceCard2 {
+        width: 520px;
+        height: 200px;
+        margin-left: 60px;
+        margin-bottom: 60px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .resourceCard3 {
+        width: 520px;
+        height: 200px;
+        margin-left: 60px;
+        margin-bottom: 60px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .resourceCircle {
+        position: relative;
+        top: 30px;
+        left: 30px;
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25), 0px 0px 4px rgba(0, 0, 0, 0.25);
+    }
+
+        .resourceCircle img {
+            position: relative;
+            top: 5px;
+            left: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+    .resourceh2 {
+        position: relative;
+        left: 120px;
+        bottom: 10px;
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 20px;
+        color: #015D67;
+    }
+
+    .resourcep {
+        position: relative;
+        top: 20px;
+        left: 30px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01cm;
+
+        color: #707070;
+    }
+
+    .visitbtn {
+        position: relative;
+        top: 50px;
+        left: 30px;
+        width: 100px;
+        height: 35px;
+
+        background: #015D67;
+        border-radius: 6px;
+        border: 0px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01cm;
+
+        color: #FFFFFF;
+
+        cursor: pointer;
+    }
+
+    .subPath {
+        position: absolute;
+        top: 260px;
+        left: 120px;
+        width: 500px;
+        height: 20px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 15px;
+        line-height: 17px;
+        
+
+        color: #676767;
+    }
+
+    #hidden {
+        visibility: hidden;
+    }
+
+    #visible {
+        visibility: visible;
+    }
+
+    .listCategory {
+        position: absolute;
+        top: 310px;
+        left: 30px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.01cm;
+
+        color: #676767;
+    }
+
+    .listDsc {
+        position: absolute;
+        top: 310px;
+        left: 500px;
+        width: 200px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.01cm;
+
+
+        color: #676767;
+    }
+
+    .listOrder {
+        position: absolute;
+        top: 305px;
+        left: 150px;
+
+        width: 90px;
+        height: 30px;
+
+        background: #DEDEDE;
+        border-radius: 3px;
+    }
+
+    .listA {
+        position: absolute;
+        left: 14px;
+        top: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .listZ {
+        position: absolute;
+        left: 64px;
+        top: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+    #Arrow {
+        position: absolute;
+        left: 36px;
+        top: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .rlistLayout {
+        position: absolute;
+        top: 350px;
+        width: 1680px;
+        min-height: 900px;
+    }
+
+    .org-list{
+        position: relative;
+        width: 1600px;
+        height: 65px;
+        background: rgba(196, 226, 238, 0.32);
+        border: 1px solid #ECF5F9;
+        box-sizing: border-box;
+        margin-top: 10px;
+    }
+
+    .org-list:nth-child(even){
+        background: rgba(238, 229, 196, 0.32);
+    }
+    
+    .rlist1 {
+        position: relative;
+        width: 1600px;
+        height: 65px;
+        background: rgba(196, 226, 238, 0.32);
+        border: 1px solid #ECF5F9;
+        box-sizing: border-box;
+        margin-top: 10px;
+    }
+
+    .rlist2 {
+        position: relative;
+        margin-top: 10px;
+        width: 1600px;
+        height: 65px;
+        background: rgba(238, 229, 196, 0.32);
+        border: 1px solid #ECF5F9;
+        box-sizing: border-box;
+    }
+
+    .rlistName {
+        position: relative;
+        left: 30px;
+        top: 19px;
+        width: 350px;
+        height: 30px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .rlistDescript {
+        position: relative;
+        left: 500px;
+        width: 800px;
+        height: 30px;
+        bottom: 5px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01cm;
+
+        color: #5F5F5F;
+    }
+
+    .rlistExplore1 {
+        position: relative;
+        left: 1400px;
+        width: 150px;
+        height: 38px;
+        bottom: 48px;
+
+        border: 1px solid #015D67;
+        box-sizing: border-box;
+        border-radius: 4px;
+
+        color: #015D67;
+        background: rgba(196, 226, 238, 0.32);
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .rlistExplore2 {
+        position: relative;
+        left: 1400px;
+        width: 150px;
+        height: 38px;
+        bottom: 48px;
+
+        border: 1px solid #015D67;
+        box-sizing: border-box;
+        border-radius: 4px;
+
+        color: #015D67;
+        background: rgba(238, 229, 196, 0.32);
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .rlistExplore1:hover {
+        background: #015D67;
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+    }
+
+    .rlistExplore2:hover {
+        background: #015D67;
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+    }
+
+    .modal-open{
+            overflow:hidden;
+        }
+
+        .modal{
+            position:fixed;
+            top:0;
+            right:0;
+            bottom:0;
+            left:0;
+            z-index:1050;
+            display:none;
+            overflow:hidden;
+            outline:0;
+        }
+
+        .modal-open .modal{
+            overflow-x:hidden;
+            overflow-y:auto;
+
+        }
+
+        .modal-dialog {
+            position: relative;
+            min-width: 1000px;
+            width: auto;
+            margin: .5rem;
+            pointer-events: none;
+        }
+
+        .modal.fade .modal-dialog{
+            transition:-webkit-transform .3s ease-out;
+            transition:transform .3s ease-out;
+            transition:transform .3s ease-out,-webkit-transform .3s ease-out;
+            -webkit-transform:translate(0,-25%);
+            transform:translate(0,-25%);
+        }
+
+        .modal.show .modal-dialog{
+            -webkit-transform:translate(0,0);
+            transform:translate(0,0);
+        }
+
+        .modal-dialog-centered{
+            display:-webkit-box;
+            display:-ms-flexbox;
+            display:flex;
+            -webkit-box-align:center;
+            -ms-flex-align:center;
+            align-items:center;
+            min-height:calc(100% - (.5rem * 2));
+        }
+
+        .modal-content{
+            position:relative;
+            display:-webkit-box;
+            display:-ms-flexbox;
+            display:flex;
+            -webkit-box-orient:vertical;
+            -webkit-box-direction:normal;
+            -ms-flex-direction:column;
+            flex-direction:column;
+            width:100%;
+            pointer-events:auto;
+            background-color:#fff;
+            background-clip:padding-box;
+            border:1px solid rgba(0,0,0,.2);
+            border-radius:.3rem;
+            outline:0;
+        }
+        
+        .modal-backdrop{
+            position:fixed;
+            top:0;
+            right:0;
+            bottom:0;
+            left:0;
+            z-index:1040;
+            background-color:#000;
+        }
+
+        .modal-backdrop.fade{
+            opacity:0;
+        }
+        
+        .modal-backdrop.show{
+            opacity:.5;
+        }
+
+        .modal-header{
+            display:-webkit-box;
+            display:-ms-flexbox;
+            display:flex;
+            -webkit-box-align:start;
+            -ms-flex-align:start;
+            align-items:flex-start;
+            -webkit-box-pack:justify;
+            -ms-flex-pack:justify;
+            justify-content:left;
+            letter-spacing: .5cm;
+            padding:1rem;
+            padding-left:55rem;
+            border-top-left-radius:.3rem;
+            border-top-right-radius:.3rem;
+        }
+        
+        .modal-header .close{
+            padding:1rem;
+            margin:-1rem -1rem -1rem auto;
+        }
+
+        .modal-title{
+            margin-bottom:0;
+            line-height:1.5;
+        }
+
+        .modal-body {
+            position: relative;
+            -webkit-box-flex: 1;
+            -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+            padding: 3rem;
+        }
+
+        .modal-footer{
+            display:-webkit-box;
+            display:-ms-flexbox;
+            display:flex;
+            -webkit-box-align:center;
+            -ms-flex-align:center;
+            align-items:center;
+            -webkit-box-pack:end;
+            -ms-flex-pack:end;
+            justify-content:flex-end;
+            padding:1rem;
+            border-top:1px solid #e9ecef;
+        }
+        
+        .modal-footer>:not(:first-child){
+            margin-left:.25rem;
+        }
+
+        .modal-footer>:not(:last-child){
+            margin-right:.25rem;
+        }
+        
+        .modal-scrollbar-measure{
+            position:absolute;
+            top:-9999px;
+            width:50px;
+            height:50px;
+            overflow:scroll;
+        }
+        
+        @media (min-width:576px){
+            .modal-dialog{
+                max-width:500px;
+                margin:1.75rem auto;
+            }
+            .modal-dialog-centered{
+                min-height:calc(100% - (1.75rem * 2));
+            }
+            .modal-sm{
+                max-width:300px;
+            }
+        }
+
+        @media (min-width:992px){
+            .modal-lg{
+                max-width:800px;
+            }
+        }
+
+    .modalh1 {
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 24px;
+        line-height: 29px;
+
+        display: flex;
+        align-items: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+
+        color: #000000;
+    }
+
+    .modalp {
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01em;
+
+        color: #000000; 
+    }
+
+    .modalbp {
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01em;
+
+        color: #000000; 
+    }
+
+    .modalContact {
+        width: 462px;
+        height: 165px;
+        background: #F5F5F5;
+        box-shadow: 0px 4px 8px rgba(1, 61, 68, 0.15);
+        border-radius: 8px;
+    }
+
+    .h3Contact {
+        position: relative;
+        left: 15px;
+        top: 15px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 19px;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+
+        color: #000000;
+    }
+
+    .contactName {
+        position: relative;
+        top: 30px;
+        left: 15px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01em;
+
+        color: #000000;
+    }
+
+    .contactEmail {
+        position: relative;
+        top: 35px;
+        left: 15px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01em;
+
+        color: #000000;
+    }
+
+    .contactPhone {
+        position: relative;
+        top: 40px;
+        left: 15px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01em;
+
+        color: #000000;
+    }
+
+    .contactWebsite {
+        position: relative;
+        width: 125px;
+        height: 27px;
+        top: 60px;
+        left: 15px;
+
+        border: 0px;
+        border-radius: 6px;
+        background: #015D67;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+
+        display: flex;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01em;
+
+        color: #FFFFFF;
+    }
+
+    .contactShare {
+        position: relative;
+        width: 125px;
+        height: 27px;
+        top: 33px;
+        left: 150px;
+
+        border: 0px;
+        border-radius: 6px;
+        background: #015D67;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+
+        display: flex;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01em;
+
+        color: #FFFFFF;
+    }
+
+    .buttonText {
+        margin: auto;
+    }
+
+    .modalMap {
+        width: 858px;
+        height: 304px;
+        position: relative;
+        top: 30px;
+    }
+
+    .modalArea {
+        position: relative;
+        top: 60px;
+        width: 113px;
+        height: 23px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 19px;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+
+        color: #000000;
+    }
+
+    .modalLang {
+        position: relative;
+        top: 37px;
+        left: 658px;
+        width: 173px;
+        height: 23px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 19px;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+
+        color: #000000;
+    }
+    .location-dorchester {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.location-somerset {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 130px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.location-wicomico {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 260px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.location-worcester {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 390px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-all {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 620px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-youth {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 750px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-teens {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 880px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-adults {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 1010px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-seniors {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 1140px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.filtered{
+    background: #015D67;
+    color: white;
+}
+
+.filtered2{
+    background: #015D67;
+    color: white;
+}
+
+.unfiltered{
+    background: #FFFFFF;
+    color: black;
+}
+
+.break-location{
+    position: absolute;
+    width: 0px;
+    height: 40px;
+    left: 555px;
+    top: 180px;
+    border: 1px solid #979797
+}
+
+.break-elig{
+    position: absolute;
+    width: 0px;
+    height: 40px;
+    left: 1260px;
+    top: 180px;
+    border: 1px solid #979797
+}
+</style>
+
+<script>
+    function filterorgsFunction() {
+        var input, filter, div, a, i;
+        input = document.getElementById("searchbar");
+        filter = input.value.toUpperCase();
+        a = document.getElementsByClassName("resourceh2")
+        b = document.getElementsByClassName("rlistName");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                $(a[i]).parent().css("display", "")
+                $(b[i]).parent().css("display", "")
+            } else {
+                $(a[i]).parent().css("display", "none")
+                $(b[i]).parent().css("display", "none")
+            }
+        }
+    }
+
+    $(document).ready(function () {
+        $("#listIcon").click(function () {
+            var list = $(".listBox");
+            var grid = $(".gridBox");
+            list.attr('id', (list.attr('id') === 'visible' ? 'hidden' : 'visible'));
+            grid.attr('id', (grid.attr('id') === 'visible' ? 'hidden' : 'visible'));
+            var licon = $(".listPH");
+            var gicon = $(".gridPH");
+            licon.attr('id', (licon.attr('id') === 'listIcon' ? 'listIcon2' : 'listIcon'));
+            gicon.attr('id', (gicon.attr('id') === 'gridIcon' ? 'gridIcon2' : 'gridIcon'));
+        });
+        $("#gridIcon").click(function () {
+            var list = $(".listBox");
+            var grid = $(".gridBox");
+            list.attr('id', (list.attr('id') === 'visible' ? 'hidden' : 'visible'));
+            grid.attr('id', (grid.attr('id') === 'visible' ? 'hidden' : 'visible'));
+            var licon = $(".listPH");
+            var gicon = $(".gridPH");
+            licon.attr('id', (licon.attr('id') === 'listIcon' ? 'listIcon2' : 'listIcon'));
+            gicon.attr('id', (gicon.attr('id') === 'gridIcon' ? 'gridIcon2' : 'gridIcon'));
+        });
+    });
+
+    $(document).ready(function () {
+        $("#listIcon").click(function () {
+            var list = $(".listBox");
+            if (list.attr("id") == "visible") {
+                var resource = $(".resourceLayout");
+                resource.attr("id", "hidden");
+                var rlist = $(".rlistLayout");
+                rlist.attr("id", "visible");
+                var listC = $(".listCategory");
+                listC.attr("id", "visibile");
+                var listD = $(".listDsc");
+                listD.attr("id", "visible");
+                var listO = $(".listOrder");
+                listO.attr("id", "visible");
+            }
+            if (list.attr("id") == "hidden") {
+                var resource = $(".resourceLayout");
+                resource.attr("id", "visible");
+                var rlist = $(".rlistLayout");
+                rlist.attr("id", "hidden");
+                var listC = $(".listCategory");
+                listC.attr("id", "hidden");
+                var listD = $(".listDsc");
+                listD.attr("id", "hidden");
+                var listO = $(".listOrder");
+                listO.attr("id", "hidden");
+            }
+        });
+        $("#gridIcon").click(function () {
+            var grid = $(".gridBox");
+            if (grid.attr("id") == "visible") {
+                var resource = $(".resourceLayout");
+                resource.attr("id", "visible");
+                var rlist = $(".rlistLayout");
+                rlist.attr("id", "hidden");
+                var listC = $(".listCategory");
+                listC.attr("id", "hidden");
+                var listD = $(".listDsc");
+                listD.attr("id", "hidden");
+                var listO = $(".listOrder");
+                listO.attr("id", "hidden");
+            }
+            if (grid.attr("id") == "hidden") {
+                var resource = $(".resourceLayout");
+                resource.attr("id", "hidden");
+                var rlist = $(".rlistLayout");
+                rlist.attr("id", "visible");
+                var listC = $(".listCategory");
+                listC.attr("id", "visibile");
+                var listD = $(".listDsc");
+                listD.attr("id", "visible");
+                var listO = $(".listOrder");
+                listO.attr("id", "visible");
+            }
+        });
+    });
+</script>
+
+    <div class="directoryBar"></div>
+    <div class="fullActive">Full Directory</div>
+    <a href="{% url 'orgdirectory' %}" class="orgHidden">Organizational Directory</a>
+    <a href="{% url 'documentdirectory' %}" class="fileHidden">Documents Directory</a>
+
+    <div class="searchbarcontainer">
+        <input type="text" placeholder="Search for organization..." class="searchbar" id="searchbar" onkeyup="filterorgsFunction()">
+        <i class="fa fa-search" aria-hidden="true" id="searchBarIcon"></i>
+    </div>
+
+    <div class="location-dorchester">Dorchester</div>
+    <div class="location-somerset">Somerset</div>
+    <div class="location-wicomico">Wicomico</div>
+    <div class="location-worcester">Worcester</div>
+
+    <div class="break-location"></div>
+
+    <div class="elig-all">All Ages</div>
+    <div class="elig-youth">Youth(0-12)</div>
+    <div class="elig-teens">Teens(13-17)</div>
+    <div class="elig-adults">Adults(18+)</div>
+    <div class="elig-seniors">Seniors(60+)</div>
+
+    <div class="break-elig"></div>
+
+    <div class="addBox"><p class="addContent"><i class="fa fa-plus" aria-hidden="true" id="addIcon"></i> New</p></div>
+
+    <div class="divideLine"></div>
+
+    {% if option == 1 %}
+        <div class="gridBox" id="visible"></div>
+        <div class="gridPH" id="gridIcon"><i class="bi bi-grid-3x2-gap-fill" aria-hidden="true"></i></div>
+        <div class="listBox" id="hidden"></div>
+        <div class="listPH" id="listIcon2"><i class="fa fa-bars" aria-hidden="true"></i></div>
+    {% else %}
+        <div class="gridBox" id="hidden"></div>
+        <div class="gridPH" id="gridIcon2"><i class="bi bi-grid-3x2-gap-fill"></i></div>
+        <div class="listBox" id="visible"></div>
+        <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
+    {% endif %}
+
+
+    <a href="{% url 'fulldirectory' %}" class="dirPath">Full Directory ></a>
+    {% for directory in directories %}
+        <div class="subPath">{{ directory.name }}</div>
+    {% endfor %}
+
+    {% if option == 1 %}
+        <div class="resourceLayout" id="visible">
+        {% for directory in directories %}
+            {% for organization in directory.subdirectory_organization.all %}
+                {% for org in organizations %}
+                    {% if org == organization %}
+                        <div class="orgCard">
+                            {% for county in org.areas_served.all %}
+                                <p class="filter-me-county" style="visibility: hidden; display: none;">{{ county }}</p>
+                            {% endfor %}
+                            {% for elig in org.eligibility.all %}
+                                <p class="filter-me-elig" style="visibility: hidden; display: none;">{{ elig }}</p>
+                            {% endfor %}
+                            <div class="resourceCircle">
+                                {% if org.org_image %}
+                                  <img src="{{ org.org_image.url }}">
+                                {% endif %}
+                            </div>
+                            <h2 class="resourceh2">{{ org.org_name }}</h2>
+                            <p class="resourcep">{{ org.description|truncatechars_html:70}}</p>
+                            <button class="visitbtn" type="button" data-toggle="modal" data-target="#testModal{{ org.id }}">Visit Page</button>
+                                <div class="modal fade" id="testModal{{ org.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <i class="bi bi-download"></i>
+                                                <i class="bi bi-box-arrow-up-right"></i>
+                                                <i class="bi bi-x-lg"></i>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h1 class="modalh1">{{ org.org_name }}</h1>
+                                                <br />
+                                                <br />
+                                                <p class="modalp">{{ org.description }}</p>
+                                                <br />
+                                                <span class="modalbp">Intake and Eligibility:</span><span class="modalp"> {% for elig in org.eligibility.all %} {{ elig }} {% endfor %}</span>
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <div class="modalContact">
+                                                    <h3 class="h3Contact">Contact</h3>
+                                                    <p class="contactName">Name: {{ org.contact_name }}</p>
+                                                    <p class="contactEmail">Email: {{ org.contact_email }}</p>
+                                                    <p class="contactPhone">Phone: {{ org.contact_phone|phone_number}}</p>
+                                                    <button class="contactWebsite" type="button"><div class="buttonText">Visit Website</div></button>
+                                                    <button class="contactShare" type="button"><div class="buttonText">Visit Website</div></button>
+                                                </div>
+                                                <div id='map{{ org.id }}' class="modalMap"></div>
+                                                    <script>
+                                                        mapboxgl.accessToken = 'pk.eyJ1IjoidXdsZXN0ZXN0YWRtaW4iLCJhIjoiY2twdTYzZnU0MHdidjJ2cG0xM2h0dXJsdyJ9.lktGtwWKbT-GAmSUOQNEdA';
+                                                        var map{{ org.id }} = new mapboxgl.Map({
+                                                            container: 'map{{ org.id }}', // container ID
+                                                            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                                                            center: [{{ org.long }} , {{ org.lat }}], // starting position [lng, lat]
+                                                            zoom: 11 // starting zoom
+                                                        });
+                                                        var marker = new mapboxgl.Marker()
+                                                            .setLngLat([{{ org.long }}, {{ org.lat }}])
+                                                            .addTo(map{{ org.id }});
+                                                        $('#testModal{{ org.id }}').on('shown.bs.modal', function () {
+                                                            map{{ org.id }}.resize();
+                                                        })
+                                                    </script>
+                                                <div class="modalArea">Areas Served:</div>
+                                                <div class="modalLang">Languages Available:</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="resourceLayout" id="hidden">
+        {% for directory in directories %}
+            {% for organization in directory.subdirectory_organization.all %}
+                {% for org in organizations %}
+                    {% if org == organization %}
+                        <div class="orgCard">
+                            {% for county in org.areas_served.all %}
+                                <p class="filter-me-county" style="visibility: hidden; display: none;">{{ county }}</p>
+                            {% endfor %}
+                            {% for elig in org.eligibility.all %}
+                                <p class="filter-me-elig" style="visibility: hidden; display: none;">{{ elig }}</p>
+                            {% endfor %}
+                            <div class="resourceCircle">
+                                {% if org.org_image %}
+                                  <img src="{{ org.org_image.url }}">
+                                {% endif %}
+                            </div>
+                            <h2 class="resourceh2">{{ org.org_name }}</h2>
+                            <p class="resourcep">{{ org.description|truncatechars_html:70}}</p>
+                            <button class="visitbtn" type="button" data-toggle="modal" data-target="#testModal{{ org.id }}">Visit Page</button>
+                                <div class="modal fade" id="testModal{{ org.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <i class="bi bi-download"></i>
+                                                <i class="bi bi-box-arrow-up-right"></i>
+                                                <i class="bi bi-x-lg"></i>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h1 class="modalh1">{{ org.org_name }}</h1>
+                                                <br />
+                                                <br />
+                                                <p class="modalp">{{ org.description }}</p>
+                                                <br />
+                                                <span class="modalbp">Intake and Eligibility:</span><span class="modalp"> {% for elig in org.eligibility.all %} {{ elig }} {% endfor %}</span>
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <div class="modalContact">
+                                                    <h3 class="h3Contact">Contact</h3>
+                                                    <p class="contactName">Name: {{ org.contact_name }}</p>
+                                                    <p class="contactEmail">Email: {{ org.contact_email }}</p>
+                                                    <p class="contactPhone">Phone: {{ org.contact_phone|phone_number}}</p>
+                                                    <button class="contactWebsite" type="button"><div class="buttonText">Visit Website</div></button>
+                                                    <button class="contactShare" type="button"><div class="buttonText">Visit Website</div></button>
+                                                </div>
+                                                <div id='map{{ org.id }}' class="modalMap"></div>
+                                                    <script>
+                                                        mapboxgl.accessToken = 'pk.eyJ1IjoidXdsZXN0ZXN0YWRtaW4iLCJhIjoiY2twdTYzZnU0MHdidjJ2cG0xM2h0dXJsdyJ9.lktGtwWKbT-GAmSUOQNEdA';
+                                                        var map{{ org.id }} = new mapboxgl.Map({
+                                                            container: 'map{{ org.id }}', // container ID
+                                                            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                                                            center: [{{ org.long }} , {{ org.lat }}], // starting position [lng, lat]
+                                                            zoom: 11 // starting zoom
+                                                        });
+                                                        var marker = new mapboxgl.Marker()
+                                                            .setLngLat([{{ org.long }}, {{ org.lat }}])
+                                                            .addTo(map{{ org.id }});
+                                                        $('#testModal{{ org.id }}').on('shown.bs.modal', function () {
+                                                            map{{ org.id }}.resize();
+                                                        })
+                                                    </script>
+                                                <div class="modalArea">Areas Served:</div>
+                                                <div class="modalLang">Languages Available:</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if option == 2 %}
+        <div class="listCategory" id="visible">Category</div>
+        <div class="listOrder" id="visible"><div class="listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="Arrow"></i><div class="listZ">Z</div></div>
+        <div class="listDsc" id="visible">Resource Type</div>
+    {% else %}
+        <div class="listCategory" id="hidden">Category</div>
+        <div class="listOrder" id="hidden"><div class="listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="Arrow"></i><div class="listZ">Z</div></div>
+        <div class="listDsc" id="hidden">Resource Type</div>
+    {% endif %}
+
+    {% if option == 2 %}
+        <div class="rlistLayout" id="visible">
+            {% for directory in directories %}
+                {% for organization in directory.subdirectory_organization.all %}
+                    {% for org in organizations %}
+                        {% if org == organization %}
+                            <div class="org-list">
+                                {% for county in org.areas_served.all %}
+                                    <p class="filter-me-county2" style="visibility: hidden; display: none;">{{ county }}</p>
+                                {% endfor %}
+                                {% for elig in org.eligibility.all %}
+                                    <p class="filter-me-elig2" style="visibility: hidden; display: none;">{{ elig }}</p>
+                                {% endfor %}
+                                <div class="rlistName">{{ org.org_name }}</div>
+                                <div class="rlistDescript">Organization</div>
+                                <button class="{% cycle 'rlistExplore1' 'rlistExplore2' %}" type="button" data-toggle="modal" data-target="#test2Modal{{ org.id }}">Visit Page</button>
+                                <div class="modal fade" id="test2Modal{{ org.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <i class="bi bi-download"></i>
+                                                <i class="bi bi-box-arrow-up-right"></i>
+                                                <i class="bi bi-x-lg"></i>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h1 class="modalh1">{{ org.org_name }}</h1>
+                                                <br />
+                                                <br />
+                                                <p class="modalp">{{ org.description }}</p>
+                                                <br />
+                                                <span class="modalbp">Intake and Eligibility:</span><span class="modalp"> {% for elig in org.eligibility.all %} {{ elig }} {% endfor %}</span>
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <div class="modalContact">
+                                                    <h3 class="h3Contact">Contact</h3>
+                                                    <p class="contactName">Name: {{ org.contact_name }}</p>
+                                                    <p class="contactEmail">Email: {{ org.contact_email }}</p>
+                                                    <p class="contactPhone">Phone: {{ org.contact_phone|phone_number}}</p>
+                                                    <button class="contactWebsite" type="button"><div class="buttonText">Visit Website</div></button>
+                                                    <button class="contactShare" type="button"><div class="buttonText">Share Contact</div></button>
+                                                </div>
+                                                <div id='map2{{ org.id }}' class="modalMap"></div>
+                                                    <script>
+                                                        mapboxgl.accessToken = 'pk.eyJ1IjoidXdsZXN0ZXN0YWRtaW4iLCJhIjoiY2twdTYzZnU0MHdidjJ2cG0xM2h0dXJsdyJ9.lktGtwWKbT-GAmSUOQNEdA';
+                                                        var map2{{ org.id }} = new mapboxgl.Map({
+                                                            container: 'map2{{ org.id }}', // container ID
+                                                            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                                                            center: [{{ org.long }} , {{ org.lat }}], // starting position [lng, lat]
+                                                            zoom: 11 // starting zoom
+                                                        });
+                                                        var marker = new mapboxgl.Marker()
+                                                            .setLngLat([{{ org.long }}, {{ org.lat }}])
+                                                            .addTo(map2{{ org.id }});
+                                                        $('#test2Modal{{ org.id }}').on('shown.bs.modal', function () {
+                                                            map2{{ org.id }}.resize();
+                                                        })
+                                                    </script>
+                                                <div class="modalArea">Areas Served:</div>
+                                                <div class="modalLang">Languages Available:</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="rlistLayout" id="hidden">
+            {% for directory in directories %}
+                {% for organization in directory.subdirectory_organization.all %}
+                    {% for org in organizations %}
+                        {% if org == organization %}
+                            <div class="org-list">
+                                {% for county in org.areas_served.all %}
+                                    <p class="filter-me-county2" style="visibility: hidden; display: none;">{{ county }}</p>
+                                {% endfor %}
+                                {% for elig in org.eligibility.all %}
+                                    <p class="filter-me-elig2" style="visibility: hidden; display: none;">{{ elig }}</p>
+                                {% endfor %}
+                                <div class="rlistName">{{ org.org_name }}</div>
+                                <div class="rlistDescript">Organization</div>
+                                <button class="{% cycle 'rlistExplore1' 'rlistExplore2' %}" type="button" data-toggle="modal" data-target="#test2Modal{{ org.id }}">Visit Page</button>
+                                <div class="modal fade" id="test2Modal{{ org.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <i class="bi bi-download"></i>
+                                                <i class="bi bi-box-arrow-up-right"></i>
+                                                <i class="bi bi-x-lg"></i>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h1 class="modalh1">{{ org.org_name }}</h1>
+                                                <br />
+                                                <br />
+                                                <p class="modalp">{{ org.description }}</p>
+                                                <br />
+                                                <span class="modalbp">Intake and Eligibility:</span><span class="modalp"> {% for elig in org.eligibility.all %} {{ elig }} {% endfor %}</span>
+                                                <br />
+                                                <br />
+                                                <br />
+                                                <div class="modalContact">
+                                                    <h3 class="h3Contact">Contact</h3>
+                                                    <p class="contactName">Name: {{ org.contact_name }}</p>
+                                                    <p class="contactEmail">Email: {{ org.contact_email }}</p>
+                                                    <p class="contactPhone">Phone: {{ org.contact_phone|phone_number}}</p>
+                                                    <button class="contactWebsite" type="button"><div class="buttonText">Visit Website</div></button>
+                                                    <button class="contactShare" type="button"><div class="buttonText">Share Contact</div></button>
+                                                </div>
+                                                    <div id='map2{{ org.id }}' class="modalMap"></div>
+                                                    <script>
+                                                        mapboxgl.accessToken = 'pk.eyJ1IjoidXdsZXN0ZXN0YWRtaW4iLCJhIjoiY2twdTYzZnU0MHdidjJ2cG0xM2h0dXJsdyJ9.lktGtwWKbT-GAmSUOQNEdA';
+                                                        var map2{{ org.id }} = new mapboxgl.Map({
+                                                            container: 'map2{{ org.id }}', // container ID
+                                                            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                                                            center: [{{ org.long }} , {{ org.lat }}], // starting position [lng, lat]
+                                                            zoom: 11 // starting zoom
+                                                        });
+                                                        var marker = new mapboxgl.Marker()
+                                                            .setLngLat([{{ org.long }}, {{ org.lat }}])
+                                                            .addTo(map2{{ org.id }});
+                                                        $('#test2Modal{{ org.id }}').on('shown.bs.modal', function () {
+                                                            map2{{ org.id }}.resize();
+                                                        })
+                                                    </script>
+                                                <div class="modalArea">Areas Served:</div>
+                                                <div class="modalLang">Languages Available:</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</body>
+{% endblock %}

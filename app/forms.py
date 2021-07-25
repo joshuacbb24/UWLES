@@ -5,7 +5,7 @@ Definition of forms.
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.utils.translation import ugettext_lazy as _
-from django.forms import ModelForm, ValidationError
+from django.forms import ModelForm, ValidationError, modelformset_factory
 from .models import *
 
 class BootstrapAuthenticationForm(AuthenticationForm):
@@ -96,55 +96,62 @@ class Remove_Clients(ModelForm):
         else:
             queryset = ClientList.objects.none()
         self.fields['clients'].queryset = queryset
+
     class Meta:
         model = ClientList
         fields = '__all__'
         exclude = ('user',)
 
-class Add_Services(ModelForm):
-    tag = forms.CharField(label = 'Add Services')
-
-    class Meta:
-        model = ServicesProvided
-        fields = '__all__'
-
-class Add_SkillsExpertise(ModelForm):
-    tag = forms.CharField(label = 'Add Skills and Expertise')
-
-    class Meta:
-        model = SkillsExpertise
-        fields = '__all__'
-
-class Add_Individual(ModelForm):
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'First Name'}), required = True)
-    last_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Last Name'}), required = True)
-    phone_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Phone Number'}), required = True)
-    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Email'}), required = True)
-    address = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Address'}), required = True)
-    city = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'City'}), required = True)
-    state = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'State'}), required = True)
-    zipcode = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Zip Code'}), required = True)
-    description = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Description'}), required = True)
-    services_provided = forms.ModelMultipleChoiceField(queryset=ServicesProvided.objects.all(), widget=forms.CheckboxSelectMultiple)
-    skills_expertise = forms.ModelMultipleChoiceField(queryset=SkillsExpertise.objects.all(), widget=forms.CheckboxSelectMultiple)
-    class Meta:
-        model = IndividualListing
-        fields = '__all__'
-
 class Add_Organization(ModelForm):
-    org_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Organization Name'}), required = True)
-    phone_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Phone Number'}), required = True)
-    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Email'}), required = True)
-    website = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Website'}), required = True)
-    address = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Address'}), required = True)
-    city = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'City'}), required = True)
-    state = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'State'}), required = True)
-    zipcode = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Zip Code'}), required = True)
-    description = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Description'}), required = True)
-    services_provided = forms.ModelMultipleChoiceField(queryset=ServicesProvided.objects.all(), widget=forms.CheckboxSelectMultiple)
+    STATE_OPTIONS = (
+            ('MD', 'MD'),
+        )
+    COUNTY_OPTIONS = (
+            ('Worcester', 'Worcester'),
+            ('Wicomico', 'Wicomico'),
+            ('Somerset', 'Somerset'),
+            ('Dorchester', 'Dorchester'),
+        )
+
+    org_name = forms.CharField(label = 'Full Organization Name', widget=forms.TextInput(attrs={'maxlength': '100'}), required = False)
+    website = forms.CharField(label = 'Website URL', widget=forms.TextInput(attrs={'maxlength': '100'}), required = False)
+    org_phone = forms.CharField(label = 'Primary Phone', widget=forms.TextInput(attrs={'placeholder': '(XXX)XXX-XXXX', 'maxlength': '13'}), required = False)
+    org_email = forms.EmailField(label = 'Primary Email', widget=forms.EmailInput(attrs={'maxlength': '60'}),required = False)
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Add a short description of your organization here', 'maxlength': '500'}), required = False)
+    eligibility = forms.ModelMultipleChoiceField(queryset=Eligibility.objects.all(), widget=forms.CheckboxSelectMultiple)
+
+    street = forms.CharField(label = 'Street Address', widget=forms.TextInput(attrs={'maxlength': '100'}), required = False)
+    apt_number = forms.CharField(label = 'Apt./Unit Number', widget=forms.TextInput(attrs={'maxlength': '10'}), required = False)
+    city = forms.CharField(label = 'City', widget=forms.TextInput(attrs={'maxlength': '25'}), required = False)
+    state = forms.CharField(label = 'State', widget=forms.Select(choices=STATE_OPTIONS), required = False)
+    zipcode = forms.CharField(label = 'Zipcode', widget=forms.TextInput(attrs={'maxlength': '5'}), required = False)
+    county = forms.CharField(label = 'County', widget=forms.Select(choices=COUNTY_OPTIONS), required = False)
+
+    mail_street = forms.CharField(label = 'Street Address', widget=forms.TextInput(attrs={'maxlength': '100'}), required = False)
+    mail_apt_number = forms.CharField(label = 'Apt./Unit Number', widget=forms.TextInput(attrs={'maxlength': '10'}), required = False)
+    mail_city = forms.CharField(label = 'City', widget=forms.TextInput(attrs={'maxlength': '25'}), required = False)
+    mail_state = forms.CharField(label = 'State', widget=forms.Select(choices=STATE_OPTIONS), required = False)
+    mail_zipcode = forms.CharField(label = 'Zipcode', widget=forms.TextInput(attrs={'maxlength': '5'}), required = False)
+    mail_county = forms.CharField(label = 'County', widget=forms.Select(choices=COUNTY_OPTIONS), required = False)
+
+    contact_name = forms.CharField(label = 'Full Name', widget=forms.TextInput(attrs={'maxlength': '70'}), required = False)
+    contact_phone = forms.CharField(label = 'Primary Phone', widget=forms.TextInput(attrs={'placeholder': '(XXX)XXX-XXXX', 'maxlength': '13'}), required = False)
+    contact_title = forms.CharField(label = 'Title', widget=forms.TextInput(attrs={'maxlength': '50'}), required = False)
+    contact_email = forms.CharField(label = 'Primary Email', widget=forms.EmailInput(attrs={'maxlength': '60'}), required = False)
+
+    org_tags = forms.ModelMultipleChoiceField(queryset=PillTags.objects.all(), widget=forms.CheckboxSelectMultiple, required = False)
+    org_image = forms.ImageField(widget=forms.FileInput, required=False)
+
+    collaborators = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(is_caseworker=True), widget=forms.CheckboxSelectMultiple, required = False)
+
+    languages = forms.ModelMultipleChoiceField(queryset=Languages.objects.all(), widget=forms.CheckboxSelectMultiple, required = False)
+
+    areas_served = forms.ModelMultipleChoiceField(queryset=Counties.objects.all(), widget=forms.CheckboxSelectMultiple, required = False)
+    
     class Meta:
-        model = OrganizationListing
+        model = Organizations
         fields = '__all__'
+        exclude = ('lat', 'long',)
 
 class filter(forms.Form):
     COUNTY_CHOICES = (
@@ -160,8 +167,64 @@ class UploadFileForm(forms.ModelForm):
         model = UploadedFile
         fields = ['file']
 
-
 class GetBackgroundColorForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['bgColor']
+
+class AddOrgToSubDir(forms.Form):
+    sub_dirs = forms.ModelMultipleChoiceField(queryset=SubDirectory.objects.all(), widget=forms.CheckboxSelectMultiple(attrs={'class': 'customCBox'}))
+
+AddTagsFormset = modelformset_factory(
+    PillTags,
+    fields=('__all__'),
+    extra=1,
+)
+
+AddOrgsFormset = modelformset_factory(
+    Organizations,
+    form=Add_Organization,
+    extra=0
+    )
+
+class TestForm(ModelForm):
+    testtags = forms.ModelMultipleChoiceField(queryset=PillTags.objects.all(), widget=forms.CheckboxSelectMultiple)
+    class Meta:
+        model = TestModel
+        fields = '__all__'
+
+class TestForm2(forms.ModelForm):
+    organization = forms.ModelChoiceField(queryset=Organizations.objects.none(), required = False, empty_label = None)
+
+    def __init__(self, *args, **kwargs):
+        user_id = kwargs.pop('user_id', None)
+        super(TestForm2, self).__init__(*args, **kwargs)
+        if user_id:
+            current_orgs = SharedWithMe.objects.get(name=user_id)
+            queryset = current_orgs.organization.all()
+        self.fields['organization'].queryset = queryset
+
+
+    class Meta:
+        model = SharedWithMe
+        fields = '__all__'
+        exclude = ('name',)
+
+class DirFileForm(forms.ModelForm):
+    file = forms.FileField(widget=forms.FileInput(attrs={'class': 'drop-zone__input__prefix__', 'name': 'myFile'}), required = True)
+    document_name = forms.CharField(widget=forms.TextInput(attrs={'maxlength': '50', 'placeholder': 'Add alternative name'}), required = False)
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Add optional description', 'maxlength': '200'}), required = False)
+    tags = forms.ModelMultipleChoiceField(queryset=PillTags.objects.all(), required = False)
+    this_id = forms.CharField(required = False)
+    folder = forms.CharField(required = False)
+    file_collaborators = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(is_caseworker=True), required = False)
+
+    class Meta:
+        model = DirectoryFiles
+        fields = '__all__'
+
+DirFilesFormset = modelformset_factory(
+    DirectoryFiles,
+    form=DirFileForm,
+    extra=0,
+    )

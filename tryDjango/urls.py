@@ -48,12 +48,26 @@ urlpatterns = [
     #path('dashboard/', views.dashboard, name='dashboard'),
     path('makeclientaccount/', views.make_client_account, name='makeclientaccount'),
 
+    path('full_directory/', views.full_directory, name='fulldirectory'),
+    path('sub_directory/<int:pk>/<int:option>', views.sub_directory, name='subdirectory'),
+
+    path('org_directory/', views.org_directory, name='orgdirectory'),
+    path('org_sub_directory/<int:pk>/', views.org_sub_directory, name='orgsubdirectory'),
+
+    path('document_directory', views.document_directory, name='documentdirectory'),
+    path('document_folder_directory/<int:pk>/<int:option>', views.document_directory_folder, name='document_folder_directory'),
+
+    path('test/', views.testpage, name='test'),
+    path('test2/', views.testpage2, name='test2'),
+
     path('app/', include('app.urls')),
     path('reset_password/', PasswordResetView.as_view(template_name='app/reset_password.html'), name="reset_password"),
     path('reset_password_sent/', PasswordResetDoneView.as_view(template_name='app/reset_password_done.html'), name="password_reset_done"),
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(template_name='app/reset_password_confirm.html'), name="password_reset_confirm"), #encodes user ID in base 64, then uses the token to check if the password is valid, part of PasswordResetConfirmView documentation
     path('reset_password_complete/', PasswordResetCompleteView.as_view(template_name='app/reset_password_complete.html'), name="password_reset_complete"),
     path('upload/', views.BasicUploadView.as_view(), name='upload'),
+
+    path('validateOrganization/', views.validate_org, name='validateOrganization'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

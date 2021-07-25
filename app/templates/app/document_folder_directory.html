@@ -1,0 +1,333 @@
+﻿{% extends 'app/format.html' %}
+
+{% block header1 %}
+    <a href="{% url 'dashboard' %}">
+        <span id="fist-element" class="las la-home"></span>
+    </a>
+{% endblock %}
+{% block header2 %}
+    <a href="{% url 'fulldirectory' %}" class="active">
+        <span class="las la-book"></span>
+    </a>
+{% endblock %}
+{% block header3 %}
+    <a href="{% url 'multichat' %}">
+        <span class="las la-comment-alt"></span>
+    </a>
+{% endblock %}
+{% block header4 %}
+    <a href="">
+        <span class="las la-user-friends"></span>
+    </a>
+{% endblock %}
+{% block header5 %}
+    <a href="">
+        <span class="las la-plus-circle"></span>
+    </a>
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+{% load project_templates %}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/directory.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/myModal.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/addOptions.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/document2.css' %}" />
+
+    <script>
+        function filterfileFunction() {
+        var input, filter, div, a, i;
+        input = document.getElementById("searchbar");
+        filter = input.value.toUpperCase();
+        a = document.getElementsByClassName("document-card-doc-name")
+        b = document.getElementsByClassName("doclistName");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                $(a[i]).parent().parent().css("display", "")
+                $(b[i]).parent().css("display", "")
+            } else {
+                $(a[i]).parent().parent().css("display", "none")
+                $(b[i]).parent().css("display", "none")
+            }
+        }
+    }
+    </script>
+</head>
+<body>
+    {% if folder.user != user %}
+        <p>Permission denied</p>
+
+    {% else %}
+
+    <div class="directoryBar"></div>
+    <a href="{% url 'fulldirectory' %}" class="fullHidden">Full Directory</a>
+    <a href="{% url 'orgdirectory' %}" class="orgHidden">Organizational Directory</a>
+    <div class="fileActive">Documents Directory</div>
+
+    <div class="searchbarcontainer">
+        <input type="text" placeholder="Search for file..." class="searchbar" id="searchbar" onkeyup="filterfileFunction()">
+        <i class="fa fa-search" aria-hidden="true" id="searchBarIcon"></i>
+    </div>
+
+    <button class="addBox" type="button" data-toggle="modal" data-target="#addModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> New</p></button>
+    <button class="editBox" type="button" data-toggle="modal" data-target="#editModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> Edit</p></button>
+
+    <div class="divideLine"></div>
+
+    <div class="gridBox" id="visible"></div>
+    <div class="gridPH" id="gridIcon"><i class="fa fa-th" aria-hidden="true"></i></div>
+
+    <div class="listBox" id="hidden"></div>
+    <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
+
+
+    <a href="{% url 'documentdirectory' %}" class="docDirPath">Document Directory</a>
+    {% if my_path == None %}
+        <div class="subdocPath">> {{ folder.name }}</div>
+    {% else %}
+        <div class="subdocPath">
+            {% for key, value in my_path.items %}
+            <div class="subdocPath-title" onclick="location.href='{% url 'document_folder_directory' value.0 value.1 %}'">>{{ key.name }}</div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="folder-container">
+        <div class="folderBox">
+            {% for folder in mysubfolders %}
+                <div class="{% cycle 'myFolder1' 'myFolder2' 'myFolder3' %}" ><i class="bi bi-folder-fill" style="color: #68D0D1; font-size: 2rem;"></i><div class="folderName" onclick="location.href='{% url 'document_folder_directory' folder.id 2 %}'">{{ folder.name }}</div>
+                <div class="folderDots"data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                    data-content="<i class='bi bi-x-lg popoverx'></i>
+                                <br>
+                                <br>
+                                <i class='bi bi-pencil'></i><p class='rename-folder' data-toggle='modal' data-target='#renameFolderModal' value='{{ folder.id }}'>Rename</p>
+                                <br>
+                                <i class='bi bi-trash-fill' style='color: red;'></i><p class='delete-folder' data-toggle='modal' data-target='#deleteFolderModal' value='{{ folder.id }}'>Delete</p>">
+                    <i class="bi bi-three-dots-vertical" style="color: #015D67;"></i></div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="addFolder" type="button" data-toggle="modal" data-target="#addFolderModal"><p class="addContent">Add Folder</p></div>
+    </div>
+
+    <div class="documentLayout" id="visible">
+            {% if folder.name != 'Shared With Me' and folder.name != 'All Files' %}
+                {% for file in folder.file.all %}
+                <div class="document-card">
+                    <div class="document-card-footing">
+                        <div class="document-card-doc">
+                            <div class="document-card-doc-circle"></div>
+                            <div class="document-card-doc-line1"></div>
+                            <div class="document-card-doc-line2"></div>
+                            <div class="document-card-doc-line3"></div>
+                            <div class="document-card-doc-line4"></div>
+                            <div class="document-card-doc-line5"></div>
+                            <div class="document-card-doc-line6"></div>
+                            <div class="document-card-doc-block"></div>
+                            <div class="document-card-doc-line7"></div>
+                            <div class="document-card-doc-line8"></div>
+                            <div class="document-card-doc-line9"></div>
+                        </div>
+                        <div class="{% if file.file|docext == 'pdf' %} file-ext_pdf {% elif file.file|docext == 'docx' %} file-ext_doc {% elif file.file|docext == 'xlsx' %} file-ext_xl {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} file-ext_mp {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} file-ext_ppt {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} file-ext_img {% endif %}">
+                            <div class="{% if file.file|docext == 'pdf' %} pdf-title {% elif file.file|docext == 'docx' %} word-title {% elif file.file|docext == 'xlsx' %} xl-title {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} mp-title {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} ppt-title {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} png-jpg-title {% endif %}">
+                                {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
+                            </div>
+                        </div>
+                        <div class="document-card-doc-name">{% if file.document_name %}{{ file.document_name|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file.file|doctitle|truncatechars_html:30 }}{% endif %}</div>
+                        <div class="document-card-doc-dots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                        data-content="<i class='bi bi-x-lg popoverx'></i>
+                                      <br>
+                                      <br>
+                                      <i class='bi bi-arrow-90deg-right'></i><p class='share-file' data-toggle='modal' data-target='#shareFileModal' value='{{ file.id }}'>Share</p>
+                                      <i class='bi bi-folder'></i><p class='move-file' data-toggle='modal' data-target='#moveFileModal' value='{{ file.id }}'>Move To</p>
+                                      <i class='bi bi-pencil'></i><p class='rename-file' data-toggle='modal' data-target='#renameFileModal' value='{{ file.id }}'>Rename</p>
+                                      <!--<i class='bi bi-bookmark'></i><p class='favorite-file' value='{{ file.id }}'>Add As Favorite</p>-->
+                                      <i class='bi bi-files'></i><p class='copy-file' data-toggle='modal' data-target='#copyFileModal' value='{{ file.id }}'>Make a Copy</p>
+                                      <i class='bi bi-download'></i><form method='post'><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' /><p class='download-file' value='{{ file.id }}' name='downloadbtn' onclick=window.open('{{ file.file.url }}')>Download</p></form>
+                                      <br>
+                                      <i class='bi bi-trash-fill' style='color: red;'></i><p class='testp2' data-toggle='modal' data-target='#deleteFileModal' value='{{ file.id }}'>Delete</p>">
+                        <i class="bi bi-three-dots-vertical" style="color: #015D67; font-size: 2rem"></i></div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% elif folder.name == 'Shared With Me' %}
+                {% for file in folder.file.all %}
+                <div class="document-card">
+                    <div class="document-card-footing">
+                        <div class="document-card-doc">
+                            <div class="document-card-doc-circle"></div>
+                            <div class="document-card-doc-line1"></div>
+                            <div class="document-card-doc-line2"></div>
+                            <div class="document-card-doc-line3"></div>
+                            <div class="document-card-doc-line4"></div>
+                            <div class="document-card-doc-line5"></div>
+                            <div class="document-card-doc-line6"></div>
+                            <div class="document-card-doc-block"></div>
+                            <div class="document-card-doc-line7"></div>
+                            <div class="document-card-doc-line8"></div>
+                            <div class="document-card-doc-line9"></div>
+                        </div>
+                        <div class="{% if file.file|docext == 'pdf' %} file-ext_pdf {% elif file.file|docext == 'docx' %} file-ext_doc {% elif file.file|docext == 'xlsx' %} file-ext_xl {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} file-ext_mp {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} file-ext_ppt {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} file-ext_img {% endif %}">
+                            <div class="{% if file.file|docext == 'pdf' %} pdf-title {% elif file.file|docext == 'docx' %} word-title {% elif file.file|docext == 'xlsx' %} xl-title {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} mp-title {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} ppt-title {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} png-jpg-title {% endif %}">
+                                {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
+                            </div>
+                        </div>
+                        <div class="document-card-doc-name">{% if file.document_name %}{{ file.document_name|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file.file|doctitle|truncatechars_html:30 }}{% endif %}</div>
+                        <div class="document-card-doc-dots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                                data-content="<i class='bi bi-x-lg popoverx'></i>
+                                <br>
+                                <br>
+                                <i class='bi bi-arrow-90deg-right'></i><p class='share-file' data-toggle='modal' data-target='#shareFileModal' value='{{ file.id }}'>Share</p>
+                                <i class='bi bi-folder'></i><p class='move-file' data-toggle='modal' data-target='#moveFileModal' value='{{ file.id }}'>Move To</p>
+                                <!--<i class='bi bi-pencil'></i><p class='rename-file' data-toggle='modal' data-target='#renameFileModal' value='{{ file.id }}'>Rename</p>-->
+                                <!--<i class='bi bi-bookmark'></i><p class='favorite-file' value='{{ file.id }}'>Add As Favorite</p>-->
+                                <i class='bi bi-files'></i><p class='copy-file' data-toggle='modal' data-target='#copyFileModal' value='{{ file.id }}'>Make a Copy</p>
+                                <i class='bi bi-download'></i><form method='post'><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' /><p class='download-file' value='{{ file.id }}' name='downloadbtn' onclick=window.open('{{ file.file.url }}')>Download</p></form>
+                                <br>
+                                <i class='bi bi-trash-fill' style='color: red;'></i><p class='testp2' data-toggle='modal' data-target='#deleteFileModal' value='{{ file.id }}'>Delete</p>">
+                    <i class="bi bi-three-dots-vertical" style="color: #015D67; font-size: 2rem"></i></div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                {% for file in folder.file.all %}
+                <div class="document-card">
+                    <div class="document-card-footing">
+                        <div class="document-card-doc">
+                            <div class="document-card-doc-circle"></div>
+                            <div class="document-card-doc-line1"></div>
+                            <div class="document-card-doc-line2"></div>
+                            <div class="document-card-doc-line3"></div>
+                            <div class="document-card-doc-line4"></div>
+                            <div class="document-card-doc-line5"></div>
+                            <div class="document-card-doc-line6"></div>
+                            <div class="document-card-doc-block"></div>
+                            <div class="document-card-doc-line7"></div>
+                            <div class="document-card-doc-line8"></div>
+                            <div class="document-card-doc-line9"></div>
+                        </div>
+                        <div class="{% if file.file|docext == 'pdf' %} file-ext_pdf {% elif file.file|docext == 'docx' %} file-ext_doc {% elif file.file|docext == 'xlsx' %} file-ext_xl {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} file-ext_mp {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} file-ext_ppt {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} file-ext_img {% endif %}">
+                            <div class="{% if file.file|docext == 'pdf' %} pdf-title {% elif file.file|docext == 'docx' %} word-title {% elif file.file|docext == 'xlsx' %} xl-title {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} mp-title {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} ppt-title {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} png-jpg-title {% endif %}">
+                                {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
+                            </div>
+                        </div>
+                        <div class="document-card-doc-name">{% if file.document_name %}{{ file.document_name|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file.file|doctitle|truncatechars_html:30 }}{% endif %}</div>
+                        <div class="document-card-doc-dots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                                data-content="<i class='bi bi-x-lg popoverx'></i>
+                                <br>
+                                <br>
+                                <i class='bi bi-arrow-90deg-right'></i><p class='share-file' data-toggle='modal' data-target='#shareFileModal' value='{{ file.id }}'>Share</p>
+                                <!--<i class='bi bi-folder'></i><p class='move-file' data-toggle='modal' data-target='#moveFileModal' value='{{ file.id }}'>Move To</p>-->
+                                <!--<i class='bi bi-pencil'></i><p class='rename-file' data-toggle='modal' data-target='#renameFileModal' value='{{ file.id }}'>Rename</p>-->
+                                <!--<i class='bi bi-bookmark'></i><p class='favorite-file' value='{{ file.id }}'>Add As Favorite</p>-->
+                                <i class='bi bi-files'></i><p class='copy-file' data-toggle='modal' data-target='#copyFileModal' value='{{ file.id }}'>Make a Copy</p>
+                                <i class='bi bi-download'></i><form method='post'><input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}' /><p class='download-file' value='{{ file.id }}' name='downloadbtn' onclick=window.open('{{ file.file.url }}')>Download</p></form>
+                                <br>
+                                <!--<i class='bi bi-trash-fill' style='color: red;'></i><p class='testp2' data-toggle='modal' data-target='#deleteFileModal' value='{{ file.id }}'>Delete</p>-->">
+                    <i class="bi bi-three-dots-vertical" style="color: #015D67; font-size: 2rem"></i></div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+    </div>
+
+
+    <div class="doclistCategory" id="hidden">File Type</div>
+    <div class="doclistTitle" id="hidden">Name</div>
+    <div class="doclistOrder" id="hidden"><div class="doclistA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="docArrow"></i><div class="doclistZ">Z</div></div>
+    <div class="doclistDsc" id="hidden">Date Accessed</div>
+    <div class="doclistTags" id="hidden">Tags</div>
+
+    <div class="doclistLayout" id="hidden">
+            {% if folder.name != 'Shared With Me' and folder.name != 'All Files' %}
+                {% for file in folder.file.all %}
+                    <div class="{% cycle 'docList1' 'docList2' %}">
+                        <div class="{% if file.file|docext == 'pdf' %} doclistExt-pdf {% elif file.file|docext == 'docx' %} doclistExt-doc {% elif file.file|docext == 'xlsx' %} doclistExt-xl {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} doclistExt-mp {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} doclistExt-ppt {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} doclistExt-img {% endif %}">
+                            <div class="{% if file.file|docext == 'pdf' %} pdf-title {% elif file.file|docext == 'docx' %} word-title {% elif file.file|docext == 'xlsx' %} xl-title {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} mp-title {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} ppt-title {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} png-jpg-title {% endif %}">
+                                {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
+                            </div>
+                        </div>
+                        <div class="doclistName" onclick="window.open('{{ file.file.url }}')">{% if file.document_name %}{{ file.document_name}}.{{ file.file|docext }}{% else %}{{ file.file|doctitle }}{% endif %}</div>
+                        <div class="doclistDescript">June 18, 2021</div>
+                        <div class="doclistDots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                        data-content="<i class='bi bi-x-lg popoverx'></i>
+                                      <br>
+                                      <br>
+                                      <i class='bi bi-arrow-90deg-right'></i><p class='share-file' data-toggle='modal' data-target='#shareFileModal' value='{{ file.id }}'>Share</p>
+                                      <i class='bi bi-folder'></i><p class='move-file' data-toggle='modal' data-target='#moveFileModal' value='{{ file.id }}'>Move To</p>
+                                      <i class='bi bi-pencil'></i><p class='rename-file' data-toggle='modal' data-target='#renameFileModal' value='{{ file.id }}'>Rename</p>
+                                      <!--<i class='bi bi-bookmark'></i><p class='favorite-file' value='{{ file.id }}'>Add As Favorite</p>-->
+                                      <i class='bi bi-files'></i><p class='copy-file' data-toggle='modal' data-target='#copyFileModal' value='{{ file.id }}'>Make a Copy</p>
+                                      <i class='bi bi-download'></i><p class='download-file' value='{{ file.id }}' onclick=window.open('{{ file.file.url }}')>Download</p>
+                                      <br>
+                                      <i class='bi bi-trash-fill' style='color: red;'></i><p class='testp2' data-toggle='modal' data-target='#deleteFileModal' value='{{ file.id }}'>Delete</p>">
+                        <i class="bi bi-three-dots-vertical" style="color: #015D67; font-size: 2rem"></i></div>
+                    </div>
+                {% endfor %}
+            {% elif folder.name == 'Shared With Me' %}
+                {% for file in folder.file.all %}
+                <div class="{% cycle 'docList1' 'docList2' %}">
+                    <div class="{% if file.file|docext == 'pdf' %} doclistExt-pdf {% elif file.file|docext == 'docx' %} doclistExt-doc {% elif file.file|docext == 'xlsx' %} doclistExt-xl {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} doclistExt-mp {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} doclistExt-ppt {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} doclistExt-img {% endif %}">
+                        <div class="{% if file.file|docext == 'pdf' %} pdf-title {% elif file.file|docext == 'docx' %} word-title {% elif file.file|docext == 'xlsx' %} xl-title {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} mp-title {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} ppt-title {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} png-jpg-title {% endif %}">
+                            {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
+                        </div>
+                    </div>
+                    <div class="doclistName" onclick="window.open('{{ file.file.url }}')">{% if file.document_name %}{{ file.document_name|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file.file|doctitle }}{% endif %}</div>
+                    <div class="doclistDescript">June 18, 2021</div>
+                    <div class="doclistDots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                    data-content="<i class='bi bi-x-lg popoverx'></i>
+                                <br>
+                                <br>
+                                <i class='bi bi-arrow-90deg-right'></i><p class='share-file' data-toggle='modal' data-target='#shareFileModal' value='{{ file.id }}'>Share</p>
+                                <i class='bi bi-folder'></i><p class='move-file' data-toggle='modal' data-target='#moveFileModal' value='{{ file.id }}'>Move To</p>
+                                <!--<i class='bi bi-pencil'></i><p class='rename-file' data-toggle='modal' data-target='#renameFileModal' value='{{ file.id }}'>Rename</p>-->
+                                <!--<i class='bi bi-bookmark'></i><p class='favorite-file' value='{{ file.id }}'>Add As Favorite</p>-->
+                                <i class='bi bi-files'></i><p class='copy-file' data-toggle='modal' data-target='#copyFileModal' value='{{ file.id }}'>Make a Copy</p>
+                                <i class='bi bi-download'></i><p class='download-file' value='{{ file.id }}' onclick=window.open('{{ file.file.url }}')>Download</p>
+                                <br>
+                                <i class='bi bi-trash-fill' style='color: red;'></i><p class='testp2' data-toggle='modal' data-target='#deleteFileModal' value='{{ file.id }}'>Delete</p>">
+                    <i class="bi bi-three-dots-vertical" style="color: #015D67; font-size: 2rem"></i></div>
+                </div>
+                {% endfor %}
+            {% else %}
+                {% for file in folder.file.all %}
+                <div class="{% cycle 'docList1' 'docList2' %}">
+                    <div class="{% if file.file|docext == 'pdf' %} doclistExt-pdf {% elif file.file|docext == 'docx' %} doclistExt-doc {% elif file.file|docext == 'xlsx' %} doclistExt-xl {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} doclistExt-mp {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} doclistExt-ppt {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} doclistExt-img {% endif %}">
+                        <div class="{% if file.file|docext == 'pdf' %} pdf-title {% elif file.file|docext == 'docx' %} word-title {% elif file.file|docext == 'xlsx' %} xl-title {% elif file.file|docext == 'mp3' or file.file|docext == 'mp4'%} mp-title {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt' %} ppt-title {% elif file.file|docext == 'jpg' or file.file|docext == 'png' %} png-jpg-title {% endif %}">
+                            {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
+                        </div>
+                    </div>
+                    <div class="doclistName" onclick="window.open('{{ file.file.url }}')">{% if file.document_name %}{{ file.document_name}}.{{ file.file|docext }}{% else %}{{ file.file|doctitle }}{% endif %}</div>
+                    <div class="doclistDescript">June 18, 2021</div>
+                    <div class="doclistDots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                    data-content="<i class='bi bi-x-lg popoverx'></i>
+                                <br>
+                                <br>
+                                <i class='bi bi-arrow-90deg-right'></i><p class='share-file' data-toggle='modal' data-target='#shareFileModal' value='{{ file.id }}'>Share</p>
+                                <!--<i class='bi bi-folder'></i><p class='move-file' data-toggle='modal' data-target='#moveFileModal' value='{{ file.id }}'>Move To</p>-->
+                                <!--<i class='bi bi-pencil'></i><p class='rename-file' data-toggle='modal' data-target='#renameFileModal' value='{{ file.id }}'>Rename</p>-->
+                                <!--<i class='bi bi-bookmark'></i><p class='favorite-file' value='{{ file.id }}'>Add As Favorite</p>-->
+                                <i class='bi bi-files'></i><p class='copy-file' data-toggle='modal' data-target='#copyFileModal' value='{{ file.id }}'>Make a Copy</p>
+                                <i class='bi bi-download'></i><p class='download-file' value='{{ file.id }}' onclick=window.open('{{ file.file.url }}')>Download</p>
+                                <br>
+                                <!--<i class='bi bi-trash-fill' style='color: red;'></i><p class='testp2' data-toggle='modal' data-target='#deleteFileModal' value='{{ file.id }}'>Delete</p>-->">
+                    <i class="bi bi-three-dots-vertical" style="color: #015D67; font-size: 2rem"></i></div>
+                </div>
+                {% endfor %}
+            {% endif %}
+    </div>
+    {% endif %}
+
+    {% include "app/file_folder_forms.html" %}
+
+    <script src="{% static 'app/scripts/directory.js' %}"></script>
+    <script src="{% static 'app/scripts/test2.js' %}"></script>
+    <script src="{% static 'app/scripts/test.js' %}"></script>
+    <script src="{% static 'app/scripts/file-folder.js' %}"></script>
+</body>
+{% endblock %}

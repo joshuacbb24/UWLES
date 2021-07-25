@@ -18,7 +18,7 @@
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
-    <WebBrowserUrl>http://localhost</WebBrowserUrl>
+    <WebBrowserUrl>http://localhost:8000</WebBrowserUrl>
     <LaunchProvider>Django launcher</LaunchProvider>
     <DjangoSettingsModule>tryDjango.settings</DjangoSettingsModule>
     <OutputPath>.</OutputPath>
@@ -98,16 +98,20 @@
     <Folder Include="tryDjango\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\content\addOptions.css" />
     <Content Include="app\static\app\content\chat.css" />
     <Content Include="app\static\app\content\chatPage.css" />
     <Content Include="app\static\app\content\chatPopUp.css" />
     <Content Include="app\static\app\content\chatscreen.css" />
+    <Content Include="app\static\app\content\directory.css" />
+    <Content Include="app\static\app\content\dropfile.css" />
     <Content Include="app\static\app\content\format.css" />
     <Content Include="app\static\app\content\instantmessage.css" />
     <Content Include="app\static\app\content\instantmessage2.css" />
     <Content Include="app\static\app\content\login.css" />
     <Content Include="app\static\app\content\main.css" />
     <Content Include="app\static\app\content\multichat.css" />
+    <Content Include="app\static\app\content\myModal.css" />
     <Content Include="app\static\app\content\profile.css" />
     <Content Include="app\static\app\content\resourcelayout.css" />
     <Content Include="app\static\app\content\signup.css" />
@@ -124,7 +128,10 @@
     <Content Include="app\static\app\scripts\chat2.js" />
     <Content Include="app\static\app\scripts\defaults.js" />
     <Content Include="app\static\app\scripts\default_avatar.js" />
+    <Content Include="app\static\app\scripts\directory.js" />
     <Content Include="app\static\app\scripts\dropdown.js" />
+    <Content Include="app\static\app\scripts\dropfile.js" />
+    <Content Include="app\static\app\scripts\dropfile2.js" />
     <Content Include="app\static\app\scripts\Element.classList.js" />
     <Content Include="app\static\app\scripts\Element.closest.js" />
     <Content Include="app\static\app\scripts\Element.matches.js" />
@@ -141,6 +148,7 @@
     <Content Include="app\static\app\scripts\jquery.ui.widget.js" />
     <Content Include="app\static\app\scripts\leftChat.js" />
     <Content Include="app\static\app\scripts\main.js" />
+    <Content Include="app\static\app\scripts\myfileupload.js" />
     <Content Include="app\static\app\scripts\NodeList.forEach.js" />
     <Content Include="app\static\app\scripts\Object.assign.js" />
     <Content Include="app\static\app\scripts\pop-up-chat.js" />
@@ -155,6 +163,7 @@
     <Content Include="app\static\app\scripts\tagify.min.js" />
     <Content Include="app\static\app\scripts\tagify.polyfills.min.js" />
     <Content Include="app\static\app\scripts\templates.js" />
+    <Content Include="app\static\app\scripts\test.js" />
     <Content Include="app\templates\app\addclients.html" />
     <Content Include="app\templates\app\add_individuals.html" />
     <Content Include="app\templates\app\add_organizations.html" />
@@ -163,11 +172,18 @@
     <Content Include="app\templates\app\clientlist.html" />
     <Content Include="app\templates\app\dashboard2.html" />
     <Content Include="app\templates\app\directory.html" />
+    <Content Include="app\templates\app\document_directory.html" />
+    <Content Include="app\templates\app\document_folder_directory.html" />
     <Content Include="app\templates\app\file_upload.html" />
     <Content Include="app\templates\app\format.html" />
+    <Content Include="app\templates\app\full_directory.html" />
     <Content Include="app\templates\app\home.html" />
     <Content Include="app\templates\app\ListView.html" />
     <Content Include="app\templates\app\multichat.html" />
+    <Content Include="app\templates\app\orgdirectory.html" />
+    <Content Include="app\templates\app\orgsubdirectory.html" />
+    <Content Include="app\templates\app\org_directory.html" />
+    <Content Include="app\templates\app\org_view_directory.html" />
     <Content Include="app\templates\app\removeclients.html" />
     <Content Include="app\templates\app\reset_password_confirm.html" />
     <Content Include="app\templates\app\reset_password.html" />
@@ -177,6 +193,9 @@
     <Content Include="app\templates\app\room.html" />
     <Content Include="app\templates\app\room_include.html" />
     <Content Include="app\templates\app\signup.html" />
+    <Content Include="app\templates\app\subdirectory.html" />
+    <Content Include="app\templates\app\test.html" />
+    <Content Include="app\templates\app\test2.html" />
     <Content Include="app\templates\app\userinfo.html" />
     <Content Include="app\templates\app\profile.html" />
     <Content Include="app\templates\chatpage.html" />

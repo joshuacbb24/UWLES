@@ -1,0 +1,886 @@
+       .docDirPath {
+            position: absolute;
+            top: 260px;
+            width: 160px;
+            height: 20px;
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 17px;
+            color: #979797;
+            text-align: left;
+        }
+
+        .subdocPath {
+            position: absolute;
+            top: 260px;
+            width: 150px;
+            left: 170px;
+            height: 20px;
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 17px;
+            color: #979797;
+            text-align: left;
+        }
+        
+        .folderBox {
+            position: absolute;
+            width: 1200px;
+            height: 220px;
+            top: 300px;
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: left;
+            list-style: none;
+            overflow-y: auto;
+        }
+
+        .myFolder1 {
+            position: relative;
+            width: 350px;
+            height: 60px;
+            margin-right: 50px;
+            margin-bottom: 50px;
+            background: #FFFFFF;
+            border-radius: 6px;
+            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+            padding-left: 20px;
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 22px;
+            line-height: 20px;
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #013D44;
+
+            cursor: pointer;
+        }
+
+        .myFolder2 {
+            position: relative;
+            width: 350px;
+            height: 60px;
+            margin-right: 50px;
+            margin-bottom: 50px;
+            background: #FFFFFF;
+            border-radius: 6px;
+            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+            padding-left: 20px;
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 22px;
+            line-height: 20px;
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #013D44;
+
+            cursor: pointer;
+        }
+
+        .myFolder3 {
+            position: relative;
+            width: 350px;
+            height: 60px;
+            margin-bottom: 50px;
+            background: #FFFFFF;
+            border-radius: 6px;
+            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+            padding-left: 20px;
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 22px;
+            line-height: 20px;
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #013D44;
+
+            cursor: pointer;
+        }
+
+        .folderName {
+            padding-left: 20px;
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 22px;
+            line-height: 20px;
+
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #013D44;
+        }
+
+        .folderDots {
+            position: absolute;
+            left: 310px;
+        }
+
+        .addFolder {
+            position: absolute;
+            top: 325px;
+            left: 1230px;
+            height: 35px;
+            width: 110px;
+            background: #015D67;
+            cursor: pointer;
+            border: none;
+        }
+
+        .viewFilesTitle {
+            position: absolute;
+            width: 170px;
+            height: 30px;
+            top: 540px;
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 24px;
+            line-height: 20px;
+
+            display: flex;
+            align-items: center;
+
+            color: #013D44;
+        }
+
+        .documentLayout {
+        position: absolute;
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: left;
+        list-style: none;
+        top: 640px;
+        width: 1680px;
+        min-height: 330px;
+    }
+
+    .document-card{
+        width: 390px;
+        height: 300px;
+        margin-right: 30px;
+        margin-bottom: 30px;
+        background: #EBF2F2;
+        border-radius: 6px;
+    }
+
+    .document-card-doc{
+        position: relative;
+        bottom: 160px;
+        margin-left: 100px;
+        width: 190px;
+        height: 160px;
+        background: #FFFFFF;
+        border: 1px solid #979797;
+        box-sizing: border-box;
+        border-bottom: none;
+    }
+
+    .document-card-doc-circle{
+        position: relative;
+        top: 15px;
+        left: 15px;
+        width: 30px;
+        height: 30px;
+
+        background: #C4C4C4;
+        border-radius: 50%;
+    }
+
+    .document-card-doc-line1{
+        position: relative;
+        top: 12px;
+        left: 50px;
+        width: 120px;
+        height: 2px;
+
+        background: #676767;
+    }
+
+    .document-card-doc-line2{
+        position: relative;
+        top: 20px;
+        left: 15px;
+        width: 155px;
+        height: 2px;
+
+        background: #676767;
+    }
+
+    .document-card-doc-line3{
+        position: relative;
+        top: 28px;
+        left: 15px;
+        width: 155px;
+        height: 2px;
+
+        background: #676767;
+    }
+
+    .document-card-doc-line4{
+        position: relative;
+        top: 36px;
+        left: 15px;
+        width: 155px;
+        height: 2px;
+
+        background: #676767;
+    }
+
+    .document-card-doc-line5{
+        position: relative;
+        top: 44px;
+        left: 15px;
+        width: 155px;
+        height: 2px;
+
+        background: #676767;
+    }
+
+    .document-card-doc-line6{
+        position: relative;
+        top: 52px;
+        left: 15px;
+        width: 155px;
+        height: 2px;
+
+        background: #676767;
+    }
+
+    .document-card-doc-block{
+        position: relative;
+        top: 60px;
+        left: 15px;
+        width: 155px;
+        height: 15px;
+
+        background: #C4C4C4;
+    }
+
+    .document-card-doc-line7{
+        position: relative;
+        top: 76px;
+        left: 15px;
+        width: 155px;
+        height: 2px;
+
+        background: #676767;
+    }
+
+    .document-card-doc-line8{
+        position: relative;
+        top: 84px;
+        left: 15px;
+        width: 155px;
+        height: 2px;
+
+        background: #676767;
+    }
+
+    .document-card-doc-line9{
+        position: relative;
+        top: 92px;
+        left: 15px;
+        width: 155px;
+        height: 2px;
+
+        background: #676767;
+    }
+
+    .document-card-footing{
+        background: #FFFFFF;
+        border-radius: 6px;
+        position: relative;
+        width: 390px;
+        height: 70px;
+        top: 230px;
+        vertical-align: middle;
+    }
+
+    .document-card-doc-name{
+        position: relative;
+        margin-left: 100px;
+        width: 250px;
+        height: 15px;
+        bottom: 170px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 15px;
+        letter-spacing: 0.01em;
+
+        color: #676767;
+    }
+
+    .document-card-doc-dots{
+        position: relative;
+        bottom: 190px;
+        margin-left: 350px;
+        height: 50px;
+        width: 10px;
+        cursor: pointer;
+    }
+
+    .file-ext_doc {
+        position: relative;
+        bottom: 145px;
+        left: 30px;
+        height: 35px;
+        width: 28px;
+        background-image: url('/static/app/images/files icon2.png');
+    }
+
+    .file-ext_xl {
+        position: relative;
+        bottom: 145px;
+        left: 30px;
+        height: 35px;
+        width: 28px;
+        background-image: url('/static/app/images/files icon3.png');
+    }
+
+    .file-ext_pdf {
+        position: relative;
+        bottom: 145px;
+        left: 30px;
+        height: 35px;
+        width: 28px;
+        background-image: url('/static/app/images/files icon.png');
+    }
+
+    .file-ext_ppt {
+        position: relative;
+        bottom: 145px;
+        left: 30px;
+        height: 35px;
+        width: 28px;
+        background-image: url('/static/app/images/files icon5.png');
+    }
+
+    .file-ext_mp {
+        position: relative;
+        bottom: 145px;
+        left: 30px;
+        height: 35px;
+        width: 28px;
+        background-image: url('/static/app/images/files icon6.png');
+    }
+
+    .file-ext_img {
+        position: relative;
+        bottom: 145px;
+        left: 30px;
+        height: 35px;
+        width: 28px;
+        background-image: url('/static/app/images/files icon4.png');
+    }
+
+        .documentCard1 {
+        width: 520px;
+        height: 200px;
+        margin-bottom: 60px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .documentCard2 {
+        width: 520px;
+        height: 200px;
+        margin-left: 60px;
+        margin-bottom: 60px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .documentCard3 {
+        width: 520px;
+        height: 200px;
+        margin-left: 60px;
+        margin-bottom: 60px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .documentCircle {
+        position: relative;
+        top: 30px;
+        left: 30px;
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25), 0px 0px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    .documenth2 {
+        position: relative;
+        left: 120px;
+        bottom: 10px;
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 20px;
+        color: #015D67;
+        width: 300px;
+        height: 20px;
+    }
+
+    .documentp {
+        position: relative;
+        top: 20px;
+        left: 30px;
+        width: 500px;
+        height: 17px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01cm;
+
+        color: #707070;
+    }
+
+    .downloadbtn {
+        position: relative;
+        top: 50px;
+        left: 30px;
+        width: 100px;
+        height: 35px;
+
+        background: #015D67;
+        border-radius: 6px;
+        border: 0px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01cm;
+
+        color: #FFFFFF;
+
+        cursor: pointer;
+    }
+
+    /*.file-ext_doc {
+            position: relative;
+            top: 12px;
+            left: 15px;
+            height: 35px;
+            width: 28px;
+            background-image: url('/static/app/images/files icon2.png');
+        }
+
+        .file-ext_xl {
+            position: relative;
+            top: 12px;
+            left: 15px;
+            height: 35px;
+            width: 28px;
+            background-image: url('/static/app/images/files icon3.png');
+        }
+
+        .file-ext_pdf {
+            position: relative;
+            top: 12px;
+            left: 15px;
+            height: 35px;
+            width: 28px;
+            background-image: url('/static/app/images/files icon.png');
+        }
+
+        .file-ext_ppt {
+            position: relative;
+            top: 12px;
+            left: 15px;
+            height: 35px;
+            width: 28px;
+            background-image: url('/static/app/images/files icon5.png');
+        }
+
+        .file-ext_mp {
+            position: relative;
+            top: 12px;
+            left: 15px;
+            height: 35px;
+            width: 28px;
+            background-image: url('/static/app/images/files icon6.png');
+        }
+
+        .file-ext_img {
+            position: relative;
+            top: 12px;
+            left: 15px;
+            height: 35px;
+            width: 28px;
+            background-image: url('/static/app/images/files icon4.png');
+        }*/
+
+        .doclistLayout {
+        position: absolute;
+        top: 650px;
+        width: 1680px;
+        min-height: 900px;
+    }
+
+        .doclist1 {
+        position: relative;
+        width: 1600px;
+        height: 65px;
+        background: rgba(196, 226, 238, 0.32);
+        border: 1px solid #ECF5F9;
+        box-sizing: border-box;
+        margin-top: 10px;
+    }
+
+    .doclist2 {
+        position: relative;
+        margin-top: 10px;
+        width: 1600px;
+        height: 65px;
+        background: rgba(238, 229, 196, 0.32);
+        border: 1px solid #ECF5F9;
+        box-sizing: border-box;
+    }
+
+        .doclistExt-pdf {
+            position: relative;
+            left: 50px;
+            top: 15px;
+            height: 35px;
+            width: 28px;
+
+            background-image: url('/static/app/images/files icon.png');
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 24px;
+        }
+
+        .doclistExt-doc {
+            position: relative;
+            left: 50px;
+            top: 15px;
+            height: 35px;
+            width: 28px;
+
+            background-image: url('/static/app/images/files icon2.png');
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 24px;
+        }
+
+        .doclistExt-xl {
+            position: relative;
+            left: 50px;
+            top: 15px;
+            height: 35px;
+            width: 28px;
+
+            background-image: url('/static/app/images/files icon3.png');
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 24px;
+        }
+
+        .doclistExt-mp {
+            position: relative;
+            left: 50px;
+            top: 15px;
+            height: 35px;
+            width: 28px;
+
+            background-image: url('/static/app/images/files icon6.png');
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 24px;
+        }
+
+        .doclistExt-ppt {
+            position: relative;
+            left: 50px;
+            top: 15px;
+            height: 35px;
+            width: 28px;
+
+            background-image: url('/static/app/images/files icon5.png');
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 24px;
+        }
+
+        .doclistExt-img {
+            position: relative;
+            left: 50px;
+            top: 15px;
+            height: 35px;
+            width: 28px;
+
+            background-image: url('/static/app/images/files icon4.png');
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 18px;
+            line-height: 24px;
+        }
+
+    .doclistName {
+        position: relative;
+        left: 350px;
+        bottom: 12px;
+        width: 500px;
+        height: 30px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: 0.01em;
+
+        color: #676767;
+
+        cursor: pointer;
+    }
+
+    .doclistDescript {
+        position: relative;
+        left: 900px;
+        bottom: 42px;
+        width: 500px;
+        height: 30px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 22px;
+        letter-spacing: 0.01em;
+
+        color: #676767;
+    }
+
+    .doclistDots {
+            position: absolute;
+            bottom: 15px;
+            left: 1530px;
+            cursor: pointer;
+        }
+
+    .doclistCategory {
+        position: absolute;
+        top: 590px;
+        left: 30px;
+        width: 100px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.01cm;
+
+        color: #676767;
+    }
+
+    .doclistDsc {
+        position: absolute;
+        top: 590px;
+        left: 900px;
+        width: 200px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.01cm;
+
+
+        color: #676767;
+    }
+
+    .doclistOrder {
+        position: absolute;
+        top: 590px;
+        left: 450px;
+
+        width: 90px;
+        height: 30px;
+
+        background: #DEDEDE;
+        border-radius: 3px;
+    }
+
+    .doclistA {
+        position: absolute;
+        left: 14px;
+        top: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .doclistZ {
+        position: absolute;
+        left: 64px;
+        top: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+    #docArrow {
+        position: absolute;
+        left: 36px;
+        top: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+        .doclistTags {
+            position: absolute;
+            top: 590px;
+            left: 1300px;
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+            letter-spacing: 0.01cm;
+
+            color: #676767;
+        }
+
+
+        .doclistTitle {
+            position: absolute;
+            position: absolute;
+            top: 590px;
+            left: 350px;
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+            letter-spacing: 0.01cm;
+
+            color: #676767;
+        }
+
+        .pdf-title {
+            position: absolute;
+            left: 8px;
+            top: 7px;
+            width: 50px;
+            height: 17px;
+
+            background: #FFFFFF;
+            border: 1px solid #DA1E1E;
+            box-sizing: border-box;
+            border-radius: 4px;
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 12px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.01em;
+
+            color: #676767;
+        }
+
+        .word-title {
+            position: absolute;
+            left: 8px;
+            top: 7px;
+            width: 50px;
+            height: 17px;
+
+            background: #FFFFFF;
+            border: 1px solid #015D67;
+            box-sizing: border-box;
+            border-radius: 4px;
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 12px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.01em;
+
+            color: #676767;
+        }
+
+        .xl-title {
+            position: absolute;
+            left: 8px;
+            top: 7px;
+            width: 50px;
+            height: 17px;
+
+            background: #FFFFFF;
+            border: 1px solid #1CA04F;
+            box-sizing: border-box;
+            border-radius: 4px;
+
+            font-family: Helvetica;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 10px;
+            line-height: 12px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.01em;
+
+            color: #676767;
+        }
+
+        

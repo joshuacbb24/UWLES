@@ -1,0 +1,455 @@
+.popover{
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1200;
+    display:block;
+    width:180px;
+    height:200px;
+    padding:1px;
+    text-align:left;
+    white-space:normal;
+    background-color:#fff;
+    border:1px solid #ccc;
+    border:1px solid rgba(0,0,0,0.2);
+    border-radius:6px;
+    -webkit-box-shadow:0 5px 10px rgba(0,0,0,0.2);
+    box-shadow:0 5px 10px rgba(0,0,0,0.2);
+    background-clip:padding-box;
+}
+.popover.top{
+    margin-top:-10px;
+}
+.popover.right{
+    margin-left:10px;
+}
+.popover.bottom{
+    margin-top:10px;
+}
+.popover.left{
+    margin-left:-10px;
+}
+.popover-title{
+    padding:8px 14px;
+    margin:0;
+    font-size:14px;
+    font-weight:normal;
+    line-height:18px;
+    background-color:#f7f7f7;
+    border-bottom:1px solid #ebebeb;
+    border-radius:5px 5px 0 0;
+}
+.popover-content{
+    padding:9px 14px;
+}
+.popover .arrow,.popover .arrow:after{
+    position:absolute;
+    display:block;
+    width:0;
+    height:0;
+    border-color:transparent;
+    border-style:solid;
+}
+.popover .arrow{
+    border-width:11px;
+}
+.popover .arrow:after{
+    border-width:10px;
+    content:"";
+}
+.popover.top .arrow{
+    bottom:-11px;
+    left:50%;
+    margin-left:-11px;
+    border-top-color:#999;
+    border-top-color:rgba(0,0,0,0.25);
+    border-bottom-width:0;
+}
+.popover.top .arrow:after{
+    bottom:1px;
+    margin-left:-10px;
+    border-top-color:#fff;
+    border-bottom-width:0;
+    content:" ";
+}
+.popover.right .arrow{
+    top:50%;
+    left:-11px;
+    margin-top:-11px;
+    border-right-color:#999;
+    border-right-color:rgba(0,0,0,0.25);
+    border-left-width:0;
+}
+.popover.right .arrow:after{
+    bottom:-10px;
+    left:1px;
+    border-right-color:#fff;
+    border-left-width:0;
+    content:" ";
+}
+.popover.bottom .arrow{
+    top:-11px;
+    left:50%;
+    margin-left:-11px;
+    border-bottom-color:#999;
+    border-bottom-color:rgba(0,0,0,0.25);
+    border-top-width:0;
+}
+.popover.bottom .arrow:after{
+    top:1px;
+    margin-left:-10px;
+    border-bottom-color:#fff;
+    border-top-width:0;
+    content:" ";
+}
+.popover.left .arrow{
+    top:50%;
+    right:-11px;
+    margin-top:-11px;
+    border-left-color:#999;
+    border-left-color:rgba(0,0,0,0.25);
+    border-right-width:0;
+}
+.popover.left .arrow:after{
+    right:1px;
+    bottom:-10px;
+    border-left-color:#fff;
+    border-right-width:0;
+    content:" ";
+}
+
+.popover-body p{
+    position: relative;
+    bottom: 13px;
+    padding-left: 32px;
+    padding-bottom: 12px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+
+    color: #676767;
+}
+
+.popover-body p:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.popover-body p.testp2{
+    color: red;
+}
+
+.popover-body p.delete-folder{
+    color: red;
+}
+
+.popover-body i{
+    padding-left: 12px;
+    padding-bottom: 12px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+
+    color: #676767;
+}
+
+.popoverx{
+    position: absolute;
+    top: 15px !important;
+    left: 135px !important;
+}
+
+.popoverx:hover{
+    cursor: pointer;
+}
+
+[name=delete-file-true]{
+    display: none;
+    visibility: hidden;
+}
+
+[for=delete-file-true]{
+    display: none;
+    visibility: hidden;
+}
+
+[name=delete-folder-true]{
+    display: none;
+    visibility: hidden;
+}
+
+[for=delete-folder-true]{
+    display: none;
+    visibility: hidden;
+}
+
+.delete-this-true{
+    background: red;
+    width: 100px;
+    height: 50px;
+    color: white;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+
+    display: inline-block;
+    padding: 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.delete-this-folder-true{
+    background: red;
+    width: 100px;
+    height: 50px;
+    color: white;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+
+    display: inline-block;
+    padding: 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.delete-this-false{
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+    
+    background: grey;
+    width: 100px;
+    height: 50px;
+    color: white;
+
+    display: inline-block;
+    padding: 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.428571429;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+[id^=copy-folder]{
+    width: 25px;
+    height: 25px;
+}
+
+[for^=copy-folder]{
+    position: relative;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+    bottom: 5px;
+}
+
+[id^=copy-subfolder]{
+    position: relative;
+    left: 25px;
+    width: 25px;
+    height: 25px;
+}
+
+[for^=copy-subfolder]{
+    position: relative;
+    left: 25px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+    bottom: 5px;
+}
+
+[id^=copy-sub2folder]{
+    position: relative;
+    left: 50px;
+    width: 25px;
+    height: 25px;
+}
+
+[for^=copy-sub2folder]{
+    position: relative;
+    left: 50px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+    bottom: 5px;
+}
+
+[id^=move-folder]{
+    width: 25px;
+    height: 25px;
+}
+
+[for^=move-folder]{
+    position: relative;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+    bottom: 5px;
+}
+
+[id^=move-subfolder]{
+    position: relative;
+    left: 25px;
+    width: 25px;
+    height: 25px;
+}
+
+[for^=move-subfolder]{
+    position: relative;
+    left: 25px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+    bottom: 5px;
+}
+
+[id^=move-sub2folder]{
+    position: relative;
+    left: 50px;
+    width: 25px;
+    height: 25px;
+}
+
+[for^=move-sub2folder]{
+    position: relative;
+    left: 50px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+    bottom: 5px;
+}
+
+#sharecollaboratorsChoice {
+    display: block !important;
+    position: absolute;
+    width: 500px;
+    min-height: 300px;
+    max-height: 300px;
+    background: #F6F6F6;
+    overflow-y: auto;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 15px;
+    display: flex;
+    align-items: center;
+    color: #676767;
+}
+
+#sharecollaboratorsChoice li.share-collab--remove{
+    display: none;
+}
+
+.share-collab__A {
+    color: black;
+    width: 500px;
+    height: 50px;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    background: lightgrey;
+}
+
+    .share-collab__A:hover {
+        color: black;
+        width: 500px;
+        height: 50px;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        background: grey;
+        cursor: pointer;
+    }
+
+.share-collab__B {
+    color: white;
+    width: 500px;
+    height: 50px;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    background: #015D67;
+}
+
+    .share-collab__B:hover {
+        color: white;
+        width: 500px;
+        height: 50px;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        background: darkcyan;
+        cursor: pointer;
+    }

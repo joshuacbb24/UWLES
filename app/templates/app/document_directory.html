@@ -1,0 +1,657 @@
+﻿{% extends 'app/format.html' %}
+
+{% block header1 %}
+    <a href="{% url 'dashboard' %}">
+        <span id="fist-element" class="las la-home"></span>
+    </a>
+{% endblock %}
+{% block header2 %}
+    <a href="{% url 'fulldirectory' %}" class="active">
+        <span class="las la-book"></span>
+    </a>
+{% endblock %}
+{% block header3 %}
+    <a href="{% url 'multichat' %}">
+        <span class="las la-comment-alt"></span>
+    </a>
+{% endblock %}
+{% block header4 %}
+    <a href="">
+        <span class="las la-user-friends"></span>
+    </a>
+{% endblock %}
+{% block header5 %}
+    <a href="">
+        <span class="las la-plus-circle"></span>
+    </a>
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+{% load project_templates %}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/directory.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/myModal.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/addOptions.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/moreOptions.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/documents.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/fileFolder.css' %}" />
+
+    <script>
+        function filterfileFunction() {
+        var input, filter, div, a, i;
+        input = document.getElementById("searchbar");
+        filter = input.value.toUpperCase();
+        a = document.getElementsByClassName("document-card-doc-name")
+        b = document.getElementsByClassName("doclistName");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                $(a[i]).parent().parent().css("display", "")
+                $(b[i]).parent().css("display", "")
+            } else {
+                $(a[i]).parent().parent().css("display", "none")
+                $(b[i]).parent().css("display", "none")
+            }
+        }
+    }
+    </script>
+</head>
+<body>
+    <div class="directoryBar"></div>
+    <a href="{% url 'fulldirectory' %}" class="fullHidden">Full Directory</a>
+    <a href="{% url 'orgdirectory' %}" class="orgHidden">Organizational Directory</a>
+    <div class="fileActive">Documents Directory</div>
+
+    <div class="searchbarcontainer">
+        <input type="text" placeholder="Search for file..." class="searchbar" id="searchbar" onkeyup="filterfileFunction()">
+        <i class="fa fa-search" aria-hidden="true" id="searchBarIcon"></i>
+    </div>
+
+    <button class="addBox" type="button" data-toggle="modal" data-target="#addModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> New</p></button>
+    <button class="editBox" type="button" data-toggle="modal" data-target="#editModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> Edit</p></button>
+
+    {% include "app/directory_forms.html" %}
+
+    <div class="divideLine"></div>
+
+    <div class="gridBox" id="visible"></div>
+    <div class="gridPH" id="gridIcon"><i class="fa fa-th" aria-hidden="true"></i></div>
+
+    <div class="listBox" id="hidden"></div>
+    <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
+
+    <a href="{% url 'documentdirectory' %}" class="docDirPath">Document Directory</a>
+
+    <div class="folderBox">
+        {% for folder in myfolders %}
+            <div class="{% cycle 'myFolder1' 'myFolder2' 'myFolder3' %}"><i class="bi bi-folder-fill" style="color: #68D0D1; font-size: 2rem;"></i><div class="folderName" onclick="location.href='{% url 'document_folder_directory' folder.id 1 %}'">{{ folder.name }}</div>
+            {% if folder.name != 'All Files' and folder.name != 'Shared With Me' and folder.name != 'Personal' %}
+                <div class="folderDots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                data-content="<i class='bi bi-x-lg popoverx'></i>
+                            <br>
+                            <br>
+                            <i class='bi bi-pencil'></i><p class='rename-folder' data-toggle='modal' data-target='#renameFolderModal' value='{{ folder.id }}'>Rename</p>
+                            <br>
+                            <i class='bi bi-trash-fill' style='color: red;'></i><p class='delete-folder' data-toggle='modal' data-target='#deleteFolderModal' value='{{ folder.id }}'>Delete</p>">
+                <i class="bi bi-three-dots-vertical" style="color: #015D67;"></i></div>
+            {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="addFolder" type="button" data-toggle="modal" data-target="#addFolderModal"><p class="addContent">Add Folder</p></div>
+
+    <div class="viewFilesTitle">Recent Files</div>
+
+    <div class="documentLayout" id="visible">
+        {% for recent in recent_files %}
+        <div class="document-card">
+            <div class="document-card-footing">
+                <div class="document-card-doc">
+                    <div class="document-card-doc-circle"></div>
+                    <div class="document-card-doc-line1"></div>
+                    <div class="document-card-doc-line2"></div>
+                    <div class="document-card-doc-line3"></div>
+                    <div class="document-card-doc-line4"></div>
+                    <div class="document-card-doc-line5"></div>
+                    <div class="document-card-doc-line6"></div>
+                    <div class="document-card-doc-block"></div>
+                    <div class="document-card-doc-line7"></div>
+                    <div class="document-card-doc-line8"></div>
+                    <div class="document-card-doc-line9"></div>
+                </div>
+                <div class="{% if recent.file.file|docext == 'pdf' %} file-ext_pdf {% elif recent.file.file|docext == 'docx' %} file-ext_doc {% elif recent.file.file|docext == 'xlsx' %} file-ext_xl {% elif recent.file.file|docext == 'mp3' or recent.file.file|docext == 'mp4'%} file-ext_mp {% elif recent.file.file|docext == 'pptx' or recent.file.file|docext == 'ppt' %} file-ext_ppt {% elif recent.file.file|docext == 'jpg' or recent.file.file|docext == 'png' %} file-ext_img {% endif %}">
+                    <div class="{% if recent.file.file|docext == 'pdf' %} pdf-title {% elif recent.file.file|docext == 'docx' %} word-title {% elif recent.file.file|docext == 'xlsx' %} xl-title {% elif recent.file.file|docext == 'mp3' or recent.file.file|docext == 'mp4'%} mp-title {% elif recent.file.file|docext == 'pptx' or recent.file.file|docext == 'ppt' %} ppt-title {% elif recent.file.file|docext == 'jpg' or recent.file.file|docext == 'png' %} png-jpg-title {% endif %}">
+                        {% if recent.file.file|docext == 'pdf' %} PDF {% elif recent.file.file|docext == 'docx' %} WORD {% elif recent.file.file|docext == 'xlsx' %} EXL {% elif recent.file.file|docext == 'pptx' or recent.file.file|docext == 'ppt'%} PPT {% elif recent.file.file|docext == 'mp3' %} MP3 {% elif recent.file.file|docext == 'mp4' %} MP4 {% elif recent.file.file|docext == 'png' %} PNG {% elif recent.file.file|docext == 'jpg' %} JPG {% endif %}
+                    </div>
+                </div>
+                <div class="document-card-doc-name">{% if recent.file.document_name %}{{ recent.file.document_name|truncatechars_html:30 }}.{{ recent.file.file|docext }}{% else %}{{ recent.file.file|doctitle|truncatechars_html:30 }}{% endif %}</div>
+                <div class="document-card-doc-dots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                data-content="<i class='bi bi-x-lg popoverx'></i>
+                              <br>
+                              <br>
+                              <i class='bi bi-arrow-90deg-right'></i><p class='share-file' data-toggle='modal' data-target='#shareFileModal' value='{{ recent.file.id }}'>Share</p>
+                              <!--<i class='bi bi-folder'></i><p class='move-file' data-toggle='modal' data-target='#moveFileModal' value='{{ recent.file.id }}'>Move To</p>-->
+                              <i class='bi bi-pencil'></i><p class='rename-file' data-toggle='modal' data-target='#renameFileModal' value='{{ recent.file.id }}'>Rename</p>
+                              <!--<i class='bi bi-bookmark'></i><p class='favorite-file' value='{{ recent.file.id }}'>Add As Favorite</p>-->
+                              <i class='bi bi-files'></i><p class='copy-file' data-toggle='modal' data-target='#copyFileModal' value='{{ recent.file.id }}'>Make a Copy</p>
+                              <i class='bi bi-download'></i><p class='download-file' value='{{ recent.file.id }}' onclick=window.open('{{ recent.file.file.url }}')>Download</p>
+                              <br>
+                              <!--<i class='bi bi-trash-fill' style='color: red;'></i><p class='testp2' data-toggle='modal' data-target='#deleteFileModal' value='{{ recent.file.id }}'>Delete</p>-->">
+                <i class="bi bi-three-dots-vertical" style="color: #015D67; font-size: 2rem"></i></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <div class="doclistCategory" id="hidden">File Type</div>
+    <div class="doclistTitle" id="hidden">Name</div>
+    <div class="doclistOrder" id="hidden"><div class="doclistA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="docArrow"></i><div class="doclistZ">Z</div></div>
+    <div class="doclistDsc" id="hidden">Date Accessed</div>
+    <div class="doclistTags" id="hidden">Tags</div>
+
+    <div class="doclistLayout" id="hidden">
+        {% for recent in recent_files %}
+            <div class="{% cycle 'docList1' 'docList2' %}">
+                <div class="{% if recent.file.file|docext == 'pdf' %} doclistExt-pdf {% elif recent.file.file|docext == 'docx' %} doclistExt-doc {% elif recent.file.file|docext == 'xlsx' %} doclistExt-xl {% elif recent.file.file|docext == 'mp3' or recent.file.file|docext == 'mp4'%} doclistExt-mp {% elif recent.file.file|docext == 'pptx' or recent.file.file|docext == 'ppt' %} doclistExt-ppt {% elif recent.file.file|docext == 'jpg' or recent.file.file|docext == 'png' %} doclistExt-img {% endif %}">
+                    <div class="{% if recent.file.file|docext == 'pdf' %} pdf-title {% elif recent.file.file|docext == 'docx' %} word-title {% elif recent.file.file|docext == 'xlsx' %} xl-title {% elif recent.file.file|docext == 'mp3' or recent.file.file|docext == 'mp4'%} mp-title {% elif recent.file.file|docext == 'pptx' or recent.file.file|docext == 'ppt' %} ppt-title {% elif recent.file.file|docext == 'jpg' or recent.file.file|docext == 'png' %} png-jpg-title {% endif %}">
+                        {% if recent.file.file|docext == 'pdf' %} PDF {% elif recent.file.file|docext == 'docx' %} WORD {% elif recent.file.file|docext == 'xlsx' %} EXL {% elif recent.file.file|docext == 'pptx' or recent.file.file|docext == 'ppt'%} PPT {% elif recent.file.file|docext == 'mp3' %} MP3 {% elif recent.file.file|docext == 'mp4' %} MP4 {% elif recent.file.file|docext == 'png' %} PNG {% elif recent.file.file|docext == 'jpg' %} JPG {% endif %}
+                    </div>
+                </div>
+                <div class="doclistName" onclick="window.open('{{ recent.file.file.url }}')">{% if recent.file.document_name %}{{ recent.file.document_name|truncatechars_html:30 }}.{{ recent.file.file|docext }}{% else %}{{ recent.file.file|doctitle }}{% endif %}</div>
+                <div class="doclistDescript">{{ recent.time_viewed }}</div>
+                <div class="doclistDots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
+                data-content="<i class='bi bi-x-lg popoverx'></i>
+                              <br>
+                              <br>
+                              <i class='bi bi-arrow-90deg-right'></i><p class='share-file' data-toggle='modal' data-target='#shareFileModal' value='{{ recent.file.id }}'>Share</p>
+                              <!--<i class='bi bi-folder'></i><p class='move-file' data-toggle='modal' data-target='#moveFileModal' value='{{ recent.file.id }}'>Move To</p>-->
+                              <i class='bi bi-pencil'></i><p class='rename-file' data-toggle='modal' data-target='#renameFileModal' value='{{ recent.file.id }}'>Rename</p>
+                              <!--<i class='bi bi-bookmark'></i><p class='favorite-file' value='{{ recent.file.id }}'>Add As Favorite</p>-->
+                              <i class='bi bi-files'></i><p class='copy-file' data-toggle='modal' data-target='#copyFileModal' value='{{ recent.file.id }}'>Make a Copy</p>
+                              <i class='bi bi-download'></i><p class='download-file' value='{{ recent.file.id }}' onclick=window.open('{{ recent.file.file.url }}')>Download</p>
+                              <br>
+                              <!--<i class='bi bi-trash-fill' style='color: red;'></i><p class='testp2' data-toggle='modal' data-target='#deleteFileModal' value='{{ recent.file.id }}'>Delete</p>-->">
+                <i class="bi bi-three-dots-vertical" style="color: #015D67; font-size: 2rem"></i></div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% include "app/file_folder_forms.html" %}
+
+    <script src="{% static 'app/scripts/directory.js' %}"></script>
+    <script src="{% static 'app/scripts/formvalidation.js' %}"></script>
+    <script src="{% static 'app/scripts/test.js' %}"></script>
+    <script src="{% static 'app/scripts/file-folder.js' %}"></script>
+    <script>
+        document.formHasErrors = {% if form1.errors %}true{% else %}false{% endif %}
+        $('#id_org_name').on('input', function (){
+            var id_org_name = $(this).val();
+            $.ajax({
+                url: '{% url 'validateOrganization' %}',
+                data: {
+                    'org_name': id_org_name
+                },
+                dataType: 'json',
+                success: function(data){
+                    if(data.is_taken){
+                        $('#id_org_name').addClass('error-review')
+                        $('.orgName').addClass('error-review-label')
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-name-error'><div class='form-error-box-ex' id='form-error-org-name-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.name_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-name-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-name-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                    else{
+                        if ($('#id_org_name').hasClass('error-review')){
+                            $('#id_org_name').removeClass('error-review')
+                            $('.orgName').removeClass('error-review-label')
+                            $('.form-error-box--before').children('#form-error-org-name-error').remove()
+                        }
+                    }
+                }
+            });
+        });
+
+    $('#id_website').on('input', function (){
+        var id_website = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_website': id_website
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.web_invalid){
+                    $('#id_website').addClass('error-review')
+                    $('.webName').addClass('error-review-label')
+                    if ($('#form-error-org-website-error').length == 0){
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-website-error'><div class='form-error-box-ex' id='form-error-org-website-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.website_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-website-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-website-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_website').hasClass('error-review')){
+                        $('#id_website').removeClass('error-review')
+                        $('.webName').removeClass('error-review-label')
+                        $('.form-error-box--before').children('#form-error-org-website-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-website]').on('input', function (){
+        var id_website = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editform/g, '');
+        thisvalue--;
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_website': id_website
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.web_invalid){
+                    $('[id^=id_orgs][id$=-website]').addClass('error-review')
+                    $('.webName').addClass('error-review-label')
+                    if ($('#form-error-org-website-error').length == 0){
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-website-error'><div class='form-error-box-ex' id='form-error-org-website-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.website_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-website-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-website-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs][id$=-website]').hasClass('error-review')){
+                        $('[id^=id_orgs][id$=-website]').removeClass('error-review')
+                        $('.webName').removeClass('error-review-label')
+                        $('.form-error-box--before-pt1' + thisvalue).children('#form-error-org-website-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_org_phone').on('input', function (){
+        var id_org_phone = $(this).val();
+        id_org_phone = id_org_phone.replace(/\(|\)|\-/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_phone': id_org_phone
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.phone_invalid){
+                    $('#id_org_phone').addClass('error-review')
+                    $('.phoneName').addClass('error-review-label')
+                    if ($('#form-error-org-phone-error').length == 0){
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-phone-error'><div class='form-error-box-ex' id='form-error-org-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.phone_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_org_phone').hasClass('error-review')){
+                        $('#id_org_phone').removeClass('error-review')
+                        $('.phoneName').removeClass('error-review-label')
+                        $('.form-error-box--before').children('#form-error-org-phone-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-org_phone]').on('input', function (){
+        var id_org_phone = $(this).val();
+        id_org_phone = id_org_phone.replace(/\(|\)|\-/g, '');
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editform/g, '');
+        thisvalue--;
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_phone': id_org_phone
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.phone_invalid){
+                    $('[id^=id_orgs-][id$=-org_phone]').addClass('error-review')
+                    $('.phoneName').addClass('error-review-label')
+                    if ($('#form-error-org-phone-error').length == 0){
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-phone-error'><div class='form-error-box-ex' id='form-error-org-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.phone_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-org_phone]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-org_phone]').removeClass('error-review')
+                        $('.phoneName').removeClass('error-review-label')
+                        $('.form-error-box--before-pt1' + thisvalue).children('#form-error-org-phone-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_org_email').on('input', function (){
+        var id_org_email = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_email': id_org_email
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.email_invalid){
+                    $('#id_org_email').addClass('error-review')
+                    $('.emailName').addClass('error-review-label')
+                    if ($('#form-error-org-email-error').length == 0){
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-email-error'><div class='form-error-box-ex' id='form-error-org-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.email_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-email-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_org_email').hasClass('error-review')){
+                        $('#id_org_email').removeClass('error-review')
+                        $('.emailName').removeClass('error-review-label')
+                        $('.form-error-box--before').children('#form-error-org-email-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-org_email]').on('input', function (){
+        var id_org_email = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editform/g, '');
+        thisvalue--;
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_email': id_org_email
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.email_invalid){
+                    $('[id^=id_orgs-][id$=-org_email]').addClass('error-review')
+                    $('.emailName').addClass('error-review-label')
+                    if ($('#form-error-org-email-error').length == 0){
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-email-error'><div class='form-error-box-ex' id='form-error-org-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.email_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-email-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-org_email]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-org_email]').removeClass('error-review')
+                        $('.emailName').removeClass('error-review-label')
+                        $('.form-error-box--before-pt1' + thisvalue).children('#form-error-org-email-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_zipcode').on('input', function (){
+        var id_zipcode = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_zipcode': id_zipcode
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.zipcode_invalid){
+                    $('#id_zipcode').addClass('error-review')
+                    $('.zipName').addClass('error-review-label')
+                    if ($('#form-error-org-zipcode-error').length == 0){
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-zipcode-error'><div class='form-error-box-ex' id='form-error-org-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.zipcode_msg + "</div>")
+                        $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_zipcode').hasClass('error-review')){
+                        $('#id_zipcode').removeClass('error-review')
+                        $('.zipName').removeClass('error-review-label')
+                        $('.form-error-box--before').children('#form-error-org-zipcode-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-zipcode]').on('input', function (){
+        var id_zipcode = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editform/g, '');
+        thisvalue--;
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'org_zipcode': id_zipcode
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.zipcode_invalid){
+                    $('[id^=id_orgs-][id$=-zipcode]').addClass('error-review')
+                    $('.zipName').addClass('error-review-label')
+                    if ($('#form-error-org-zipcode-error').length == 0){
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-zipcode-error'><div class='form-error-box-ex' id='form-error-org-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.zipcode_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-zipcode]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-zipcode]').removeClass('error-review')
+                        $('.zipName').removeClass('error-review-label')
+                        $('.form-error-box--before-pt1' + thisvalue).children('#form-error-org-zipcode-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_contact_phone').on('input', function (){
+        var id_contact_phone = $(this).val();
+        id_contact_phone = id_contact_phone.replace(/\(|\)|\-/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'contact_phone': id_contact_phone
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.cphone_invalid){
+                    $('#id_contact_phone').addClass('error-review')
+                    $('.cphoneName').addClass('error-review-label')
+                    if ($('#form-error-org-contact-phone-error').length == 0){
+                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-contact-phone-error'><div class='form-error-box-ex' id='form-error-org-contact-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cphone_msg + "</div>")
+                        $('.form-error-box--before2').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_contact_phone').hasClass('error-review')){
+                        $('#id_contact_phone').removeClass('error-review')
+                        $('.cphoneName').removeClass('error-review-label')
+                        $('.form-error-box--before2').children('#form-error-org-contact-phone-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-contact_phone]').on('input', function (){
+        var id_contact_phone = $(this).val();
+        id_contact_phone = id_contact_phone.replace(/\(|\)|\-/g, '');
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editFormPT2/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'contact_phone': id_contact_phone
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.cphone_invalid){
+                    $('[id^=id_orgs-][id$=-contact_phone]').addClass('error-review')
+                    $('.cphoneName').addClass('error-review-label')
+                    if ($('#form-error-org-contact-phone-error').length == 0){
+                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-contact-phone-error'><div class='form-error-box-ex' id='form-error-org-contact-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cphone_msg + "</div>")
+                        $('.form-error-box--before2-pt2' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-contact_phone]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-contact_phone]').removeClass('error-review')
+                        $('.cphoneName').removeClass('error-review-label')
+                        $('.form-error-box--before2-pt2' + thisvalue).children('#form-error-org-contact-phone-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_contact_email').on('input', function (){
+        var id_contact_email = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'contact_email': id_contact_email
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.cemail_invalid){
+                    $('#id_contact_email').addClass('error-review')
+                    $('.cemailName').addClass('error-review-label')
+                    if ($('#form-error-org-contact-email-error').length == 0){
+                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-contact-email-error'><div class='form-error-box-ex' id='form-error-org-contact-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cemail_msg + "</div>")
+                        $('.form-error-box--before2').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_contact_email').hasClass('error-review')){
+                        $('#id_contact_email').removeClass('error-review')
+                        $('.cemailName').removeClass('error-review-label')
+                        $('.form-error-box--before2').children('#form-error-org-contact-email-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-contact_email]').on('input', function (){
+        var id_contact_email = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editFormPT2/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'contact_email': id_contact_email
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.cemail_invalid){
+                    $('[id^=id_orgs-][id$=-contact_email]').addClass('error-review')
+                    $('.cemailName').addClass('error-review-label')
+                    if ($('#form-error-org-contact-email-error').length == 0){
+                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-contact-email-error'><div class='form-error-box-ex' id='form-error-org-contact-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cemail_msg + "</div>")
+                        $('.form-error-box--before2-pt2' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-contact_email]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-contact_email]').removeClass('error-review')
+                        $('.cemailName').removeClass('error-review-label')
+                        $('.form-error-box--before2-pt2' + thisvalue).children('#form-error-org-contact-email-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('#id_mail_zipcode').on('input', function (){
+        var id_mail_zipcode = $(this).val();
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'mail_zipcode': id_mail_zipcode
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.mzipcode_invalid){
+                    $('#id_mail_zipcode').addClass('error-review')
+                    $('.mailzipName').addClass('error-review-label')
+                    if ($('#form-error-org-mail-zipcode-error').length == 0){
+                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-mail-zipcode-error'><div class='form-error-box-ex' id='form-error-org-mail-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.mzipcode_msg + "</div>")
+                        $('.form-error-box--before2').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('#id_mail_zipcode').hasClass('error-review')){
+                        $('#id_mail_zipcode').removeClass('error-review')
+                        $('.mailzipName').removeClass('error-review-label')
+                        $('.form-error-box--before2').children('#form-error-org-mail-zipcode-error').remove()
+                    }
+                }
+            }
+        });
+    });
+
+    $('[id^=id_orgs-][id$=-mail_zipcode]').on('input', function (){
+        var id_mail_zipcode = $(this).val();
+        var thisvalue = $(this).parent().parent().parent().parent().attr('id').replace(/editFormPT2/g, '');
+        $.ajax({
+            url: '{% url 'validateOrganization' %}',
+            data: {
+                'mail_zipcode': id_mail_zipcode
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.mzipcode_invalid){
+                    $('[id^=id_orgs-][id$=-mail_zipcode]').addClass('error-review')
+                    $('.mailzipName').addClass('error-review-label')
+                    if ($('#form-error-org-mail-zipcode-error').length == 0){
+                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-mail-zipcode-error'><div class='form-error-box-ex' id='form-error-org-mail-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.mzipcode_msg + "</div>")
+                        $('.form-error-box--before2-pt2' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
+                    }
+                }
+                else{
+                    if ($('[id^=id_orgs-][id$=-mail_zipcode]').hasClass('error-review')){
+                        $('[id^=id_orgs-][id$=-mail_zipcode]').removeClass('error-review')
+                        $('.mailzipName').removeClass('error-review-label')
+                        $('.form-error-box--before2-pt2' + thisvalue).children('#form-error-org-mail-zipcode-error').remove()
+                    }
+                }
+            }
+        });
+    });
+    </script>
+    <script src="{% static 'app/scripts/form_errors.js' %}"></script>
+</body>
+{% endblock %}

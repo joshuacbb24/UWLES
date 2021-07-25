@@ -1,0 +1,142 @@
+﻿{% extends 'app/format.html' %}
+
+{% block header1 %}
+    <a href="{% url 'dashboard' %}">
+        <span id="fist-element" class="las la-home"></span>
+    </a>
+{% endblock %}
+{% block header2 %}
+    <a href="{% url 'fulldirectory' %}" class="active">
+        <span class="las la-book"></span>
+    </a>
+{% endblock %}
+{% block header3 %}
+    <a href="{% url 'multichat' %}">
+        <span class="las la-comment-alt"></span>
+    </a>
+{% endblock %}
+{% block header4 %}
+    <a href="">
+        <span class="las la-user-friends"></span>
+    </a>
+{% endblock %}
+{% block header5 %}
+    <a href="">
+        <span class="las la-plus-circle"></span>
+    </a>
+{% endblock %}
+
+
+{% block content %}
+{% load static %}
+{% load project_templates %}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/directory.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/myModal.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/addOptions.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/org_view.css' %}"/>
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css' rel='stylesheet' />
+
+</head>
+<body>
+    <div class="directoryBar"></div>
+    <a href="{% url 'fulldirectory' %}" class="fullHidden">Full Directory</a>
+    <a href="{% url 'orgdirectory' %}" class="orgActive">Organizational Directory</a>
+    <a href="{% url 'documentdirectory' %}" class="fileHidden">Documents Directory</a>
+
+    <!--<div class="searchbar"><i class="fa fa-search" aria-hidden="true" id="searchBarIcon"></i></div>
+
+    <select class="locationDD">
+        <option value="0">Location</option>
+        <option value="1">Wicomico</option>
+        <option value="2">Worcester</option>
+        <option value="3">Somerset</option>
+        <option value="4">Dorchester</option>
+    </select>
+
+    <select class="eligibilityDD">
+        <option value="0">Eligibility</option>
+        <option value="1">All Ages</option>
+        <option value="2">Children</option>
+        <option value="3">Adults</option>
+        <option value="4">Seniors</option>
+    </select>-->
+
+    <button class="addBox" type="button" data-toggle="modal" data-target="#addModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> New</p></button>
+    <button class="editBox" type="button" data-toggle="modal" data-target="#editModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> Edit</p></button>
+
+    <div class="divideLine"></div>
+
+    <div class="gridBox" id="visible"></div>
+    <div class="gridPH" id="gridIcon"><i class="fa fa-th" aria-hidden="true"></i></div>
+
+    <div class="listBox" id="hidden"></div>
+    <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
+
+    <a href="{% url 'orgdirectory' %}" class="orgPath">Organizational Directory ></a>
+    <div class="suborgPath">{{ organization.org_name }}</div>
+
+    <div class="org-detail--box">
+        <div class="org-detail__icon">
+            {% if organization.org_image %}
+                <img src="{{ organization.org_image.url }}">
+            {% endif %}
+        </div>
+        <div class="org-detail__title">{{ organization.org_name }}</div>
+        <div class="org-detail__description">{{ organization.description }}</div>
+        <div class="org-detail__eligibility--boldthis">Intake and Eligibility:</div>
+        <span class="org-detail__eligibility"> {% for elig in organization.eligibility.all %} {{ elig }} {% endfor %}</span>
+        <div class="org-detail__hours--boldthis">Hours of Operation:</div>
+        <div class="org-detail__hours">24 Hours</div>
+        <div class="org-detail__contact--box">
+            <div class="org-detail__contact--h2">Contact</div>
+            <div class="org-detail__contact--name">Name: {{ organization.contact_name }}</div>
+            <div class="org-detail__contact--email">Email: {{ organization.contact_email }}</div>
+            <div class="org-detail__contact--phone">Phone: {{ organization.contact_phone|phone_number2 }}</div>
+            <div class="org-detail__contact--visit__btn" onclick="location.href='{{ organization.website|urlcheck }}'">Visit</div>
+            <div class="org-detail__contact--share__btn">Share Contact</div>
+        </div>
+        <div class="org-detail--location">Location</div>
+        <div class="org-detail--address">{{ organization.street }}</div>
+        <div class="org-detail--city">{{ organization.city }}, {{ organization.state }} {{ organization.zipcode }}</div>
+        <div class="org-detail--directions">Get Directions</div>
+        <div class="org-detail--programs">Programs and Services:</div>
+        <div class="org-detail--areas">Areas Served:</div>
+        <div class="org-detail--areas__box">
+            {% for area in organization.areas_served.all %}
+                <div class="org-detail--areas__county">{{ area.county }} County</div>
+            {% endfor %}
+        </div>
+        <div class="org-detail--languages">Languages Available:</div>
+        <div class="org-detail--languages__box">
+            {% for lang in organization.languages.all %}
+                <div class="org-detail--languages__languages">{{ lang.language }}</div>
+            {% endfor %}
+        </div>
+        <div id='map{{ organization.id }}' class="modalMap"></div>
+        <script>
+            mapboxgl.accessToken = 'pk.eyJ1IjoidXdsZXN0ZXN0YWRtaW4iLCJhIjoiY2twdTYzZnU0MHdidjJ2cG0xM2h0dXJsdyJ9.lktGtwWKbT-GAmSUOQNEdA';
+            var map{{ organization.id }} = new mapboxgl.Map({
+                container: 'map{{ organization.id }}', // container ID
+                style: 'mapbox://styles/mapbox/streets-v11', // style URL
+                center: [{{ organization.long }} , {{ organization.lat }}], // starting position [lng, lat]
+                zoom: 13 // starting zoom
+            });
+            var marker = new mapboxgl.Marker()
+            .setLngLat([{{ organization.long }}, {{ organization.lat }}])
+            .addTo(map{{ organization.id }});
+            $('#testModal{{ organization.id }}').on('shown.bs.modal', function () {
+                map{{ organization.id }}.resize();
+            })
+        </script>
+    </div>
+    <div class="org-detail--related">Related Organizations:</div>
+
+    <script src="{% static 'app/scripts/directory.js' %}"></script>
+    <script src="{% static 'app/scripts/test.js' %}"></script>
+</body>
+{% endblock %}

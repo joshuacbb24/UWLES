@@ -1,0 +1,939 @@
+﻿{% extends 'app/format.html' %}
+{% block content %}
+{% load static %}
+<head>
+</head>
+<body>
+<style>
+    .directoryBar {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 10px;
+
+        position: absolute;
+        width: 1090px;
+        height: 50px;
+        top: 20px;
+        left: 250px;
+
+        background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+        border-radius: 4px;
+    }
+
+    .fullActive {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 260px;
+
+        background: #EBF2F2;
+        box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+        border-radius: 4px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        padding-top: 6px;
+        color: #013D44;
+
+        cursor: pointer;
+
+    }
+    
+    .orgActive {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 620px;
+        
+        background: #EBF2F2;
+        box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+        border-radius: 4px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        padding-top: 6px;
+        color: #013D44;
+
+        cursor: pointer;
+    }
+
+    .fileActive {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 1090px;
+        
+        background: #EBF2F2;
+        box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+        border-radius: 4px;
+    }
+    
+
+    .fullHidden {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 260px;
+
+        background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01cm;
+        text-transform: capitalize;
+        padding-top: 6px;
+        color: #878787;
+    }
+        .fullHidden:hover {
+            cursor: pointer;
+            background: #E6EEF0;
+        }
+
+    .fileHidden {
+        position: absolute;
+        width: 350px;
+        height: 40px;
+        top: 25px;
+        left: 980px;
+
+        background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 28px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01cm;
+        text-transform: capitalize;
+        padding-top: 6px;
+        color: #878787;
+    }
+
+        .fileHidden:hover {
+            cursor: pointer;
+            background: #E6EEF0;
+        }
+
+    .searchbar {
+        position: absolute;
+        height: 40px;
+        width: 1600px;
+        top: 100px;
+
+        background: #FFFFFF;
+        border: 1px solid #878787;
+        box-sizing: border-box;
+        border-radius: 4px;
+    }
+
+    #searchBarIcon {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: #BDBDBD;
+    }
+
+    .locationDD {
+        position: absolute;
+        top: 180px;
+        height: 35px;
+        width: 104px;
+
+        background: #FFFFFF;
+        border: 0.5px solid #5F5F5F;
+        box-sizing: border-box;
+        border-radius: 4px;
+    }
+
+    .eligibilityDD {
+        position: absolute;
+        top: 180px;
+        height: 35px;
+        width: 104px;
+        left: 140px;
+
+        background: #FFFFFF;
+        border: 0.5px solid #5F5F5F;
+        box-sizing: border-box;
+        border-radius: 4px;
+    }
+
+    .DDcontent {
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 24px;
+        align-items: center;
+        text-align: center;
+        color: #5F5F5F;
+    }
+
+    .addBox {
+        position: absolute;
+        top: 180px;
+        left: 1390px;
+        height: 35px;
+        width: 72px;
+        background: #015D67;
+    }
+
+    .addContent {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        color: #FFFFFF;
+        letter-spacing: 0.01cm;
+    }
+
+    #addIcon {
+  
+    }
+
+    .divideLine {
+        position: absolute;
+        width: 0px;
+        height: 30px;
+        left: 1480px;
+        top: 180px;
+        border: 1px solid #979797
+    }
+
+    .gridBox {
+        position: absolute;
+        left: 1498px;
+        top: 180px;
+        width: 44px;
+        height: 35px;
+        background: #DEDEDE;
+        border-radius: 2px;
+    }
+
+    #gridIcon {
+        position: absolute;
+        left: 1510px;
+        top: 190px;
+        color: black;
+    }
+
+     #gridIcon2 {
+        position: absolute;
+        left: 1510px;
+        top: 190px;
+        color: #AFAFAF;
+    }
+
+    .listBox {
+        position: absolute;
+        left: 1554px;
+        top: 180px;
+        width: 44px;
+        height: 35px;
+        background: #DEDEDE;
+        border-radius: 2px;
+    }
+
+    #listIcon {
+        position: absolute;
+        left: 1570px;
+        top: 190px;
+        width: 22px;
+        height: 18px;
+        color: #AFAFAF;
+    }
+
+     #listIcon2 {
+        position: absolute;
+        left: 1570px;
+        top: 190px;
+        width: 22px;
+        height: 18px;
+        color: black;
+    }
+
+    .dirPath {
+        position: absolute;
+        top: 260px;
+        width: 175px;
+        height: 20px;
+        
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 17px;
+        text-align: center;
+
+        color: #979797;
+    }
+
+    .gridLayout {
+        position: absolute;
+        top: 300px;
+        width: 1680px;
+        height: 1000px;
+    }
+
+
+    .card1 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card2 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 580px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card3 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 1160px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card4 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 260px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card5 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 260px;
+        left: 580px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card6 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 1160px;
+        top: 260px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card7 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 520px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card8 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 520px;
+        left: 580px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card9 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 1160px;
+        top: 520px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card10 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 780px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card11 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        top: 780px;
+        left: 580px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .card12 {
+        position: absolute;
+        width: 520px;
+        height: 200px;
+        left: 1160px;
+        top: 780px;
+        background: #FFFFFF;
+        border-radius: 6px;
+        box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+    }
+
+    .circle {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        background: rgba(255, 186, 0, 0.2);
+    }
+
+    #AgingIcon {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    #EducationIcon {
+        position: absolute;
+        top: 15px;
+        left: 10px;
+        color: #FFBA00;
+    }
+
+    #FoodIcon {
+        position: absolute;
+        top: 15px;
+        left: 17px;
+        color: #FFBA00;
+    }
+
+    #FamilyIcon {
+        position: absolute;
+        top: 15px;
+        left: 13px;
+        color: #FFBA00;
+    }
+
+    #DomesticIcon {
+        position: absolute;
+        top: 14px;
+        left: 17px;
+        color: #FFBA00;
+    }
+
+    #EmploymentIcon {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    #HealthIcon {
+        position: absolute;
+        top: 16px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    #HousingIcon {
+        position: absolute;
+        top: 14px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    #LegalIcon {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        color: #FFBA00;
+    }
+
+    #UtilityIcon {
+        position: absolute;
+        top: 15px;
+        left: 20px;
+        color: #FFBA00;
+    }
+
+    #MentalIcon {
+        position: absolute;
+        top: 15px;
+        left: 16px;
+        color: #FFBA00;
+    }
+
+    #VeteransIcon {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        color: #FFBA00;
+    }
+
+    .h2title {
+        position: absolute;
+        top: 50px;
+        left: 120px;
+        
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 20px;
+        color: #015D67;
+    }
+
+    .ptext {
+        position: absolute;
+        top: 100px;
+        left: 30px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01cm;
+
+        color: #707070;
+    }
+
+    .explorebtn {
+        position: absolute;
+        top: 150px;
+        left: 30px;
+        width: 100px;
+        height: 35px;
+
+        background: #015D67;
+        border-radius: 6px;
+        border: 0px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01cm;
+
+        color: #FFFFFF;
+
+        cursor: pointer;
+    }
+
+    #hidden {
+        visibility: hidden;
+    }
+    #visible {
+        visibility: visible;
+    }
+
+    .listLayout {
+        position: absolute;
+        top: 350px;
+        width: 1680px;
+        height: 900px;
+    }
+
+    .list1 {
+        position: relative;
+        width: 1600px;
+        height: 65px;
+        background: rgba(196, 226, 238, 0.32);
+        border: 1px solid #ECF5F9;
+        box-sizing: border-box;
+        margin-top: 10px;
+    }
+
+    .list2 {
+        position: relative;
+        margin-top: 10px;
+        width: 1600px;
+        height: 65px;
+        background: rgba(238, 229, 196, 0.32);
+        border: 1px solid #ECF5F9;
+        box-sizing: border-box;
+    }
+
+    .listName {
+        position: relative;
+        left: 30px;
+        top: 19px;
+        width: 350px;
+        height: 30px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    .listDescript {
+        position: relative;
+        left: 500px;
+        width: 800px;
+        height: 30px;
+        bottom: 5px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 17px;
+        letter-spacing: 0.01cm;
+
+        color: #5F5F5F;
+    }
+
+    .listExplore1 {
+        position: relative;
+        left: 1400px;
+        width: 150px;
+        height: 38px;
+        bottom: 48px;
+
+        border: 1px solid #015D67;
+        box-sizing: border-box;
+        border-radius: 4px;
+
+        color: #015D67;
+        background: rgba(196, 226, 238, 0.32);
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .listExplore2 {
+        position: relative;
+        left: 1400px;
+        width: 150px;
+        height: 38px;
+        bottom: 48px;
+
+        border: 1px solid #015D67;
+        box-sizing: border-box;
+        border-radius: 4px;
+
+        color: #015D67;
+        background: rgba(238, 229, 196, 0.32);
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+    }
+
+    .listExplore1:hover {
+        background: #015D67;
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+    }
+
+    .listExplore2:hover {
+        background: #015D67;
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        align-items: center;
+        text-align: center;
+        color: white;
+        cursor: pointer;
+    }
+
+    .listCategory {
+        position: absolute;
+        top: 310px;
+        left: 30px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.01cm;
+
+        color: #676767;
+    }
+
+    .listDsc {
+        position: absolute;
+        top: 310px;
+        left: 500px;
+
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: 0.01cm;
+
+        color: #676767;
+    }
+
+    .listOrder {
+        position: absolute;
+        top: 305px;
+        left: 150px;
+
+        width: 90px;
+        height: 30px;
+
+        background: #DEDEDE;
+        border-radius: 3px;
+    }
+
+    .listA {
+        position: absolute;
+        left: 14px;
+        top: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .listZ {
+        position: absolute;
+        left: 64px;
+        top: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+    #Arrow {
+        position: absolute;
+        left: 36px;
+        top: 8px;
+        width: 18px;
+        height: 18px;
+    }
+
+</style>
+
+<script>
+    $(document).ready(function () {
+        $("#listIcon").click(function () {
+            var list = $(".listBox");
+            var grid = $(".gridBox");
+            list.attr('id', (list.attr('id') === 'visible' ? 'hidden' : 'visible'));
+            grid.attr('id', (grid.attr('id') === 'visible' ? 'hidden' : 'visible'));
+            var licon = $(".listPH");
+            var gicon = $(".gridPH");
+            licon.attr('id', (licon.attr('id') === 'listIcon' ? 'listIcon2' : 'listIcon'));
+            gicon.attr('id', (gicon.attr('id') === 'gridIcon' ? 'gridIcon2' : 'gridIcon'));
+        });
+        $("#gridIcon").click(function () {
+            var list = $(".listBox");
+            var grid = $(".gridBox");
+            list.attr('id', (list.attr('id') === 'visible' ? 'hidden' : 'visible'));
+            grid.attr('id', (grid.attr('id') === 'visible' ? 'hidden' : 'visible'));
+            var licon = $(".listPH");
+            var gicon = $(".gridPH");
+            licon.attr('id', (licon.attr('id') === 'listIcon' ? 'listIcon2' : 'listIcon'));
+            gicon.attr('id', (gicon.attr('id') === 'gridIcon' ? 'gridIcon2' : 'gridIcon'));
+        });
+    });
+
+    $(document).ready(function () {
+        $("#listIcon").click(function () {
+            var list = $(".listBox");
+            if (list.attr("id") == "visible") {
+                var grid = $(".gridLayout");
+                grid.attr("id", "hidden");
+                var list2 = $(".listLayout");
+                list2.attr("id", "visible");
+                var listC = $(".listCategory");
+                listC.attr("id", "visibile");
+                var listD = $(".listDsc");
+                listD.attr("id", "visible");
+                var listO = $(".listOrder");
+                listO.attr("id", "visible");
+            }
+            if (list.attr("id") == "hidden") {
+                var grid = $(".gridLayout");
+                grid.attr("id", "visible");
+                var list2 = $(".listLayout");
+                list2.attr("id", "hidden");
+                var listC = $(".listCategory");
+                listC.attr("id", "hidden");
+                var listD = $(".listDsc");
+                listD.attr("id", "hidden");
+                var listO = $(".listOrder");
+                listO.attr("id", "hidden");
+            }
+        });
+        $("#gridIcon").click(function () {
+            var grid = $(".gridBox");
+            if (grid.attr("id") == "visible") {
+                var grid2 = $(".gridLayout");
+                grid2.attr("id", "visible");
+                var list = $(".listLayout");
+                list.attr("id", "hidden");
+                var listC = $(".listCategory");
+                listC.attr("id", "hidden");
+                var listD = $(".listDsc");
+                listD.attr("id", "hidden");
+                var listO = $(".listOrder");
+                listO.attr("id", "hidden");
+            }
+            if (grid.attr("id") == "hidden") {
+                var grid2 = $(".gridLayout");
+                grid2.attr("id", "hidden");
+                var list = $(".listLayout");
+                list.attr("id", "visible");
+                var listC = $(".listCategory");
+                listC.attr("id", "visibile");
+                var listD = $(".listDsc");
+                listD.attr("id", "visible");
+                var listO = $(".listOrder");
+                listO.attr("id", "visible");
+            }
+        });
+    });
+</script>
+
+    <div class="directoryBar"></div>
+    <a href="{% url 'fulldirectory' %}" class="fullHidden">Full Directory</a>
+    <div class="orgActive">Organizational Directory</div>
+    <div class="fileHidden">Documents Directory</div>
+
+    <div class="searchbar"><i class="fa fa-search" aria-hidden="true" id="searchBarIcon"></i></div>
+
+    <select class="locationDD">
+        <option value="0">Location</option>
+        <option value="1">Wicomico</option>
+        <option value="2">Worcester</option>
+        <option value="3">Somerset</option>
+        <option value="4">Dorchester</option>
+    </select>
+
+    <select class="eligibilityDD">
+        <option value="0">Eligibility</option>
+        <option value="1">All Ages</option>
+        <option value="2">Children</option>
+        <option value="3">Adults</option>
+        <option value="4">Seniors</option>
+    </select>
+
+    <div class="addBox"><p class="addContent"><i class="fa fa-plus" aria-hidden="true" id="addIcon"></i> New</p></div>
+
+    <div class="divideLine"></div>
+
+    <div class="gridBox" id="visible"></div>
+    <div class="gridPH" id="gridIcon"><i class="fa fa-th" aria-hidden="true"></i></div>
+
+    <div class="listBox" id="hidden"></div>
+    <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
+
+    <a href="{% url 'orgdirectory' %}" class="dirPath">Organizational Directory</a>
+
+    <div class="gridLayout" id="visible">
+        <div class="card1"><div class="circle"><i class="fa fa-wheelchair-alt fa-2x" aria-hidden="true" id="AgingIcon"></i></div><h2 class="h2title">{{ aging_disability.name }}</h2><p class="ptext">{{ aging_disability.description }}</p><a href="{% url 'orgsubdirectory' aging_disability.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card2"><div class="circle"><i class="fa fa-group fa-2x" aria-hidden="true" id="FamilyIcon"></i></div><h2 class="h2title">{{ children_families.name }}</h2><p class="ptext">{{ children_families.description }}</p><a href="{% url 'orgsubdirectory' children_families.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card3"><div class="circle"><i class="fa fa-hospital-o fa-2x" aria-hidden="true" id="DomesticIcon"></i></div><h2 class="h2title">{{ domestic_family_violence.name }}</h2><p class="ptext">{{ domestic_family_violence.description }}</p><a href="{% url 'orgsubdirectory' domestic_family_violence.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card4"><div class="circle"><i class="fa fa-graduation-cap fa-2x" aria-hidden="true" id="EducationIcon"></i></div><h2 class="h2title">{{ education.name }}</h2><p class="ptext">{{ education.description }}</p><a href="{% url 'orgsubdirectory' education.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card5"><div class="circle"><i class="fa fa-briefcase fa-2x" aria-hidden="true" id="EmploymentIcon"></i></div><h2 class="h2title">{{ employment.name }}</h2><p class="ptext">{{ employment.description }}</p><a href="{% url 'orgsubdirectory' employment.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card6"><div class="circle"><i class="fa fa-cutlery fa-2x" aria-hidden="true" id="FoodIcon"></i></div><h2 class="h2title">{{ food_services.name }}</h2><p class="ptext">{{ food_services.description }}</p><a href="{% url 'orgsubdirectory' food_services.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card7"><div class="circle"><i class="fa fa-heartbeat fa-2x" aria-hidden="true" id="HealthIcon"></i></div><h2 class="h2title">{{ healthcare.name }}</h2><p class="ptext">{{ healthcare.description }}</p><a href="{% url 'orgsubdirectory' healthcare.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card8"><div class="circle"><i class="fa fa-home fa-2x" aria-hidden="true" id="HousingIcon"></i></div><h2 class="h2title">{{ housing_shelter.name }}</h2><p class="ptext">{{ housing_shelter.description }}</p><a href="{% url 'orgsubdirectory' housing_shelter.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card9"><div class="circle"><i class="fa fa-legal fa-2x" aria-hidden="true" id="LegalIcon"></i></div><h2 class="h2title">{{ legal_tax_services.name }}</h2><p class="ptext">{{ legal_tax_services.description }}</p><a href="{% url 'orgsubdirectory' legal_tax_services.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card11"><div class="circle"><i class="fa fa-frown-o fa-2x" aria-hidden="true" id="MentalIcon"></i></div><h2 class="h2title">{{ mental_health.name }}</h2><p class="ptext">{{ mental_health.description }}</p><a href="{% url 'orgsubdirectory' mental_health.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card10"><div class="circle"><i class="fa fa-lightbulb-o fa-2x" aria-hidden="true" id="UtilityIcon"></i></div><h2 class="h2title">{{ utility_assistance.name }}</h2><p class="ptext">{{ utility_assistance.description }}</p><a href="{% url 'orgsubdirectory' utility_assistance.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+        <div class="card12"><div class="circle"><i class="fa fa-fighter-jet fa-2x" aria-hidden="true" id="VeteransIcon"></i></div><h2 class="h2title">{{ veterans.name }}</h2><p class="ptext">{{ veterans.description }}</p><a href="{% url 'orgsubdirectory' veterans.id 1 %}"><button class="explorebtn">Explore</button></a></div>
+    </div>
+
+    <div class="listCategory" id="hidden">Category</div>
+    <div class="listOrder" id="hidden"><div class="listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="Arrow"></i><div class="listZ">Z</div></div>
+    <div class="listDsc" id="hidden">Description</div>
+    <div class="listLayout" id="hidden">
+        <div class="list1"><div class="listName">{{ aging_disability.name }}</div><div class="listDescript">{{ aging_disability.description }}</div><a href="{% url 'orgsubdirectory' aging_disability.id 2 %}"><button class="listExplore1">Explore</button></a></div>
+        <div class="list2"><div class="listName">{{ children_families.name }}</div><div class="listDescript">{{ children_families.description }}</div><a href="{% url 'orgsubdirectory' children_families.id 2 %}"><button class="listExplore2">Explore</button></a></div>
+        <div class="list1"><div class="listName">{{ domestic_family_violence.name }}</div><div class="listDescript">{{ domestic_family_violence.description }}</div><a href="{% url 'orgsubdirectory' domestic_family_violence.id 2 %}"><button class="listExplore1">Explore</button></a></div>
+        <div class="list2"><div class="listName">{{ education.name }}</div><div class="listDescript">{{ education.description }}</div><a href="{% url 'orgsubdirectory' education.id 2 %}"><button class="listExplore2">Explore</button></a></div>
+        <div class="list1"><div class="listName">{{ employment.name }}</div><div class="listDescript">{{ employment.description }}</div><a href="{% url 'orgsubdirectory' employment.id 2 %}"><button class="listExplore1">Explore</button></a></div>
+        <div class="list2"><div class="listName">{{ food_services.name }}</div><div class="listDescript">{{ food_services.description }}</div><a href="{% url 'orgsubdirectory' food_services.id 2 %}"><button class="listExplore2">Explore</button></a></div>
+        <div class="list1"><div class="listName">{{ healthcare.name }}</div><div class="listDescript">{{ healthcare.description }}</div><a href="{% url 'orgsubdirectory' healthcare.id 2 %}"><button class="listExplore1">Explore</button></a></div>
+        <div class="list2"><div class="listName">{{ housing_shelter.name }}</div><div class="listDescript">{{ housing_shelter.description }}</div><a href="{% url 'orgsubdirectory' housing_shelter.id 2 %}"><button class="listExplore2">Explore</button></a></div>
+        <div class="list1"><div class="listName">{{ legal_tax_services.name }}</div><div class="listDescript">{{ legal_tax_services.description }}</div><a href="{% url 'orgsubdirectory' legal_tax_services.id 2 %}"><button class="listExplore1">Explore</button></a></div>
+        <div class="list2"><div class="listName">{{ mental_health.name }}</div><div class="listDescript">{{ mental_health.description }}</div><a href="{% url 'orgsubdirectory' mental_health.id 2 %}"><button class="listExplore2">Explore</button></a></div>
+        <div class="list1"><div class="listName">{{ utility_assistance.name }}</div><div class="listDescript">{{ utility_assistance.description }}</div><a href="{% url 'orgsubdirectory' utility_assistance.id 2 %}"><button class="listExplore1">Explore</button></a></div>
+        <div class="list2"><div class="listName">{{ veterans.name }}</div><div class="listDescript">{{ veterans.description }}</div><a href="{% url 'orgsubdirectory' veterans.id 2 %}"><button class="listExplore2">Explore</button></a></div>
+    </div>
+
+</body>
+{% endblock %}
