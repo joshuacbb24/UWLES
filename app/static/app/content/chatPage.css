@@ -25,9 +25,8 @@
   width: 10px;
 }
 .chat-log::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
   border-radius: 10px;
-  background: #f1f1f1; 
+  background: #e0e0e0; 
 
 }
 .chat-log::-webkit-scrollbar-thumb {
@@ -36,6 +35,20 @@
 }
 .chat-log::-webkit-scrollbar-thumb:hover {
   background: #555; }
+  .rooms::-webkit-scrollbar {
+    width: 10px;
+  }
+  .rooms::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #e0e0e0; 
+  
+  }
+  .rooms::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 10px;
+  }
+  .rooms::-webkit-scrollbar-thumb:hover {
+    background: #555; }
 .left-panel {
   float: left;
   overflow: hidden;
@@ -227,15 +240,15 @@
   float: right;
 }
 
+
 .incoming {
   position: relative;
   float: left;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
   margin-top: 5px;
   font-size: 14px;
   padding: 5px 10px 5px 5px;
-  min-width: 30%;
-  max-width:30%;
+  max-width:40%;
   border-radius: 0px 10px 10px 10px;
   background: white;
   word-wrap: break-word;
@@ -264,14 +277,13 @@
   background-color: #DCDCDC		;
   border-radius: 10px 0px 10px 10px;
   font-size: 14px;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
   margin-top: 5px;
   color: black;
   padding: 5px 10px 5px 5px;
   float: right;
   word-wrap: break-word;
-  min-width: 30%;
-  max-width:30%;
+  max-width:40%;
 }
 
 .msg_send_btn {

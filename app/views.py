@@ -510,7 +510,7 @@ class BasicUploadView(View):
 
             UploadedFile = form.save()
             data = {'is_valid': True, 'name': UploadedFile.file.name,
-                    'url': UploadedFile.file.url}
+                    'url': UploadedFile.file.url, 'size': UploadedFile.file.size}
             # return redirect("/")
         else:
             data = {'is_valid': False}

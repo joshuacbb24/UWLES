@@ -33,7 +33,7 @@ def get_room_or_error(room_id, user):
 
 
 @database_sync_to_async
-def save_message(room_id, user, message, link, file, notice):
+def save_message(room_id, user, message, file, notice):
     """
     Save message data to database
     """
@@ -45,18 +45,15 @@ def save_message(room_id, user, message, link, file, notice):
         room = ChatGroup.objects.get(pk=room_id)
     except ChatGroup.DoesNotExist:
         raise ClientError("ROOM_INVALID")
-    if link == True:
+    if file == True:
         message = Messages.objects.create(
-            chat_group=room, from_user=user, message=message, is_link=True, is_file=False, is_notice=False)
-    elif file == True:
-        message = Messages.objects.create(
-            chat_group=room, from_user=user, message=message, is_link=False, is_file=True, is_notice=False)
+            chat_group=room, from_user=user, message=message, is_file=True, is_notice=False)
     elif notice == True:
         message = Messages.objects.create(
-            chat_group=room, from_user=user, message=message, is_link=False, is_file=True, is_notice=True)
+            chat_group=room, from_user=user, message=message, is_file=False, is_notice=True)
     else:
         message = Messages.objects.create(
-            chat_group=room, from_user=user, message=message, is_link=False, is_file=False, is_notice=False)
+            chat_group=room, from_user=user, message=message, is_file=False, is_notice=False)
 
     return message
 
@@ -228,23 +225,33 @@ def fetch_rooms(user):
     # find the room they requested (by ID)
     try:
         members = []
+        alert = "User made change to chat."
         groups = ChatGroup.objects.filter(members=user)
         for group in groups:
             unreadroom = OfflineMessage.objects.filter(
                 offline_user=user, chat_group=group)
+            group.acknowledged = False
+            group.unread = False
             if unreadroom.exists():
                 group.unread = True
-            else:
-                group.unread = False
+                for unreadroomexists in unreadroom:
+                    if unreadroomexists.acknowledged == True:
+                        group.acknowledged = True
 
             avatararrs = group.members.all()
             avatararray = []
             message = []
+            print("last_message", group, group.id)
             last_message = Messages.objects.filter(
-                chat_group=group.id).latest('sent_at')
-            message.append(last_message.message)
-            print("message", message)
-            group.preview = message
+                chat_group=group).latest('sent_at')
+            if last_message.is_notice == False:
+                message.append(last_message.message)
+                print("message", message)
+                group.preview = message
+            else:
+                message.append(alert)
+                print("message", alert)
+                group.preview = message
             for avatararr in avatararrs:
 
                 # if avatararr.username == user.username:
@@ -425,6 +432,8 @@ def unread(room_id, new_name, message):
         room = ChatGroup.objects.get(pk=room_id)
         offlineuser = OfflineMessage.objects.filter(
             chat_group=room, offline_user=new_name)
+        if isinstance(message, int):
+            message = Messages.objects.get(pk=message)
         if offlineuser.exists():
             return
         OfflineMessage.objects.create(
@@ -436,18 +445,59 @@ def unread(room_id, new_name, message):
 
 
 @ database_sync_to_async
-def fetch_unread(room_id, new_name):
+def fetch_unread(room_id, new_name, message):
     try:
         room = ChatGroup.objects.get(pk=room_id)
-        offlineuser = OfflineMessage.objects.filter(
-            chat_group=room, offline_user=new_name)
-        OfflineMessage.objects.filter(
-            chat_group=room, offline_user=new_name).delete()
-        if offlineuser.exists():
+        offlineusers = OfflineMessage.objects.filter(
+            chat_group=room, offline_user=new_name, message=message)
+        if offlineusers.exists():
+            offlineuser = offlineusers[0]
+            print("utiles fetch unread", offlineuser)
             return offlineuser
         else:
             return False
 
     except OfflineMessage.DoesNotExist:
 
-        raise ClientError("NO_MESSAGES")
+        raise ClientError("NO_MESSAGES_UNREAD")
+
+
+@ database_sync_to_async
+def acknowledged_message(room_id, myself):
+    try:
+        room = ChatGroup.objects.get(pk=room_id)
+        offlineusers = OfflineMessage.objects.filter(
+            chat_group=room, offline_user=myself)
+        if offlineusers.exists():
+            for offlineuser in offlineusers:
+                offlineuser.acknowledged = True
+                offlineuser.save()
+
+    except OfflineMessage.DoesNotExist:
+
+        raise ClientError("NO_MESSAGES_ACKNOWLED")
+
+
+@ database_sync_to_async
+def get_self(myself):
+    try:
+        me = Account.objects.get(username=myself)
+        return me
+    except Account.DoesNotExist:
+
+        raise ClientError("NOT A USER")
+
+
+@ database_sync_to_async
+def delete_unread(room_id, new_name, message):
+    try:
+        room = ChatGroup.objects.get(pk=room_id)
+        offlineusers = OfflineMessage.objects.get(
+            chat_group=room, offline_user=new_name, message=message)
+        if offlineusers:
+            print("utiles delete unread", offlineusers)
+            offlineusers.delete()
+
+    except OfflineMessage.DoesNotExist:
+
+        raise ClientError("NO Message To Delete")

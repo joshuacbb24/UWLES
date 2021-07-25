@@ -104,7 +104,6 @@ class Messages(models.Model):
         Account, on_delete=models.PROTECT, related_name="messages_sent")
     message = models.CharField(max_length=1024)
     sent_at = models.DateTimeField(auto_now_add=True)
-    is_link = models.BooleanField(default=False)
     is_file = models.BooleanField(default=False)
     is_notice = models.BooleanField(default=False)
 
@@ -115,11 +114,15 @@ class Messages(models.Model):
 class OfflineMessage(models.Model):
     """Messages queued for delivery when a user connnects"""
     offline_user = models.ForeignKey(
-        Account, on_delete=models.PROTECT, related_name='offline_from_user')
+        Account, on_delete=models.CASCADE, related_name='offline_from_user')
     chat_group = models.ForeignKey(
         ChatGroup, on_delete=models.CASCADE, null=True)
     message = models.ForeignKey(
-        Messages, on_delete=models.PROTECT, related_name='offline_messages')
+        Messages, on_delete=models.CASCADE, related_name='offline_messages')
+    acknowledged = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "{} {} {}".format(self.offline_user, self.chat_group, self.message)
 
 
 class BgInfo(models.Model):
