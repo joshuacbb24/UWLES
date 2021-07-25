@@ -1412,7 +1412,7 @@ is empty when first clicked -->
                         let unreadmessage = (data.message.unread !== undefined) ? data.message.unread : data.unread;
                         let is_file = (data.message.is_file !== undefined) ? data.message.is_file : data.is_file;
                         let notice = (data.message.notice !== undefined) ? data.message.notice : data.notice;
-                        let received = (data.message.received) ? data.message.received : data.received
+                        let received = (data.message.received !== undefined) ? data.message.received : data.received
                         const NewMessage = "New Message";
                         const cssClass = $("#myself").val() == user ? 'outgoing' : 'incoming';
                         var d = new Date();
@@ -1513,11 +1513,10 @@ is empty when first clicked -->
                                     $(".unread-break-line").show();
                                     unreadnotdisplayed = false;
                                 }
-                                /*if (data.message)
-                                {
+                                if (received === true) {
                                     $(".unread-break-line").hide();
                                     unreadnotdisplayed = true;
-                                }*/
+                                }
                                 $(".chat-log").append(
                                     `<div class='chat-wrapper' style="float: left; margin-left: 25px;">` +
                                     `<div class='incoming-msg-img'>` + avatarofchatlog + `</div>` +
