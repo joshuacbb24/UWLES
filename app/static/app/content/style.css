@@ -14,7 +14,7 @@
 }
 
 .sidebar {
-    width: 60px;
+    width: 51px;
     left: 0;
     top: 60px;
     height: 100%;
@@ -35,22 +35,29 @@
     }
 
 .sidebar-menu li {
-    width: 100%;
-    padding-left: 1rem;
+    width: 90%;
+    padding-left: 0rem;
     margin-bottom: 1rem;
+    float: right;
+    position: relative;
 }
 
 .sidebar-menu a {
     display: block;
     color: #fff;
     font-size: 1.1rem;
+    position: relative !important;
+    width: 100% !important;
+    padding-left: 8px;
 }
 
     .sidebar-menu a.active {
-        background: #ebf2f2;
-        right: 10px;
+        background: #FFF;
+        right: 0px;
         padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
+        /*padding-top: 11.5px;*/
+        padding-bottom: 2.5px;
+        /*padding-bottom: 4.5px;*/
         border-radius: 30px 0px 0px 30px;
         color: #68d0d1;
     }
@@ -171,7 +178,27 @@
     color: var(--text-grey);
 }
 
-.profile-pic {
+.avatars .profile-pic-wrapper{
+    position: relative !important;
+    max-width: 35px !important;
+    max-height: 35px !important;
+    width: 35px !important;
+    height: 35px !important;
+    white-space: normal !important;
+    border-radius: 50% !important;
+    font-size: 16px !important;
+    color: #fff !important;
+    border: 2px solid #fff;
+    text-align: center !important;
+    line-height: 150px !important;
+    overflow: hidden !important;
+    justify-content: center !important;
+    flex-direction: row !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.user-wrapper .profile-pic {
     max-width: 32px;
     max-height: 32px;
     width: 32px;
@@ -183,11 +210,78 @@
     color: #fff;
     text-align: center;
     line-height: 150px;
-    cursor: context-menu;
     overflow: hidden;
     justify-content: center;
     display: flex;
     align-items: center;
+}
+
+.chat-wrapper .profile-pic {
+    max-width: 32px;
+    max-height: 32px;
+    width: 26px;
+    height: 26px;
+    white-space: normal;
+    margin-right: 15px;
+    margin-top: 5px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    line-height: 150px;
+    overflow: hidden;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.profile-link .profile-pic{
+    max-width: 26px;
+    max-height: 26px;
+    width: 25px;
+    height: 25px;
+    white-space: normal;
+    margin-right: 15px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    justify-content: center;
+    float: left;
+    align-items: center;
+    bottom: 9px;
+}
+
+.profile-link img{
+    max-width: 26px;
+    max-height: 26px;
+    width: 25px;
+    height: 25px;
+    white-space: normal;
+    margin-right: 15px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+    justify-content: center;
+    float: left;
+    align-items: center;
+    top: 1px;
+}
+
+.profile-link {
+    display: inline-flex;
+}
+.profile-name {
+    margin-left: 32px;
+    white-space: nowrap;
+    display: inline-flex;
+}
+.avatars .profile-pic-wrapper, .profile-pic:not(:last-child) {
+    position: relative !important;
+    margin-right: -45px !important;
 }
 
 .card-single-one {

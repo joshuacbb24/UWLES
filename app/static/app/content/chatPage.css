@@ -1,52 +1,71 @@
-button {
-    background-color: #d3d3d3;
-    border: none;
-    color: #808080;
-    padding: 10px 15px 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 18px;
-    margin: 4px 2px;
-    cursor: pointer;
-}
+
 
 .chat-container {
     max-width: 1500px;
     width: 100%;
-    height: 90%;
+    height: 93%;
+    min-height: 90%;
     background: #f8f8f8 none repeat scroll 0 0;
-    border: 1px solid #ccc;
-}
-
-.chat-log {
+    /*border: 1px solid #ccc;*/
+    top: -1px;
     position: relative;
-    height: 78.5%;
+  }
+  
+  .chat-log {
+    position: absolute;
+    height: 80.5%;
     z-index: 1;
-    overflow: auto;
     border-bottom: 1px solid #c4c4c4;
-    border: 2px solid #dedede;
-    background-color: #f0f0f0;
-    border-radius: 5px;
-}
-
-.left-panel {
+    border: 1px solid #dedede;
+    background-color: #F5F5F5	;
+    /*border-radius: 5px;*/
+    overflow-y: auto;
+  }
+  .chat-log::-webkit-scrollbar {
+    width: 10px;
+  }
+  .chat-log::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #e0e0e0; 
+  
+  }
+  .chat-log::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 10px;
+  }
+  .chat-log::-webkit-scrollbar-thumb:hover {
+    background: #555; }
+    .rooms::-webkit-scrollbar {
+      width: 10px;
+    }
+    .rooms::-webkit-scrollbar-track {
+      border-radius: 10px;
+      background: #e0e0e0; 
+    
+    }
+    .rooms::-webkit-scrollbar-thumb {
+      background: #888; 
+      border-radius: 10px;
+    }
+    .rooms::-webkit-scrollbar-thumb:hover {
+      background: #555; }
+  .left-panel {
     float: left;
     overflow: hidden;
     width: 26%;
     border-right: 1px solid #c4c4c4;
     height: 100%;
-}
-
-.left-panel-header {
+  }
+  
+  .left-panel-header {
     position: relative;
-    height: 10%;
+    height: 15%;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     overflow: hidden;
     background-color: #fcfcfc;
-}
-
-.middle-panel {
+  }
+  
+  .middle-panel {
     position: relative;
     float: left;
     width: 48%;
@@ -54,35 +73,38 @@ button {
     overflow: hidden;
     border-right: 1px solid #c4c4c4;
     top: 0;
-}
-
-.rooms-container {
+    background-color: #F5F5F5;
+  
+  }
+  
+  .rooms-container {
     position: relative;
     border-bottom: 1px solid #c4c4c4;
-    height: 78.5%;
-    overflow: auto;
-    background: #f8f8f8 none repeat scroll 0 0;
-}
-
-.rooms {
+    height: 73.5%;
+    background: white;
+  
+  }
+  
+  .rooms {
     position: relative;
     float: left;
-    overflow: hidden;
     width: 100%;
-}
-
-.right-panel {
+    background-color: white;
+    overflow-y: auto;
+  }
+  
+  .right-panel {
     position: relative;
     float: left;
     overflow: hidden;
     width: 26%;
     height: 100%;
-    background-color: #d7d7d7;
-}
-
-.rightAccordion {
-    background-color: #d7d7d7;
-    color: #013d44;
+    background-color: white;
+  }
+  
+  .rightAccordion {
+    background-color: white;
+    color: black;
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -99,33 +121,30 @@ button {
     transition: 0.4s;
     margin-bottom: 5px;
     display: none;
-}
-
-    .rightActive,
-    .rightAccordion:hover {
-        background-color: #ccc;
-    }
-
-    .rightAccordion:after {
-        content: "\1433";
-        color: #afafaf;
-        font-weight: bold;
-        float: right;
-        margin-left: 5px;
-    }
-
-.rightActive:after {
-    content: "\142F";
-}
-
-.rightPanel {
+    outline:none;
+  }
+  
+  .rightActive,
+  .rightAccordion:hover {
+    background-color: white;
+  }
+  
+  .rightAccordion:after {
+    color: #afafaf;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+  }
+  
+  
+  .rightPanel {
     background-color: white;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
-}
-
-.right-btn-group button {
+  }
+  
+  .right-btn-group button {
     background-color: white;
     /* Green background */
     border: none;
@@ -142,133 +161,146 @@ button {
     display: block;
     /* Make the buttons appear below each other */
     text-align: left;
-}
-
-    .right-btn-group button:not(:last-child) {
-        border-bottom: none;
-        /* Prevent double borders */
-    }
-
-    /* Add a background color on hover */
-    .right-btn-group button:hover {
-        background-color: #afafaf;
-    }
-
-.creating-chat-section {
+  }
+  
+  .right-btn-group button:not(:last-child) {
+    border-bottom: none;
+    /* Prevent double borders */
+  }
+  
+  /* Add a background color on hover */
+  .right-btn-group button:hover {
+    background-color: #afafaf;
+  }
+  
+  .creating-chat-section {
     height: 5%;
-}
-
-#create-chat {
+  }
+  
+  #create-chat {
     position: relative;
-    text-align: center;
+    text-align: left;
     width: 90%;
     margin-left: 5%;
-}
-
-    #create-chat:after {
-        content: "\FF0B";
-        float: right;
-        font-size: 40px;
-        color: #afafaf;
-        font-weight: bold;
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 90%;
-        -ms-transform: translate(-90%, -50%);
-        transform: translate(-90%, -50%);
-        /*margin-right: 16px;*/
-    }
-
-.rooms li {
-    border: 1px solid #ddd;
-    background-color: #f6f6f6;
+    padding-left: 7%;
+    color: #015D67;
+    
+    background-color: #d5e4e4bd;
+    border: none;
+    padding: 10px 15px 10px 15px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    bottom: 6px;
+    cursor: pointer;
+    border-radius: 10px;
+  
+  }
+  
+  .rooms li {
+    background-color: white;
     padding: 12px;
     text-decoration: none;
     font-size: 18px;
     color: black;
     display: block;
     cursor: pointer;
-}
-
-    .rooms li:hover {
-        background-color: #eee;
-    }
-
-.input-section {
+  }
+  
+  .rooms li:hover {
+    background-color: #eee;
+  }
+  
+  .active-room {
+    background-color: #eee !important;
+  }
+  
+  .create-header {
     position: relative;
-    bottom: 0;
-}
-
-.user-header {
-    position: relative;
-    height: 10%;
+    height: 8%;
     background-color: white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     padding-top: 0.01px;
     line-height: 60px;
-}
-
-    .user-header:after {
-        font-size: 50px;
-        color: #afafaf;
-        font-weight: bold;
-        float: right;
-    }
-
-.incoming {
+  }
+  
+  .user-header {
+    position: relative;
+    height: 8%;
+    background-color: white;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    padding-top: 0.01px;
+    line-height: 60px;
+  }
+  
+  .user-header:after {
+    font-size: 50px;
+    color: #afafaf;
+    font-weight: bold;
+    float: right;
+  }
+  
+  
+  .incoming {
     position: relative;
     float: left;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
+    margin-top: 5px;
     font-size: 14px;
-    padding: 5px 10px 5px 12px;
-    width: 80%;
-    border-radius: 3px;
-    background: #a0a0a0 none repeat scroll 0 0;
-}
-
-.list-of-members span,
-b {
+    padding: 5px 10px 5px 5px;
+    max-width:40%;
+    border-radius: 0px 10px 10px 10px;
+    background: white;
+    word-wrap: break-word;
+    color: black;
+  }
+  
+  .list-of-members span{
     display: block;
     font-family: Helvetica;
     color: black;
     border-radius: 5px;
     font-size: 1rem;
-    font-weight: bold;
-    width: 200px;
-    min-width: 200px;
-    max-width: 200px;
-}
-
-    .list-of-members span:hover {
-        background-color: rgb(0, 119, 255);
-    }
-
-.outgoing {
+    width: 100%;
+    height: 30px;
+    padding-top: 1.5px;
+  
+  }
+  
+  .profile-link:hover, .profile-link .profile-pic-wrapper:hover{
+    background-color: rgb(0, 119, 255);
+    color: white;
+  }
+  
+  .outgoing {
     position: relative;
-    background: grey none repeat scroll 0 0;
-    border-radius: 3px;
+    background-color: #DCDCDC		;
+    border-radius: 10px 0px 10px 10px;
     font-size: 14px;
-    margin-bottom: 5px;
-    color: #fff;
-    padding: 5px 10px 5px 12px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+    color: black;
+    padding: 5px 10px 5px 5px;
     float: right;
-    width: 80%;
-}
-
-.msg_send_btn {
-    background: #4c4c4c none repeat scroll 0 0;
+    word-wrap: break-word;
+    max-width:40%;
+  }
+  
+  .msg_send_btn {
+    position: relative;
+    background: #015D67;
     border: medium none;
     border-radius: 50%;
     color: #fff;
     cursor: pointer;
     font-size: 17px;
     height: 33px;
-    top: 5px;
+    top: -4px;
     width: 5%;
-}
-
-.unread-messages {
+    /* bottom: 4px;*/
+  }
+  
+  .unread-messages {
     max-width: 15px;
     max-height: 15px;
     width: 15px;
@@ -278,29 +310,10 @@ b {
     margin-left: 10px;
     border-radius: 50%;
     background-color: blue;
-}
-
-.profile-pic {
-    max-width: 32px;
-    max-height: 32px;
-    width: 32px;
-    height: 32px;
-    white-space: normal;
-    margin-right: 15px;
-    border-radius: 50%;
-    font-size: 16px;
-    color: #fff;
-    text-align: center;
-    line-height: 150px;
-    cursor: context-menu;
-    overflow: hidden;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-}
-
-/* The Modal (background) */
-#members-page {
+  }
+  
+  /* The Modal (background) */
+  #members-page {
     display: none;
     /* Hidden by default */
     position: fixed;
@@ -320,65 +333,74 @@ b {
     background-color: rgba(0, 0, 0, 0.4);
     /* Black w/ opacity */
     padding-top: 60px;
-}
-
-/* Modal Content/Box */
-#members-page-content {
+    overflow: hidden;
+  }
+  
+  /* Modal Content/Box */
+  #members-page-content {
     background-color: #fefefe;
     margin: 5% auto 15% auto;
     /* 5% from the top, 15% from the bottom and centered */
-    border: 1px solid #888;
-    width: 50%;
-    height: 50%;
+    border: 1px solid #000;
+    width: 40%;
+    height: 80%;
     z-index: 3;
     border-radius: 5px;
+    margin-right: 27%;
     /* Could be more or less, depending on screen size */
-}
-
-/* The Close Button (x) */
-/* The Close Button (x) */
-#close {
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    overflow: hidden;
+  }
+  
+  /* The Close Button (x) */
+  /* The Close Button (x) */
+  #close {
     position: absolute;
     right: 25px;
     top: 0;
     color: #000;
     font-size: 35px;
     font-weight: bold;
-}
-
-    #close:hover,
-    #close:focus {
-        color: red;
-        cursor: pointer;
-    }
-
-/* Add Zoom Animation */
-#animate {
+  }
+  
+  #close:hover,
+  #close:focus {
+    color: red;
+    cursor: pointer;
+  }
+  
+  /* Add Zoom Animation */
+  #animate {
     -webkit-animation: animatezoom 0.6s;
     animation: animatezoom 0.6s;
-}
-
-@-webkit-keyframes animatezoom {
+  }
+  
+  @-webkit-keyframes animatezoom {
     from {
-        -webkit-transform: scale(0);
+      -webkit-transform: scale(0);
     }
-
+  
     to {
-        -webkit-transform: scale(1);
+      -webkit-transform: scale(1);
     }
-}
-
-@keyframes animatezoom {
+  }
+  
+  @keyframes animatezoom {
     from {
-        transform: scale(0);
+      transform: scale(0);
     }
-
+  
     to {
-        transform: scale(1);
+      transform: scale(1);
     }
-}
-
-.input-section input[type="text"] {
+  }
+  .input-section {
+    position: absolute;
+    width: 100%;
+    bottom: 25px;
+  
+  }
+  .input-section input[type="text"] {
     float: left;
     padding: 6px;
     margin-left: 16px;
@@ -386,26 +408,27 @@ b {
     font-size: 17px;
     width: 85%;
     border-radius: 12px;
-}
-
-.left-panel-header .search-container {
+  }
+  
+  .left-panel-header .search-container {
     float: center;
     margin-left: 16px;
-}
-
-.left-panel-header input[type="text"] {
+    margin-right: 16px;
+  }
+  
+  .left-panel-header input[type="text"] {
     padding: 6px;
-    margin-top: 8px;
+    margin-top: 5%;
     font-size: 17px;
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
     border-color: #afafaf;
-    width: 80%;
+    width: 100%;
     height: 60%;
-}
-
-.left-panel-header .search-container button {
+  }
+  
+  .left-panel-header .search-container button {
     float: center;
     padding: 6px 10px;
     margin-top: 8px;
@@ -413,31 +436,31 @@ b {
     font-size: 17px;
     cursor: pointer;
     height: 55%;
-}
-
-    .left-panel-header .search-container button:hover {
-        background: #ccc;
-    }
-
-body {
+  }
+  
+  .left-panel-header .search-container button:hover {
+    background: #ccc;
+  }
+  
+  body {
     margin: 0;
     background-color: #ebf2f2;
     font-family: effra, Helvetica;
-}
-
-.column-one {
+  }
+  
+  .column-one {
     float: left;
     width: 33.33%;
     padding: 10px;
-}
-
-.column-three {
+  }
+  
+  .column-three {
     float: left;
     width: 33.33%;
     padding: 10px;
-}
-
-.column-two {
+  }
+  
+  .column-two {
     position: relative;
     height: 82%;
     margin: 5%;
@@ -445,8 +468,8 @@ body {
     border: 2px solid #dedede;
     background-color: #f0f0f0;
     box-shadow: 1px 1px 5px #555 inset;
-}
-
-.modal-header {
+  }
+  
+  .modal-header {
     background-color: white;
-}
+  }

@@ -74,15 +74,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
         self.bgColor = '#' + hex_number
         # TODO maybe remove this model?
     
-class OfflineMessage(models.Model):
-    """Messages queued for delivery when a user connnects"""
-    to_user = models.ForeignKey(
-        Account, on_delete=models.PROTECT, related_name='offline_from_user')
-    from_user = models.ForeignKey(
-        Account, on_delete=models.PROTECT, related_name='offline_to_user')
-    message = models.CharField(max_length=1024)
-
-
 # TODO maybe remove this model?
 class Channels(models.Model):
     """The channel/socket associted with each user"""
@@ -91,10 +82,12 @@ class Channels(models.Model):
 
 
 class ChatGroup(models.Model):
-    group_name = models.CharField(max_length=100, null=True, unique=True)
+    group_name = models.CharField(max_length=100, null=True, unique=False)
     created_by = models.ForeignKey(Account, on_delete=models.PROTECT)
     members = models.ManyToManyField(Account, related_name="all_group_members")
     created_at = models.DateTimeField(auto_now_add=True)
+    edited = models.BooleanField(default=False)
+    solitary = models.BooleanField(default=False)
 
     def __str__(self):
         return self.group_name
@@ -108,11 +101,30 @@ class ChatGroup(models.Model):
 
 class Messages(models.Model):
     """"messages that have actually been delivered"""
-    chat_group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, null=True)
+    chat_group = models.ForeignKey(
+        ChatGroup, on_delete=models.CASCADE, null=True)
     from_user = models.ForeignKey(
         Account, on_delete=models.PROTECT, related_name="messages_sent")
     message = models.CharField(max_length=1024)
     sent_at = models.DateTimeField(auto_now_add=True)
+    is_file = models.BooleanField(default=False)
+    is_notice = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.message
+
+class OfflineMessage(models.Model):
+    """Messages queued for delivery when a user connnects"""
+    offline_user = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name='offline_from_user')
+    chat_group = models.ForeignKey(
+        ChatGroup, on_delete=models.CASCADE, null=True)
+    message = models.ForeignKey(
+        Messages, on_delete=models.CASCADE, related_name='offline_messages')
+    acknowledged = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "{} {} {}".format(self.offline_user, self.chat_group, self.message)
 
 class BgInfo(models.Model):
     GENDER_CHOICES = (

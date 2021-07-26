@@ -1,5 +1,6 @@
 var accr = document.getElementsByClassName("rightAccordion");
 var j;
+var o = 140;
 
 for (j = 0; j < accr.length; j++) {
     accr[j].addEventListener("click", function () {
@@ -8,7 +9,7 @@ for (j = 0; j < accr.length; j++) {
         if (rightPanel.style.maxHeight) {
             rightPanel.style.maxHeight = null;
         } else {
-            rightPanel.style.maxHeight = rightPanel.scrollHeight + "px";
+            rightPanel.style.maxHeight = o + "px";
         }
     });
 }

@@ -414,7 +414,7 @@ def make_client_account(request):
         form = User_Creation_Form()
     return render(request, 'app/signup.html', {'form': form})
 
-@login_required(login_url='login')
+@login_required
 def multichat(request):
     """
     Root page view. This is essentially a single-page app, if you ignore the
@@ -432,6 +432,7 @@ def multichat(request):
 
 # find out if the rendering htmls is correct
 
+
 class BasicUploadView(View):
     def get(self, request):
         UploadedFiles_list = UploadedFile.objects.all()
@@ -441,9 +442,10 @@ class BasicUploadView(View):
         form = UploadFileForm(self.request.POST, self.request.FILES)
         if form.is_valid():
             # form.save()
+
             UploadedFile = form.save()
             data = {'is_valid': True, 'name': UploadedFile.file.name,
-                    'url': UploadedFile.file.url}
+                    'url': UploadedFile.file.url, 'size': UploadedFile.file.size}
             # return redirect("/")
         else:
             data = {'is_valid': False}
