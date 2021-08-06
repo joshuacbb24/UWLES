@@ -1,3 +1,5 @@
+from app.models import MyFileName
+import os
 from django import template
 from django.contrib.auth.models import Group
 
@@ -52,3 +54,19 @@ def urlcheck(urlname):
     else:
         urlstr = 'http://' + urlstr
         return urlstr
+
+@register.filter(name='filename')
+def filename(file):
+    return os.path.basename(file.file.name)
+
+@register.filter(name='myfilename')
+def myfilename(file, user):
+    my_obj = MyFileName.objects.get(file=file, user=user)
+    return my_obj.newname
+
+@register.filter(name='myfilename2')
+def myfilename2(file, user):
+    my_obj = MyFileName.objects.get(file=file, user=user)
+    filename = str(my_obj.newname)
+    head, sep, tail = filename.partition('.')
+    return head

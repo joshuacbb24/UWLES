@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <style>
+        html{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+        body{
+            height: 100%;
+            overflow-y: auto;
+            margin: 0;
+        }
+        .container{
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 460%;
+            background: black;
+        }
+        .intro-container{
+            display: flex;
+            flex-direction: column;
+            flex-flow: wrap;
+            width: 60%;
+            height: 100%;
+            background: white;
+        }
+        .right-panel-container{
+            align-self: flex-end;
+            width: 20%;
+            height: 100%;
+            background-image: linear-gradient(to bottom, #68D0D1, #015D67, #164E66);
+        }
+        .left-panel-container{
+            align-self: flex-start;
+            width: 20%;
+            height: 100%;
+            background-image: linear-gradient(to bottom, #68D0D1, #015D67, #164E66);
+        }
+        .video-container{
+            position: relative;
+            left: 20%;
+            height: 300px;
+            width: 600px;
+            background: lightgrey;
+            margin-right: 100px;
+        }
+        .img-highlight{
+            position: relative;
+            left: 20%;
+            height: 200px;
+            width: 600px;
+            background: grey;
+            margin-right: 50px;
+        }
+
+        #dashboard{
+            background-image: url('/static/app/images/dashboard.png');
+        }
+        #directory{
+            background-image: url('/static/app/images/resourcedirectory.png');
+        }
+        #chat{
+            background-image: url('/static/app/images/chat.png');
+        }
+        .intro-title{
+            position: relative;
+            font-family: Helvetica;
+            justify-self: center;
+            width: 60%;
+            left: 20%;
+            color: #015D67;
+        }
+        .intro-text{
+            margin: 30px;
+            margin-bottom: 0;
+            font-family: Helvetica;
+            font-size: 20px;
+        }
+        .intro-text-bold{
+            margin: 30px;
+            margin-bottom: 0;
+            font-family: Helvetica;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .intro-h2{
+            position: relative;
+            font-family: Helvetica;
+            font-weight: bold;
+            justify-self: center;
+            width: 60%;
+            margin: 30px;
+            margin-bottom: 0;
+            color: #015D67;
+        }
+
+        .intro-divider{
+            width: 100%;
+            height: 2px;
+            background: grey;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel-container"></div>
+        <div class="intro-container">
+            <h1 class="intro-title">UWLES Connect Website: Introduction</h1>
+            <p class="intro-text">Welcome to the prototype for the UWLES Connect website! The purpose of this website is to help improve health literacy on the Eastern Shore of Maryland by 
+                streamlining the workflow of case managers and clients, via tools such as chatting, resource sharing, and resource viewing. Today, we would greatly appreciate your feedback on the resource directory!
+            </p>
+            <p class="intro-text">The resource directory is responsible for housing all the information regarding organizations, as well as personal documents for each user, 
+                and it is broken up into three unique sections: The category directory, organizational directory, and the document directory. 
+                The category directory is where you can search for organizations by category (health & fitness, addiction, disabilities, etc), 
+                the organizational directory is where you can see all organizations in the system, 
+                and the document directory is where all of your documents will be stored.
+            </p>
+            <p class="intro-text">If you have any problems while you are testing, please text 443-735-6440, or email kaaron1@gulls.salisbury.edu.
+                 I will be available between 12pm-8pm everyday.
+            </p>
+
+            <span><p class="intro-text">In order to conduct our research, we ask that you <a target="_blank" href="https://forms.gle/pEH94ufrQHW9ZQgk8">click here</a> for the Google Form. 
+                There are 4 sections, and you will fill them out as you go through the different processes.</p></span>
+            <span><p class="intro-text">Now let's get started! First you will need to login <a target="_blank" href="{% url 'dashboard' %}">by clicking here</a>, and using the account information sent to you</p></span>
+            <p class="intro-text">Once you have logged in, you will be redirected to the dashboard page, which you can see a portion of in this image: </p>
+            <div class="img-highlight" id="dashboard"></div>
+
+            <span><p class="intro-text">If you would like to view a PowerPoint instead of watching the short videos, <a target="_blank" href="{% static 'app/images/survey.pptx' %}">click here</a> to download a walkthrough PowerPoint.</p></span>
+            <div class="intro-divider"></div>
+            <h2 class="intro-h2">1. Adding Organizational Data</h2>
+            <p class="intro-text">To get started, please watch this video below that will teach you how to add an organization. Once you are done watching, please add a new organization. 
+                You should have received a list of information to put in, so please use this to create a new organization.
+            </p>
+            <iframe class="video-container" src="https://www.youtube.com/embed/cnepexEm7t8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p class="intro-text-bold">After you are done watching the video and adding an organization, answer the questions in the first section of the form. 
+                Once you are finished, click next to move on to the next section of the form.
+            </p>
+
+            <div class="intro-divider"></div>
+            <h2 class="intro-h2">2. Editing Organizational Data</h2>
+            <p class="intro-text">Now that you have added your organization, please watch this video below that will teach you how to edit your organization. 
+                For this part, edit any of the fields you choose to.
+            </p>
+            <iframe class="video-container" src="https://www.youtube.com/embed/CbPX5eXO_QI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p class="intro-text-bold">After you are done watching the video and editing your organization, answer the questions in the second section of the form. 
+                Once you are finished, click next to move on to the next section of the form.
+            </p>
+
+            <div class="intro-divider"></div>
+            <h2 class="intro-h2">3. Finding Your Organization</h2>
+            <p class="intro-text">Once you have completed these steps, you can now find and view the newly created organization. 
+                Please watch this short video below that will show you the different ways to view organizations.
+            </p>
+            <iframe class="video-container" src="https://www.youtube.com/embed/JYdC6ozcyWY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p class="intro-text-bold">After you are done watching the video and finding your organization, answer the questions in the third section of the form. 
+                Once you are finished, click next to move on to the next and final section of the form.
+            </p>
+
+            <div class="intro-divider"></div>
+            <h2 class="intro-h2">4. Adding Folders + Documents</h2>
+            <p class="intro-text">Now that you have completed all tasks related to organizations, let’s move on to the document directory. 
+                The document directory is the part of the resource directory responsible for housing your personal files you upload.
+            </p>
+
+            <p class="intro-text">Now we will upload new documents and create new folders for these documents. 
+                Please watch the following video:
+            </p>
+
+            <iframe class="video-container" src="https://www.youtube.com/embed/tvTqC1Xl2M8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p class="intro-text-bold">After you are done watching the video and adding folders + documents, answer the questions in the fourth and final section of the form. 
+                Once you are finished, click submit to submit the form.
+            </p>
+            <p class="intro-text">Once you have completed this, you are all done! Thank you for helping us gather feedback on the website thus far, and have a wonderful rest of your day!</p>
+        </div>
+        <div class="right-panel-container"></div>
+    </div>
+</body>
+</html>

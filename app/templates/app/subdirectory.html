@@ -286,13 +286,15 @@
         left: 1510px;
         top: 190px;
         color: black;
+        cursor: pointer;
     }
 
-     #gridIcon2 {
+    #gridIcon2 {
         position: absolute;
         left: 1510px;
         top: 190px;
         color: #AFAFAF;
+        cursor: pointer;
     }
 
     .listBox {
@@ -311,22 +313,24 @@
         top: 190px;
         width: 22px;
         height: 18px;
-        color: black;
+        color: #AFAFAF;
+        cursor: pointer;
     }
 
-     #listIcon2 {
+    #listIcon2 {
         position: absolute;
         left: 1570px;
         top: 190px;
         width: 22px;
         height: 18px;
-        color: #AFAFAF;
+        color: black;
+        cursor: pointer;
     }
 
     .dirPath {
         position: absolute;
         top: 260px;
-        width: 110px;
+        width: 150px;
         height: 20px;
 
         font-family: Helvetica;
@@ -741,7 +745,7 @@
     .subPath {
         position: absolute;
         top: 260px;
-        left: 120px;
+        left: 160px;
         width: 500px;
         height: 20px;
 
@@ -781,7 +785,7 @@
     .listDsc {
         position: absolute;
         top: 310px;
-        left: 500px;
+        left: 700px;
         width: 200px;
 
         font-family: Helvetica;
@@ -876,7 +880,7 @@
         position: relative;
         left: 30px;
         top: 19px;
-        width: 350px;
+        width: 500px;
         height: 30px;
 
         font-family: Helvetica;
@@ -888,7 +892,7 @@
 
     .rlistDescript {
         position: relative;
-        left: 500px;
+        left: 700px;
         width: 800px;
         height: 30px;
         bottom: 5px;
@@ -1590,8 +1594,14 @@
         for (i = 0; i < a.length; i++) {
             txtValue = a[i].textContent || a[i].innerText;
             if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                $(a[i]).parent().css("display", "")
-                $(b[i]).parent().css("display", "")
+                if ($(a[i]).parent().hasClass('hide-this') || $(a[i]).parent().hasClass('hide-this2')){
+                    $(a[i]).parent().css("display", "none")
+                    $(b[i]).parent().css("display", "none")
+                }
+                else{
+                    $(a[i]).parent().css("display", "")
+                    $(b[i]).parent().css("display", "")
+                }
             } else {
                 $(a[i]).parent().css("display", "none")
                 $(b[i]).parent().css("display", "none")
@@ -1600,7 +1610,7 @@
     }
 
     $(document).ready(function () {
-        $("#listIcon").click(function () {
+        $("[id^=listIcon]").click(function () {
             var list = $(".listBox");
             var grid = $(".gridBox");
             list.attr('id', (list.attr('id') === 'visible' ? 'hidden' : 'visible'));
@@ -1610,7 +1620,7 @@
             licon.attr('id', (licon.attr('id') === 'listIcon' ? 'listIcon2' : 'listIcon'));
             gicon.attr('id', (gicon.attr('id') === 'gridIcon' ? 'gridIcon2' : 'gridIcon'));
         });
-        $("#gridIcon").click(function () {
+        $("[id^=gridIcon]").click(function () {
             var list = $(".listBox");
             var grid = $(".gridBox");
             list.attr('id', (list.attr('id') === 'visible' ? 'hidden' : 'visible'));
@@ -1623,7 +1633,7 @@
     });
 
     $(document).ready(function () {
-        $("#listIcon").click(function () {
+        $("[id^=listIcon]").click(function () {
             var list = $(".listBox");
             if (list.attr("id") == "visible") {
                 var resource = $(".resourceLayout");
@@ -1650,7 +1660,7 @@
                 listO.attr("id", "hidden");
             }
         });
-        $("#gridIcon").click(function () {
+        $("[id^=gridIcon]").click(function () {
             var grid = $(".gridBox");
             if (grid.attr("id") == "visible") {
                 var resource = $(".resourceLayout");
@@ -1681,7 +1691,7 @@
 </script>
 
     <div class="directoryBar"></div>
-    <div class="fullActive">Full Directory</div>
+    <a href="{% url 'fulldirectory' %}" class="fullActive">Category Directory</a>
     <a href="{% url 'orgdirectory' %}" class="orgHidden">Organizational Directory</a>
     <a href="{% url 'documentdirectory' %}" class="fileHidden">Documents Directory</a>
 
@@ -1705,24 +1715,24 @@
 
     <div class="break-elig"></div>
 
-    <div class="addBox"><p class="addContent"><i class="fa fa-plus" aria-hidden="true" id="addIcon"></i> New</p></div>
+    <!--<div class="addBox"><p class="addContent"><i class="fa fa-plus" aria-hidden="true" id="addIcon"></i> New</p></div>
 
-    <div class="divideLine"></div>
+    <div class="divideLine"></div>-->
 
     {% if option == 1 %}
         <div class="gridBox" id="visible"></div>
         <div class="gridPH" id="gridIcon"><i class="bi bi-grid-3x2-gap-fill" aria-hidden="true"></i></div>
         <div class="listBox" id="hidden"></div>
-        <div class="listPH" id="listIcon2"><i class="fa fa-bars" aria-hidden="true"></i></div>
+        <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
     {% else %}
         <div class="gridBox" id="hidden"></div>
         <div class="gridPH" id="gridIcon2"><i class="bi bi-grid-3x2-gap-fill"></i></div>
         <div class="listBox" id="visible"></div>
-        <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
+        <div class="listPH" id="listIcon2"><i class="fa fa-bars" aria-hidden="true"></i></div>
     {% endif %}
 
 
-    <a href="{% url 'fulldirectory' %}" class="dirPath">Full Directory ></a>
+    <a href="{% url 'fulldirectory' %}" class="dirPath">Category Directory ></a>
     {% for directory in directories %}
         <div class="subPath">{{ directory.name }}</div>
     {% endfor %}
@@ -1781,7 +1791,7 @@
                                                             container: 'map{{ org.id }}', // container ID
                                                             style: 'mapbox://styles/mapbox/streets-v11', // style URL
                                                             center: [{{ org.long }} , {{ org.lat }}], // starting position [lng, lat]
-                                                            zoom: 11 // starting zoom
+                                                            zoom: 12 // starting zoom
                                                         });
                                                         var marker = new mapboxgl.Marker()
                                                             .setLngLat([{{ org.long }}, {{ org.lat }}])
@@ -1790,8 +1800,6 @@
                                                             map{{ org.id }}.resize();
                                                         })
                                                     </script>
-                                                <div class="modalArea">Areas Served:</div>
-                                                <div class="modalLang">Languages Available:</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1856,7 +1864,7 @@
                                                             container: 'map{{ org.id }}', // container ID
                                                             style: 'mapbox://styles/mapbox/streets-v11', // style URL
                                                             center: [{{ org.long }} , {{ org.lat }}], // starting position [lng, lat]
-                                                            zoom: 11 // starting zoom
+                                                            zoom: 12 // starting zoom
                                                         });
                                                         var marker = new mapboxgl.Marker()
                                                             .setLngLat([{{ org.long }}, {{ org.lat }}])
@@ -1865,8 +1873,6 @@
                                                             map{{ org.id }}.resize();
                                                         })
                                                     </script>
-                                                <div class="modalArea">Areas Served:</div>
-                                                <div class="modalLang">Languages Available:</div>
                                             </div>
                                         </div>
                                     </div>
@@ -1880,12 +1886,12 @@
     {% endif %}
 
     {% if option == 2 %}
-        <div class="listCategory" id="visible">Category</div>
-        <div class="listOrder" id="visible"><div class="listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="Arrow"></i><div class="listZ">Z</div></div>
+        <div class="listCategory" id="visible">Organization</div>
+        <!--<div class="listOrder" id="visible"><div class="listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="Arrow"></i><div class="listZ">Z</div></div>-->
         <div class="listDsc" id="visible">Resource Type</div>
     {% else %}
-        <div class="listCategory" id="hidden">Category</div>
-        <div class="listOrder" id="hidden"><div class="listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="Arrow"></i><div class="listZ">Z</div></div>
+        <div class="listCategory" id="hidden">Organization</div>
+        <!--<div class="listOrder" id="hidden"><div class="listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="Arrow"></i><div class="listZ">Z</div></div>-->
         <div class="listDsc" id="hidden">Resource Type</div>
     {% endif %}
 
@@ -1938,7 +1944,7 @@
                                                             container: 'map2{{ org.id }}', // container ID
                                                             style: 'mapbox://styles/mapbox/streets-v11', // style URL
                                                             center: [{{ org.long }} , {{ org.lat }}], // starting position [lng, lat]
-                                                            zoom: 11 // starting zoom
+                                                            zoom: 12 // starting zoom
                                                         });
                                                         var marker = new mapboxgl.Marker()
                                                             .setLngLat([{{ org.long }}, {{ org.lat }}])
@@ -1947,8 +1953,6 @@
                                                             map2{{ org.id }}.resize();
                                                         })
                                                     </script>
-                                                <div class="modalArea">Areas Served:</div>
-                                                <div class="modalLang">Languages Available:</div>
                                             </div>
                                         </div>
                                     </div>
@@ -2008,7 +2012,7 @@
                                                             container: 'map2{{ org.id }}', // container ID
                                                             style: 'mapbox://styles/mapbox/streets-v11', // style URL
                                                             center: [{{ org.long }} , {{ org.lat }}], // starting position [lng, lat]
-                                                            zoom: 11 // starting zoom
+                                                            zoom: 12 // starting zoom
                                                         });
                                                         var marker = new mapboxgl.Marker()
                                                             .setLngLat([{{ org.long }}, {{ org.lat }}])
@@ -2017,8 +2021,6 @@
                                                             map2{{ org.id }}.resize();
                                                         })
                                                     </script>
-                                                <div class="modalArea">Areas Served:</div>
-                                                <div class="modalLang">Languages Available:</div>
                                             </div>
                                         </div>
                                     </div>

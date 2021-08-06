@@ -65,17 +65,17 @@
     {% else %}
 
     <div class="directoryBar"></div>
-    <a href="{% url 'fulldirectory' %}" class="fullHidden">Full Directory</a>
+    <a href="{% url 'fulldirectory' %}" class="fullHidden">Category Directory</a>
     <a href="{% url 'orgdirectory' %}" class="orgHidden">Organizational Directory</a>
-    <div class="fileActive">Documents Directory</div>
+    <a href="{% url 'documentdirectory' %}" class="fileActive">Documents Directory</a>
 
     <div class="searchbarcontainer">
         <input type="text" placeholder="Search for file..." class="searchbar" id="searchbar" onkeyup="filterfileFunction()">
         <i class="fa fa-search" aria-hidden="true" id="searchBarIcon"></i>
     </div>
 
-    <button class="addBox" type="button" data-toggle="modal" data-target="#addModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> New</p></button>
-    <button class="editBox" type="button" data-toggle="modal" data-target="#editModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> Edit</p></button>
+    <!--<button class="addBox" type="button" data-toggle="modal" data-target="#addModal"><p class="addContent"><i class="fa fa-plus" aria-hidden="true" id="addIcon"></i> New</p></button>
+    <button class="editBox" type="button" data-toggle="modal" data-target="#editModal"><p class="addContent"><i class="fa fa-plus" aria-hidden="true" id="addIcon"></i> Edit</p></button>-->
 
     <div class="divideLine"></div>
 
@@ -138,7 +138,7 @@
                                 {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
                             </div>
                         </div>
-                        <div class="document-card-doc-name">{% if file.document_name %}{{ file.document_name|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file.file|doctitle|truncatechars_html:30 }}{% endif %}</div>
+                        <div class="document-card-doc-name">{% if file.document_name %}{{ file|myfilename:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file|myfilename2:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% endif %}</div>
                         <div class="document-card-doc-dots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
                         data-content="<i class='bi bi-x-lg popoverx'></i>
                                       <br>
@@ -177,7 +177,7 @@
                                 {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
                             </div>
                         </div>
-                        <div class="document-card-doc-name">{% if file.document_name %}{{ file.document_name|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file.file|doctitle|truncatechars_html:30 }}{% endif %}</div>
+                        <div class="document-card-doc-name">{% if file.document_name %}{{ file|myfilename:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file|myfilename2:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% endif %}</div>
                         <div class="document-card-doc-dots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
                                 data-content="<i class='bi bi-x-lg popoverx'></i>
                                 <br>
@@ -216,7 +216,7 @@
                                 {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
                             </div>
                         </div>
-                        <div class="document-card-doc-name">{% if file.document_name %}{{ file.document_name|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file.file|doctitle|truncatechars_html:30 }}{% endif %}</div>
+                        <div class="document-card-doc-name">{% if file.document_name %}{{ file|myfilename:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file|myfilename2:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% endif %}</div>
                         <div class="document-card-doc-dots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
                                 data-content="<i class='bi bi-x-lg popoverx'></i>
                                 <br>
@@ -239,7 +239,7 @@
 
     <div class="doclistCategory" id="hidden">File Type</div>
     <div class="doclistTitle" id="hidden">Name</div>
-    <div class="doclistOrder" id="hidden"><div class="doclistA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="docArrow"></i><div class="doclistZ">Z</div></div>
+    <!--<div class="doclistOrder" id="hidden"><div class="doclistA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="docArrow"></i><div class="doclistZ">Z</div></div>-->
     <div class="doclistDsc" id="hidden">Date Accessed</div>
     <div class="doclistTags" id="hidden">Tags</div>
 
@@ -252,7 +252,7 @@
                                 {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
                             </div>
                         </div>
-                        <div class="doclistName" onclick="window.open('{{ file.file.url }}')">{% if file.document_name %}{{ file.document_name}}.{{ file.file|docext }}{% else %}{{ file.file|doctitle }}{% endif %}</div>
+                        <div class="doclistName" onclick="window.open('{{ file.file.url }}')">{% if file.document_name %}{{ file|myfilename:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file|myfilename2:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% endif %}</div>
                         <div class="doclistDescript">June 18, 2021</div>
                         <div class="doclistDots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
                         data-content="<i class='bi bi-x-lg popoverx'></i>
@@ -277,7 +277,7 @@
                             {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
                         </div>
                     </div>
-                    <div class="doclistName" onclick="window.open('{{ file.file.url }}')">{% if file.document_name %}{{ file.document_name|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file.file|doctitle }}{% endif %}</div>
+                    <div class="doclistName" onclick="window.open('{{ file.file.url }}')">{% if file.document_name %}{{ file|myfilename:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file|myfilename2:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% endif %}</div>
                     <div class="doclistDescript">June 18, 2021</div>
                     <div class="doclistDots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
                     data-content="<i class='bi bi-x-lg popoverx'></i>
@@ -302,7 +302,7 @@
                             {% if file.file|docext == 'pdf' %} PDF {% elif file.file|docext == 'docx' %} WORD {% elif file.file|docext == 'xlsx' %} EXL {% elif file.file|docext == 'pptx' or file.file|docext == 'ppt'%} PPT {% elif file.file|docext == 'mp3' %} MP3 {% elif file.file|docext == 'mp4' %} MP4 {% elif file.file|docext == 'png' %} PNG {% elif file.file|docext == 'jpg' %} JPG {% endif %}
                         </div>
                     </div>
-                    <div class="doclistName" onclick="window.open('{{ file.file.url }}')">{% if file.document_name %}{{ file.document_name}}.{{ file.file|docext }}{% else %}{{ file.file|doctitle }}{% endif %}</div>
+                    <div class="doclistName" onclick="window.open('{{ file.file.url }}')">{% if file.document_name %}{{ file|myfilename:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% else %}{{ file|myfilename2:request.user|truncatechars_html:30 }}.{{ file.file|docext }}{% endif %}</div>
                     <div class="doclistDescript">June 18, 2021</div>
                     <div class="doclistDots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
                     data-content="<i class='bi bi-x-lg popoverx'></i>

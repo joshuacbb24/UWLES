@@ -445,7 +445,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .docDirPath {
             position: absolute;
-            top: 260px;
+            top: 200px;
             width: 150px;
             height: 20px;
             font-family: Helvetica;
@@ -459,7 +459,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .subdocPath {
             position: absolute;
-            top: 260px;
+            top: 200px;
             width: 1000px;
             left: 150px;
             height: 20px;
@@ -490,7 +490,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             position: absolute;
             width: 1200px;
             height: 220px;
-            top: 300px;
+            top: 240px;
             display: flex;
             flex-flow: row wrap;
             justify-content: left;
@@ -593,8 +593,8 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .addFolder {
             position: relative;
-            top: 325px;
-            left: 1230px;
+            top: 180px;
+            left: 1330px;
             height: 35px;
             width: 110px;
             background: #015D67;
@@ -619,17 +619,6 @@ input[type=text][id^=id_file][id$=-document_name]{
 
             color: #013D44;
         }
-
-        .documentLayout {
-        position: absolute;
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: left;
-        list-style: none;
-        top: 640px;
-        width: 1680px;
-        min-height: 220px;
-    }
 
         .documentCard1 {
         width: 520px;
@@ -729,7 +718,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .doclistLayout {
         position: absolute;
-        top: 650px;
+        top: 580px;
         width: 1680px;
         min-height: 900px;
     }
@@ -847,7 +836,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
     .doclistCategory {
         position: absolute;
-        top: 590px;
+        top: 520px;
         left: 30px;
         width: 100px;
 
@@ -863,7 +852,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
     .doclistDsc {
         position: absolute;
-        top: 590px;
+        top: 520px;
         left: 900px;
         width: 200px;
 
@@ -916,7 +905,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .doclistTags {
             position: absolute;
-            top: 590px;
+            top: 520px;
             left: 1300px;
 
             font-family: Helvetica;
@@ -932,7 +921,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .doclistTitle {
             position: absolute;
-            top: 590px;
+            top: 520px;
             left: 350px;
 
             font-family: Helvetica;
@@ -1096,7 +1085,8 @@ input[type=text][id^=id_file][id$=-document_name]{
             z-index:1200;
             display:block;
             width:180px;
-            height:300px;
+            min-height: 100px;
+            max-height:300px;
             padding:1px;
             text-align:left;
             white-space:normal;
@@ -1284,8 +1274,11 @@ input[type=text][id^=id_file][id$=-document_name]{
         
         .delete-this-true{
             background: red;
-            width: 100px;
-            height: 50px;
+            position: relative;
+            top: 25%;
+            left: 10%;
+            width: 40%;
+            height: 50%;
             color: white;
 
             font-family: Helvetica;
@@ -1315,8 +1308,11 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .delete-this-folder-true{
             background: red;
-            width: 100px;
-            height: 50px;
+            position: relative;
+            top: 25%;
+            left: 10%;
+            width: 40%;
+            height: 50%;
             color: white;
 
             font-family: Helvetica;
@@ -1352,8 +1348,11 @@ input[type=text][id^=id_file][id$=-document_name]{
             letter-spacing: 0.01em;
             
             background: grey;
-            width: 100px;
-            height: 50px;
+            position: relative;
+            top: 25%;
+            left: 10%;
+            width: 40%;
+            height: 50%;
             color: white;
 
             display: inline-block;
@@ -1482,11 +1481,11 @@ input[type=text][id^=id_file][id$=-document_name]{
         }
 
         #sharecollaboratorsChoice {
-            display: block !important;
+            display: block;
             position: absolute;
-            width: 500px;
-            min-height: 300px;
-            max-height: 300px;
+            width: 556px;
+            min-height: 350px;
+            max-height: 350px;
             background: #F6F6F6;
             overflow-y: auto;
             font-family: Helvetica;
@@ -1494,7 +1493,6 @@ input[type=text][id^=id_file][id$=-document_name]{
             font-weight: normal;
             font-size: 20px;
             line-height: 15px;
-            display: flex;
             align-items: center;
             color: #676767;
         }
@@ -1505,7 +1503,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .share-collab__A {
             color: black;
-            width: 500px;
+            width: 100%;
             height: 50px;
             padding: 12px 16px;
             text-decoration: none;
@@ -1515,7 +1513,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
             .share-collab__A:hover {
                 color: black;
-                width: 500px;
+                width: 100%;
                 height: 50px;
                 padding: 12px 16px;
                 text-decoration: none;
@@ -1526,17 +1524,18 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .share-collab__B {
             color: white;
-            width: 500px;
+            width: 100%;
             height: 50px;
             padding: 12px 16px;
             text-decoration: none;
             display: block;
             background: #015D67;
+            cursor: pointer;
         }
 
             .share-collab__B:hover {
                 color: white;
-                width: 500px;
+                width: 100%;
                 height: 50px;
                 padding: 12px 16px;
                 text-decoration: none;
@@ -1647,7 +1646,7 @@ input[type=text][id^=id_file][id$=-document_name]{
                 flex-flow: row wrap;
                 justify-content: left;
                 list-style: none;
-                top: 640px;
+                top: 520px;
                 width: 1680px;
                 min-height: 330px;
             }
@@ -1872,4 +1871,53 @@ input[type=text][id^=id_file][id$=-document_name]{
                 height: 35px;
                 width: 28px;
                 background-image: url('/static/app/images/files icon4.png');
+            }
+
+            .acceptbtn{
+                background: #4CAF50;
+                color: white;
+                width: 50%;
+                height: 100%;
+                cursor: pointer;
+                border-width: 0px;
+            }
+            
+            .declinebtn{
+                background: #f44336;
+                color: white;
+                width: 50%;
+                height: 100%;
+                cursor: pointer;
+                border-width: 0px;
+            }
+            
+            .rename-folder-input{
+                position: relative;
+                bottom: 25%;
+                left: 20%;
+                width: 40%;
+                height: 50%;
+            }
+
+            .rename-file-input{
+                position: relative;
+                bottom: 25%;
+                left: 20%;
+                width: 40%;
+                height: 50%;
+            }
+            
+            .rename-text{
+                position: relative;
+                top: 25%;
+                height: 50%;
+                font-family: Helvetica;
+            }
+
+            .create-folder-input{
+                position: relative;
+                bottom: 25%;
+                left: 20%;
+                width: 40%;
+                height: 50%;
             }

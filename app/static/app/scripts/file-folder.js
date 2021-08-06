@@ -2,7 +2,7 @@ $(document).ready(function(){
     $('[data-toggle="popover"]').popover();
 
     $('body').on('click', '.bi.bi-x-lg', function (){
-        $('[data-toggle="popover"]').popover('hide');
+        $(this).parent().parent().popover('hide');
     });
 
     $('body').on('show.bs.modal', function () {
@@ -84,8 +84,8 @@ $(document).ready(function(){
         console.log("in collab choice B")
         var thisval = $(this).attr('value');
         var thismodal = $(this).parent().parent().parent().parent().parent()
-        $(this).removeClass("file-collab__B");
-        $(this).addClass("file-collab__A");
+        $(this).removeClass("share-collab__B");
+        $(this).addClass("share-collab__A");
         $(thismodal).find('input[name="sharecollabCheckboxes"][value=' + thisval + ']').prop('checked', false)
         console.log($(thismodal).find('input[name="sharecollabCheckboxes"][value=' + thisval + ']'))
     });

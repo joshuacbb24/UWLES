@@ -2,18 +2,20 @@
 {% load project_templates %}
 <form method="POST">
     {% csrf_token %}
-    <div class="modal box3 fade" id="addFolderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal box4 fade" id="addFolderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Create New Folder</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <button type="button" data-dismiss="modal" class="close-folder-modal"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
-                <input type="text" maxlength="50" name="add-folder-name">
+                <p class="rename-text">Folder Name: </p>
+                <input type="text" maxlength="50" name="add-folder-name" class="create-folder-input">
             </div>
             <div class="modal-footer">
-                <button type="submit" class="addfolderbtn">Submit</button>
+                <button type="submit" class="acceptbtn">Submit</button>
+                <button type="button" class="declinebtn">Disregard</button>
             </div>
             </div>
         </div>
@@ -27,7 +29,7 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Share File</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <button type="button" data-dismiss="modal" class="close-share"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="share-file-id" value="">
@@ -46,7 +48,8 @@
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="sharefilebtn">Submit</button>
+                <button type="submit" class="acceptbtn">Submit</button>
+                <button type="button" class="declinebtn">Disregard</button>
             </div>
             </div>
         </div>
@@ -60,7 +63,7 @@
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Move File To</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <button type="button" data-dismiss="modal" class="close-share"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="move-file-id" value="">
@@ -84,7 +87,8 @@
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                <button type="submit" class="movefilebtn">Submit</button>
+                <button type="submit" class="acceptbtn">Submit</button>
+                <button type="button" class="declinebtn">Disregard</button>
             </div>
             </div>
         </div>
@@ -97,8 +101,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Move File To</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <h5 class="modal-title" id="exampleModalLabel">Copy File To</h5>
+                <button type="button" data-dismiss="modal" class="close-share"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="copy-file-id" value="">
@@ -122,7 +126,8 @@
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                <button type="submit" class="copyfilebtn">Submit</button>
+                <button type="submit" class="acceptbtn">Submit</button>
+                <button type="button" class="declinebtn">Disregard</button>
             </div>
             </div>
         </div>
@@ -131,19 +136,21 @@
 
 <form method="POST">
     {% csrf_token %}
-    <div class="modal box3 fade" id="renameFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+    <div class="modal box4 fade" id="renameFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Rename File</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <button type="button" data-dismiss="modal" class="close-share"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="rename-file-id" value="">
-                <input type="text" maxlength="50" name="rename-file-name">
+                <p class="rename-text">New Name: </p>
+                <input type="text" maxlength="50" name="rename-file-name" class="rename-file-input">
             </div>
             <div class="modal-footer">
-                <button type="submit" class="renamefilebtn">Submit</button>
+                <button type="submit" class="acceptbtn">Submit</button>
+                <button type="button" class="declinebtn">Disregard</button>
             </div>
             </div>
         </div>
@@ -152,12 +159,12 @@
 
 <form method="POST">
     {% csrf_token %}
-    <div class="modal box3 fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+    <div class="modal box4 fade" id="deleteFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Are You Sure You Want To Delete?</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <button type="button" data-dismiss="modal" class="close-share"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="delete-file-id" value="">
@@ -173,19 +180,21 @@
 
 <form method="POST">
     {% csrf_token %}
-    <div class="modal box3 fade" id="renameFolderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+    <div class="modal box4 fade" id="renameFolderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Rename File</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <h5 class="modal-title" id="exampleModalLabel">Rename Folder</h5>
+                <button type="button" data-dismiss="modal" class="close-folder-modal"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="rename-folder-id" value="">
-                <input type="text" maxlength="50" name="rename-folder-name">
+                <p class="rename-text">New Name: </p>
+                <input type="text" maxlength="50" name="rename-folder-name" class="rename-folder-input">
             </div>
             <div class="modal-footer">
-                <button type="submit" class="renamefolderbtn">Submit</button>
+                <button type="submit" class="acceptbtn">Submit</button>
+                <button type="button" class="declinebtn">Disregard</button>
             </div>
             </div>
         </div>
@@ -194,12 +203,12 @@
 
 <form method="POST">
     {% csrf_token %}
-    <div class="modal box3 fade" id="deleteFolderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
+    <div class="modal box4 fade" id="deleteFolderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Are You Sure You Want To Delete?</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <button type="button" data-dismiss="modal" class="close-folder-modal"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" name="delete-folder-id" value="">

@@ -7,16 +7,66 @@
 <h2>Sign Up</h2>
 <form method="post" class="signup_layout" enctype="multipart/form-data">
     {% csrf_token %}
-    <p>{{ form.username }} Required</p>
+    <p>{{ form.username }} </p>
     <br />
-    <p>{{ form.email }} Required</p>
+    <p>{{ form.email }} </p>
     <br />
     <p>{{ form.password1 }} Must be at least 8 characters</p>
     <br />
-    <p>{{ form.password2 }} Enter the same password as before</p>
+    <p>{{ form.password2 }} Confirm password</p>
     <br />
-    <p>{{ form.avatar }}</p>
+    <label class="profile-picture-upload">
+        {{ form.avatar }}
+        Add Profile Picture
+    </label>
     <br />
     <button type="submit">Sign Up</button>
 </form>
+
+<script>
+
+    $('#id_avatar').change(function(){
+        console.log("got change")
+    });
+    $('#id_username').on('input', function (){
+        var id_username = $(this).val();
+        $.ajax({
+            url: '{% url 'validateAccount' %}',
+            data: {
+                'account_name': id_username
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.username_taken){
+                    $('#id_username').addClass('error-review')
+                }
+                else{
+                    if ($('#id_username').hasClass('error-review')){
+                        $('#id_username').removeClass('error-review')
+                    }
+                }
+            }
+        });
+    });
+    $('#id_email').on('input', function (){
+        var id_email = $(this).val();
+        $.ajax({
+            url: '{% url 'validateAccount' %}',
+            data: {
+                'email_name': id_email
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.email_taken){
+                    $('#id_email').addClass('error-review')
+                }
+                else{
+                    if ($('#id_email').hasClass('error-review')){
+                        $('#id_email').removeClass('error-review')
+                    }
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -120,7 +120,15 @@ def signup(request):
     else:
         form = User_Creation_Form()
     return render(request, 'app/signup.html', {'form': form})
-    
+
+
+def introduction(request):
+    context = {
+
+    }
+
+    return render(request, 'app/introduction.html', context)
+
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker', 'client'])
 def user_information(request):
@@ -513,20 +521,38 @@ def full_directory(request):
     formset4 = DirFilesFormset(queryset=DirectoryFiles.objects.none(), prefix='file')
 
     if request.is_ajax() and request.method == "POST":
+        print(request.POST)
         formset4 = DirFilesFormset(request.POST, request.FILES, prefix='file')
-        for form in formset4:
-            if form.is_valid():
-                if (form.cleaned_data.get('file') != None):
-                    m = form.save()
-                    this_file = DirectoryFiles.objects.get(file = m.file)
-                    collaborators = form.cleaned_data.get('file_collaborators')
-                    myfolder = form.cleaned_data.get('folder')
-                    FileFolder.add_to_folder(this_file, user, myfolder)
-                    SharedWithMe.addfile(collaborators, this_file)
-            else:
-                print(form.errors)
+        if 'downloadbtn' in request.POST:
+            fileid = request.POST['fileid']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            try:
+                obj = RecentFiles.objects.get(file=fileobj, user=user)
+                obj.save()
+            except RecentFiles.DoesNotExist:
+                obj = RecentFiles(file=fileobj, user=user)
+                obj.save()
+            data = {
+                'msg': 'hello',
+            }
+            return JsonResponse(data)
 
-        return JsonResponse(data)
+        else:
+            for form in formset4:
+                if form.is_valid():
+                    if (form.cleaned_data.get('file') != None):
+                        m = form.save()
+                        this_file = DirectoryFiles.objects.get(file = m.file)
+                        collaborators = form.cleaned_data.get('file_collaborators')
+                        myfolder = form.cleaned_data.get('folder')
+                        FileFolder.add_to_folder(this_file, user, myfolder)
+                        SharedWithMe.addfile(collaborators, this_file)
+                        thisobj = MyFileName(file=this_file, user=user)
+                        thisobj.save()
+                else:
+                    print(form.errors)
+
+            return JsonResponse(data)
 
     elif request.method == "POST":
         form1 = Add_Organization(request.POST, request.FILES)
@@ -783,20 +809,38 @@ def org_directory(request):
     formset4 = DirFilesFormset(queryset=DirectoryFiles.objects.none(), prefix='file')
 
     if request.is_ajax() and request.method == "POST":
+        print(request.POST)
         formset4 = DirFilesFormset(request.POST, request.FILES, prefix='file')
-        for form in formset4:
-            if form.is_valid():
-                if (form.cleaned_data.get('file') != None):
-                    m = form.save()
-                    this_file = DirectoryFiles.objects.get(file = m.file)
-                    collaborators = form.cleaned_data.get('file_collaborators')
-                    myfolder = form.cleaned_data.get('folder')
-                    FileFolder.add_to_folder(this_file, user, myfolder)
-                    SharedWithMe.addfile(collaborators, this_file)
-            else:
-                print(form.errors)
+        if 'downloadbtn' in request.POST:
+            fileid = request.POST['fileid']
+            fileobj = DirectoryFiles.objects.get(id=fileid)
+            try:
+                obj = RecentFiles.objects.get(file=fileobj, user=user)
+                obj.save()
+            except RecentFiles.DoesNotExist:
+                obj = RecentFiles(file=fileobj, user=user)
+                obj.save()
+            data = {
+                'msg': 'hello',
+            }
+            return JsonResponse(data)
 
-        return JsonResponse(data)
+        else:
+            for form in formset4:
+                if form.is_valid():
+                    if (form.cleaned_data.get('file') != None):
+                        m = form.save()
+                        this_file = DirectoryFiles.objects.get(file = m.file)
+                        collaborators = form.cleaned_data.get('file_collaborators')
+                        myfolder = form.cleaned_data.get('folder')
+                        FileFolder.add_to_folder(this_file, user, myfolder)
+                        SharedWithMe.addfile(collaborators, this_file)
+                        thisobj = MyFileName(file=this_file, user=user)
+                        thisobj.save()
+                else:
+                    print(form.errors)
+
+            return JsonResponse(data)
 
     elif request.method == "POST":
         form1 = Add_Organization(request.POST, request.FILES)
@@ -1054,6 +1098,8 @@ def document_directory(request):
                         myfolder = form.cleaned_data.get('folder')
                         FileFolder.add_to_folder(this_file, user, myfolder)
                         SharedWithMe.addfile(collaborators, this_file)
+                        thisobj = MyFileName(file=this_file, user=user)
+                        thisobj.save()
                 else:
                     print(form.errors)
 
@@ -1123,9 +1169,10 @@ def document_directory(request):
             fileid = request.POST['rename-file-id']
             fileobj = DirectoryFiles.objects.get(id=fileid)
             newname = request.POST['rename-file-name']
-            print(fileobj.document_name)
-            fileobj.document_name = newname
-            fileobj.save()
+            filenameobj = MyFileName.objects.get(file=fileobj, user=user)
+            print(filenameobj.newname)
+            filenameobj.newname = newname
+            filenameobj.save()
             return HttpResponseRedirect('document_directory')
 
         elif 'delete-file-id' in request.POST:
@@ -1478,9 +1525,10 @@ def document_directory_folder(request, pk, option):
             fileid = request.POST['rename-file-id']
             fileobj = DirectoryFiles.objects.get(id=fileid)
             newname = request.POST['rename-file-name']
-            print(fileobj.document_name)
-            fileobj.document_name = newname
-            fileobj.save()
+            filenameobj = MyFileName.objects.get(file=fileobj, user=user)
+            print(filenameobj.newname)
+            filenameobj.newname = newname
+            filenameobj.save()
             return HttpResponseRedirect(reverseurl)
 
         elif 'delete-file-id' in request.POST:
@@ -1618,6 +1666,35 @@ def testpage(request):
         'form': form,
         }
     return render(request, 'app/test.html', context)
+
+def validate_account(request):
+    account_name = request.GET.get('account_name', None)
+    test_name = Account.objects.filter(username=account_name).exists()
+    if (test_name):
+        account_name = True
+        name_msg = "A user with this name already exists"
+    else:
+        account_name = False
+        name_msg = ""
+
+    account_email = request.GET.get('email_name', None)
+    test_email = Account.objects.filter(email=account_email).exists()
+    if (test_email):
+        account_email = True
+        email_msg = "A user with this email already exists"
+    else:
+        account_email = False
+        email_msg = ""
+    
+    data = {
+        'username_taken': account_name,
+        'email_taken': account_email,
+
+        'name_msg': name_msg,
+        'email_msg': email_msg,
+    }
+
+    return JsonResponse(data)
 
 def validate_org(request):
     org_name = request.GET.get('org_name', None)

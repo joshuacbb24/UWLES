@@ -58,6 +58,12 @@ $(document).ready(function(){
             var theseorgs = $('.orgCard')
             var theseorgs2 = $('.org-list')
             for (var i = 0 ; i < theseorgs.length; i++){
+                if($(theseorgs[i]).hasClass('show-this')){
+                    $(theseorgs[i]).removeClass('show-this')
+                }
+                if($(theseorgs[i]).hasClass('hide-this')){
+                    $(theseorgs[i]).removeClass('hide-this')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs[i]).hasClass('show-this2')){
                         if ($(theseorgs[i]).children('p.filter-me-county:contains("Dorchester")').length > 0){
@@ -92,6 +98,12 @@ $(document).ready(function(){
                 }
             }
             for (var i = 0 ; i < theseorgs2.length; i++){
+                if($(theseorgs2[i]).hasClass('show-this')){
+                    $(theseorgs2[i]).removeClass('show-this')
+                }
+                if($(theseorgs2[i]).hasClass('hide-this')){
+                    $(theseorgs2[i]).removeClass('hide-this')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs2[i]).hasClass('show-this2')){
                         if ($(theseorgs2[i]).children('p.filter-me-county2:contains("Dorchester")').length > 0){
@@ -184,6 +196,12 @@ $(document).ready(function(){
             var theseorgs = $('.orgCard')
             var theseorgs2 = $('.org-list')
             for (var i = 0 ; i < theseorgs.length; i++){
+                if($(theseorgs[i]).hasClass('show-this')){
+                    $(theseorgs[i]).removeClass('show-this')
+                }
+                if($(theseorgs[i]).hasClass('hide-this')){
+                    $(theseorgs[i]).removeClass('hide-this')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs[i]).hasClass('show-this2')){
                         if ($(theseorgs[i]).children('p.filter-me-county:contains("Somerset")').length > 0){
@@ -218,6 +236,12 @@ $(document).ready(function(){
                 }
             }
             for (var i = 0 ; i < theseorgs2.length; i++){
+                if($(theseorgs2[i]).hasClass('show-this')){
+                    $(theseorgs2[i]).removeClass('show-this')
+                }
+                if($(theseorgs2[i]).hasClass('hide-this')){
+                    $(theseorgs2[i]).removeClass('hide-this')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs2[i]).hasClass('show-this2')){
                         if ($(theseorgs2[i]).children('p.filter-me-county2:contains("Somerset")').length > 0){
@@ -309,6 +333,12 @@ $(document).ready(function(){
             var theseorgs = $('.orgCard')
             var theseorgs2 = $('.org-list')
             for (var i = 0 ; i < theseorgs.length; i++){
+                if($(theseorgs[i]).hasClass('show-this')){
+                    $(theseorgs[i]).removeClass('show-this')
+                }
+                if($(theseorgs[i]).hasClass('hide-this')){
+                    $(theseorgs[i]).removeClass('hide-this')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs[i]).hasClass('show-this2')){
                         if ($(theseorgs[i]).children('p.filter-me-county:contains("Wicomico")').length > 0){
@@ -343,6 +373,12 @@ $(document).ready(function(){
                 }
             }
             for (var i = 0 ; i < theseorgs2.length; i++){
+                if($(theseorgs2[i]).hasClass('show-this')){
+                    $(theseorgs2[i]).removeClass('show-this')
+                }
+                if($(theseorgs2[i]).hasClass('hide-this')){
+                    $(theseorgs2[i]).removeClass('hide-this')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs2[i]).hasClass('show-this2')){
                         if ($(theseorgs2[i]).children('p.filter-me-county2:contains("Wicomico")').length > 0){
@@ -434,6 +470,12 @@ $(document).ready(function(){
             var theseorgs = $('.orgCard')
             var theseorgs2 = $('.org-list')
             for (var i = 0 ; i < theseorgs.length; i++){
+                if($(theseorgs[i]).hasClass('show-this')){
+                    $(theseorgs[i]).removeClass('show-this')
+                }
+                if($(theseorgs[i]).hasClass('hide-this')){
+                    $(theseorgs[i]).removeClass('hide-this')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs[i]).hasClass('show-this2')){
                         if ($(theseorgs[i]).children('p.filter-me-county:contains("Worcester")').length > 0){
@@ -468,6 +510,12 @@ $(document).ready(function(){
                 }
             }
             for (var i = 0 ; i < theseorgs2.length; i++){
+                if($(theseorgs2[i]).hasClass('show-this')){
+                    $(theseorgs2[i]).removeClass('show-this')
+                }
+                if($(theseorgs2[i]).hasClass('hide-this')){
+                    $(theseorgs2[i]).removeClass('hide-this')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs2[i]).hasClass('show-this2')){
                         if ($(theseorgs2[i]).children('p.filter-me-county2:contains("Worcester")').length > 0){
@@ -559,6 +607,12 @@ $(document).ready(function(){
             var theseorgs = $('.orgCard')
             var theseorgs2 = $('.org-list')
             for (var i = 0 ; i < theseorgs.length; i++){
+                if($(theseorgs[i]).hasClass('show-this2')){
+                    $(theseorgs[i]).removeClass('show-this2')
+                }
+                if($(theseorgs[i]).hasClass('hide-this2')){
+                    $(theseorgs[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs[i]).hasClass('show-this')){
                         if ($(theseorgs[i]).children('p.filter-me-elig:contains("All Ages")').length > 0){
@@ -593,6 +647,12 @@ $(document).ready(function(){
                 }
             }
             for (var i = 0 ; i < theseorgs2.length; i++){
+                if($(theseorgs2[i]).hasClass('show-this2')){
+                    $(theseorgs2[i]).removeClass('show-this2')
+                }
+                if($(theseorgs2[i]).hasClass('hide-this2')){
+                    $(theseorgs2[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs2[i]).hasClass('show-this')){
                         if ($(theseorgs2[i]).children('p.filter-me-elig2:contains("All Ages")').length > 0){
@@ -685,6 +745,12 @@ $(document).ready(function(){
             var theseorgs = $('.orgCard')
             var theseorgs2 = $('.org-list')
             for (var i = 0 ; i < theseorgs.length; i++){
+                if($(theseorgs[i]).hasClass('show-this2')){
+                    $(theseorgs[i]).removeClass('show-this2')
+                }
+                if($(theseorgs[i]).hasClass('hide-this2')){
+                    $(theseorgs[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs[i]).hasClass('show-this')){
                         if ($(theseorgs[i]).children('p.filter-me-elig:contains("Youth(under 12)")').length > 0){
@@ -719,6 +785,12 @@ $(document).ready(function(){
                 }
             }
             for (var i = 0 ; i < theseorgs2.length; i++){
+                if($(theseorgs2[i]).hasClass('show-this2')){
+                    $(theseorgs2[i]).removeClass('show-this2')
+                }
+                if($(theseorgs2[i]).hasClass('hide-this2')){
+                    $(theseorgs2[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs2[i]).hasClass('show-this')){
                         if ($(theseorgs2[i]).children('p.filter-me-elig2:contains("Youth(under 12)")').length > 0){
@@ -810,6 +882,12 @@ $(document).ready(function(){
             var theseorgs = $('.orgCard')
             var theseorgs2 = $('.org-list')
             for (var i = 0 ; i < theseorgs.length; i++){
+                if($(theseorgs[i]).hasClass('show-this2')){
+                    $(theseorgs[i]).removeClass('show-this2')
+                }
+                if($(theseorgs[i]).hasClass('hide-this2')){
+                    $(theseorgs[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs[i]).hasClass('show-this')){
                         if ($(theseorgs[i]).children('p.filter-me-elig:contains("Teens(13-17)")').length > 0){
@@ -844,6 +922,12 @@ $(document).ready(function(){
                 }
             }
             for (var i = 0 ; i < theseorgs2.length; i++){
+                if($(theseorgs2[i]).hasClass('show-this2')){
+                    $(theseorgs2[i]).removeClass('show-this2')
+                }
+                if($(theseorgs2[i]).hasClass('hide-this2')){
+                    $(theseorgs2[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs2[i]).hasClass('show-this')){
                         if ($(theseorgs2[i]).children('p.filter-me-elig2:contains("Teens(13-17)")').length > 0){
@@ -935,6 +1019,12 @@ $(document).ready(function(){
             var theseorgs = $('.orgCard')
             var theseorgs2 = $('.org-list')
             for (var i = 0 ; i < theseorgs.length; i++){
+                if($(theseorgs[i]).hasClass('show-this2')){
+                    $(theseorgs[i]).removeClass('show-this2')
+                }
+                if($(theseorgs[i]).hasClass('hide-this2')){
+                    $(theseorgs[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs[i]).hasClass('show-this')){
                         if ($(theseorgs[i]).children('p.filter-me-elig:contains("Adults(18+)")').length > 0){
@@ -969,6 +1059,12 @@ $(document).ready(function(){
                 }
             }
             for (var i = 0 ; i < theseorgs2.length; i++){
+                if($(theseorgs2[i]).hasClass('show-this2')){
+                    $(theseorgs2[i]).removeClass('show-this2')
+                }
+                if($(theseorgs2[i]).hasClass('hide-this2')){
+                    $(theseorgs2[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs2[i]).hasClass('show-this')){
                         if ($(theseorgs2[i]).children('p.filter-me-elig2:contains("Adults(18+)")').length > 0){
@@ -1060,6 +1156,12 @@ $(document).ready(function(){
             var theseorgs = $('.orgCard')
             var theseorgs2 = $('.org-list')
             for (var i = 0 ; i < theseorgs.length; i++){
+                if($(theseorgs[i]).hasClass('show-this2')){
+                    $(theseorgs[i]).removeClass('show-this2')
+                }
+                if($(theseorgs[i]).hasClass('hide-this2')){
+                    $(theseorgs[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs[i]).hasClass('show-this')){
                         if ($(theseorgs[i]).children('p.filter-me-elig:contains("Seniors(60+)")').length > 0){
@@ -1094,6 +1196,12 @@ $(document).ready(function(){
                 }
             }
             for (var i = 0 ; i < theseorgs2.length; i++){
+                if($(theseorgs2[i]).hasClass('show-this2')){
+                    $(theseorgs2[i]).removeClass('show-this2')
+                }
+                if($(theseorgs2[i]).hasClass('hide-this2')){
+                    $(theseorgs2[i]).removeClass('hide-this2')
+                }
                 if (has_efilter && has_filter){
                     if ($(theseorgs2[i]).hasClass('show-this')){
                         if ($(theseorgs2[i]).children('p.filter-me-elig2:contains("Seniors(60+)")').length > 0){

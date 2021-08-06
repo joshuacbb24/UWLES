@@ -134,6 +134,10 @@ input[type=text][id^=id_file][id$=-document_name]{
             height: 95px;
         }
 
+        .file-selected{
+            background: rgba(104, 208, 209, 0.16);
+        }
+
         .ext_pic {
             position: relative;
             top: 10px;
@@ -224,12 +228,9 @@ input[type=text][id^=id_file][id$=-document_name]{
         }
 
         .file-remove-x {
-            position: absolute;
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            background: #5F5F5F;
-            transform: translate(50%, 50%);
+            font-size: 20px;
+            color: #5F5F5F;
+            content: "x";
         }
         #file-more {
             position: absolute;
@@ -297,6 +298,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .file-edit-details {
             position: relative;
+            display: flex;
             width: 100px;
             height: 25px;
             left: 270px;
@@ -305,8 +307,9 @@ input[type=text][id^=id_file][id$=-document_name]{
             background: #FFFFFF;
             border: 1px solid #015D67;
             box-sizing: border-box;
-            border-radius: 10px;
+            border-radius: 3px;
 
+            justify-content: center;
             font-family: Helvetica;
             font-style: normal;
             font-weight: 500;
@@ -512,11 +515,11 @@ input[type=text][id^=id_file][id$=-document_name]{
             }
 
         #collaboratorsChoice {
-            display: block !important;
+            display: block;
             position: absolute;
-            width: 500px;
-            min-height: 300px;
-            max-height: 300px;
+            width: 556px;
+            min-height: 350px;
+            max-height: 350px;
             background: #F6F6F6;
             overflow-y: auto;
             font-family: Helvetica;
@@ -524,7 +527,6 @@ input[type=text][id^=id_file][id$=-document_name]{
             font-weight: normal;
             font-size: 20px;
             line-height: 15px;
-            display: flex;
             align-items: center;
             color: #676767;
         }
@@ -539,7 +541,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .file-collab__A {
             color: black;
-            width: 500px;
+            width: 100%;
             height: 50px;
             padding: 12px 16px;
             text-decoration: none;
@@ -549,7 +551,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
             .file-collab__A:hover {
                 color: black;
-                width: 500px;
+                width: 100%;
                 height: 50px;
                 padding: 12px 16px;
                 text-decoration: none;
@@ -560,17 +562,18 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .file-collab__B {
             color: white;
-            width: 500px;
+            width: 100%;
             height: 50px;
             padding: 12px 16px;
             text-decoration: none;
             display: block;
             background: #015D67;
+            cursor: pointer;
         }
 
             .file-collab__B:hover {
                 color: white;
-                width: 500px;
+                width: 100%;
                 height: 50px;
                 padding: 12px 16px;
                 text-decoration: none;
@@ -580,11 +583,11 @@ input[type=text][id^=id_file][id$=-document_name]{
             }
 
     #filetagsChoice {
-            display: block !important;
+            display: block;
             position: absolute;
-            width: 500px;
-            min-height: 300px;
-            max-height: 300px;
+            width: 556px;
+            min-height: 350px;
+            max-height: 350px;
             background: #F6F6F6;
             overflow-y: auto;
             font-family: Helvetica;
@@ -592,14 +595,13 @@ input[type=text][id^=id_file][id$=-document_name]{
             font-weight: normal;
             font-size: 20px;
             line-height: 15px;
-            display: flex;
             align-items: center;
             color: #676767;
         }
 
     .file-tag__A {
             color: black;
-            width: 500px;
+            width: 100%;
             height: 50px;
             padding: 12px 16px;
             text-decoration: none;
@@ -609,7 +611,7 @@ input[type=text][id^=id_file][id$=-document_name]{
 
             .file-tag__A:hover {
                 color: black;
-                width: 500px;
+                width: 100%;
                 height: 50px;
                 padding: 12px 16px;
                 text-decoration: none;
@@ -620,17 +622,18 @@ input[type=text][id^=id_file][id$=-document_name]{
 
         .file-tag__B {
             color: white;
-            width: 500px;
+            width: 100%;
             height: 50px;
             padding: 12px 16px;
             text-decoration: none;
             display: block;
             background: #015D67;
+            cursor: pointer;
         }
 
             .file-tag__B:hover {
                 color: white;
-                width: 500px;
+                width: 100%;
                 height: 50px;
                 padding: 12px 16px;
                 text-decoration: none;
@@ -683,6 +686,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             line-height: 14px;
             display: flex;
             align-items: center;
+            text-align: center;
             color: #015D67;
             background: #F8F8F8;
             border-width: 2px;
@@ -701,6 +705,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             line-height: 14px;
             display: flex;
             align-items: center;
+            text-align: center;
             color: #015D67;
             background: #F8F8F8;
             border-width: 2px;
@@ -723,6 +728,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             line-height: 14px;
             display: flex;
             align-items: center;
+            text-align: center;
             color: #015D67;
             background: #F8F8F8;
             border-width: 2px;
@@ -741,6 +747,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             line-height: 14px;
             display: flex;
             align-items: center;
+            text-align: center;
             color: #015D67;
             background: #F8F8F8;
             border-width: 2px;
@@ -763,6 +770,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             line-height: 14px;
             display: flex;
             align-items: center;
+            text-align: center;
             color: #015D67;
             background: #F8F8F8;
             border-width: 2px;
@@ -781,6 +789,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             line-height: 14px;
             display: flex;
             align-items: center;
+            text-align: center;
             color: #015D67;
             background: #F8F8F8;
             border-width: 2px;
@@ -803,6 +812,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             line-height: 14px;
             display: flex;
             align-items: center;
+            text-align: center;
             color: #015D67;
             background: #F8F8F8;
             border-width: 2px;
@@ -821,6 +831,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             line-height: 14px;
             display: flex;
             align-items: center;
+            text-align: center;
             color: #015D67;
             background: #F8F8F8;
             border-width: 2px;
@@ -843,6 +854,7 @@ input[type=text][id^=id_file][id$=-document_name]{
             line-height: 14px;
             display: flex;
             align-items: center;
+            text-align: center;
             color: #015D67;
             background: #F8F8F8;
             border-width: 2px;

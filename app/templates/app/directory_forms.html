@@ -35,7 +35,7 @@
     </div>
 </div>
 
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" id="directory_forms">
     {% csrf_token %}
     {{ formset2.management_form }}
     <div id="form_set3">
@@ -55,62 +55,62 @@
                         <div class="page-line-1"></div>
 
                         <div class="page-circle-2"></div>
-                        <div class="page-circle-2-title" type="button" id="editForm1-circle-2">Additional Information</div>
+                        <div class="page-circle-2-title" type="button" id="editForm1-circle-2" onclick="findForm3Errors({{ forloop.counter0 }})" data-target="#editFormPT2{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Additional Information</div>
                         <div class="page-line-2"></div>
 
                         <div class="page-circle-3"></div>
-                        <div class="page-circle-3-title" type="button" id="editForm1-circle-3">Add Organization's Tags</div>
+                        <div class="page-circle-3-title" type="button" id="editForm1-circle-3" onclick="findForm3Errors({{ forloop.counter0 }})" data-target="#editorgForm2{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Add Organization's Tags</div>
                         <div class="page-line-3"></div>
 
                         <div class="page-circle-4"></div>
-                        <div class="page-circle-4-title" type="button" id="editForm1-circle-4">Background Information</div>
+                        <div class="page-circle-4-title" type="button" id="editForm1-circle-4" onclick="findForm3Errors({{ forloop.counter0 }})" data-target="#editorgForm3{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Background Information</div>
                         <div class="page-line-4"></div>
 
                         <div class="page-circle-5"></div>
-                        <div class="page-circle-5-title" type="button" id="editForm1-circle-5">Sub Directories + Collaborators</div>
+                        <div class="page-circle-5-title" type="button" id="editForm1-circle-5" onclick="findForm3Errors({{ forloop.counter0 }})" data-target="#editorgForm4{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Categories + Collaborators</div>
                         <div class="page-line-5"></div>
 
                         <div class="page-circle-6"></div>
-                        <div class="page-circle-6-title" type="button" id="editForm1-circle-6">Confirmation / Submission</div>
+                        <div class="page-circle-6-title" type="button" id="editForm1-circle-6" onclick="findForm3Errors({{ forloop.counter0 }})" data-target="#editorgForm5{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Confirmation / Submission</div>
 
                         {{ formx.org_name }}
-                        <div class="orgName">Full Organization Name</div>
+                        <div class="orgName">Full Organization Name <div class="form-required">*</div></div>
                         {{ formx.website }}
-                        <div class="webName">Website URL</div>
+                        <div class="webName">Website URL <div class="form-required">*</div></div>
                         {{ formx.org_phone }}
-                        <div class="phoneName">Primary Phone</div>
+                        <div class="phoneName">Primary Phone <div class="form-required">*</div></div>
                         {{ formx.org_email }}
-                        <div class="emailName">Primary Email</div>
+                        <div class="emailName">Primary Email <div class="form-required">*</div></div>
 
                         {{ formx.description }}
-                        <div class="eligName">Eligibility (Select all that apply)</div>
+                        <div class="eligName">Eligibility (Select all that apply) <div class="form-required">*</div></div>
                         {% for checkbox in formx.eligibility %}
                         {{ checkbox }}
                         {% endfor %}
                         {{ formx.street }}
-                        <div class="streetName">Street</div>
+                        <div class="streetName">Street <div class="form-required">*</div></div>
                         {{ formx.apt_number }}
                         <div class="aptName">Apt./Unit Number</div>
                         {{ formx.county }}
-                        <div class="countyName">County</div>
+                        <div class="countyName">County <div class="form-required">*</div></div>
                         {{ formx.city }}
-                        <div class="cityName">City</div>
+                        <div class="cityName">City <div class="form-required">*</div></div>
                         {{ formx.state }}
-                        <div class="stateName">State</div>
+                        <div class="stateName">State <div class="form-required">*</div></div>
                         {{ formx.zipcode }}
-                        <div class="zipName">Zipcode</div>
+                        <div class="zipName">Zipcode <div class="form-required">*</div></div>
 
                         <label class="custom-file-upload">
                             {{ formx.org_image }}
                             <i class="bi bi-cloud-arrow-up"></i> Add Image
-                            <span id="file-selected"></span>
+                            <span id="file-selected{{ forloop.counter0 }}"></span>
                         </label>
 
                         <div class="form-error-box--before-pt1{{ forloop.counter0 }}">
           
                         </div>
                         <input type="hidden" name="orgs-{{ forloop.counter0 }}-id" value="{{ orglist|index:forloop.counter0 }}" id="id_orgs-{{ forloop.counter0 }}-id" />
-                        <button class="continueBtn1" id="orgbtn2" type="button" value="{{ forloop.counter0 }}">Continue</button>
+                        <button class="continueBtn1" id="orgbtn2" type="button" value="{{ forloop.counter0 }}" onclick="findForm3Errors({{ forloop.counter0 }})" data-target="#editFormPT2{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Continue</button>
                     </div>
                 </div>
             </div>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="page-circle-1 completed"></div>
-                    <div class="page-circle-1-title" type="button" id="editForm2-circle-1">Background Information</div>
+                    <div class="page-circle-1-title" type="button" id="editForm2-circle-1" onclick="findForm4Errors({{ forloop.counter0 }})" data-target="#editform{{ forloop.counter }}" data-toggle="modal" data-dismiss="modal">Background Information</div>
                     <div class="page-line-1 completed-line"></div>
         
                     <div class="page-circle-2 completed-current"></div>
@@ -134,19 +134,19 @@
                     <div class="page-line-2"></div>
         
                     <div class="page-circle-3"></div>
-                    <div class="page-circle-3-title" type="button" id="editForm2-circle-3">Add Organization's Tags</div>
+                    <div class="page-circle-3-title" type="button" id="editForm2-circle-3" onclick="findForm4Errors({{ forloop.counter0 }})" data-target="#editorgForm2{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Add Organization's Tags</div>
                     <div class="page-line-3"></div>
         
                     <div class="page-circle-4"></div>
-                    <div class="page-circle-4-title" type="button" id="editForm2-circle-4">Background Information</div>
+                    <div class="page-circle-4-title" type="button" id="editForm2-circle-4" onclick="findForm4Errors({{ forloop.counter0 }})" data-target="#editorgForm3{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Background Information</div>
                     <div class="page-line-4"></div>
         
                     <div class="page-circle-5"></div>
-                    <div class="page-circle-5-title" type="button" id="editForm2-circle-5">Sub Directories + Collaborators</div>
+                    <div class="page-circle-5-title" type="button" id="editForm2-circle-5" onclick="findForm4Errors({{ forloop.counter0 }})" data-target="#editorgForm4{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Categories + Collaborators</div>
                     <div class="page-line-5"></div>
         
                     <div class="page-circle-6"></div>
-                    <div class="page-circle-6-title" type="button" id="editForm2-circle-6">Confirmation / Submission</div>
+                    <div class="page-circle-6-title" type="button" id="editForm2-circle-6" onclick="findForm4Errors({{ forloop.counter0 }})" data-target="#editorgForm5{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Confirmation / Submission</div>
         
                     {{ formx.mail_street }}
                     <div class="mailstreetName">Street (Mail)</div>
@@ -160,20 +160,20 @@
                     <div class="mailzipName">Zipcode (Mail)</div>
           
                     {{ formx.contact_name }}
-                    <div class="cnameName">Full Name</div>
+                    <div class="cnameName">Full Name <div class="form-required">*</div></div>
                     {{ formx.contact_phone }}
-                    <div class="cphoneName">Primary Phone</div>
+                    <div class="cphoneName">Primary Phone <div class="form-required">*</div></div>
                     {{ formx.contact_title }}
-                    <div class="ctitleName">Title</div>
+                    <div class="ctitleName">Title <div class="form-required">*</div></div>
                     {{ formx.contact_email }}
-                    <div class="cemailName">Primary Email</div>
+                    <div class="cemailName">Primary Email <div class="form-required">*</div></div>
         
-                    <div class="languagesName">Languages Available (Select all that apply)</div>
+                    <div class="languagesName">Languages Available (Select all that apply) <div class="form-required">*</div></div>
                     {% for checkbox in formx.languages %}
                         {{ checkbox }}
                     {% endfor %}
         
-                    <div class="areasName">Areas Served (Select all that apply)</div>
+                    <div class="areasName">Areas Served (Select all that apply) <div class="form-required">*</div></div>
                     {% for checkbox in formx.areas_served %}
                         {{ checkbox }}
                     {% endfor %}
@@ -181,7 +181,7 @@
                     <div class="form-error-box--before2-pt2{{ forloop.counter0 }}">
           
                     </div>
-                <button class="continueBtn2" type="button" id="orgbtn2pt2" value="{{ forloop.counter0 }}">Continue</button>
+                <button class="continueBtn2" type="button" id="orgbtn2pt2" value="{{ forloop.counter0 }}" onclick="findForm4Errors({{ forloop.counter0 }})" data-target="#editorgForm2{{ forloop.counter0 }}" data-toggle="modal" data-dismiss="modal">Continue</button>
                 </div>
               </div>
             </div>
@@ -214,7 +214,7 @@
     <div class="page-line-4"></div>
 
     <div class="page-circle-5"></div>
-    <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#editorgForm4{{ forloop.counter0 }}" data-dismiss="modal">Sub Directories + Collaborators</div>
+    <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#editorgForm4{{ forloop.counter0 }}" data-dismiss="modal">Categories + Collaborators</div>
     <div class="page-line-5"></div>
 
     <div class="page-circle-6"></div>
@@ -283,7 +283,7 @@
         <div class="page-line-4"></div>
 
         <div class="page-circle-5"></div>
-        <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#editorgForm4{{ forloop.counter0 }}" data-dismiss="modal">Sub Directories + Collaborators</div>
+        <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#editorgForm4{{ forloop.counter0 }}" data-dismiss="modal">Categories + Collaborators</div>
         <div class="page-line-5"></div>
 
         <div class="page-circle-6"></div>
@@ -336,13 +336,13 @@
     <div class="page-line-4 completed-line"></div>
 
     <div class="page-circle-5 completed-current"></div>
-    <div class="page-circle-5-title current-bold">Sub Directories + Collaborators</div>
+    <div class="page-circle-5-title current-bold">Categories + Collaborators</div>
     <div class="page-line-5"></div>
 
     <div class="page-circle-6"></div>
     <div class="page-circle-6-title" type="button" data-toggle="modal" data-target="#editorgForm5{{ forloop.counter0 }}" data-dismiss="modal">Confirmation / Submission</div>
 
-      <div class="addToDirTitle">Add To Directories (All That Apply):</div>
+      <div class="addToDirTitle">Add To Categories (All That Apply):</div>
         <div class="add-to-dir__layout">
         {% for checkbox in form2.sub_dirs %}
             {% if checkbox.id_for_label == 'id_sub_dirs_0' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Addiction & Recovery Services</div></label>
@@ -419,14 +419,14 @@
       <div class="page-line-4 completed-line"></div>
 
       <div class="page-circle-5 completed"></div>
-      <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#editorgForm4{{ forloop.counter0 }}" data-dismiss="modal">Sub Directories + Collaborators</div>
+      <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#editorgForm4{{ forloop.counter0 }}" data-dismiss="modal">Categories + Collaborators</div>
       <div class="page-line-5 completed-line"></div>
 
       <div class="page-circle-6 completed-current"></div>
       <div class="page-circle-6-title current-bold">Confirmation / Submission</div>
 
     
-      <div class="confirmation-question">Are you sure you want to edit </div>
+      <div class="confirmation-question">Are you sure you want to edit this organization?</div>
       <div class="confirmation-org-title"></div>
 
       <button type="submit" class="confirmation-accept" id="checkthis3{{ forloop.counter0 }}" value="{{ forloop.counter0 }}" name="submit_formx">Yes, edit organization.</button>
@@ -500,23 +500,23 @@
     <div class="page-line-1"></div>
 
     <div class="page-circle-2"></div>
-    <div class="page-circle-2-title" id="orgForm1-circle-2" type="button">Additional Information</div>
+    <div class="page-circle-2-title" id="orgForm1-circle-2" type="button" onclick="findForm1Errors()" data-target="#orgFormPT2" data-toggle="modal" data-dismiss="modal">Additional Information</div>
     <div class="page-line-2"></div>
 
     <div class="page-circle-3"></div>
-    <div class="page-circle-3-title" id="orgForm1-circle-3" type="button">Add Organization's Tags</div>
+    <div class="page-circle-3-title" id="orgForm1-circle-3" type="button" onclick="findForm1Errors()" data-target="#orgForm2" data-toggle="modal" data-dismiss="modal">Add Organization's Tags</div>
     <div class="page-line-3"></div>
 
     <div class="page-circle-4"></div>
-    <div class="page-circle-4-title" id="orgForm1-circle-4" type="button">Review Information</div>
+    <div class="page-circle-4-title" id="orgForm1-circle-4" type="button" onclick="findForm1Errors()" data-target="#orgForm2PT2" data-toggle="modal" data-dismiss="modal">Review Information</div>
     <div class="page-line-4"></div>
 
     <div class="page-circle-5"></div>
-    <div class="page-circle-5-title" id="orgForm1-circle-5" type="button">Sub Directories + Collaborators</div>
+    <div class="page-circle-5-title" id="orgForm1-circle-5" type="button" onclick="findForm1Errors()" data-target="#orgForm3" data-toggle="modal" data-dismiss="modal">Categories + Collaborators</div>
     <div class="page-line-5"></div>
 
     <div class="page-circle-6"></div>
-    <div class="page-circle-6-title" id="orgForm1-circle-6" type="button">Confirmation / Submission</div>
+    <div class="page-circle-6-title" id="orgForm1-circle-6" type="button" onclick="findForm1Errors()" data-target="#orgForm3PT2" data-toggle="modal" data-dismiss="modal">Confirmation / Submission</div>
 
       {{ form1.org_name }}
       <div class="orgName">Full Organization Name<div class="form-required">*</div></div>
@@ -565,7 +565,7 @@
         {% endfor %}
       </div>
       {% endif %}
-  <button class="continueBtn" id="continue-1" type="button">Continue</button>
+  <button class="continueBtn" id="continue-1" type="button" onclick="findForm1Errors()" data-target="#orgFormPT2" data-toggle="modal" data-dismiss="modal">Continue</button>
   </div>
 </div>
 </div>
@@ -581,7 +581,7 @@
     </div>
     <div class="modal-body">
         <div class="page-circle-1 completed"></div>
-        <div class="page-circle-1-title" id="orgForm2-circle-1" type="button">Background Information</div>
+        <div class="page-circle-1-title" id="orgForm2-circle-1" type="button" onclick="findForm2Errors()" data-target="#orgForm1" data-toggle="modal" data-dismiss="modal">Background Information</div>
         <div class="page-line-1 completed-line"></div>
 
         <div class="page-circle-2 completed-current"></div>
@@ -589,19 +589,19 @@
         <div class="page-line-2"></div>
 
         <div class="page-circle-3"></div>
-        <div class="page-circle-3-title" id="orgForm2-circle-3" type="button">Add Organization's Tags</div>
+        <div class="page-circle-3-title" id="orgForm2-circle-3" type="button" onclick="findForm2Errors()" data-target="#orgForm2" data-toggle="modal" data-dismiss="modal">Add Organization's Tags</div>
         <div class="page-line-3"></div>
 
         <div class="page-circle-4"></div>
-        <div class="page-circle-4-title" id="orgForm2-circle-4" type="button">Review Information</div>
+        <div class="page-circle-4-title" id="orgForm2-circle-4" type="button" onclick="findForm2Errors()" data-target="#orgForm2PT2" data-toggle="modal" data-dismiss="modal">Review Information</div>
         <div class="page-line-4"></div>
 
         <div class="page-circle-5"></div>
-        <div class="page-circle-5-title" id="orgForm2-circle-5" type="button">Sub Directories + Collaborators</div>
+        <div class="page-circle-5-title" id="orgForm2-circle-5" type="button" onclick="findForm2Errors()" data-target="#orgForm3" data-toggle="modal" data-dismiss="modal">Categories + Collaborators</div>
         <div class="page-line-5"></div>
 
         <div class="page-circle-6"></div>
-        <div class="page-circle-6-title" id="orgForm2-circle-6" type="button">Confirmation / Submission</div>
+        <div class="page-circle-6-title" id="orgForm2-circle-6" type="button" onclick="findForm2Errors()" data-target="#orgForm3PT2" data-toggle="modal" data-dismiss="modal">Confirmation / Submission</div>
 
         {{ form1.mail_street }}
         <div class="mailstreetName">Street (Mail)</div>
@@ -637,7 +637,7 @@
           
         </div>
 
-    <button class="continueBtn" id="continue-2" type="button" onclick="showInput()";>Continue</button>
+    <button class="continueBtn" id="continue-2" type="button" onclick="findForm2Errors()" data-target="#orgForm2" data-toggle="modal" data-dismiss="modal">Continue</button>
     </div>
   </div>
 </div>
@@ -669,7 +669,7 @@
         <div class="page-line-4"></div>
 
         <div class="page-circle-5"></div>
-        <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Sub Directories + Collaborators</div>
+        <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Categories + Collaborators</div>
         <div class="page-line-5"></div>
 
         <div class="page-circle-6"></div>
@@ -732,7 +732,7 @@
     <div class="page-line-4"></div>
 
     <div class="page-circle-5"></div>
-    <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Sub Directories + Collaborators</div>
+    <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Categories + Collaborators</div>
     <div class="page-line-5"></div>
 
     <div class="page-circle-6"></div>
@@ -817,14 +817,14 @@
     <div class="page-line-4 completed-line"></div>
 
     <div class="page-circle-5 completed-current"></div>
-    <div class="page-circle-5-title current-bold">Sub Directories + Collaborators</div>
+    <div class="page-circle-5-title current-bold">Categories + Collaborators</div>
     <div class="page-line-5"></div>
 
     <div class="page-circle-6"></div>
     <div class="page-circle-6-title" type="button" data-toggle="modal" data-target="#orgForm3PT2" data-dismiss="modal">Confirmation / Submission</div>
 
 
-    <div class="addToDirTitle">Add To Directories (All That Apply):</div>
+    <div class="addToDirTitle">Add To Categories (All That Apply):</div>
     <div class="add-to-dir__layout">
         {% for checkbox in form2.sub_dirs %}
             {% if checkbox.id_for_label == 'id_sub_dirs_0' %} <label class="add-to-dir__box1">{{ checkbox }}<div class="add-to-box1" id="deselected">Addiction & Recovery Services</div></label>
@@ -897,7 +897,7 @@
       <div class="page-line-4 completed-line"></div>
 
       <div class="page-circle-5 completed"></div>
-      <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Sub Directories + Collaborators</div>
+      <div class="page-circle-5-title" type="button" data-toggle="modal" data-target="#orgForm3" data-dismiss="modal">Categories + Collaborators</div>
       <div class="page-line-5 completed-line"></div>
 
       <div class="page-circle-6 completed-current"></div>
@@ -914,45 +914,22 @@
 </div>
 </div>
 
-
-
-<!--<div class="modal box1 fade" id="fileForm1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog" role="document">
-<div class="modal-content">
-  <div class="modal-header">
-    <div class="addCircle2"><i class="bi bi-files" id="addFileIcon2"></i></div>
-    <h5 class="modal-title" id="exampleModalLabel">New Document</h5>
-    <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
-  </div>
-  <div class="modal-body">
-      <input type="file" name="my_file" id="my-file" multiple>
-      <div class="drop-zone" id="dropzone">
-          <span class="drop-zone__prompt">Drop your image here, or browse computer</span>
-          {{ formset4.management_form }}
-          <div id="form_set_file">
-              {% for form in formset4 %}
-                {{ form }}
-              {% endfor %}
-          </div>
-          <div id="empty_form_file">
-              {{ formset4.empty_form }}
-          </div>
-          <div id="file-list">
-
-          </div>
-          <select name="folders" id="folderSelect">
-              {% for folder in myfolders %}
-                {% if folder.name != 'All Files' and folder.name != 'Shared With Me' %}
-                    <option value="{{ folder.name }}">{{ folder.name }}</option>
-                {% endif %}
-              {% endfor %}
-          </select>
+<div class="modal box4 fade" id="orgFormErrorMsg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Oops!</h5>
+          <button type="button" data-dismiss="modal" class="testClose2"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-body">
+            <p>One or more errors detected! Please fix them before you submit.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="clear-error-btn" data-dismiss="modal">Okay</button>
+        </div>
       </div>
-  <button class="continueBtn" id="fileSubmit" type="submit">Continue</button>
-  </div>
-</div>
-</div>
-</div>-->
+    </div>
+    </div>
 
 <div class="modal box1 fade" id="fileForm1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -986,7 +963,8 @@
               {% endif %}
             {% endfor %}
         </select>
-      <button class="continueBtn" id="fileSubmit" type="submit">Continue</button>
+      <button class="continueBtn" id="fileReview" type="submit">Review</button>
+      <button class="continueBtn" id="fileSubmit" type="submit" style="visibility: hidden; display: none;">Submit</button>
       </div>
     </div>
     </div>
@@ -997,7 +975,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Collaborators</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <button type="button" data-dismiss="modal" class="close-collab-modal"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
                 <ul name="collaborators" id="collaboratorsChoice">
@@ -1013,7 +991,9 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
-                <button type="button" class="collabButton" data-dismiss="modal">click me!</button>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="collabButton" data-dismiss="modal">Share With These</button>
             </div>
         </div>
     </div>
@@ -1024,7 +1004,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Tags</h5>
-                <button type="button" data-dismiss="modal" class="testClose"><i class="bi bi-x-lg"></i></button>
+                <button type="button" data-dismiss="modal" class="close-tags-modal"><i class="bi bi-x-lg"></i></button>
             </div>
             <div class="modal-body">
                 <ul name="filetags" id="filetagsChoice">
@@ -1038,10 +1018,32 @@
                             <li class="file-tag__A" value="{{ tag.id }}">{{ tag }}</li>
                     {% endfor %}
                 </ul>
-                <button type="button" class="filetagButton" data-dismiss="modal">click me!</button>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="filetagButton" data-dismiss="modal">Add These Tags</button>
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal box3 fade" id="confirmation-file-modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Keep These Document Titles?</h5>
+              <button type="button" data-dismiss="modal" class="close-review-modal"><i class="bi bi-x-lg"></i></button>
+          </div>
+          <div class="modal-body">
+            <div class="title-text-box">
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="confirm-filename" data-dismiss="modal">Yes, Keep</button>
+            <button type="button" class="declinebtn" data-dismiss="modal">No, Rename</button>
+          </div>
+      </div>
+  </div>
 </div>
 
 </form>

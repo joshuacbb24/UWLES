@@ -910,7 +910,19 @@ $(document).ready(function () {
         var fileName = "";
         fileName = $(this).val();
         var newFile2 = fileName.replace(/C:\\fakepath\\/, '');
-        $('#file-selected').html(newFile2);
+        $('#file-selected').text(newFile2)
+    });
+
+    $("[id^=id_orgs-][id$=-org_image]").change(function () {
+        var fileName = "";
+        fileName = $(this).val();
+        var newFile2 = fileName.replace(/C:\\fakepath\\/, '');
+        var orgpicked =  $(this).attr('id');
+        var org_num = orgpicked.replace(/id_orgs-/, '')
+        console.log(org_num)
+        org_num = org_num.replace(/-org_image/, '')
+        console.log(org_num)
+        $('#file-selected' + org_num).text(newFile2)
     });
 
     $(".addCollabBox").on('click', 'a.org-collab__A', function () {

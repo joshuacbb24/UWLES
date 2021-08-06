@@ -44,7 +44,7 @@
 </head>
 <body>
     <div class="directoryBar"></div>
-    <a href="{% url 'fulldirectory' %}" class="fullHidden">Full Directory</a>
+    <a href="{% url 'fulldirectory' %}" class="fullHidden">Category Directory</a>
     <a href="{% url 'orgdirectory' %}" class="orgActive">Organizational Directory</a>
     <a href="{% url 'documentdirectory' %}" class="fileHidden">Documents Directory</a>
 
@@ -66,8 +66,8 @@
         <option value="4">Seniors</option>
     </select>-->
 
-    <button class="addBox" type="button" data-toggle="modal" data-target="#addModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> New</p></button>
-    <button class="editBox" type="button" data-toggle="modal" data-target="#editModal"><p class="addContent"><!--<i class="fa fa-plus" aria-hidden="true" id="addIcon"></i>--> Edit</p></button>
+    <!--<button class="addBox" type="button" data-toggle="modal" data-target="#addModal"><p class="addContent"><i class="fa fa-plus" aria-hidden="true" id="addIcon"></i> New</p></button>
+    <button class="editBox" type="button" data-toggle="modal" data-target="#editModal"><p class="addContent"><i class="fa fa-plus" aria-hidden="true" id="addIcon"></i> Edit</p></button>
 
     <div class="divideLine"></div>
 
@@ -75,7 +75,7 @@
     <div class="gridPH" id="gridIcon"><i class="fa fa-th" aria-hidden="true"></i></div>
 
     <div class="listBox" id="hidden"></div>
-    <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
+    <div class="listPH" id="listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>-->
 
     <a href="{% url 'orgdirectory' %}" class="orgPath">Organizational Directory ></a>
     <div class="suborgPath">{{ organization.org_name }}</div>

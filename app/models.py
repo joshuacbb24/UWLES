@@ -298,6 +298,7 @@ class Languages(models.Model):
     LANGUAGE_CHOICES = (
         ('English', 'English'),
         ('Spanish', 'Spanish'),
+        ('Haitian Creole', 'Haitian Creole')
     )
     language = models.CharField(max_length=20, choices=LANGUAGE_CHOICES, primary_key=True)
 
@@ -561,6 +562,8 @@ class SharedWithMe(models.Model):
 
             obj.file.add(file)
             FileFolder.add_to_folder(file, collab, "Shared With Me")
+            thisobj = MyFileName(file=file, user=collab)
+            thisobj.save()
 
     def addindfile(collab, file):
         try:
@@ -571,6 +574,8 @@ class SharedWithMe(models.Model):
 
         obj.file.add(file)
         FileFolder.add_to_folder(file, collab, "Shared With Me")
+        thisobj = MyFileName(file=file, user=collab)
+        thisobj.save()
 
 class RecentFiles(models.Model):
     file = models.ForeignKey(DirectoryFiles, on_delete=models.CASCADE)
@@ -581,4 +586,25 @@ class RecentFiles(models.Model):
         '''On save, update view time (time_viewed)'''
         self.time_viewed = timezone.now()
         return super(RecentFiles, self).save(*args, **kwargs)
+
+class MyFileName(models.Model):
+    file = models.ForeignKey(DirectoryFiles, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    newname = models.CharField(max_length=50, blank = True)
+
+    class Meta:
+        unique_together = (('file', 'user',))
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if (self.file.document_name):
+                current_name = self.file.document_name
+            else:
+                replace_this = str(self.file.file)
+                current_name = replace_this.replace('file_directory/', '')
+            self.newname = current_name
+        super(MyFileName, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.newname) + "-" + str(self.user)
 

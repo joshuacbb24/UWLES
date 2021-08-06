@@ -22,30 +22,28 @@ $(document).ready(function () {
         $("#dropzone").addClass('drop-zone-dropped')
         $("#dropzone").css({"width": "200px", "height": "265px", "left": "120px"})
         $('#file-list').css('display', 'block')
-        var form_idx = $('#id_file-TOTAL_FORMS').val();
-        $('#form_set_file').append($('#empty_form_file').html().replace(/__prefix__/g, form_idx))
-        $('#id_file-TOTAL_FORMS').val(parseInt(form_idx) + 1)
-
         var inputElement = $("[class=drop-zone__input"+ inc_this + "]")
-
-        e.preventDefault()
-        console.log(inputElement.attr("id"))
-
         if (e.originalEvent.dataTransfer.files.length) {
             inputElement.files = e.originalEvent.dataTransfer.files;
-            console.log(inputElement)
-            console.log(inputElement.files[0])
-            updateList(inputElement.files[0], inc_this)
+            if (checkExt(inputElement.files[0])){
+                updateList(inputElement.files[0], inc_this)
+                var form_idx = $('#id_file-TOTAL_FORMS').val();
+                $('#form_set_file').append($('#empty_form_file').html().replace(/__prefix__/g, form_idx))
+                $('#id_file-TOTAL_FORMS').val(parseInt(form_idx) + 1)
+
+
+                e.preventDefault()
+
+                inputElement1[inc_this] = inputElement
+
+                $(this).removeClass("drop-zone--over")
+                showDocumentTitles()
+                inc_this++
+            }
         }
-
-        inputElement1[inc_this] = inputElement
-
-        console.log(inputElement1)
-
-        $(this).removeClass("drop-zone--over")
-        console.log(inputElement1[inc_this].files[0])
-        console.log(inputElement1[inc_this].files[0].size)
-        inc_this++
+        else{
+            e.preventDefault()
+        }
     });
 
     $("body").on("click", "#dropzone", function (){
@@ -56,21 +54,84 @@ $(document).ready(function () {
     $("body").on("change", "#my-file", function(){
         $("#dropzone").addClass('drop-zone-dropped')
         $('#file-list').css('display', 'block')
-        var form_idx = $('#id_file-TOTAL_FORMS').val();
-        $('#form_set_file').append($('#empty_form_file').html().replace(/__prefix__/g, form_idx))
-        $('#id_file-TOTAL_FORMS').val(parseInt(form_idx) + 1)
-
         var inputElement = $("[class=drop-zone__input"+ inc_this + "]")
-
-        if ($("#my-file").val()){
+        if ($("#my-file").val()) {
             inputElement.files = $("#my-file").prop('files')
-            updateList(inputElement.files[0], inc_this)
+            if (checkExt(inputElement.files[0])){
+                var form_idx = $('#id_file-TOTAL_FORMS').val();
+                $('#form_set_file').append($('#empty_form_file').html().replace(/__prefix__/g, form_idx))
+                $('#id_file-TOTAL_FORMS').val(parseInt(form_idx) + 1)
+        
+                updateList(inputElement.files[0], inc_this)
+                inputElement1[inc_this] = inputElement
+        
+                $("#dropzone").removeClass("drop-zone--over");
+                showDocumentTitles()
+                inc_this++
+            }
         }
- 
-        inputElement1[inc_this] = inputElement
+        else{
+            e.preventDefault()
+        }
+    });
 
-        $("#dropzone").removeClass("drop-zone--over");
-        inc_this++
+    function showDocumentTitles(){
+        $('#fileSubmit').css({"visibility": "hidden", "display": "none"})
+        $('#fileReview').css({"visibility": "visible", "display": ""})
+        var thisBody = $('#confirmation-file-modal').children().children().children('.modal-body').children('.title-text-box')
+        var thisValue = $('#file-list').children('.file-listing').children('[class=file-edit-details][value=' + inc_this + ']')
+        var thisFileName = $(thisValue).parent().children('.file-text')
+        var thisNode = document.createElement('div')
+        var textNode = document.createElement('div')
+        textNode.className = 'my-doc-tile-confirm'
+        var thisButton = document.createElement('button')
+        thisButton.className = 'edit-title-button'
+        thisButton.innerText = 'Edit'
+        thisButton.value = $(thisValue).attr('value')
+        thisButton.type = 'button'
+        thisNode.className = 'document-title-text'
+        var thisTitle = $(thisFileName).text()
+        var thisTextNode = document.createTextNode(thisTitle)
+        textNode.appendChild(thisTextNode)
+        thisNode.appendChild(textNode)
+        thisNode.append(thisButton)
+        thisBody.append(thisNode)
+    }
+
+    function updateDocumentTitles(val){
+        $('#fileSubmit').css({"visibility": "hidden", "display": "none"})
+        $('#fileReview').css({"visibility": "visible", "display": ""})
+        var thisBody = $('#confirmation-file-modal').children().children().children('.modal-body').children('.title-text-box').children('.document-title-text').children('[class=edit-title-button][value=' + val +']')
+        var thisTitle = $(thisBody).parent().children('div')
+        var updatedTitle = $('#id_file-'  + val + '-document_name').val()
+        var thisValue = $('#file-list').children('.file-listing').children('[class=file-edit-details][value=' + val + ']')
+        var thisFileName = $(thisValue).parent().children('.file-text').text()
+        var thisExt = thisFileName.split('.')
+        var fullTitle = updatedTitle + '.' + thisExt[1]
+        $(thisTitle).text(fullTitle)
+    }
+
+    $('body').on('input', '[id^=id_file-][id$=-document_name]', function (){
+        var myid = $(this).attr('id')
+        myid = myid.replace(/id_file-/, '')
+        myid = myid.replace(/-document_name/, '')
+        updateDocumentTitles(myid)
+    });
+
+    $('body').on('click', '.edit-title-button', function(){
+        $('#confirmation-file-modal').modal('hide')
+        var thisval = $(this).attr('value')
+        $('[class=file-edit-details][value=' + thisval +']')[0].click();
+    });
+
+    $('form').on('click', '#fileReview', function (event) {
+        event.preventDefault()
+        $('#confirmation-file-modal').modal('show')
+    });
+
+    $('body').on('click', '.confirm-filename', function(){
+        $('#fileSubmit').css({"visibility": "visible", "display": ""})
+        $('#fileReview').css({"visibility": "hidden", "display": "none"})
     });
 
     $('form').on('click', '#fileSubmit', function (event) {
@@ -177,7 +238,7 @@ $(document).ready(function () {
                             $('.progress-bar').removeClass('progress-bar').addClass('progress-bar-success');
                             $('.file-listing').append('<div class="file-complete">Complete</div>')
                         }
-
+                        $('#fileForm1').modal('hide')
                     }
                 });
 
@@ -189,6 +250,16 @@ $(document).ready(function () {
             data: fd,
             success: function (response) {
                 console.log(response)
+                $('#directory_forms')[0].reset()
+                $('#file-list').empty()
+                $('[class^=file-more]').remove()
+                $('[id^=file-collaborators]').remove()
+                $('[id^=file-folderSelect]').remove()
+                $('[id^=file-add]').remove()
+                $('[id^=file-tags]').remove()
+                $('[id^=file-addx]').remove()
+                $('[id^=file-document-name]').remove()
+                $('[id^=file-move-to-folder]').remove()
             },
             error: function (error) {
                 console.log(error)
@@ -198,6 +269,7 @@ $(document).ready(function () {
             processData: false,
         })
     });
+
     $('.documentlayout').on('click', '.downloadbtn', function (event) {
         var mydata = new FormData()
         mydata.append('fileid', $(this).attr('value'))
@@ -222,6 +294,18 @@ $(document).ready(function () {
         })
     });
 });
+
+function checkExt(file){
+    var filename = file.name
+    var fileext = filename.split('.').pop()
+    if (fileext == 'png' || fileext == 'PNG' || fileext == 'jpg' || fileext == 'JPG' || fileext.startsWith('doc') || fileext.startsWith('xl') 
+    || fileext == 'pdf' || fileext.startsWith('ppt') || fileext == 'mp3' || fileext == 'MP3' || fileext == 'mp4' || fileext == 'MP4'){
+        return true
+    }
+    else{
+        return false
+    }
+}
 
 function updateList(file, filevalue) {
     var cModal = $('#collabModal').clone()
@@ -299,7 +383,9 @@ function updateList(file, filevalue) {
     pbNode.setAttribute("aria-valuemax", 100)
     pNode.appendChild(pbNode)
 
+    var xtext = document.createTextNode('x')
     xNode.className = "file-remove-x"
+    xNode.appendChild(xtext)
     rNode.className = "file-remove"
     rNode.setAttribute('value', filevalue)
     rNode.appendChild(xNode)
@@ -403,6 +489,7 @@ function updateList(file, filevalue) {
 $(document).ready(function () {
     $('#file-list').on('click', 'div.file-remove', function () {
         var thisval = $(this).attr('value')
+        $('[class=edit-title-button][value=' + thisval +']').parent().remove()
         $('#id_file-' + thisval + '-file').remove()
         $('[for=id_file-'+ thisval + '-file]').remove()
         $('#id_file-' + thisval + '-document_name').remove()
@@ -418,6 +505,10 @@ $(document).ready(function () {
         var thisval = $(this).attr('value')
         $('.file-edit-details').css({ "background": "#FFFFFF", "color": "#015D67" })
         $(this).css({ "background": "#015D67", "color": "#FFFFFF" })
+
+        $('.file-selected').removeClass('file-selected')
+        $(this).parent().addClass('file-selected')
+
         $('[id^=id_file-][id$=-document_name]').css('display', 'none')
         $('#id_file-' + thisval + '-document_name').css('display', 'block')
 

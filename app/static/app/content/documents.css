@@ -167,7 +167,7 @@
         flex-flow: row wrap;
         justify-content: left;
         list-style: none;
-        top: 640px;
+        top: 600px;
         width: 1680px;
         min-height: 330px;
     }
@@ -669,7 +669,7 @@
 
     .doclistName {
         position: relative;
-        left: 350px;
+        left: 300px;
         bottom: 12px;
         width: 500px;
         height: 30px;
@@ -688,7 +688,7 @@
 
     .doclistDescript {
         position: relative;
-        left: 900px;
+        left: 700px;
         bottom: 42px;
         width: 500px;
         height: 30px;
@@ -729,7 +729,7 @@
     .doclistDsc {
         position: absolute;
         top: 590px;
-        left: 900px;
+        left: 700px;
         width: 200px;
 
         font-family: Helvetica;
@@ -782,7 +782,7 @@
         .doclistTags {
             position: absolute;
             top: 590px;
-            left: 1300px;
+            left: 1100px;
 
             font-family: Helvetica;
             font-style: normal;
@@ -799,7 +799,7 @@
             position: absolute;
             position: absolute;
             top: 590px;
-            left: 350px;
+            left: 300px;
 
             font-family: Helvetica;
             font-style: normal;

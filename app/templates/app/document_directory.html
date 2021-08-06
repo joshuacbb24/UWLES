@@ -61,7 +61,7 @@
 </head>
 <body>
     <div class="directoryBar"></div>
-    <a href="{% url 'fulldirectory' %}" class="fullHidden">Full Directory</a>
+    <a href="{% url 'fulldirectory' %}" class="fullHidden">Category Directory</a>
     <a href="{% url 'orgdirectory' %}" class="orgHidden">Organizational Directory</a>
     <div class="fileActive">Documents Directory</div>
 
@@ -128,7 +128,7 @@
                         {% if recent.file.file|docext == 'pdf' %} PDF {% elif recent.file.file|docext == 'docx' %} WORD {% elif recent.file.file|docext == 'xlsx' %} EXL {% elif recent.file.file|docext == 'pptx' or recent.file.file|docext == 'ppt'%} PPT {% elif recent.file.file|docext == 'mp3' %} MP3 {% elif recent.file.file|docext == 'mp4' %} MP4 {% elif recent.file.file|docext == 'png' %} PNG {% elif recent.file.file|docext == 'jpg' %} JPG {% endif %}
                     </div>
                 </div>
-                <div class="document-card-doc-name">{% if recent.file.document_name %}{{ recent.file.document_name|truncatechars_html:30 }}.{{ recent.file.file|docext }}{% else %}{{ recent.file.file|doctitle|truncatechars_html:30 }}{% endif %}</div>
+                <div class="document-card-doc-name">{% if recent.file.document_name %}{{ recent.file|myfilename:request.user|truncatechars_html:30 }}.{{ recent.file.file|docext }}{% else %}{{ recent.file|myfilename2:request.user|truncatechars_html:30 }}.{{ recent.file.file|docext }}{% endif %}</div>
                 <div class="document-card-doc-dots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
                 data-content="<i class='bi bi-x-lg popoverx'></i>
                               <br>
@@ -150,7 +150,7 @@
 
     <div class="doclistCategory" id="hidden">File Type</div>
     <div class="doclistTitle" id="hidden">Name</div>
-    <div class="doclistOrder" id="hidden"><div class="doclistA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="docArrow"></i><div class="doclistZ">Z</div></div>
+    <!--<div class="doclistOrder" id="hidden"><div class="doclistA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="docArrow"></i><div class="doclistZ">Z</div></div>-->
     <div class="doclistDsc" id="hidden">Date Accessed</div>
     <div class="doclistTags" id="hidden">Tags</div>
 
@@ -162,7 +162,7 @@
                         {% if recent.file.file|docext == 'pdf' %} PDF {% elif recent.file.file|docext == 'docx' %} WORD {% elif recent.file.file|docext == 'xlsx' %} EXL {% elif recent.file.file|docext == 'pptx' or recent.file.file|docext == 'ppt'%} PPT {% elif recent.file.file|docext == 'mp3' %} MP3 {% elif recent.file.file|docext == 'mp4' %} MP4 {% elif recent.file.file|docext == 'png' %} PNG {% elif recent.file.file|docext == 'jpg' %} JPG {% endif %}
                     </div>
                 </div>
-                <div class="doclistName" onclick="window.open('{{ recent.file.file.url }}')">{% if recent.file.document_name %}{{ recent.file.document_name|truncatechars_html:30 }}.{{ recent.file.file|docext }}{% else %}{{ recent.file.file|doctitle }}{% endif %}</div>
+                <div class="doclistName" onclick="window.open('{{ recent.file.file.url }}')">{% if recent.file.document_name %}{{ recent.file|myfilename:request.user|truncatechars_html:30 }}.{{ recent.file.file|docext }}{% else %}{{ recent.file|myfilename2:request.user|truncatechars_html:30 }}.{{ recent.file.file|docext }}{% endif %}</div>
                 <div class="doclistDescript">{{ recent.time_viewed }}</div>
                 <div class="doclistDots" data-html="true" data-container="body" data-toggle="popover" data-placement="top" 
                 data-content="<i class='bi bi-x-lg popoverx'></i>
@@ -201,9 +201,10 @@
                     if(data.is_taken){
                         $('#id_org_name').addClass('error-review')
                         $('.orgName').addClass('error-review-label')
-                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-name-error'><div class='form-error-box-ex' id='form-error-org-name-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.name_msg + "</div>")
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-name-error'><div class='form-error-box-ex' id='form-error-org-name-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-name-msg'>" + data.name_msg + "</div></div>")
                         $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-name-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-name-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-name-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                     else{
@@ -230,9 +231,10 @@
                     $('#id_website').addClass('error-review')
                     $('.webName').addClass('error-review-label')
                     if ($('#form-error-org-website-error').length == 0){
-                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-website-error'><div class='form-error-box-ex' id='form-error-org-website-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.website_msg + "</div>")
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-website-error'><div class='form-error-box-ex' id='form-error-org-website-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-website-msg'>" + data.website_msg + "</div>")
                         $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-website-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-website-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-website-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }
@@ -262,8 +264,9 @@
                     $('[id^=id_orgs][id$=-website]').addClass('error-review')
                     $('.webName').addClass('error-review-label')
                     if ($('#form-error-org-website-error').length == 0){
-                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-website-error'><div class='form-error-box-ex' id='form-error-org-website-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.website_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-website-error'><div class='form-error-box-ex' id='form-error-org-website-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-website-msg'>" + data.website_msg + "</div>")
                         $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-website-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-website-error').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-website-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
@@ -293,8 +296,9 @@
                     $('#id_org_phone').addClass('error-review')
                     $('.phoneName').addClass('error-review-label')
                     if ($('#form-error-org-phone-error').length == 0){
-                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-phone-error'><div class='form-error-box-ex' id='form-error-org-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.phone_msg + "</div>")
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-phone-error'><div class='form-error-box-ex' id='form-error-org-phone-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-phone-msg'>" + data.phone_msg + "</div>")
                         $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-phone-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-phone-error').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
@@ -326,8 +330,9 @@
                     $('[id^=id_orgs-][id$=-org_phone]').addClass('error-review')
                     $('.phoneName').addClass('error-review-label')
                     if ($('#form-error-org-phone-error').length == 0){
-                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-phone-error'><div class='form-error-box-ex' id='form-error-org-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.phone_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-phone-error'><div class='form-error-box-ex' id='form-error-org-phone-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-phone-msg'>" + data.phone_msg + "</div>")
                         $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-phone-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-phone-error').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
@@ -356,8 +361,9 @@
                     $('#id_org_email').addClass('error-review')
                     $('.emailName').addClass('error-review-label')
                     if ($('#form-error-org-email-error').length == 0){
-                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-email-error'><div class='form-error-box-ex' id='form-error-org-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.email_msg + "</div>")
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-email-error'><div class='form-error-box-ex' id='form-error-org-email-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-email-msg'>" + data.email_msg + "</div>")
                         $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
+                        $('#form-error-org-email-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-email-error').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-email-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
@@ -388,9 +394,10 @@
                     $('[id^=id_orgs-][id$=-org_email]').addClass('error-review')
                     $('.emailName').addClass('error-review-label')
                     if ($('#form-error-org-email-error').length == 0){
-                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-email-error'><div class='form-error-box-ex' id='form-error-org-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.email_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-email-error'><div class='form-error-box-ex' id='form-error-org-email-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-email-msg'>" + data.email_msg + "</div>")
                         $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-email-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-email-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }
@@ -418,9 +425,10 @@
                     $('#id_zipcode').addClass('error-review')
                     $('.zipName').addClass('error-review-label')
                     if ($('#form-error-org-zipcode-error').length == 0){
-                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-zipcode-error'><div class='form-error-box-ex' id='form-error-org-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.zipcode_msg + "</div>")
+                        $('.form-error-box--before').append("<div class='form-error-box-card' id='form-error-org-zipcode-error'><div class='form-error-box-ex' id='form-error-org-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-zipcode-msg'>" + data.zipcode_msg + "</div>")
                         $('.form-error-box--before').css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }
@@ -450,9 +458,10 @@
                     $('[id^=id_orgs-][id$=-zipcode]').addClass('error-review')
                     $('.zipName').addClass('error-review-label')
                     if ($('#form-error-org-zipcode-error').length == 0){
-                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-zipcode-error'><div class='form-error-box-ex' id='form-error-org-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.zipcode_msg + "</div>")
+                        $('.form-error-box--before-pt1' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-zipcode-error'><div class='form-error-box-ex' id='form-error-org-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-zipcode-msg'>" + data.zipcode_msg + "</div>")
                         $('.form-error-box--before-pt1' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-zipcode-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }
@@ -481,9 +490,10 @@
                     $('#id_contact_phone').addClass('error-review')
                     $('.cphoneName').addClass('error-review-label')
                     if ($('#form-error-org-contact-phone-error').length == 0){
-                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-contact-phone-error'><div class='form-error-box-ex' id='form-error-org-contact-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cphone_msg + "</div>")
+                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-contact-phone-error'><div class='form-error-box-ex' id='form-error-org-contact-phone-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-contact-phone-msg'>" + data.cphone_msg + "</div>")
                         $('.form-error-box--before2').css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-contact-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-contact-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }
@@ -513,9 +523,10 @@
                     $('[id^=id_orgs-][id$=-contact_phone]').addClass('error-review')
                     $('.cphoneName').addClass('error-review-label')
                     if ($('#form-error-org-contact-phone-error').length == 0){
-                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-contact-phone-error'><div class='form-error-box-ex' id='form-error-org-contact-phone-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cphone_msg + "</div>")
+                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-contact-phone-error'><div class='form-error-box-ex' id='form-error-org-contact-phone-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-contact-phone-msg'>" + data.cphone_msg + "</div>")
                         $('.form-error-box--before2-pt2' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-contact-phone-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-phone-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-contact-phone-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }
@@ -543,9 +554,10 @@
                     $('#id_contact_email').addClass('error-review')
                     $('.cemailName').addClass('error-review-label')
                     if ($('#form-error-org-contact-email-error').length == 0){
-                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-contact-email-error'><div class='form-error-box-ex' id='form-error-org-contact-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cemail_msg + "</div>")
+                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-contact-email-error'><div class='form-error-box-ex' id='form-error-org-contact-email-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-contact-email-msg'>" + data.cemail_msg + "</div>")
                         $('.form-error-box--before2').css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-contact-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-contact-email-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }
@@ -574,9 +586,10 @@
                     $('[id^=id_orgs-][id$=-contact_email]').addClass('error-review')
                     $('.cemailName').addClass('error-review-label')
                     if ($('#form-error-org-contact-email-error').length == 0){
-                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-contact-email-error'><div class='form-error-box-ex' id='form-error-org-contact-email-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.cemail_msg + "</div>")
+                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-contact-email-error'><div class='form-error-box-ex' id='form-error-org-contact-email-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-contact-email-msg'>" + data.cemail_msg + "</div>")
                         $('.form-error-box--before2-pt2' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-contact-email-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-contact-email-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-contact-email-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }
@@ -604,9 +617,10 @@
                     $('#id_mail_zipcode').addClass('error-review')
                     $('.mailzipName').addClass('error-review-label')
                     if ($('#form-error-org-mail-zipcode-error').length == 0){
-                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-mail-zipcode-error'><div class='form-error-box-ex' id='form-error-org-mail-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.mzipcode_msg + "</div>")
+                        $('.form-error-box--before2').append("<div class='form-error-box-card' id='form-error-org-mail-zipcode-error'><div class='form-error-box-ex' id='form-error-org-mail-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-mail-zipcode-msg'>" + data.mzipcode_msg + "</div>")
                         $('.form-error-box--before2').css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-mail-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-mail-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }
@@ -635,9 +649,10 @@
                     $('[id^=id_orgs-][id$=-mail_zipcode]').addClass('error-review')
                     $('.mailzipName').addClass('error-review-label')
                     if ($('#form-error-org-mail-zipcode-error').length == 0){
-                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-mail-zipcode-error'><div class='form-error-box-ex' id='form-error-org-mail-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div>" + data.mzipcode_msg + "</div>")
+                        $('.form-error-box--before2-pt2' + thisvalue).append("<div class='form-error-box-card' id='form-error-org-mail-zipcode-error'><div class='form-error-box-ex' id='form-error-org-mail-zipcode-ex'><i class='bi bi-exclamation-lg'></i></div><div class='form-error-box-msg' id='form-error-org-mail-zipcode-msg'>" + data.mzipcode_msg + "</div>")
                         $('.form-error-box--before2-pt2' + thisvalue).css({'display': 'table-cell', 'visibility': 'visible'})
                         $('#form-error-org-mail-zipcode-error').css({'display': 'flex', 'visibility': 'visible'})
+                        $('#form-error-org-mail-zipcode-msg').css({'display': 'flex', 'visibility': 'visible'})
                         $('#form-error-org-mail-zipcode-ex').css({'display': 'flex', 'visibility': 'visible'})
                     }
                 }

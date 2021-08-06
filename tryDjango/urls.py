@@ -13,7 +13,7 @@ from django.conf.urls import include
 
 
 urlpatterns = [
-    path('', views.dashboard, name='dashboard'),
+    path('', views.introduction, name='introduction'),
     #path('contact/', views.contact, name='contact'),
     #path('about/', views.about, name='about'),
     path('login/',
@@ -45,7 +45,7 @@ urlpatterns = [
     #path('addorganizations/', views.add_organization, name='addorganizations'),
     #path('addservices/', views.add_services, name='addservices'),
     #path('addskills/', views.add_skills, name='addskills'),
-    #path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/', views.dashboard, name='dashboard'),
     path('makeclientaccount/', views.make_client_account, name='makeclientaccount'),
 
     path('full_directory/', views.full_directory, name='fulldirectory'),
@@ -68,6 +68,7 @@ urlpatterns = [
     path('upload/', views.BasicUploadView.as_view(), name='upload'),
 
     path('validateOrganization/', views.validate_org, name='validateOrganization'),
+    path('validateAccount', views.validate_account, name='validateAccount'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
