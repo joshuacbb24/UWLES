@@ -492,7 +492,11 @@ class BasicUploadView(View):
 @allowed_user(allowed_roles=['caseworker'])
 def full_directory(request):
     user = request.user
-    swme = SharedWithMe.objects.get(name=user)
+    try:
+        swme = SharedWithMe.objects.get(name=user)
+    except SharedWithMe.DoesNotExist:
+        swme = SharedWithMe(name=user)
+        swme.save()
     myorgs = Organizations.objects.filter(id__in=swme.organization.all())
     myfolders = FileFolder.objects.filter(user=user)
     collab_accounts = Account.objects.filter(is_caseworker = True)
@@ -849,7 +853,11 @@ def org_directory(request):
     organizations = Organizations.objects.all()
 
     user = request.user
-    swme = SharedWithMe.objects.get(name=user)
+    try:
+        swme = SharedWithMe.objects.get(name=user)
+    except SharedWithMe.DoesNotExist:
+        swme = SharedWithMe(name=user)
+        swme.save()
     myorgs = Organizations.objects.filter(id__in=swme.organization.all())
     myfolders = FileFolder.objects.filter(user=user)
     collab_accounts = Account.objects.filter(is_caseworker = True)
@@ -1153,7 +1161,11 @@ def org_sub_directory(request, pk):
 @allowed_user(allowed_roles=['caseworker'])
 def document_directory(request):
     user = request.user
-    swme = SharedWithMe.objects.get(name=user)
+    try:
+        swme = SharedWithMe.objects.get(name=user)
+    except SharedWithMe.DoesNotExist:
+        swme = SharedWithMe(name=user)
+        swme.save()
     myorgs = Organizations.objects.filter(id__in=swme.organization.all())
     myfolders = FileFolder.objects.filter(user=user)
     collab_accounts = Account.objects.filter(is_caseworker = True)
@@ -1553,7 +1565,10 @@ def document_directory_folder(request, pk, option):
             folder = None
         my_path = FileSubFolder.findpath(pk, user)
 
-    swme = SharedWithMe.objects.get(name=user)
+    try:
+        swme = SharedWithMe.objects.get(name=user)
+    except SharedWithMe.DoesNotExist():
+        swme = None
     myorgs = Organizations.objects.filter(id__in=swme.organization.all())
     mysubfolders = folder.subfolder.all()
     print(mysubfolders)
