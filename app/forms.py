@@ -228,3 +228,32 @@ DirFilesFormset = modelformset_factory(
     form=DirFileForm,
     extra=0,
     )
+
+class MySurveryForm(forms.ModelForm):
+    DIFFICULTY_OPTIONS = (
+            ('Very Easy', 'Very Easy'),
+            ('Easy', 'Easy'),
+            ('Moderate', 'Moderate'),
+            ('Hard', 'Hard'),
+            ('Very Hard', 'Very Hard'),
+    )
+
+    add_org_difficulty = forms.CharField(widget=forms.RadioSelect(attrs={'class': 'intro-text-bold'}, choices=DIFFICULTY_OPTIONS), required = True)
+    add_org_answer = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Feedback here...', 'maxlength': '500'}), required = True)
+    add_org_comments = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Additional Information', 'maxlength': '500'}), required = False)
+
+    edit_org_difficulty = forms.CharField(widget=forms.RadioSelect(choices=DIFFICULTY_OPTIONS), required = True)
+    edit_org_answer = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Feedback here...', 'maxlength': '500'}), required = True)
+    edit_org_comments = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Additional Information', 'maxlength': '500'}), required = False)
+
+    find_org_difficulty = forms.CharField(widget=forms.RadioSelect(choices=DIFFICULTY_OPTIONS), required = True)
+    find_org_answer = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Feedback here...', 'maxlength': '500'}), required = True)
+    find_org_comments = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Additional Information', 'maxlength': '500'}), required = False)
+
+    add_folder_file_difficulty = forms.CharField(widget=forms.RadioSelect(choices=DIFFICULTY_OPTIONS), required = True)
+    add_folder_file_answer = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Feedback here...', 'maxlength': '500'}), required = True)
+    add_folder_file_comments = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Additional Information', 'maxlength': '500'}), required = False)
+
+    class Meta:
+        model = MySurvey
+        fields = '__all__'

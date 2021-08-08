@@ -123,6 +123,35 @@ def signup(request):
 
 
 def introduction(request):
+    if request.is_ajax() and request.method == "POST":
+        print(request.POST)
+        difficulty1 = request.POST['add_org_difficulty']
+        answer1 = request.POST['add_org_answer']
+        comments1 = request.POST['add_org_comments']
+
+        difficulty2 = request.POST['edit_org_difficulty']
+        answer2 = request.POST['edit_org_answer']
+        comments2 = request.POST['edit_org_comments']
+
+        difficulty3 = request.POST['find_org_difficulty']
+        answer3 = request.POST['find_org_answer']
+        comments3 = request.POST['find_org_comments']
+
+        difficulty4 = request.POST['add_files_difficulty']
+        answer4 = request.POST['add_files_answer']
+        comments4 = request.POST['add_files_comments']
+
+        myEntry = MySurvey(add_org_difficulty=difficulty1, add_org_answer=answer1, add_org_comments=comments1,
+        edit_org_difficulty=difficulty2, edit_org_answer=answer2, edit_org_comments=comments2, 
+        find_org_difficulty=difficulty3, find_org_answer=answer3, find_org_comments=comments3,
+        add_folder_file_difficulty=difficulty4, add_folder_file_answer=answer4, add_folder_file_comments=comments4)
+
+        myEntry.save()
+        data = {
+            'msg': 'hello',
+        }
+        return JsonResponse(data)
+
     context = {
 
     }
@@ -577,6 +606,7 @@ def full_directory(request):
                         subdirs = form2.cleaned_data.get('sub_dirs')
                         this_org = Organizations.objects.get(org_name=org)
                         SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
                         SubDirectory.add_org(this_org, subdirs)
                         Organizations.addextra(org, tagarray)
 
@@ -599,6 +629,7 @@ def full_directory(request):
                         subdirs = form2.cleaned_data.get('sub_dirs')
                         this_org = Organizations.objects.get(org_name=org)
                         SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
                         SubDirectory.add_org(this_org, subdirs)
                         Organizations.addextra(org, tagarray)
 
@@ -620,8 +651,53 @@ def full_directory(request):
                         collaborators = formz.cleaned_data.get('collaborators')
                         this_org = Organizations.objects.get(org_name=org)
                         SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
                         Organizations.addextra(org, tagarray)
 
+                return HttpResponseRedirect(request.path_info)
+            
+            elif formset2.is_valid() and formset3.is_valid() == False and form2.is_valid() == False:
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        print(collaborators)
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset2.is_valid() and formset3.is_valid() and form2.is_valid() == False:
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        print(collaborators)
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
+                        Organizations.addextra(org, tagarray)
+                        
                 return HttpResponseRedirect(request.path_info)
 
             else:
@@ -668,6 +744,7 @@ def full_directory(request):
                 subdirs = form2.cleaned_data.get('sub_dirs')
                 this_org = Organizations.objects.get(org_name=org)
                 SharedWithMe.addorg(collaborators, this_org)
+                SharedWithMe.addindorg(user, this_org)
                 SubDirectory.add_org(this_org, subdirs)
                 Organizations.addextra(org, tagarray)
 
@@ -689,6 +766,7 @@ def full_directory(request):
                 form1.save()
                 this_org = Organizations.objects.get(org_name=org)
                 SharedWithMe.addorg(collaborators, this_org)
+                SharedWithMe.addindorg(user, this_org)
                 Organizations.addextra(org, tagarray)
 
                 return HttpResponseRedirect(request.path_info)
@@ -865,6 +943,7 @@ def org_directory(request):
                         subdirs = form2.cleaned_data.get('sub_dirs')
                         this_org = Organizations.objects.get(org_name=org)
                         SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
                         SubDirectory.add_org(this_org, subdirs)
                         Organizations.addextra(org, tagarray)
 
@@ -887,6 +966,7 @@ def org_directory(request):
                         subdirs = form2.cleaned_data.get('sub_dirs')
                         this_org = Organizations.objects.get(org_name=org)
                         SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
                         SubDirectory.add_org(this_org, subdirs)
                         Organizations.addextra(org, tagarray)
 
@@ -908,8 +988,51 @@ def org_directory(request):
                         collaborators = formz.cleaned_data.get('collaborators')
                         this_org = Organizations.objects.get(org_name=org)
                         SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
                         Organizations.addextra(org, tagarray)
 
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset2.is_valid() and formset3.is_valid() == False and form2.is_valid() == False:
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset2.is_valid() and formset3.is_valid() and form2.is_valid() == False:
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
+                        Organizations.addextra(org, tagarray)
+                        
                 return HttpResponseRedirect(request.path_info)
 
             else:
@@ -956,6 +1079,7 @@ def org_directory(request):
                 subdirs = form2.cleaned_data.get('sub_dirs')
                 this_org = Organizations.objects.get(org_name=org)
                 SharedWithMe.addorg(collaborators, this_org)
+                SharedWithMe.addindorg(user, this_org)
                 SubDirectory.add_org(this_org, subdirs)
                 Organizations.addextra(org, tagarray)
 
@@ -977,6 +1101,7 @@ def org_directory(request):
                 form1.save()
                 this_org = Organizations.objects.get(org_name=org)
                 SharedWithMe.addorg(collaborators, this_org)
+                SharedWithMe.addindorg(user, this_org)
                 Organizations.addextra(org, tagarray)
 
                 return HttpResponseRedirect(request.path_info)
@@ -1214,6 +1339,7 @@ def document_directory(request):
                         subdirs = form2.cleaned_data.get('sub_dirs')
                         this_org = Organizations.objects.get(org_name=org)
                         SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
                         SubDirectory.add_org(this_org, subdirs)
                         Organizations.addextra(org, tagarray)
 
@@ -1236,6 +1362,7 @@ def document_directory(request):
                         subdirs = form2.cleaned_data.get('sub_dirs')
                         this_org = Organizations.objects.get(org_name=org)
                         SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
                         SubDirectory.add_org(this_org, subdirs)
                         Organizations.addextra(org, tagarray)
 
@@ -1257,8 +1384,53 @@ def document_directory(request):
                         collaborators = formz.cleaned_data.get('collaborators')
                         this_org = Organizations.objects.get(org_name=org)
                         SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
                         Organizations.addextra(org, tagarray)
 
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset2.is_valid() and formset3.is_valid() == False and form2.is_valid() == False:
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        print(collaborators)
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
+                        Organizations.addextra(org, tagarray)
+
+                return HttpResponseRedirect(request.path_info)
+
+            elif formset2.is_valid() and formset3.is_valid() and form2.is_valid() == False:
+                for formz in formset3:
+                    if formz.is_valid():
+                        if formz.cleaned_data.get('tag'):
+                            tags = formz.cleaned_data.get('tag')
+                            formz.save()
+                            pill = PillTags.objects.get(tag=tags)
+                            tagarray.append(pill)
+                for formz in formset2:
+                    if (formz.has_changed() == True):
+                        org = formz.cleaned_data.get('org_name')
+                        if formz.is_valid():
+                            formz.save()
+                        collaborators = formz.cleaned_data.get('collaborators')
+                        print(collaborators)
+                        this_org = Organizations.objects.get(org_name=org)
+                        SharedWithMe.addorg(collaborators, this_org)
+                        SharedWithMe.addindorg(user, this_org)
+                        Organizations.addextra(org, tagarray)
+                        
                 return HttpResponseRedirect(request.path_info)
 
             else:
@@ -1305,6 +1477,7 @@ def document_directory(request):
                 subdirs = form2.cleaned_data.get('sub_dirs')
                 this_org = Organizations.objects.get(org_name=org)
                 SharedWithMe.addorg(collaborators, this_org)
+                SharedWithMe.addindorg(user, this_org)
                 SubDirectory.add_org(this_org, subdirs)
                 Organizations.addextra(org, tagarray)
 
@@ -1326,6 +1499,7 @@ def document_directory(request):
                 form1.save()
                 this_org = Organizations.objects.get(org_name=org)
                 SharedWithMe.addorg(collaborators, this_org)
+                SharedWithMe.addindorg(user, this_org)
                 Organizations.addextra(org, tagarray)
 
                 return HttpResponseRedirect(request.path_info)

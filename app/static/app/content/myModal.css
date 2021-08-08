@@ -22,7 +22,7 @@
         left: 6%;
         z-index: 1051;
         display: none;
-        overflow: hidden;
+        overflow: auto;
         outline: 0;
     }
 
@@ -73,28 +73,23 @@
 
 
 .modal-open .modal {
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: auto;
 }
 
     .modal-open .modal.box1 {
-        overflow-x: hidden;
-        overflow-y: hidden;
+        overflow: auto;
     }
 
     .modal-open .modal.box2 {
         overflow-x: hidden;
-        overflow-y: hidden;
     }
 
     .modal-open .modal.box3 {
         overflow-x: hidden;
-        overflow-y: hidden;
     }
 
     .modal-open .modal.box4 {
         overflow-x: hidden;
-        overflow-y: hidden;
     }
 
 .modal-dialog {
@@ -370,6 +365,22 @@
     line-height: 0;
 }
 
+.modal.box4 .modal-title.closeme{
+    position: relative;
+    color: #015D67;
+    top: 0px;
+    left: 0px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.01cm;
+    margin-bottom: 0;
+    line-height: 0;
+}
 
 .modal-body {
     position: relative;

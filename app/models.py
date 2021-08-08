@@ -608,3 +608,28 @@ class MyFileName(models.Model):
     def __str__(self):
         return str(self.newname) + "-" + str(self.user)
 
+class MySurvey(models.Model):
+    DIFFICULTY_CHOICES = (
+        ('Very Easy', 'Very Easy'),
+        ('Easy', 'Easy'),
+        ('Moderate', 'Moderate'),
+        ('Hard', 'Hard'),
+        ('Very Hard', 'Very Hard'),
+    )
+    
+    add_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
+    add_org_answer = models.CharField(max_length = 1000)
+    add_org_comments = models.CharField(max_length = 1000, blank = True)
+
+    edit_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
+    edit_org_answer = models.CharField(max_length = 1000)
+    edit_org_comments = models.CharField(max_length = 1000, blank = True)
+
+    find_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
+    find_org_answer = models.CharField(max_length = 1000)
+    find_org_comments = models.CharField(max_length = 1000, blank = True)
+
+    add_folder_file_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
+    add_folder_file_answer = models.CharField(max_length = 1000)
+    add_folder_file_comments = models.CharField(max_length = 1000, blank = True)
+

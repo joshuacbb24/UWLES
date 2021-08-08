@@ -2,6 +2,10 @@
 <html>
 <head>
     {% load static %}
+    <link rel="stylesheet" href="{% static 'app/content/myModal.css' %}" />
+    <script src="{% static 'app/scripts/jquery.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <style>
         html{
             width: 100%;
@@ -17,7 +21,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
-            height: 460%;
+            height: 850%;
             background: black;
         }
         .intro-container{
@@ -83,9 +87,20 @@
         .intro-text-bold{
             margin: 30px;
             margin-bottom: 0;
+            margin-right: 0;
             font-family: Helvetica;
             font-size: 20px;
             font-weight: bold;
+        }
+
+        .question-text{
+            margin: 30px;
+            margin-bottom: 0;
+            margin-right: 0;
+            font-family: Helvetica;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
         }
 
         .intro-h2{
@@ -103,6 +118,124 @@
             width: 100%;
             height: 2px;
             background: grey;
+        }
+
+        label{
+            float: left;
+            padding: 0 1em;
+            text-align: center;
+        }
+
+        input[type='radio']{
+            transform: scale(2);
+        }
+
+        textarea{
+            width: 90%;
+            height: 200px;
+            overflow-y: auto;
+            margin: 30px;
+            margin-top: 10px;
+            margin-bottom: 0;
+            font-family: Helvetica;
+            font-size: 20px;
+            resize: none;
+            padding: 12px 20px;
+        }
+
+        form{
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            left: 5%;
+            width: 90%;
+            height: 850px;
+            background: rgb(247, 241, 241);
+        }
+
+        .submit-all-forms{
+            position: relative;
+            left: 5%;
+            width: 90%;
+            height: 60px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .close-modal{
+            width: 100%;
+            height: 100%;
+            background: red;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        button.close {
+            padding: 0;
+            background-color: transparent;
+            border: 0;
+            -webkit-appearance: none;
+        }
+
+        .close {
+            float: right;
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: #000;
+            text-shadow: 0 1px 0 #fff;
+            opacity: .5;
+        }
+
+        .close:hover{
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .modal-message{
+            font-family: Helvetica;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .form-required {
+            position: relative;
+            color: red;
+            left: 5px;
+        }
+
+        @media only screen and (min-device-width: 768px) and (max-device-width: 1024px){
+            textarea{
+                width: 50%;
+                height: 100px;
+                overflow-y: auto;
+                margin: 30px;
+                margin-top: 10px;
+                margin-bottom: 0;
+                font-family: Helvetica;
+                font-size: 20px;
+                resize: none;
+                padding: 12px 20px;
+            }
+        }
+        @media only screen and (min-device-width: 1030px) and (max-device-width: 1366px){
+            textarea{
+                width: 50%;
+                height: 100px;
+                overflow-y: auto;
+                margin: 30px;
+                margin-top: 10px;
+                margin-bottom: 0;
+                font-family: Helvetica;
+                font-size: 20px;
+                resize: none;
+                padding: 12px 20px;
+            }
         }
     </style>
 </head>
@@ -124,8 +257,10 @@
                  I will be available between 12pm-8pm everyday.
             </p>
 
-            <span><p class="intro-text">In order to conduct our research, we ask that you <a target="_blank" href="https://forms.gle/pEH94ufrQHW9ZQgk8">click here</a> for the Google Form. 
-                There are 4 sections, and you will fill them out as you go through the different processes.</p></span>
+            <p class="intro-text">During this process, you will need to have two tabs open on your browser, one for this page, and another for the rest of the website. 
+                The second tab will open automatically once you click on the login link. There are four parts to the survey. For each part, you will watch a short video, then do a task, and then 
+                provide feedback.
+            </p>
             <span><p class="intro-text">Now let's get started! First you will need to login <a target="_blank" href="{% url 'dashboard' %}">by clicking here</a>, and using the account information sent to you</p></span>
             <p class="intro-text">Once you have logged in, you will be redirected to the dashboard page, which you can see a portion of in this image: </p>
             <div class="img-highlight" id="dashboard"></div>
@@ -136,10 +271,45 @@
             <p class="intro-text">To get started, please watch this video below that will teach you how to add an organization. Once you are done watching, please add a new organization. 
                 You should have received a list of information to put in, so please use this to create a new organization.
             </p>
-            <iframe class="video-container" src="https://www.youtube.com/embed/cnepexEm7t8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <p class="intro-text-bold">After you are done watching the video and adding an organization, answer the questions in the first section of the form. 
-                Once you are finished, click next to move on to the next section of the form.
+            <iframe class="video-container" src="https://www.youtube.com/embed/X5enTYCUKjE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p class="intro-text-bold">After you are done watching the video and adding an organization, answer the questions below.
             </p>
+
+            <form method="post" id="form1">
+                {% csrf_token %}
+                <div class="question-text">How easy/hard was it to add a new organization? <div class="form-required">*</div></div>
+                <br/>
+                <label for="veryeasy_addorg" class="intro-text-bold">Very Easy<br/>
+                    <input type="radio" id="veryeasy_addorg" name="add_org_difficulty" value="Very Easy" required>
+                </label>
+                <label for="easy_addorg" class="intro-text-bold">Easy<br/>
+                    <input type="radio" id="easy_addorg" name="add_org_difficulty" value="Easy">
+                </label>
+                <label for="moderate_addorg" class="intro-text-bold">Moderate<br/>
+                    <input type="radio" id="moderate_addorg" name="add_org_difficulty" value="Moderate">
+                </label>
+                <label for="hard_addorg" class="intro-text-bold">Hard<br/>
+                    <input type="radio" id="hard_addorg" name="add_org_difficulty" value="Hard">
+                </label>
+                <label for="veryhard_addorg" class="intro-text-bold">Very Hard<br/>
+                    <input type="radio" id="veryhard_addorg" name="add_org_difficulty" value="Very Hard">
+                </label>
+
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
+                <div class="question-text">What parts of the adding organization process worked well? What parts did not work well? <div class="form-required">*</div></div>
+                <br/>
+                <textarea placeholder="Feedback here..." required id="feedback_addorg" maxlength="1000"></textarea>
+
+
+                <p class="question-text">Additional Comments:</p>
+                <br/>
+                <textarea placeholder="Additional Comments..." id="comments_addorg" maxlength="1000"></textarea>
+            </form>
 
             <div class="intro-divider"></div>
             <h2 class="intro-h2">2. Editing Organizational Data</h2>
@@ -147,9 +317,43 @@
                 For this part, edit any of the fields you choose to.
             </p>
             <iframe class="video-container" src="https://www.youtube.com/embed/CbPX5eXO_QI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <p class="intro-text-bold">After you are done watching the video and editing your organization, answer the questions in the second section of the form. 
-                Once you are finished, click next to move on to the next section of the form.
+            <p class="intro-text-bold">After you are done watching the video and editing your organization, answer the questions below.
             </p>
+
+            <form method="post" id="form2">
+                <div class="question-text">How easy/hard was it to edit an organization? <div class="form-required">*</div></div>
+                <br/>
+                <label for="veryeasy_editorg" class="intro-text-bold">Very Easy<br/>
+                    <input type="radio" id="veryeasy_editorg" name="edit_org_difficulty" value="Very Easy" required>
+                </label>
+                <label for="easy_editorg" class="intro-text-bold">Easy<br/>
+                    <input type="radio" id="easy_editorg" name="edit_org_difficulty" value="Easy">
+                </label>
+                <label for="moderate_editorg" class="intro-text-bold">Moderate<br/>
+                    <input type="radio" id="moderate_editorg" name="edit_org_difficulty" value="Moderate">
+                </label>
+                <label for="hard_editorg" class="intro-text-bold">Hard<br/>
+                    <input type="radio" id="hard_editorg" name="edit_org_difficulty" value="Hard">
+                </label>
+                <label for="veryhard_editorg" class="intro-text-bold">Very Hard<br/>
+                    <input type="radio" id="veryhard_editorg" name="edit_org_difficulty" value="Very Hard">
+                </label>
+
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
+                <div class="question-text">What parts of the editing organization process worked well? What parts did not work well? <div class="form-required">*</div></div>
+                <br/>
+                <textarea placeholder="Feedback here..." required id="feedback_editorg" maxlength="1000"></textarea>
+
+
+                <p class="intro-text-bold">Additional Comments:</p>
+                <br/>
+                <textarea placeholder="Additional Comments..." id="comments_editorg" maxlength="1000"></textarea>
+            </form>
 
             <div class="intro-divider"></div>
             <h2 class="intro-h2">3. Finding Your Organization</h2>
@@ -157,9 +361,43 @@
                 Please watch this short video below that will show you the different ways to view organizations.
             </p>
             <iframe class="video-container" src="https://www.youtube.com/embed/JYdC6ozcyWY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <p class="intro-text-bold">After you are done watching the video and finding your organization, answer the questions in the third section of the form. 
-                Once you are finished, click next to move on to the next and final section of the form.
+            <p class="intro-text-bold">After you are done watching the video and finding your organization, answer the questions below.
             </p>
+
+            <form method="post" id="form3">
+                <div class="question-text">How easy/hard was it to find your organization (through either method)? <div class="form-required">*</div></div>
+                <br/>
+                <label for="veryeasy_findorg" class="intro-text-bold">Very Easy<br/>
+                    <input type="radio" id="veryeasy_findorg" name="find_org_difficulty" value="Very Easy" required>
+                </label>
+                <label for="easy_findorg" class="intro-text-bold">Easy<br/>
+                    <input type="radio" id="easy_findorg" name="find_org_difficulty" value="Easy">
+                </label>
+                <label for="moderate_findorg" class="intro-text-bold">Moderate<br/>
+                    <input type="radio" id="moderate_findorg" name="find_org_difficulty" value="Moderate">
+                </label>
+                <label for="hard_findorg" class="intro-text-bold">Hard<br/>
+                    <input type="radio" id="hard_findorg" name="find_org_difficulty" value="Hard">
+                </label>
+                <label for="veryhard_findorg" class="intro-text-bold">Very Hard<br/>
+                    <input type="radio" id="veryhard_findorg" name="find_org_difficulty" value="Very Hard">
+                </label>
+
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
+                <div class="question-text">What parts of finding your organization worked well? What parts did not work well? <div class="form-required">*</div></div>
+                <br/>
+                <textarea placeholder="Feedback here..." required id="feedback_findorg" maxlength="1000"></textarea>
+
+
+                <p class="intro-text-bold">Additional Comments:</p>
+                <br/>
+                <textarea placeholder="Additional Comments..." id="comments_findorg" maxlength="1000"></textarea>
+            </form>
 
             <div class="intro-divider"></div>
             <h2 class="intro-h2">4. Adding Folders + Documents</h2>
@@ -172,12 +410,159 @@
             </p>
 
             <iframe class="video-container" src="https://www.youtube.com/embed/tvTqC1Xl2M8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <p class="intro-text-bold">After you are done watching the video and adding folders + documents, answer the questions in the fourth and final section of the form. 
-                Once you are finished, click submit to submit the form.
+            <p class="intro-text-bold">After you are done watching the video and adding folders + documents, answer the questions below, and then click the submit button.
             </p>
-            <p class="intro-text">Once you have completed this, you are all done! Thank you for helping us gather feedback on the website thus far, and have a wonderful rest of your day!</p>
+
+            <form method="post" id="form4">
+                <div class="question-text">How easy/hard was it to upload new documents & create folders? <div class="form-required">*</div></div>
+                <br/>
+                <label for="veryeasy_addfiles" class="intro-text-bold">Very Easy<br/>
+                    <input type="radio" id="veryeasy_addfiles" name="add_files_difficulty" value="Very Easy" required>
+                </label>
+                <label for="easy_addfiles" class="intro-text-bold">Easy<br/>
+                    <input type="radio" id="easy_addfiles" name="add_files_difficulty" value="Easy">
+                </label>
+                <label for="moderate_addfiles" class="intro-text-bold">Moderate<br/>
+                    <input type="radio" id="moderate_addfiles" name="add_files_difficulty" value="Moderate">
+                </label>
+                <label for="hard_addfiles" class="intro-text-bold">Hard<br/>
+                    <input type="radio" id="hard_addfiles" name="add_files_difficulty" value="Hard">
+                </label>
+                <label for="veryhard_addfiles" class="intro-text-bold">Very Hard<br/>
+                    <input type="radio" id="veryhard_addfiles" name="add_files_difficulty" value="Very Hard">
+                </label>
+
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+
+                <div class="question-text">What parts of the document & folder creation worked well? What parts did not work well? <div class="form-required">*</div></div>
+                <br/>
+                <textarea placeholder="Feedback here..." required id="feedback_addfiles" maxlength="1000"></textarea>
+
+
+                <p class="intro-text-bold">Additional Comments:</p>
+                <br/>
+                <textarea placeholder="Additional Comments..." id="comments_addfiles" maxlength="1000"></textarea>
+            </form>
+
+            <button type="button" class="submit-all-forms">Submit Responses</button>
+
+            <p class="intro-text">Once you have clicked submit, you are all done! Thank you for helping us gather feedback on the website thus far, and have a wonderful rest of your day!</p>
         </div>
         <div class="right-panel-container"></div>
     </div>
+
+    <div class="modal box4 fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title closeme" id="exampleModalLabel" style="color: #4CAF50">Success!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-message">Your information was submitted successfully, you may now close the site! Thank you!</div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="close-modal" data-dismiss="modal" style="background: #4CAF50">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="modal box4 fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title closeme" id="exampleModalLabel" style="color: red">Error!</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-message">One or more required fields were not filled out, please fill them out then submit again!</div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="close-modal" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <script>
+        $(document).ready(function(){
+            const csrf = document.getElementsByName('csrfmiddlewaretoken')
+            const url = ""
+            $('body').on('click', '.submit-all-forms', function(){
+                if ($("input[name='add_org_difficulty']:checked").val() && $("input[name='edit_org_difficulty']:checked").val() && $("input[name='find_org_difficulty']:checked").val() 
+                && $("input[name='add_files_difficulty']:checked").val() && $("#feedback_addorg").val() && $("#feedback_editorg").val() && $("#feedback_findorg").val() && $("#feedback_addfiles").val()){
+                    const fd = new FormData()
+                    fd.append('csrfmiddlewaretoken', csrf[0].value)
+
+                    fd.append('add_org_difficulty', $("input[name='add_org_difficulty']:checked").val())
+                    fd.append('add_org_answer',  $("#feedback_addorg").val())
+                    if ($("#comments_addorg").val()){
+                        fd.append('add_org_comments', $("#comments_addorg").val())
+                    }
+                    else{
+                        fd.append('add_org_comments', '')
+                    }
+
+                    fd.append('edit_org_difficulty', $("input[name='edit_org_difficulty']:checked").val())
+                    fd.append('edit_org_answer',  $("#feedback_editorg").val())
+                    if ($("#comments_editorg").val()){
+                        fd.append('edit_org_comments', $("#comments_editorg").val())
+                    }
+                    else{
+                        fd.append('edit_org_comments', '')
+                    }
+
+                    fd.append('find_org_difficulty', $("input[name='find_org_difficulty']:checked").val())
+                    fd.append('find_org_answer',  $("#feedback_findorg").val())
+                    if ($("#comments_findorg").val()){
+                        fd.append('find_org_comments', $("#comments_findorg").val())
+                    }
+                    else{
+                        fd.append('find_org_comments', '')
+                    }
+
+                    fd.append('add_files_difficulty', $("input[name='add_files_difficulty']:checked").val())
+                    fd.append('add_files_answer',  $("#feedback_addfiles").val())
+                    if ($("#comments_addfiles").val()){
+                        fd.append('add_files_comments', $("#comments_addfiles").val())
+                    }
+                    else{
+                        fd.append('add_files_comments', '')
+                    }
+
+
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        enctype: 'multipart/form-data',
+                        data: fd,
+                        success: function (response) {
+                            console.log(response)
+                            $(".submit-all-forms").css('visibility', 'hidden')
+                            $("#successModal").modal('show')
+                        },
+                        error: function (error) {
+                            console.log(error)
+                        },
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                    })
+                }
+                else{
+                    $("#errorModal").modal('show')
+                }
+            })
+        })
+    </script>
 </body>
 </html>

@@ -193,8 +193,13 @@ $(document).ready(function () {
                 fd.append('file-' + i + '-this_id', i)
 
                 if ($('#id_file-' + i + '-file_collaborators').val().length != 0) {
-                    for (var g = 0; g < $('#id_file-' + i + '-file_collaborators').val().length; g++)
-                    fd.append('file-' + i + '-file_collaborators', $('#id_file-' + i + '-file_collaborators').val()[g])
+                    console.log("got collaborators")
+                    for (var g = 0; g < $('#id_file-' + i + '-file_collaborators').val().length; g++){
+                        fd.append('file-' + i + '-file_collaborators', $('#id_file-' + i + '-file_collaborators').val()[g])
+                    }
+                }
+                else{
+                    console.log("no collaborators?")
                 }
 
                 if ($('#id_file-' + i + '-tags').val().length != 0) {
@@ -541,7 +546,7 @@ $(document).ready(function () {
     $('form').on('click', '.collabButton', function () {
         var thisval = $(this).parent().parent().parent().parent().attr('id')
         var thisval2 = thisval.replace(/collabModal/, '')
-        var myboxes = $(this).parent().find('input[name="collabCheckboxes"]:checked')
+        var myboxes = $(this).parent().parent().parent().parent().find('input[name="collabCheckboxes"]:checked')
         var thisarray = []
         for (var i = 0; i < myboxes.length; i++) {
             var boxid = $(myboxes[i]).val()
@@ -553,7 +558,7 @@ $(document).ready(function () {
     $('form').on('click', '.filetagButton', function () {
         var thisval = $(this).parent().parent().parent().parent().attr('id')
         var thisval2 = thisval.replace(/filetagModal/, '')
-        var myboxes = $(this).parent().find('input[name="filetagCheckboxes"]:checked')
+        var myboxes = $(this).parent().parent().parent().parent().find('input[name="filetagCheckboxes"]:checked')
         var thisarray = []
         for (var i = 0; i < myboxes.length; i++) {
             var boxid = $(myboxes[i]).val()
