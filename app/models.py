@@ -618,18 +618,45 @@ class MySurvey(models.Model):
     )
     
     add_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
-    add_org_answer = models.CharField(max_length = 1000)
-    add_org_comments = models.CharField(max_length = 1000, blank = True)
+    add_org_answer = models.TextField()
+    add_org_comments = models.TextField(blank=True, null=True)
+
+class MySurvey2(models.Model):
+    DIFFICULTY_CHOICES = (
+        ('Very Easy', 'Very Easy'),
+        ('Easy', 'Easy'),
+        ('Moderate', 'Moderate'),
+        ('Hard', 'Hard'),
+        ('Very Hard', 'Very Hard'),
+    )
 
     edit_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
-    edit_org_answer = models.CharField(max_length = 1000)
-    edit_org_comments = models.CharField(max_length = 1000, blank = True)
+    edit_org_answer = models.TextField()
+    edit_org_comments = models.TextField(blank=True, null=True)
+
+class MySurvey3(models.Model):
+    DIFFICULTY_CHOICES = (
+        ('Very Easy', 'Very Easy'),
+        ('Easy', 'Easy'),
+        ('Moderate', 'Moderate'),
+        ('Hard', 'Hard'),
+        ('Very Hard', 'Very Hard'),
+    )
 
     find_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
-    find_org_answer = models.CharField(max_length = 1000)
-    find_org_comments = models.CharField(max_length = 1000, blank = True)
+    find_org_answer = models.TextField()
+    find_org_comments = models.TextField(blank=True, null=True)
+
+class MySurvey4(models.Model):
+    DIFFICULTY_CHOICES = (
+        ('Very Easy', 'Very Easy'),
+        ('Easy', 'Easy'),
+        ('Moderate', 'Moderate'),
+        ('Hard', 'Hard'),
+        ('Very Hard', 'Very Hard'),
+    )
 
     add_folder_file_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
-    add_folder_file_answer = models.CharField(max_length = 1000)
-    add_folder_file_comments = models.CharField(max_length = 1000, blank = True)
+    add_folder_file_answer = models.TextField()
+    add_folder_file_comments = models.TextField(blank=True, null=True)
 

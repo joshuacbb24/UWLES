@@ -67,6 +67,16 @@ urlpatterns = [
     path('reset_password_complete/', PasswordResetCompleteView.as_view(template_name='app/reset_password_complete.html'), name="password_reset_complete"),
     path('upload/', views.BasicUploadView.as_view(), name='upload'),
 
+    path('add_survey1/', views.add_survey1, name='addSurvey1'),
+    path('edit_survey1/', views.edit_survey1, name='editSurvey1'),
+    path('add_survey2/', views.add_survey2, name='addSurvey2'),
+    path('edit_survey2/', views.edit_survey2, name='editSurvey2'),
+    path('add_survey3/', views.add_survey3, name='addSurvey3'),
+    path('edit_survey3/', views.edit_survey3, name='editSurvey3'),
+    path('add_survey4/', views.add_survey4, name='addSurvey4'),
+    path('edit_survey4/', views.edit_survey4, name='editSurvey4'),
+
+
     path('validateOrganization/', views.validate_org, name='validateOrganization'),
     path('validateAccount', views.validate_account, name='validateAccount'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -7,6 +7,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <style>
+        p{
+            margin-block-end: 0;
+            margin-block-start: 0;
+        }
         html{
             width: 100%;
             height: 100%;
@@ -81,6 +85,7 @@
         .intro-text{
             margin: 30px;
             margin-bottom: 0;
+            margin-top: 0;
             font-family: Helvetica;
             font-size: 20px;
         }
@@ -88,6 +93,7 @@
             margin: 30px;
             margin-bottom: 0;
             margin-right: 0;
+            margin-top: 15px;
             font-family: Helvetica;
             font-size: 20px;
             font-weight: bold;
@@ -97,10 +103,40 @@
             margin: 30px;
             margin-bottom: 0;
             margin-right: 0;
+            margin-top: 15px;
             font-family: Helvetica;
             font-size: 20px;
             font-weight: bold;
             display: flex;
+        }
+
+        .question-text-saved{
+            position: relative;
+            left: 35%;
+            margin: 30px;
+            margin-bottom: 0;
+            margin-right: 0;
+            margin-top: 15px;
+            font-family: Helvetica;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+        }
+
+        .question-saved-banner{
+            display: flex;
+            width: 100%;
+            height: 80px;
+            margin-top: 30px;
+            font-family: Helvetica;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+            background: #4CAF50;
+            color: white;
         }
 
         .intro-h2{
@@ -111,6 +147,7 @@
             width: 60%;
             margin: 30px;
             margin-bottom: 0;
+            margin-top: 0;
             color: #015D67;
         }
 
@@ -145,7 +182,6 @@
 
         form{
             position: relative;
-            margin-top: 20px;
             margin-bottom: 20px;
             left: 5%;
             width: 90%;
@@ -248,28 +284,45 @@
                 streamlining the workflow of case managers and clients, via tools such as chatting, resource sharing, and resource viewing. Today, we would greatly appreciate your feedback on the resource directory!
             </p>
             <p class="intro-text">The resource directory is responsible for housing all the information regarding organizations, as well as personal documents for each user. 
-                It is broken up into three unique sections: The Category Directory, Organizational Directory, and the Document Directory. 
-                The category directory is where you can search for organizations by category (such as health & fitness, addiction, disabilities, housing, etc), 
-                the Organizational Directory is where you can see all organizations listed within UWLES Connect, 
-                and the Document Directory is where all of your documents and files will be stored.
+                It is broken up into three unique sections: The <strong>Category Directory</strong>, <strong>Organizational Directory</strong>, and the <strong>Document Directory</strong>. 
+                The <strong>Category Directory</strong> is where you can search for organizations by category (such as health & fitness, addiction, disabilities, housing, etc), 
+                the <strong>Organizational Directory</strong> is where you can see all organizations listed within UWLES Connect, 
+                and the <strong>Document Directory</strong> is where all of your documents and files will be stored.
             </p>
             <p class="intro-text">If you have any problems while you are testing, please text 443-735-6440, or email kaaron1@gulls.salisbury.edu.
                  I will be available between 12pm-8pm EST everyday.
             </p>
 
-            <p class="intro-text">During this process, you will need to have two tabs open on your browser, one for this page, and another for the rest of the website. 
-                The second tab will open automatically once you click on the login link. There are four parts to the survey. For each part, you will watch a short video, then do a task, and then 
-                provide feedback.
-            </p>
+            <p class="intro-text-bold">Some information about the survey: </p>
+            <ul>
+                <li>
+                    <p class="intro-text">There are four parts to the survey. For each part, you will watch a short video, then do a task, and then provide feedback.</p>
+                </li>
+                <br>
+                <li>
+                    <p class="intro-text">During this process, you will need to have two tabs open on your browser, one for this page, and another for the rest of the website. The second tab will open automatically once you click on the login link.</p>
+                </li>
+                <br>
+                <li>
+                    <p class="intro-text">When answering the questions, your data will be saved automatically, so if you need to take a break from it and come back later to finish later sections, you may.</p>
+                </li>
+                <br>
+                <li>
+                    <p class="intro-text">Remember to answer every section. If you take a break, start where you left off, as your previous data will have already been saved.</p>
+                </li>
+                <br>
+                <li>
+                    <span><p class="intro-text">If you would like to view a PowerPoint instead of watching the short videos, <a target="_blank" href="{% static 'app/images/survey.pptx' %}">click here</a> to download a walkthrough PowerPoint.</p></span>
+                </li>
+            </ul>
             <span><p class="intro-text">Now let's get started! First you will need to login <a target="_blank" href="{% url 'dashboard' %}">by clicking here</a>, and using the account information sent to you</p></span>
             <p class="intro-text">Once you have logged in, you will be redirected to the dashboard page, which you can see a portion of in this image: </p>
             <div class="img-highlight" id="dashboard"></div>
 
-            <span><p class="intro-text">If you would like to view a PowerPoint instead of watching the short videos, <a target="_blank" href="{% static 'app/images/survey.pptx' %}">click here</a> to download a walkthrough PowerPoint.</p></span>
             <div class="intro-divider"></div>
             <h2 class="intro-h2">1. Adding Organizational Data</h2>
-            <p class="intro-text">To get started, please watch the video below which will teach you how to add an organization to the Resource Directory. Once you are done watching, please add a new organization. 
-                You should have received a list of information to put in, so please use this to create a new organization.
+            <p class="intro-text">To get started, please watch the video below which will teach you how to add an organization to the <strong>Resource Directory</strong>. Once you are done watching, please add your organization.
+                If it already exists, alter the name a bit.
             </p>
             <iframe class="video-container" src="https://www.youtube.com/embed/X5enTYCUKjE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <p class="intro-text-bold">After you are done watching the video and adding an organization, answer the questions below.
@@ -303,12 +356,14 @@
 
                 <div class="question-text">What parts of the adding organization process worked well? What parts did not work well? <div class="form-required">*</div></div>
                 <br/>
-                <textarea placeholder="Feedback here..." required id="feedback_addorg" maxlength="1000"></textarea>
+                <textarea placeholder="Feedback here..." required id="feedback_addorg"></textarea>
 
 
                 <p class="question-text">Additional Comments:</p>
                 <br/>
-                <textarea placeholder="Additional Comments..." id="comments_addorg" maxlength="1000"></textarea>
+                <textarea placeholder="Additional Comments..." id="comments_addorg"></textarea>
+
+                <div class="question-saved-banner" id="saved-form1" style="visibility: hidden;">Response Saved!</div>
             </form>
 
             <div class="intro-divider"></div>
@@ -347,12 +402,14 @@
 
                 <div class="question-text">What parts of the editing organization process worked well? What parts did not work well? <div class="form-required">*</div></div>
                 <br/>
-                <textarea placeholder="Feedback here..." required id="feedback_editorg" maxlength="1000"></textarea>
+                <textarea placeholder="Feedback here..." required id="feedback_editorg"></textarea>
 
 
                 <p class="intro-text-bold">Additional Comments:</p>
                 <br/>
-                <textarea placeholder="Additional Comments..." id="comments_editorg" maxlength="1000"></textarea>
+                <textarea placeholder="Additional Comments..." id="comments_editorg"></textarea>
+
+                <div class="question-saved-banner" id="saved-form2" style="visibility: hidden;">Response Saved!</div>
             </form>
 
             <div class="intro-divider"></div>
@@ -391,18 +448,20 @@
 
                 <div class="question-text">What parts of finding your organization worked well? What parts did not work well? <div class="form-required">*</div></div>
                 <br/>
-                <textarea placeholder="Feedback here..." required id="feedback_findorg" maxlength="1000"></textarea>
+                <textarea placeholder="Feedback here..." required id="feedback_findorg"></textarea>
 
 
                 <p class="intro-text-bold">Additional Comments:</p>
                 <br/>
-                <textarea placeholder="Additional Comments..." id="comments_findorg" maxlength="1000"></textarea>
+                <textarea placeholder="Additional Comments..." id="comments_findorg"></textarea>
+
+                <div class="question-saved-banner" id="saved-form3" style="visibility: hidden;">Response Saved!</div>
             </form>
 
             <div class="intro-divider"></div>
             <h2 class="intro-h2">4. Adding Folders + Documents</h2>
-            <p class="intro-text">Now that you have completed all tasks related to organizations, let’s move on to the Document Directory. 
-                The Document Directory is the part of the resource directory responsible for housing your personal files you upload.
+            <p class="intro-text">Now that you have completed all tasks related to organizations, let’s move on to the <strong>Document Directory</strong>. 
+                The <strong>Document Directory</strong> is the part of the <strong>Resource Directory</strong> responsible for housing your personal files you upload.
             </p>
 
             <p class="intro-text">Now we will upload new documents and create new folders for these documents. 
@@ -440,129 +499,679 @@
 
                 <div class="question-text">What parts of the document & folder creation worked well? What parts did not work well? <div class="form-required">*</div></div>
                 <br/>
-                <textarea placeholder="Feedback here..." required id="feedback_addfiles" maxlength="1000"></textarea>
+                <textarea placeholder="Feedback here..." required id="feedback_addfiles"></textarea>
 
 
                 <p class="intro-text-bold">Additional Comments:</p>
                 <br/>
-                <textarea placeholder="Additional Comments..." id="comments_addfiles" maxlength="1000"></textarea>
-            </form>
+                <textarea placeholder="Additional Comments..." id="comments_addfiles"></textarea>
 
-            <button type="button" class="submit-all-forms">Submit Responses</button>
+                <div class="question-saved-banner" id="saved-form4" style="visibility: hidden;">Response Saved!</div>
+            </form>
 
             <p class="intro-text">Once you have clicked submit, you are all done! Thank you for helping us gather feedback on the website thus far, and have a wonderful rest of your day!</p>
         </div>
         <div class="right-panel-container"></div>
     </div>
 
-    <div class="modal box4 fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title closeme" id="exampleModalLabel" style="color: #4CAF50">Success!</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-message">Your information was submitted successfully, you may now close the site! Thank you!</div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="close-modal" data-dismiss="modal" style="background: #4CAF50">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    
-      <div class="modal box4 fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title closeme" id="exampleModalLabel" style="color: red">Error!</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <div class="modal-message">One or more required fields were not filled out, please fill them out then submit again!</div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="close-modal" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
     <script>
-        $(document).ready(function(){
-            const csrf = document.getElementsByName('csrfmiddlewaretoken')
-            const url = ""
-            $('body').on('click', '.submit-all-forms', function(){
-                if ($("input[name='add_org_difficulty']:checked").val() && $("input[name='edit_org_difficulty']:checked").val() && $("input[name='find_org_difficulty']:checked").val() 
-                && $("input[name='add_files_difficulty']:checked").val() && $("#feedback_addorg").val() && $("#feedback_editorg").val() && $("#feedback_findorg").val() && $("#feedback_addfiles").val()){
-                    const fd = new FormData()
-                    fd.append('csrfmiddlewaretoken', csrf[0].value)
-
-                    fd.append('add_org_difficulty', $("input[name='add_org_difficulty']:checked").val())
-                    fd.append('add_org_answer',  $("#feedback_addorg").val())
+        var hasSurvey1 = false
+        var hasSurvey2 = false
+        var hasSurvey3 = false
+        var hasSurvey4 = false
+        var survey1ID = ''
+        var survey2ID = ''
+        var survey3ID = ''
+        var survey4ID = ''
+        
+        $('#feedback_addorg').on('input', function (){
+            if (hasSurvey1){
+                if ($("input[name='add_org_difficulty']:checked").val()){
+                    var add_org_difficulty = $("input[name='add_org_difficulty']:checked").val()
+                    var add_org_answer = $("#feedback_addorg").val()
                     if ($("#comments_addorg").val()){
-                        fd.append('add_org_comments', $("#comments_addorg").val())
+                        var add_org_comment = $("#comments_addorg").val()
                     }
                     else{
-                        fd.append('add_org_comments', '')
+                        var add_org_comment = ''
                     }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey1' %}',
+                    data: {
+                        'id': survey1ID,
+                        'add_org_difficulty': add_org_difficulty,
+                        'add_org_answer': add_org_answer,
+                        'add_org_comment': add_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey1ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("input[name='add_org_difficulty']:checked").val()){
+                    var add_org_difficulty = $("input[name='add_org_difficulty']:checked").val()
+                    var add_org_answer = $("#feedback_addorg").val()
+                    if ($("#comments_addorg").val()){
+                        var add_org_comment = $("#comments_addorg").val()
+                    }
+                    else{
+                        var add_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey1' %}',
+                    data: {
+                        'add_org_difficulty': add_org_difficulty,
+                        'add_org_answer': add_org_answer,
+                        'add_org_comment': add_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey1ID = data.id
+                        hasSurvey1 = data.hasSurvey1
+                        $("#saved-form1").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
 
-                    fd.append('edit_org_difficulty', $("input[name='edit_org_difficulty']:checked").val())
-                    fd.append('edit_org_answer',  $("#feedback_editorg").val())
+        $('input[type=radio][name=add_org_difficulty]').change(function(){
+            if (hasSurvey1){
+                if ($("#feedback_addorg").val()){
+                    var add_org_difficulty = $("input[name='add_org_difficulty']:checked").val()
+                    var add_org_answer = $("#feedback_addorg").val()
+                    if ($("#comments_addorg").val()){
+                        var add_org_comment = $("#comments_addorg").val()
+                    }
+                    else{
+                        var add_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey1' %}',
+                    data: {
+                        'id': survey1ID,
+                        'add_org_difficulty': add_org_difficulty,
+                        'add_org_answer': add_org_answer,
+                        'add_org_comment': add_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey1ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("#feedback_addorg").val()){
+                    var add_org_difficulty = $("input[name='add_org_difficulty']:checked").val()
+                    var add_org_answer = $("#feedback_addorg").val()
+                    if ($("#comments_addorg").val()){
+                        var add_org_comment = $("#comments_addorg").val()
+                    }
+                    else{
+                        var add_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey1' %}',
+                    data: {
+                        'add_org_difficulty': add_org_difficulty,
+                        'add_org_answer': add_org_answer,
+                        'add_org_comment': add_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey1ID = data.id
+                        hasSurvey1 = data.hasSurvey1
+                        $("#saved-form1").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
+
+        $('#comments_addorg').on('input', function (){
+            if (hasSurvey1){
+                if ($("input[name='add_org_difficulty']:checked").val() && $("#feedback_addorg").val()){
+                    var add_org_difficulty = $("input[name='add_org_difficulty']:checked").val()
+                    var add_org_answer = $("#feedback_addorg").val()
+                    if ($("#comments_addorg").val()){
+                        var add_org_comment = $("#comments_addorg").val()
+                    }
+                    else{
+                        var add_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey1' %}',
+                    data: {
+                        'id': survey1ID,
+                        'add_org_difficulty': add_org_difficulty,
+                        'add_org_answer': add_org_answer,
+                        'add_org_comment': add_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey1ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("input[name='add_org_difficulty']:checked").val() && $("#feedback_addorg").val()){
+                    var add_org_difficulty = $("input[name='add_org_difficulty']:checked").val()
+                    var add_org_answer = $("#feedback_addorg").val()
+                    if ($("#comments_addorg").val()){
+                        var add_org_comment = $("#comments_addorg").val()
+                    }
+                    else{
+                        var add_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey1' %}',
+                    data: {
+                        'add_org_difficulty': add_org_difficulty,
+                        'add_org_answer': add_org_answer,
+                        'add_org_comment': add_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey1ID = data.id
+                        hasSurvey1 = data.hasSurvey1
+                        $("#saved-form1").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
+
+        $('#feedback_editorg').on('input', function (){
+            if (hasSurvey2){
+                if ($("input[name='edit_org_difficulty']:checked").val()){
+                    var edit_org_difficulty = $("input[name='edit_org_difficulty']:checked").val()
+                    var edit_org_answer = $("#feedback_editorg").val()
                     if ($("#comments_editorg").val()){
-                        fd.append('edit_org_comments', $("#comments_editorg").val())
+                        var edit_org_comment = $("#comments_editorg").val()
                     }
                     else{
-                        fd.append('edit_org_comments', '')
+                        var edit_org_comment = ''
                     }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey2' %}',
+                    data: {
+                        'id': survey2ID,
+                        'edit_org_difficulty': edit_org_difficulty,
+                        'edit_org_answer': edit_org_answer,
+                        'edit_org_comment': edit_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey2ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("input[name='edit_org_difficulty']:checked").val()){
+                    var edit_org_difficulty = $("input[name='edit_org_difficulty']:checked").val()
+                    var edit_org_answer = $("#feedback_editorg").val()
+                    if ($("#comments_editorg").val()){
+                        var edit_org_comment = $("#comments_editorg").val()
+                    }
+                    else{
+                        var edit_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey2' %}',
+                    data: {
+                        'edit_org_difficulty': edit_org_difficulty,
+                        'edit_org_answer': edit_org_answer,
+                        'edit_org_comment': edit_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey2ID = data.id
+                        hasSurvey2 = data.hasSurvey2
+                        $("#saved-form2").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
 
-                    fd.append('find_org_difficulty', $("input[name='find_org_difficulty']:checked").val())
-                    fd.append('find_org_answer',  $("#feedback_findorg").val())
+        $('input[type=radio][name=edit_org_difficulty]').change(function(){
+            if (hasSurvey2){
+                if ($("#feedback_editorg").val()){
+                    var edit_org_difficulty = $("input[name='edit_org_difficulty']:checked").val()
+                    var edit_org_answer = $("#feedback_editorg").val()
+                    if ($("#comments_editorg").val()){
+                        var edit_org_comment = $("#comments_editorg").val()
+                    }
+                    else{
+                        var edit_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey2' %}',
+                    data: {
+                        'id': survey2ID,
+                        'edit_org_difficulty': edit_org_difficulty,
+                        'edit_org_answer': edit_org_answer,
+                        'edit_org_comment': edit_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey2ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("#feedback_editorg").val()){
+                    var edit_org_difficulty = $("input[name='edit_org_difficulty']:checked").val()
+                    var edit_org_answer = $("#feedback_editorg").val()
+                    if ($("#comments_editorg").val()){
+                        var edit_org_comment = $("#comments_editorg").val()
+                    }
+                    else{
+                        var edit_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey2' %}',
+                    data: {
+                        'edit_org_difficulty': edit_org_difficulty,
+                        'edit_org_answer': edit_org_answer,
+                        'edit_org_comment': edit_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey2ID = data.id
+                        hasSurvey2 = data.hasSurvey2
+                        $("#saved-form2").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
+
+        $('#comments_editorg').on('input', function (){
+            if (hasSurvey2){
+                if ($("input[name='edit_org_difficulty']:checked").val() && $("#feedback_editorg").val()){
+                    var edit_org_difficulty = $("input[name='edit_org_difficulty']:checked").val()
+                    var edit_org_answer = $("#feedback_editorg").val()
+                    if ($("#comments_editorg").val()){
+                        var edit_org_comment = $("#comments_editorg").val()
+                    }
+                    else{
+                        var edit_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey2' %}',
+                    data: {
+                        'id': survey2ID,
+                        'edit_org_difficulty': edit_org_difficulty,
+                        'edit_org_answer': edit_org_answer,
+                        'edit_org_comment': edit_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey2ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("input[name='edit_org_difficulty']:checked").val() && $("#feedback_editorg").val()){
+                    var edit_org_difficulty = $("input[name='edit_org_difficulty']:checked").val()
+                    var edit_org_answer = $("#feedback_editorg").val()
+                    if ($("#comments_editorg").val()){
+                        var edit_org_comment = $("#comments_editorg").val()
+                    }
+                    else{
+                        var edit_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey2' %}',
+                    data: {
+                        'edit_org_difficulty': edit_org_difficulty,
+                        'edit_org_answer': edit_org_answer,
+                        'edit_org_comment': edit_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey2ID = data.id
+                        hasSurvey2 = data.hasSurvey2
+                        $("#saved-form2").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
+
+        $('#feedback_findorg').on('input', function (){
+            if (hasSurvey3){
+                if ($("input[name='find_org_difficulty']:checked").val()){
+                    var find_org_difficulty = $("input[name='find_org_difficulty']:checked").val()
+                    var find_org_answer = $("#feedback_findorg").val()
                     if ($("#comments_findorg").val()){
-                        fd.append('find_org_comments', $("#comments_findorg").val())
+                        var find_org_comment = $("#comments_findorg").val()
                     }
                     else{
-                        fd.append('find_org_comments', '')
+                        var find_org_comment = ''
                     }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey3' %}',
+                    data: {
+                        'id': survey3ID,
+                        'find_org_difficulty': find_org_difficulty,
+                        'find_org_answer': find_org_answer,
+                        'find_org_comment': find_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey3ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("input[name='find_org_difficulty']:checked").val()){
+                    var find_org_difficulty = $("input[name='find_org_difficulty']:checked").val()
+                    var find_org_answer = $("#feedback_findorg").val()
+                    if ($("#comments_findorg").val()){
+                        var find_org_comment = $("#comments_findorg").val()
+                    }
+                    else{
+                        var find_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey3' %}',
+                    data: {
+                        'find_org_difficulty': find_org_difficulty,
+                        'find_org_answer': find_org_answer,
+                        'find_org_comment': find_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey3ID = data.id
+                        hasSurvey3 = data.hasSurvey3
+                        $("#saved-form3").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
 
-                    fd.append('add_files_difficulty', $("input[name='add_files_difficulty']:checked").val())
-                    fd.append('add_files_answer',  $("#feedback_addfiles").val())
+        $('input[type=radio][name=find_org_difficulty]').change(function(){
+            if (hasSurvey3){
+                if ($("#feedback_findorg").val()){
+                    var find_org_difficulty = $("input[name='find_org_difficulty']:checked").val()
+                    var find_org_answer = $("#feedback_findorg").val()
+                    if ($("#comments_findorg").val()){
+                        var find_org_comment = $("#comments_findorg").val()
+                    }
+                    else{
+                        var find_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey3' %}',
+                    data: {
+                        'id': survey3ID,
+                        'find_org_difficulty': find_org_difficulty,
+                        'find_org_answer': find_org_answer,
+                        'find_org_comment': find_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey3ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("#feedback_findorg").val()){
+                    var find_org_difficulty = $("input[name='find_org_difficulty']:checked").val()
+                    var find_org_answer = $("#feedback_findorg").val()
+                    if ($("#comments_findorg").val()){
+                        var find_org_comment = $("#comments_findorg").val()
+                    }
+                    else{
+                        var find_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey3' %}',
+                    data: {
+                        'find_org_difficulty': find_org_difficulty,
+                        'find_org_answer': find_org_answer,
+                        'find_org_comment': find_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey3ID = data.id
+                        hasSurvey3 = data.hasSurvey3
+                        $("#saved-form3").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
+
+        $('#comments_findorg').on('input', function (){
+            if (hasSurvey3){
+                if ($("input[name='find_org_difficulty']:checked").val() && $("#feedback_findorg").val()){
+                    var find_org_difficulty = $("input[name='find_org_difficulty']:checked").val()
+                    var find_org_answer = $("#feedback_findorg").val()
+                    if ($("#comments_findorg").val()){
+                        var find_org_comment = $("#comments_findorg").val()
+                    }
+                    else{
+                        var find_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey3' %}',
+                    data: {
+                        'id': survey3ID,
+                        'find_org_difficulty': find_org_difficulty,
+                        'find_org_answer': find_org_answer,
+                        'find_org_comment': find_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey1ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("input[name='find_org_difficulty']:checked").val() && $("#feedback_findorg").val()){
+                    var find_org_difficulty = $("input[name='find_org_difficulty']:checked").val()
+                    var find_org_answer = $("#feedback_findorg").val()
+                    if ($("#comments_findorg").val()){
+                        var find_org_comment = $("#comments_findorg").val()
+                    }
+                    else{
+                        var find_org_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey3' %}',
+                    data: {
+                        'find_org_difficulty': find_org_difficulty,
+                        'find_org_answer': find_org_answer,
+                        'find_org_comment': find_org_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey3ID = data.id
+                        hasSurvey3 = data.hasSurvey3
+                        $("#saved-form3").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
+
+        $('#feedback_addfiles').on('input', function (){
+            if (hasSurvey4){
+                if ($("input[name='add_files_difficulty']:checked").val()){
+                    var add_files_difficulty = $("input[name='add_files_difficulty']:checked").val()
+                    var add_files_answer = $("#feedback_addfiles").val()
                     if ($("#comments_addfiles").val()){
-                        fd.append('add_files_comments', $("#comments_addfiles").val())
+                        var add_files_comment = $("#comments_addfiles").val()
                     }
                     else{
-                        fd.append('add_files_comments', '')
+                        var add_files_comment = ''
                     }
-
-
-                    $.ajax({
-                        type: 'POST',
-                        url: url,
-                        enctype: 'multipart/form-data',
-                        data: fd,
-                        success: function (response) {
-                            console.log(response)
-                            $(".submit-all-forms").css('visibility', 'hidden')
-                            $("#successModal").modal('show')
-                        },
-                        error: function (error) {
-                            console.log(error)
-                        },
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                    })
                 }
-                else{
-                    $("#errorModal").modal('show')
+                $.ajax({
+                    url: '{% url 'editSurvey4' %}',
+                    data: {
+                        'id': survey4ID,
+                        'add_files_difficulty': add_files_difficulty,
+                        'add_files_answer': add_files_answer,
+                        'add_files_comment': add_files_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey4ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("input[name='add_files_difficulty']:checked").val()){
+                    var add_files_difficulty = $("input[name='add_files_difficulty']:checked").val()
+                    var add_files_answer = $("#feedback_addfiles").val()
+                    if ($("#comments_addfiles").val()){
+                        var add_files_comment = $("#comments_addfiles").val()
+                    }
+                    else{
+                        var add_files_comment = ''
+                    }
                 }
-            })
-        })
+                $.ajax({
+                    url: '{% url 'addSurvey4' %}',
+                    data: {
+                        'add_files_difficulty': add_files_difficulty,
+                        'add_files_answer': add_files_answer,
+                        'add_files_comment': add_files_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey4ID = data.id
+                        hasSurvey4 = data.hasSurvey4
+                        $("#saved-form4").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
+
+        $('input[type=radio][name=add_files_difficulty]').change(function(){
+            if (hasSurvey4){
+                if ($("#feedback_addfiles").val()){
+                    var add_files_difficulty = $("input[name='add_files_difficulty']:checked").val()
+                    var add_files_answer = $("#feedback_addfiles").val()
+                    if ($("#comments_addfiles").val()){
+                        var add_files_comment = $("#comments_addfiles").val()
+                    }
+                    else{
+                        var add_files_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey4' %}',
+                    data: {
+                        'id': survey4ID,
+                        'add_files_difficulty': add_files_difficulty,
+                        'add_files_answer': add_files_answer,
+                        'add_files_comment': add_files_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey4ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("#feedback_addfiles").val()){
+                    var add_files_difficulty = $("input[name='add_files_difficulty']:checked").val()
+                    var add_files_answer = $("#feedback_addfiles").val()
+                    if ($("#comments_addfiles").val()){
+                        var add_files_comment = $("#comments_addfiles").val()
+                    }
+                    else{
+                        var add_files_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey4' %}',
+                    data: {
+                        'add_files_difficulty': add_files_difficulty,
+                        'add_files_answer': add_files_answer,
+                        'add_files_comment': add_files_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey4ID = data.id
+                        hasSurvey4 = data.hasSurvey4
+                        $("#saved-form4").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
+
+        $('#comments_addfiles').on('input', function (){
+            if (hasSurvey4){
+                if ($("input[name='add_files_difficulty']:checked").val() && $("#feedback_addfiles").val()){
+                    var add_files_difficulty = $("input[name='add_files_difficulty']:checked").val()
+                    var add_files_answer = $("#feedback_addfiles").val()
+                    if ($("#comments_addfiles").val()){
+                        var add_files_comment = $("#comments_addfiles").val()
+                    }
+                    else{
+                        var add_files_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'editSurvey4' %}',
+                    data: {
+                        'id': survey4ID,
+                        'add_files_difficulty': add_files_difficulty,
+                        'add_files_answer': add_files_answer,
+                        'add_files_comment': add_files_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey1ID = data.id
+                    }
+                });
+            }
+            else{
+                if ($("input[name='add_files_difficulty']:checked").val() && $("#feedback_addfiles").val()){
+                    var add_files_difficulty = $("input[name='add_files_difficulty']:checked").val()
+                    var add_files_answer = $("#feedback_addfiles").val()
+                    if ($("#comments_addfiles").val()){
+                        var add_files_comment = $("#comments_addfiles").val()
+                    }
+                    else{
+                        var add_files_comment = ''
+                    }
+                }
+                $.ajax({
+                    url: '{% url 'addSurvey4' %}',
+                    data: {
+                        'add_files_difficulty': add_files_difficulty,
+                        'add_files_answer': add_files_answer,
+                        'add_files_comment': add_files_comment,
+                    },
+                    dataType: 'json',
+                    success: function(data){
+                        survey4ID = data.id
+                        hasSurvey4 = data.hasSurvey4
+                        $("#saved-form4").css('visibility', 'visible')
+                    }
+                });
+            }
+        });
+
     </script>
 </body>
 </html>

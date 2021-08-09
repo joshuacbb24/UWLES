@@ -1856,6 +1856,138 @@ def testpage(request):
         }
     return render(request, 'app/test.html', context)
 
+def add_survey1(request):
+    difficulty = request.GET.get('add_org_difficulty')
+    answer = request.GET.get('add_org_answer')
+    comments = request.GET.get('add_org_comment')
+    obj = MySurvey(add_org_difficulty=difficulty, add_org_answer=answer, add_org_comments=comments)
+    obj.save()
+    myid = obj.id
+    hasSurvey1 = "true"
+    data = {
+        'id': myid,
+        'hasSurvey1': hasSurvey1,
+    }
+
+    return JsonResponse(data)
+
+def edit_survey1(request):
+    thisSurvey = request.GET.get('id')
+    obj = MySurvey(id=thisSurvey)
+    difficulty = request.GET.get('add_org_difficulty')
+    answer = request.GET.get('add_org_answer')
+    comments = request.GET.get('add_org_comment')
+
+    obj.add_org_difficulty = difficulty
+    obj.add_org_answer = answer
+    obj.add_org_comments = comments
+    obj.save()
+    myid = thisSurvey
+    data = {
+        'id': myid,
+    }
+
+    return JsonResponse(data)
+
+def add_survey2(request):
+    difficulty = request.GET.get('edit_org_difficulty')
+    answer = request.GET.get('edit_org_answer')
+    comments = request.GET.get('edit_org_comment')
+    obj = MySurvey2(edit_org_difficulty=difficulty, edit_org_answer=answer, edit_org_comments=comments)
+    obj.save()
+    myid = obj.id
+    hasSurvey2 = "true"
+    data = {
+        'id': myid,
+        'hasSurvey2': hasSurvey2,
+    }
+
+    return JsonResponse(data)
+
+def edit_survey2(request):
+    thisSurvey = request.GET.get('id')
+    obj = MySurvey2(id=thisSurvey)
+    difficulty = request.GET.get('edit_org_difficulty')
+    answer = request.GET.get('edit_org_answer')
+    comments = request.GET.get('edit_org_comment')
+
+    obj.edit_org_difficulty = difficulty
+    obj.edit_org_answer = answer
+    obj.edit_org_comments = comments
+    obj.save()
+    myid = thisSurvey
+    data = {
+        'id': myid,
+    }
+
+    return JsonResponse(data)
+
+def add_survey3(request):
+    difficulty = request.GET.get('find_org_difficulty')
+    answer = request.GET.get('find_org_answer')
+    comments = request.GET.get('find_org_comment')
+    obj = MySurvey3(find_org_difficulty=difficulty, find_org_answer=answer, find_org_comments=comments)
+    obj.save()
+    myid = obj.id
+    hasSurvey3 = "true"
+    data = {
+        'id': myid,
+        'hasSurvey3': hasSurvey3,
+    }
+
+    return JsonResponse(data)
+
+def edit_survey3(request):
+    thisSurvey = request.GET.get('id')
+    obj = MySurvey3(id=thisSurvey)
+    difficulty = request.GET.get('find_org_difficulty')
+    answer = request.GET.get('find_org_answer')
+    comments = request.GET.get('find_org_comment')
+
+    obj.find_org_difficulty = difficulty
+    obj.find_org_answer = answer
+    obj.find_org_comments = comments
+    obj.save()
+    myid = thisSurvey
+    data = {
+        'id': myid,
+    }
+
+    return JsonResponse(data)
+
+def add_survey4(request):
+    difficulty = request.GET.get('add_files_difficulty')
+    answer = request.GET.get('add_files_answer')
+    comments = request.GET.get('add_files_comment')
+    obj = MySurvey4(add_folder_file_difficulty=difficulty, add_folder_file_answer=answer, add_folder_file_comments=comments)
+    obj.save()
+    myid = obj.id
+    hasSurvey4 = "true"
+    data = {
+        'id': myid,
+        'hasSurvey4': hasSurvey4,
+    }
+
+    return JsonResponse(data)
+
+def edit_survey4(request):
+    thisSurvey = request.GET.get('id')
+    obj = MySurvey4(id=thisSurvey)
+    difficulty = request.GET.get('add_files_difficulty')
+    answer = request.GET.get('add_files_answer')
+    comments = request.GET.get('add_files_comment')
+
+    obj.add_folder_file_difficulty = difficulty
+    obj.add_folder_file_answer = answer
+    obj.add_folder_file_comments = comments
+    obj.save()
+    myid = thisSurvey
+    data = {
+        'id': myid,
+    }
+
+    return JsonResponse(data)
+
 def validate_account(request):
     account_name = request.GET.get('account_name', None)
     test_name = Account.objects.filter(username=account_name).exists()
