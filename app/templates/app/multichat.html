@@ -18,7 +18,6 @@
         rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'app/content/style.css' %}" />
 
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="{% static 'app/scripts/jquery.js' %}"></script>
 
@@ -28,6 +27,7 @@
 
     <script src="{% static 'app/scripts/tag.js' %}"></script>
     <script src="{% static 'app/scripts/jQuery.tagify.min.js' %}"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script>
         // if IE, add IE tagify's polyfills
         !(function (d) {
@@ -84,18 +84,63 @@
             display: inline-block;
             height: 10px;
             width: 10px;
-            background-color: green;
             border-radius: 50%;
             bottom: 8px;
             right: -18px;
             border: 1.5px solid white;
         }
 
+        .user-status .online_icon {
+            position: absolute;
+            display: inline-block;
+            height: 10px;
+            right: 73px;
+            width: 10px;
+            top: 6px;
+            border-radius: 50%;
+            border: 1.5px solid white;
+        }
+
+        .dropdown-item .online_icon {
+            position: initial;
+            display: inline-flex;
+            height: 10px;
+            right: 73px;
+            width: 10px;
+            top: 6px;
+            border-radius: 50%;
+            border: 1.5px solid white;
+            margin-right: 5px;
+        }
+
+        .status-dropdown-menu .dropdown-item {
+            float: left;
+            padding-left: 7px;
+            text-align: left;
+
+        }
+
+        .status-dropdown-menu .dropdown-item:hover {
+            background-color: #68d0d1;
+            color: white;
+
+        }
+
         .tagify__dropdown__item__avatar-wrap .online_icon {
             position: absolute;
             height: 10px;
             width: 10px;
-            background-color: green;
+            border-radius: 50%;
+            bottom: 37px;
+            left: 37px;
+            border: 1.5px solid white;
+            z-index: 1000;
+        }
+
+        .online_icon_noimg {
+            position: absolute;
+            height: 10px;
+            width: 10px;
             border-radius: 50%;
             bottom: 37px;
             left: 37px;
@@ -622,17 +667,6 @@
             margin-left: 50%;
         }
 
-        .unread-break-line span::after {
-            width: 100%;
-            border-bottom: 1px solid red;
-        }
-
-        .unread-break-line hr {
-            position: relative;
-            border-color: red;
-            width: 100%;
-        }
-
         .main-content {
             margin-left: 41px;
             margin-right: -10px;
@@ -650,6 +684,15 @@
             justify-content: center;
             text-align: center;
             margin-left: 31%;
+        }
+
+        .status-message {
+            position: absolute;
+            display: inline-block;
+            color: white;
+            text-align: left;
+            bottom: -6px;
+            left: 13px;
         }
     </style>
 </head>
@@ -704,6 +747,35 @@ is empty when first clicked -->
         <div class="sidebar-header">
             <span id="sidebar-toggle" class="las la-bars"></span>
         </div>
+        <div class="user-status" style="position:relative; width: 100px;padding-left:100px;">
+            {% if user.is_online %}
+            <div class="online_icon" data-link-id="{{user.id}}" style="background-color: green;">
+                <div class="status-message"></div>
+            </div>
+            {% else %}
+            <div class="online_icon" data-link-id="{{user.id}}" style="background-color: red;">
+                <div class="status-message"></div>
+            </div>
+            {% endif %}
+            <i style="position:absolute;font-size:20px;color:white;float:right;cursor: pointer;"
+                class="las la-angle-down status-dropdown"></i>
+            <div class="status-dropdown-menu" style="    z-index: 10000;
+            position: absolute;
+            width: fit-content;
+            background-color: white;
+            right: -108px;
+            top: 27px;
+            border: 1px solid black;
+            border-radius: 5px;
+            display: none;">
+                <a class="dropdown-item" href="#" id="available">
+                    <div class="online_icon" style="background-color: green;"></div>Available
+                </a>
+                <a class="dropdown-item" href="#" id="away">
+                    <div class="online_icon" style="background-color: red;"></div>Away
+                </a>
+            </div>
+        </div>
         <div id="leftside">
             <div class="search-wrapper">
                 <span class="las la-search"></span>
@@ -721,7 +793,8 @@ is empty when first clicked -->
                                 {% endif %}
                             </div>
                         </a>
-                        <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
+                        <i id="caret-icon" style="font-size:25px;color:white;float:right;"
+                            class="las la-angle-down"></i>
                         <div class="dropdown-content">
                             <div id="usermenu">
                                 {% if user.id in userlist %}
@@ -997,11 +1070,15 @@ is empty when first clicked -->
     $("#sidebar-toggle").on('click', function () {
         $(".sidebar").toggle('show hide');
     })
+    $(".status-dropdown").on('click', function () {
+        $(".status-dropdown-menu").slideToggle();
+    })
 </script>
 <script>
     let roomId = false;
     let nameofmembers = [];
     var whitelist_2 = [];
+    var whitelist_3 = [];
     var xisweird = 0;
     var y = 0;
     var z = 0;
@@ -1399,7 +1476,7 @@ is empty when first clicked -->
                 switch (data.msg_type) {
                     case 0:
                         // Message
-
+                        let pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/[^><]*)?", "g")
                         let text = (data.message.text) ? data.message.text : data.message;
                         let user = (data.message.from_user) ? data.message.from_user : data.username;
                         let useravatar = (data.message.avatar) ? data.message.avatar : data.avatar;
@@ -1445,8 +1522,18 @@ is empty when first clicked -->
                             }
                         }
                         //extract the url from the message
-                        let pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/[^><]*)?", "g")
-                        if (!is_file && !notice) {
+                        if (notice && !is_file) {
+                            console.log("slow it down");
+                            console.log("slow it down");
+                            console.log("slow it down");
+                            $(".chat-log").append(
+                                `<div class='notice-message'>` +
+                                `<span>` +
+                                text +
+                                `</span>` +
+                                `</div>`);
+                        }
+                        else if (!is_file && !notice) {
 
                             result = text.replace(pattern, function (url) {
                                 ;
@@ -1551,14 +1638,6 @@ is empty when first clicked -->
                                     timeid++;
                                 }
                             }
-                        }
-                        else if (notice && !is_file) {
-                            $(".chat-log").append(
-                                `<div class='notice-message'>` +
-                                `<span>` +
-                                text +
-                                `</span>` +
-                                `</div>`);
                         }
                         else if (is_file && !notice) {
                             ext = text.split(".");
@@ -2153,6 +2232,7 @@ is empty when first clicked -->
                         break;
                     case "get_members":
                         var people = data.member
+                        let coloricon = people.online ? `<div data-link-id="${people.id}" class="online_icon" style="background-color: green;"></div>` : `<div data-link-id="${people.id}" class="online_icon" style="background-color: red;"></div>`
                         let avatarofmembers = people.avatar ? '<img class="profile-pic" src="' + people.avatar + '">' : '<div class="profile-pic-wrapper" style="display: inline; width: 10%;" data-username="' + people.username + '" data-bgcolor="' + people.default + '"></div>'
 
 
@@ -2169,7 +2249,7 @@ is empty when first clicked -->
 
                             $(".list-of-members").append(
                                 `       <li>
-                                    <span class="profile-link">${avatarofmembers}<div online-link-id="${people.id}" class="online_icon"></div><p class="profile-name" data-member-name="${people.username}">${people.username}</p><i data-id="${people.id}" id="user-${people.id}"  class="las la-minus remove-button"></i></span>
+                                    <span class="profile-link">${avatarofmembers}${coloricon}<p class="profile-name">${people.username}</p><i data-id="${people.id}" id="user-${people.id}" data-member-name="${people.username}" class="las la-minus remove-button"></i></span>
         	            </li>`
 
                             );
@@ -2316,6 +2396,12 @@ is empty when first clicked -->
                                         room: data.room,
                                     })
                                 );
+                                $(".chat-log").append(
+                                    `<div class='notice-message'>` +
+                                    `<span>` +
+                                    data.msgAlert +
+                                    `</span>` +
+                                    `</div>`);
 
                             }
                             else if (!data.edited && roomId == data.room) {
@@ -2348,6 +2434,12 @@ is empty when first clicked -->
                                         room: data.room,
                                     })
                                 );
+                                $(".chat-log").append(
+                                    `<div class='notice-message'>` +
+                                    `<span>` +
+                                    data.msgAlert +
+                                    `</span>` +
+                                    `</div>`);
                             }
                             else if (!data.edited && roomId != data.room) {
                                 $("[avatar-value=" + data.room + "]").html("");
@@ -2373,7 +2465,8 @@ is empty when first clicked -->
                             name: allusers.username,
                             email: allusers.email,
                             avatar: allusers.avatar,
-                            default: allusers.default
+                            default: allusers.default,
+                            online: allusers.online
                         }
                         y++;
 
@@ -2484,6 +2577,12 @@ is empty when first clicked -->
                                         room: data.room,
                                     })
                                 );
+                                $(".chat-log").append(
+                                    `<div class='notice-message'>` +
+                                    `<span>` +
+                                    data.msgAlert +
+                                    `</span>` +
+                                    `</div>`);
                             }
                             else if (!data.edited && roomId == data.room) {
                                 wasclicked = false;
@@ -2515,6 +2614,12 @@ is empty when first clicked -->
                                         room: data.room,
                                     })
                                 );
+                                $(".chat-log").append(
+                                    `<div class='notice-message'>` +
+                                    `<span>` +
+                                    data.msgAlert +
+                                    `</span>` +
+                                    `</div>`);
                             }
                             else if (!data.edited && roomId != data.room) {
                                 $("[room-name-value=" + data.room + "]").html("");
@@ -2684,8 +2789,12 @@ is empty when first clicked -->
                                     room: data.new_room,
                                 })
                             );
-                            //editbuttonclicked(`ellipsis-${data.new_room}`);
-                            //menuclicked(`delete-${data.new_room}`, `edit-${data.new_room}`);
+                            $(".chat-log").append(
+                                `<div class='notice-message'>` +
+                                `<span>` +
+                                data.msgAlert +
+                                `</span>` +
+                                `</div>`);
                         }
                         else if ($("#myself").val() == data.removed_user && roomId != data.room) {
                             $("[avatar-value=" + data.new_room + "]").html("");
@@ -2736,6 +2845,12 @@ is empty when first clicked -->
                                         room: data.room,
                                     })
                                 );
+                                $(".chat-log").append(
+                                    `<div class='notice-message'>` +
+                                    `<span>` +
+                                    data.msgAlert +
+                                    `</span>` +
+                                    `</div>`);
                             }
                             else if (!data.edited && roomId == data.room) {
                                 wasclicked = false;
@@ -2767,6 +2882,12 @@ is empty when first clicked -->
                                         room: data.room,
                                     })
                                 );
+                                $(".chat-log").append(
+                                    `<div class='notice-message'>` +
+                                    `<span>` +
+                                    data.msgAlert +
+                                    `</span>` +
+                                    `</div>`);
                             }
                             else if (!data.edited && roomId != data.room) {
                                 $("[avatar-value=" + data.room + "]").html("");
@@ -2872,15 +2993,16 @@ is empty when first clicked -->
                                 <span
                                      ellipsis-value="${roomie.id}" id="ellipsis-${roomie.id}" class="las la-ellipsis-v ellipsis">
                                     </span>
-                                <div class="chat-dropdown">
-                                            <div chat-dropdown-value="${roomie.id}" class="chat-dropdown-content dropdown-menu">
-                                                <a edit-button-value="${roomie.id}" class="edit-button dropdown-item" id="edit-${roomie.id}">Edit Name</a>
+
+                            </div>
+                            <div class="chat-dropdown">
+                                <div chat-dropdown-value="${roomie.id}" class="chat-dropdown-content dropdown-menu">
+                                    <a edit-button-value="${roomie.id}" class="edit-button dropdown-item" id="edit-${roomie.id}">Edit Name</a>
                                     <a delete-button-value="${roomie.id}" class="delete-button dropdown-item" id="delete-${roomie.id}">Delete Room</a>
-                                            </div>
                                 </div>
                             </div>
-
-                        </li>`);
+                            </li>`
+                        );
 
                         if (data.rooms.unread == true) {
                             var firstunreadroom = $("li[data-room-id=" + roomie.id + "]")[0];
@@ -2907,8 +3029,18 @@ is empty when first clicked -->
                         title = new_title.name;
                         break;
                     case "change_status":
-                        var onlinelink = $("[online-link-id=" + data.id + "]");
+                        console.log("change_status");
+                        var onlinelink = $("[data-link-id=" + data.id + "]");
                         onlinelink.css("background-color", "green");
+                        $(".status-message").empty();
+                        $(".status-message").append("Available");
+                        break;
+                    case "change_status_off":
+                        console.log("change_status");
+                        var onlinelink = $("[data-link-id=" + data.id + "]");
+                        onlinelink.css("background-color", "red");
+                        $(".status-message").empty();
+                        $(".status-message").append("Away");
                         break;
                     case "edit":
                         var target_li = $("li[data-room-id=" + data.room + "]")[0];
@@ -2933,11 +3065,19 @@ is empty when first clicked -->
                             $(nameOfChat).html(data.name);
                             $(".room-title").html("");
                             $(".room-title").html(data.name);
+                            $(".chat-log").append(
+                                `<div class='notice-message'>` +
+                                `<span>` +
+                                data.msgAlert +
+                                `</span>` +
+                                `</div>`);
+
                         }
                         else {
                             $(nameOfChat).html("");
                             $(nameOfChat).html(data.name);
                         }
+
                         break;
 
                     default:
@@ -2986,6 +3126,7 @@ is empty when first clicked -->
                         "email": el.email,
                         "default": el.default,
                         "disabled": true,
+                        "status": el.online
                     }
                     member = false;
                     z++;
@@ -2999,6 +3140,7 @@ is empty when first clicked -->
                         "email": el.email,
                         "default": el.default,
                         "disabled": false,
+                        "status": el.online
                     }
 
                     z++;
@@ -3018,11 +3160,10 @@ is empty when first clicked -->
 
             fillarray2();
 
-            /*
-                        console.log("name", nameofmembers);
-                        console.log("memberlist", memberlist);
-                        console.log("whitelist", whitelist_2);
-            */
+            console.log("name", nameofmembers);
+            console.log("memberlist", memberlist);
+            console.log("whitelist", whitelist_2);
+
         });
 
 
@@ -3107,20 +3248,14 @@ is empty when first clicked -->
                 JSON.stringify({
                     command: "remove",
                     room: roomId,
-                    old_user: removeduser
-
-                })
-            );
-            socket.send(
-                JSON.stringify({
-                    "command": "send",
-                    "room": roomId,
+                    old_user: removeduser,
                     "message": noticemsg,
                     "from_user": $("#myself").val(),
                     "file": false,
                     "notice": true,
                 })
             );
+
             $(".confirmation-modal").hide();
         });
         $("#confirmation").click(function () {
@@ -3129,12 +3264,6 @@ is empty when first clicked -->
                 JSON.stringify({
                     command: "delete",
                     room: deleteroom,
-                })
-            );
-            socket.send(
-                JSON.stringify({
-                    "command": "send",
-                    "room": roomId,
                     "message": noticemsg,
                     "from_user": $("#myself").val(),
                     "file": false,
@@ -3152,12 +3281,6 @@ is empty when first clicked -->
                     command: "edit",
                     room: editroom,
                     newName: newChatName,
-                })
-            );
-            socket.send(
-                JSON.stringify({
-                    "command": "send",
-                    "room": roomId,
                     "message": noticemsg,
                     "from_user": $("#myself").val(),
                     "file": false,
@@ -3197,12 +3320,6 @@ is empty when first clicked -->
                     command: "add",
                     room: roomId,
                     newUsers: JSON.parse($("#user-input").val()),
-                })
-            );
-            socket.send(
-                JSON.stringify({
-                    "command": "send",
-                    "room": roomId,
                     "message": noticemsg,
                     "from_user": $("#myself").val(),
                     "file": false,
@@ -3218,7 +3335,8 @@ is empty when first clicked -->
         function roomClick() {
             let b = 0;
             xisweird = 0;
-
+            y = 0;
+            memberlist = [];
             if (ellipsisClicked == false) {
 
 
@@ -3381,6 +3499,7 @@ is empty when first clicked -->
 
         $("#create-chat").click(function () {
             wasclicked = false;
+
             if (joinedroom) {
                 socket.send(
                     JSON.stringify({
@@ -3411,8 +3530,11 @@ is empty when first clicked -->
             $(".rightPanel").hide();
             createroom = true;
             joinedroom = false;
+            roomId = null;
+            createroomid = null;
             getusers();
             getallusers();
+
         });
 
         function getusers() {
@@ -3441,8 +3563,28 @@ is empty when first clicked -->
 
 
 
-
-
+        $("#available").click(function () {
+            $(".status-dropdown-menu").hide();
+            $(".status-message").empty();
+            $(".status-message").append("Available");
+            socket.send(
+                JSON.stringify({
+                    "command": "was_connected",
+                    "user": $("#myself").val(),
+                })
+            );
+        })
+        $("#away").click(function () {
+            $(".status-dropdown-menu").hide();
+            $(".status-message").empty();
+            $(".status-message").append("Away");
+            socket.send(
+                JSON.stringify({
+                    "command": "was_disconnected",
+                    "user": $("#myself").val(),
+                })
+            );
+        })
 
         // Helpful debugging
         socket.onopen = function () {
@@ -3456,12 +3598,12 @@ is empty when first clicked -->
                         "command": "rooms",
                     })
                 );
-                /*socket.send(
+                socket.send(
                     JSON.stringify({
                         "command": "was_connected",
                         "user": $("#myself").val(),
                     })
-                );*/
+                );
                 if (roomId) {
                     //give room you were in active class and join it
                     let activeroom = $("li[room-link=" + roomId + "]")[0];
@@ -3484,6 +3626,12 @@ is empty when first clicked -->
                 console.log("disconnected modal shown")
                 $(".Disconnected-modal").show();
                 $(".rooms").empty();
+                socket.send(
+                    JSON.stringify({
+                        "command": "was_disconnected",
+                        "user": $("#myself").val(),
+                    })
+                );
             }
         };
 
@@ -3506,6 +3654,14 @@ is empty when first clicked -->
                 templates: {
                     tag: function (tagData) {
                         try {
+                            let avatarurl = "";
+                            for (var i = 0; i < memberlist.length; i++) {
+                                var el = memberlist[i];
+                                if (el.value == tagData.value) {
+                                    avatarurl = el.avatar
+                                    break;
+                                }
+                            }
                             return `
                                 <tag title="${tagData.email}"
                                     contenteditable='false'
@@ -3515,9 +3671,12 @@ is empty when first clicked -->
                                     ${this.getAttributes(tagData)}>
                                 <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
                                 <div>
-                                    <div class='tagify__tag__avatar-wrap'>
-                                        <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
-                                    </div>
+                                    ${tagData.avatar ? `
+                            <div class='tagify__tag__avatar-wrap'>
+                                <img onerror="this.style.visibility='hidden'" src="${avatarurl}">
+                            </div>` : `<div class='tagify__tag__avatar-wrap' data-username="${tagData.name}" data-bgcolor="${tagData.default}">
+                        <div data-link-id="${tagData.value}"class="online_icon"></div>
+                    </div>`}
                                     <span class='tagify__tag-text'>${tagData.name}</span>
                                 </div>
                                 </tag>`
@@ -3527,6 +3686,7 @@ is empty when first clicked -->
 
                     dropdownItem: function (tagData) {
                         try {
+                            //let onlineicon = status;
                             let avatarurl = "";
                             for (var i = 0; i < memberlist.length; i++) {
                                 var el = memberlist[i];
@@ -3568,20 +3728,17 @@ is empty when first clicked -->
                                    role="option">
                                    ${tagData.avatar ? `         
                                     <div class='tagify__dropdown__item__avatar-wrap'>
-                                    <div class="profile-pic-wrapper">
                                     <img onerror="this.style.visibility='hidden'" src="${avatarurl}">
-                                    <div online-link-id="${tagData.value}"class="online_icon"></div>
-                                    </div>
-                                   </div>` : `<div class='tagify__dropdown__item__avatar-wrap'>
-                        <div class="profile-pic-wrapper" data-username="${tagData.name}" data-bgcolor="${tagData.default}">
-                        </div>
-                        <div online-link-id="${tagData.value}"class="online_icon"></div>
-                    </div>`
+                                    ${tagData.status === true ? `<div data-link-id="${tagData.value}"class="online_icon" style="background-color: green"></div>` : `<div data-link-id="${tagData.value}"class="online_icon" style="background-color: red"></div>`}
+                                    </div>` : `<div class='tagify__dropdown__item__avatar-wrap' data-username="${tagData.name}" data-bgcolor="${tagData.default}">
+                                        ${tagData.status === true ? `<div data-link-id="${tagData.value}"class="online_icon" style="background-color: green"></div>` : `<div data-link-id="${tagData.value}"class="online_icon" style="background-color: red"></div>`}
+                                        </div>`
                                     }
                                    <strong>${tagData.name}</strong>
                                    <span>${tagData.email}</span>
                                </div>
                            `
+
                             }
                         }
                         catch (err) { }
@@ -3606,12 +3763,24 @@ is empty when first clicked -->
 
             tagify.on("dropdown:show", onSuggestionsListUpdate)
                 .on("dropdown:hide", onSuggestionsListHide)
-                .on('dropdown:scroll', onDropdownScroll)
+                //.on('dropdown:scroll', onDropdownScroll)
+                .on("dropdown:select", onDropdownSelect)
+                .on("dropdown:updated", onDropdownSelect)
+                .on("dropdown:noMatch", onDropdownSelect)
+                .on("add", onTagSelect)
 
             renderSuggestionsList()
 
+            function onDropdownSelect() {
+                showTagAvatars();
+                showDropdownAvatars();
+            }
+            function onTagSelect() {
+                showTagAvatars();
+            }
             // ES2015 argument destructuring
             function onSuggestionsListUpdate({ detail: suggestionsElm }) {
+                showDropdownAvatars();
                 //console.log(suggestionsElm)
             }
 
@@ -3621,6 +3790,7 @@ is empty when first clicked -->
 
             function onDropdownScroll(e) {
                 //console.log(e.detail)
+                //showDropdownAvatars();
             }
 
             // https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
@@ -3637,7 +3807,7 @@ is empty when first clicked -->
             $("#submit-users").on('click', tagify.removeAllTags.bind(tagify));
 
 
-
+            showDropdownAvatars();
 
         }
 
@@ -3672,9 +3842,12 @@ is empty when first clicked -->
                             ${this.getAttributes(tagData)}>
                         <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
                         <div>
+                            ${tagData.avatar ? `
                             <div class='tagify__tag__avatar-wrap'>
                                 <img onerror="this.style.visibility='hidden'" src="${avatarurl}">
-                            </div>
+                            </div>` : `<div class='tagify__tag__avatar-wrap' data-username="${tagData.name}" data-bgcolor="${tagData.default}">
+                        <div data-link-id="${tagData.value}"class="online_icon"></div>
+                    </div>`}
                             <span class='tagify__tag-text'>${tagData.name}</span>
                         </div>
                     </tag>
@@ -3690,7 +3863,9 @@ is empty when first clicked -->
                         break;
                     }
                 }
-                tagdropdown = `
+                let boolValue = (tagData.status === "True");
+                if (boolValue) {
+                    return `
                                <div ${this.getAttributes(tagData)}
                                    class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
                                    tabindex="0"
@@ -3698,17 +3873,35 @@ is empty when first clicked -->
                                    ${tagData.avatar ? `         
                                     <div class='tagify__dropdown__item__avatar-wrap'>
                                     <img onerror="this.style.visibility='hidden'" src="${avatarurl}">
-                                    <div online-link-id="${tagData.value}"class="online_icon"></div>
+                                    <div data-link-id="${tagData.value}"class="online_icon" style="background-color: green;"></div>
                                    </div>` : `<div class='tagify__dropdown__item__avatar-wrap' data-username="${tagData.name}" data-bgcolor="${tagData.default}">
-                        <div online-link-id="${tagData.value}"class="online_icon"></div>
+                        <div data-link-id="${tagData.value}"class="online_icon" style="background-color: green;"></div>
                     </div>`
-                    }
+                        }
                                    <strong>${tagData.name}</strong>
                                    <span>${tagData.email}</span>
                                </div>
                            `
-                showTagAvatars();
-                return tagdropdown;
+                }
+                else {
+                    return `
+                               <div ${this.getAttributes(tagData)}
+                                   class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'
+                                   tabindex="0"
+                                   role="option">
+                                   ${tagData.avatar ? `         
+                                    <div class='tagify__dropdown__item__avatar-wrap'>
+                                    <img onerror="this.style.visibility='hidden'" src="${avatarurl}">
+                                    <div data-link-id="${tagData.value}"class="online_icon" style="background-color: red;"></div>
+                                   </div>` : `<div class='tagify__dropdown__item__avatar-wrap' data-username="${tagData.name}" data-bgcolor="${tagData.default}">
+                                    <div data-link-id="${tagData.value} "class="online_icon" style="background-color: red;"></div>
+                                   </div>`
+                        }
+                                   <strong>${tagData.name}</strong>
+                                   <span>${tagData.email}</span>
+                               </div>
+                           `
+                }
             }
 
             // initialize Tagify on the above input node reference
@@ -3736,23 +3929,53 @@ is empty when first clicked -->
                     "avatar2": "{% static 'app/images/PngItem_4212266.png' %}",
                     "avatar": "{{user.avatar}}",
                     "email": "{{user.email}}",
-                    "default": "{{user.bgColor}}"
+                    "default": "{{user.bgColor}}",
+                    "status": "{{user.is_online}}"
                 },
                 {% endfor %}
                     ]
     })
 
-    /*tagify2.on('dropdown:show dropdown:updated', onDropdownShow)
+    tagify2.on('dropdown:show dropdown:updated', onDropdownShow)
+        .on("dropdown:hide", onSuggestionsListHide)
+        //.on('dropdown:scroll', onDropdownScroll)
+        .on("dropdown:select", onDropdownSelect)
+        .on("dropdown:updated", onDropdownSelect)
+        .on("dropdown:noMatch", onDropdownSelect)
+        .on("add", onTagSelect)
 
 
+    function onTagSelect() {
+        showTagAvatars();
+    }
     function onDropdownShow(e) {
-        var dropdownContentElm = e.detail.tagify2.DOM.dropdown.content;
+        showDropdownAvatars();
 
-    }*/
+    }
+    function onDropdownSelect() {
+        showDropdownAvatars();
+        showTagAvatars();
 
+    }
+    // ES2015 argument destructuring
+    function onSuggestionsListUpdate({ detail: suggestionsElm }) {
+        showDropdownAvatars();
+        //console.log(suggestionsElm)
+    }
+
+    function onSuggestionsListHide() {
+        //console.log("hide dropdown")
+        showDropdownAvatars();
+    }
+
+    function onDropdownScroll(e) {
+        //console.log(e.detail)
+        showDropdownAvatars();
+    }
     $(".sending-form").on("submit", tagify2.removeAllTags.bind(tagify2));
+    
 
-            }
+}
     })
 </script>
 

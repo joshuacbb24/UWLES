@@ -159,6 +159,9 @@ label {
   background: silver;
   margin-right: 5px;
   transition: 0.12s ease-out;
+  color: white;
+  justify-content: center;
+  text-align: center;
 }
 
 #users-list .tagify__tag img {
@@ -184,6 +187,9 @@ label {
   background: silver;
   margin-right: 5px;
   transition: 0.12s ease-out;
+  color: white;
+  justify-content: center;
+  text-align: center;
 }
 
 #section-manual-suggestions .tagify__tag img {

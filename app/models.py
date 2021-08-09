@@ -47,6 +47,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_client = models.BooleanField(default=True)
+    is_online = models.BooleanField(default=False)
     is_caseworker = models.BooleanField(default=False)
     has_caseworker = models.BooleanField(default=False)
 

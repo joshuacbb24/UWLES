@@ -501,3 +501,25 @@ def delete_unread(room_id, new_name, message):
     except OfflineMessage.DoesNotExist:
 
         raise ClientError("NO Message To Delete")
+
+
+@ database_sync_to_async
+def online(myself):
+    try:
+        me = Account.objects.get(username=myself)
+        me.is_online = True
+        me.save()
+    except Account.DoesNotExist:
+
+        raise ClientError("NOT CONNECTED")
+
+
+@ database_sync_to_async
+def offline(myself):
+    try:
+        me = Account.objects.get(username=myself)
+        me.is_online = False
+        me.save()
+    except Account.DoesNotExist:
+
+        raise ClientError("NOT CONNECTED")
