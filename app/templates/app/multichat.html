@@ -1047,7 +1047,18 @@ is empty when first clicked -->
 
 </div>
 <div class="Disconnected-modal">
-
+    <div class="disconnected-message" style="
+    position: relative;
+    width: 46.4%;
+    background-color: white;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 3px;
+    margin-left: 25.1%;
+    text-align: center;
+    color: orange;
+    padding-top: 12px;
+"><u>Trying to Reconnect...</u></div>
 </div>
 
 
@@ -1117,6 +1128,7 @@ is empty when first clicked -->
     let wasclicked = false;
     let notice = false;
     let unreadnotdisplayed = true;
+    let awayclicked = false;
     const noticeMessage = "User made change to chat."
 
 
@@ -2232,6 +2244,7 @@ is empty when first clicked -->
                         break;
                     case "get_members":
                         var people = data.member
+                        //TO-DO: if awayclicked = false {let coloricon = green or red} else {let color icon = grey}
                         let coloricon = people.online ? `<div data-link-id="${people.id}" class="online_icon" style="background-color: green;"></div>` : `<div data-link-id="${people.id}" class="online_icon" style="background-color: red;"></div>`
                         let avatarofmembers = people.avatar ? '<img class="profile-pic" src="' + people.avatar + '">' : '<div class="profile-pic-wrapper" style="display: inline; width: 10%;" data-username="' + people.username + '" data-bgcolor="' + people.default + '"></div>'
 
@@ -3029,6 +3042,7 @@ is empty when first clicked -->
                         title = new_title.name;
                         break;
                     case "change_status":
+                        //TO-DO: if awayclicked = false {let coloricon = green} else {let color icon = grey}
                         console.log("change_status");
                         var onlinelink = $("[data-link-id=" + data.id + "]");
                         onlinelink.css("background-color", "green");
@@ -3036,6 +3050,7 @@ is empty when first clicked -->
                         $(".status-message").append("Available");
                         break;
                     case "change_status_off":
+                        //TO-DO: if awayclicked = false {let coloricon = red} else {let color icon = grey}
                         console.log("change_status");
                         var onlinelink = $("[data-link-id=" + data.id + "]");
                         onlinelink.css("background-color", "red");
@@ -3538,6 +3553,8 @@ is empty when first clicked -->
         });
 
         function getusers() {
+            memberlist = [];
+            y = 0;
             socket.send(
                 JSON.stringify({
                     command: "users",
@@ -3573,6 +3590,7 @@ is empty when first clicked -->
                     "user": $("#myself").val(),
                 })
             );
+            awayclicked = false;
         })
         $("#away").click(function () {
             $(".status-dropdown-menu").hide();
@@ -3584,6 +3602,7 @@ is empty when first clicked -->
                     "user": $("#myself").val(),
                 })
             );
+            awayclicked = true;
         })
 
         // Helpful debugging
