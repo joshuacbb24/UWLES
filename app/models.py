@@ -13,6 +13,7 @@ from django.utils import timezone
 
 mapbox_access_token = 'pk.eyJ1IjoidXdsZXN0ZXN0YWRtaW4iLCJhIjoiY2twdTYzZnU0MHdidjJ2cG0xM2h0dXJsdyJ9.lktGtwWKbT-GAmSUOQNEdA'
 
+
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, password=None):
         if not email:
@@ -20,37 +21,40 @@ class MyAccountManager(BaseUserManager):
         if not username:
             raise ValueError("User must have a username")
         user = self.model(
-                email = self.normalize_email(email),
-                username = username,
-            )
+            email=self.normalize_email(email),
+            username=username,
+        )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
     def create_superuser(self, email, username, password):
         user = self.create_user(
-                email = self.normalize_email(email),
-                password = password,
-                username = username,
-            )
+            email=self.normalize_email(email),
+            password=password,
+            username=username,
+        )
         user.is_admin = True
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
         return user
 
+
 class Account(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     avatar = models.ImageField(null=True, blank=True, upload_to='profile_pics')
     bgColor = models.CharField(max_length=10, null=True, blank=True)
-    date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
+    date_joined = models.DateTimeField(
+        verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_client = models.BooleanField(default=True)
+    is_online = models.BooleanField(default=False)
     is_caseworker = models.BooleanField(default=False)
     has_caseworker = models.BooleanField(default=False)
 
@@ -73,8 +77,10 @@ class Account(AbstractBaseUser, PermissionsMixin):
         hex_number = format(random_number, 'x')
         self.bgColor = '#' + hex_number
         # TODO maybe remove this model?
-    
+
 # TODO maybe remove this model?
+
+
 class Channels(models.Model):
     """The channel/socket associted with each user"""
     user = models.ForeignKey(Account, on_delete=models.PROTECT, unique=True)
@@ -113,6 +119,7 @@ class Messages(models.Model):
     def __str__(self):
         return self.message
 
+
 class OfflineMessage(models.Model):
     """Messages queued for delivery when a user connnects"""
     offline_user = models.ForeignKey(
@@ -126,40 +133,45 @@ class OfflineMessage(models.Model):
     def __str__(self):
         return "{} {} {}".format(self.offline_user, self.chat_group, self.message)
 
+
 class BgInfo(models.Model):
     GENDER_CHOICES = (
         ('Male', 'Male'),
         ('Female', 'Female'),
         ('Other', 'Other'),
         ('Prefer not to say', 'Prefer Not To Say'),
-        )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, on_delete=models.CASCADE)
-    firstname = models.CharField(max_length = 50)
-    lastname = models.CharField(max_length = 50)
-    middle_initial = models.CharField(max_length = 3)
-    phone_number = models.CharField(max_length = 10)
+    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             default=1, on_delete=models.CASCADE)
+    firstname = models.CharField(max_length=50)
+    lastname = models.CharField(max_length=50)
+    middle_initial = models.CharField(max_length=3)
+    phone_number = models.CharField(max_length=10)
     birthday = models.DateField()
-    email = models.EmailField(max_length = 254)
-    gender = models.CharField(max_length = 20, choices=GENDER_CHOICES)
-    insurance_provider = models.CharField(max_length = 100, default='Provider')
-    insurance_member_id = models.CharField(max_length = 25, default='0000000')
+    email = models.EmailField(max_length=254)
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES)
+    insurance_provider = models.CharField(max_length=100, default='Provider')
+    insurance_member_id = models.CharField(max_length=25, default='0000000')
 
     class Meta:
-        unique_together = (('firstname', 'lastname', 'middle_initial', 'email'))
+        unique_together = (
+            ('firstname', 'lastname', 'middle_initial', 'email'))
 
     def __str__(self):
         return self.firstname + " " + self.lastname
 
+
 class EcInfo(models.Model):
     background = models.ForeignKey(BgInfo, on_delete=models.CASCADE)
-    name = models.CharField(max_length = 50)
-    phone_number = models.CharField(max_length = 10)
-    relationship = models.CharField(max_length = 20)
-    primary_care_physician = models.CharField(max_length = 50)
-    physician_phone = models.CharField(max_length = 10)
+    name = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=10)
+    relationship = models.CharField(max_length=20)
+    primary_care_physician = models.CharField(max_length=50)
+    physician_phone = models.CharField(max_length=10)
 
     class Meta:
         unique_together = (('background', 'name'))
+
 
 class DemoInfo(models.Model):
     COUNTY_CHOICES = (
@@ -167,47 +179,52 @@ class DemoInfo(models.Model):
         ('Wicomico', 'Wicomico'),
         ('Somerset', 'Somerset'),
         ('Dorchester', 'Dorchester'),
-        )
+    )
     STATE_CHOICES = (
         ('MD', 'Maryland'),
-        )
+    )
     ETHNICITY_CHOICES = (
         ('Hispanic or Latino', 'Hispanic or Latino'),
         ('Not Hispanic or Latino', 'Not Hispanic or Latino'),
         ('No Response', 'No Response'),
-        )
+    )
     RACE_CHOICES = (
         ('American Indian or Alask Native', 'American Indian or Alaska Native'),
         ('Asian', 'Asian'),
         ('Black or African American', 'Black or African American'),
-        ('Native Hawaiin or Other Pacific Islander', 'Native Hawaiin or Other Pacific Islander'),
+        ('Native Hawaiin or Other Pacific Islander',
+         'Native Hawaiin or Other Pacific Islander'),
         ('White', 'White'),
         ('Two or More Races', 'Two or More Races'),
         ('No Response', 'No Response'),
-        )
+    )
     background = models.ForeignKey(BgInfo, on_delete=models.CASCADE)
-    street_address = models.CharField(max_length = 100)
-    apt_unit = models.CharField(max_length = 10)
-    city = models.CharField(max_length = 25)
-    zipcode = models.CharField(max_length = 5)
-    county = models.CharField(max_length = 10, choices=COUNTY_CHOICES)
-    state = models.CharField(max_length = 20, choices=STATE_CHOICES)
-    ethnicity = models.CharField(max_length = 25, choices=ETHNICITY_CHOICES)
-    race = models.CharField(max_length = 50, choices=RACE_CHOICES)
+    street_address = models.CharField(max_length=100)
+    apt_unit = models.CharField(max_length=10)
+    city = models.CharField(max_length=25)
+    zipcode = models.CharField(max_length=5)
+    county = models.CharField(max_length=10, choices=COUNTY_CHOICES)
+    state = models.CharField(max_length=20, choices=STATE_CHOICES)
+    ethnicity = models.CharField(max_length=25, choices=ETHNICITY_CHOICES)
+    race = models.CharField(max_length=50, choices=RACE_CHOICES)
 
     class Meta:
         unique_together = (('background', 'zipcode', 'street_address'))
 
+
 class ClientNotes(models.Model):
     background = models.ForeignKey(BgInfo, on_delete=models.CASCADE)
-    notes = models.CharField(max_length = 10000)
+    notes = models.CharField(max_length=10000)
 
     class Meta:
         unique_together = (('background', 'notes'))
 
+
 class ClientList(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    clients = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="clients")
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    clients = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True, related_name="clients")
 
     def __str__(self):
         return self.user.username
@@ -222,11 +239,11 @@ class ClientList(models.Model):
         for client in clients:
             list.clients.remove(client)
 
-class Articles(models.Model):
-    article_name = models.CharField(max_length = 100)
-    article_descript = models.CharField(max_length = 200)
-    article_content = models.CharField(max_length = 5000)
 
+class Articles(models.Model):
+    article_name = models.CharField(max_length=100)
+    article_descript = models.CharField(max_length=200)
+    article_content = models.CharField(max_length=5000)
 
     class Meta:
         unique_together = (('article_name', 'article_descript'))
@@ -234,40 +251,44 @@ class Articles(models.Model):
     def __str__(self):
         return self.article_name
 
+
 class Services(models.Model):
     COUNTY_CHOICES = (
         ('Worcester', 'Worcester'),
         ('Wicomico', 'Wicomico'),
         ('Somerset', 'Somerset'),
         ('Dorchester', 'Dorchester'),
-        )
+    )
     ELIGIBILITY_CHOICES = (
         ('All Ages', 'All Ages'),
         ('Children & Youth (17 and under)', 'Children & Youth (17 and under)'),
         ('Adults (18-60)', 'Adults (18-60)'),
         ('Seniors (60+)', 'Seniors (60+)'),
-        )
-    service_name = models.CharField(max_length = 100, unique = True)
-    service_descript = models.CharField(max_length = 500)
-    service_intake_eligibility = models.CharField(max_length = 200)
-    service_contact_name = models.CharField(max_length = 100)
-    service_contact_email = models.EmailField(max_length = 254)
-    service_contact_phone = models.CharField(max_length = 10)
-    service_contact_address = models.CharField(max_length = 100)
-    service_city = models.CharField(max_length = 25)
-    service_zipcode = models.CharField(max_length = 5)
-    service_county = models.CharField(max_length = 10, choices = COUNTY_CHOICES)
-    service_eligibility = models.CharField(max_length = 75, choices = ELIGIBILITY_CHOICES)
-    service_url = models.CharField(max_length = 5000)
+    )
+    service_name = models.CharField(max_length=100, unique=True)
+    service_descript = models.CharField(max_length=500)
+    service_intake_eligibility = models.CharField(max_length=200)
+    service_contact_name = models.CharField(max_length=100)
+    service_contact_email = models.EmailField(max_length=254)
+    service_contact_phone = models.CharField(max_length=10)
+    service_contact_address = models.CharField(max_length=100)
+    service_city = models.CharField(max_length=25)
+    service_zipcode = models.CharField(max_length=5)
+    service_county = models.CharField(max_length=10, choices=COUNTY_CHOICES)
+    service_eligibility = models.CharField(
+        max_length=75, choices=ELIGIBILITY_CHOICES)
+    service_url = models.CharField(max_length=5000)
 
     def __str__(self):
         return self.service_name
 
+
 class PillTags(models.Model):
-    tag = models.CharField(max_length = 25, unique = True)
-    
+    tag = models.CharField(max_length=25, unique=True)
+
     def __str__(self):
         return self.tag
+
 
 class Eligibility(models.Model):
     ELIGIBILITY_CHOICES = (
@@ -276,11 +297,12 @@ class Eligibility(models.Model):
         ('Teens(13-17)', 'Teens(13-17)'),
         ('Adults(18+)', 'Adults(18+)'),
         ('Seniors(60+)', 'Seniors(60+)'),
-        )
-    eligibility = models.CharField(max_length = 75, choices = ELIGIBILITY_CHOICES)
+    )
+    eligibility = models.CharField(max_length=75, choices=ELIGIBILITY_CHOICES)
 
     def __str__(self):
         return self.eligibility
+
 
 class Counties(models.Model):
     COUNTY_CHOICES = (
@@ -289,10 +311,12 @@ class Counties(models.Model):
         ('Somerset', 'Somerset'),
         ('Dorchester', 'Dorchester'),
     )
-    county = models.CharField(max_length=20, choices=COUNTY_CHOICES, primary_key=True)
+    county = models.CharField(
+        max_length=20, choices=COUNTY_CHOICES, primary_key=True)
 
     def __str__(self):
         return self.county
+
 
 class Languages(models.Model):
     LANGUAGE_CHOICES = (
@@ -300,10 +324,12 @@ class Languages(models.Model):
         ('Spanish', 'Spanish'),
         ('Haitian Creole', 'Haitian Creole')
     )
-    language = models.CharField(max_length=20, choices=LANGUAGE_CHOICES, primary_key=True)
+    language = models.CharField(
+        max_length=20, choices=LANGUAGE_CHOICES, primary_key=True)
 
     def __str__(self):
         return self.language
+
 
 class Organizations(models.Model):
     COUNTY_CHOICES = (
@@ -311,59 +337,62 @@ class Organizations(models.Model):
         ('Wicomico', 'Wicomico'),
         ('Somerset', 'Somerset'),
         ('Dorchester', 'Dorchester'),
-        )
+    )
     STATE_CHOICES = (
         ('MD', 'MD'),
-        )
+    )
     LANGUAGE_CHOICES = (
         ('English', 'English'),
         ('Spanish', 'Spanish'),
     )
-    org_name = models.CharField(max_length = 100, unique = True)
-    website = models.CharField(max_length = 100)
-    org_phone = models.CharField(max_length = 10)
-    org_email = models.EmailField(max_length = 60)
-    org_fax = models.CharField(max_length = 10, blank = True)
-    description = models.CharField(max_length = 500)
+    org_name = models.CharField(max_length=100, unique=True)
+    website = models.CharField(max_length=100)
+    org_phone = models.CharField(max_length=10)
+    org_email = models.EmailField(max_length=60)
+    org_fax = models.CharField(max_length=10, blank=True)
+    description = models.CharField(max_length=500)
     eligibility = models.ManyToManyField(Eligibility)
 
-    street = models.CharField(max_length = 100)
-    apt_number = models.CharField(max_length = 10, blank = True, null = True)
-    city = models.CharField(max_length = 25)
-    state = models.CharField(max_length = 20, choices = STATE_CHOICES)
-    zipcode = models.CharField(max_length = 10)
-    county = models.CharField(max_length = 10, choices = COUNTY_CHOICES)
+    street = models.CharField(max_length=100)
+    apt_number = models.CharField(max_length=10, blank=True, null=True)
+    city = models.CharField(max_length=25)
+    state = models.CharField(max_length=20, choices=STATE_CHOICES)
+    zipcode = models.CharField(max_length=10)
+    county = models.CharField(max_length=10, choices=COUNTY_CHOICES)
 
-    mail_street = models.CharField(max_length = 100, blank = True, null = True)
-    mail_apt_number = models.CharField(max_length = 10, blank = True, null = True)
-    mail_city = models.CharField(max_length = 25, blank = True, null = True)
-    mail_state = models.CharField(max_length = 20, choices = STATE_CHOICES, blank = True, null = True)
-    mail_zipcode = models.CharField(max_length = 10, blank = True, null = True)
-    mail_county = models.CharField(max_length = 10, choices = COUNTY_CHOICES, blank = True, null = True)
+    mail_street = models.CharField(max_length=100, blank=True, null=True)
+    mail_apt_number = models.CharField(max_length=10, blank=True, null=True)
+    mail_city = models.CharField(max_length=25, blank=True, null=True)
+    mail_state = models.CharField(
+        max_length=20, choices=STATE_CHOICES, blank=True, null=True)
+    mail_zipcode = models.CharField(max_length=10, blank=True, null=True)
+    mail_county = models.CharField(
+        max_length=10, choices=COUNTY_CHOICES, blank=True, null=True)
 
-    contact_name = models.CharField(max_length = 70)
-    contact_phone = models.CharField(max_length = 10)
-    contact_title = models.CharField(max_length = 50)
-    contact_email = models.EmailField(max_length = 60)
+    contact_name = models.CharField(max_length=70)
+    contact_phone = models.CharField(max_length=10)
+    contact_title = models.CharField(max_length=50)
+    contact_email = models.EmailField(max_length=60)
 
-    org_tags = models.ManyToManyField(PillTags, blank = True)
-    org_image = models.ImageField(null = True, blank = True, upload_to = 'org_pics')
+    org_tags = models.ManyToManyField(PillTags, blank=True)
+    org_image = models.ImageField(null=True, blank=True, upload_to='org_pics')
 
-    collaborators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
+    collaborators = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, blank=True)
 
     languages = models.ManyToManyField(Languages, blank=True)
 
     areas_served = models.ManyToManyField(Counties, blank=True)
 
-    lat = models.FloatField(blank = True, null = True)
-    long = models.FloatField(blank = True, null = True)
+    lat = models.FloatField(blank=True, null=True)
+    long = models.FloatField(blank=True, null=True)
 
     def __str__(self):
         return self.org_name
 
     def save(self, *args, **kwargs):
         address = self.street + "," + self.city + "," + self.state + " " + self.zipcode
-        g = geocoder.mapbox(address, key = mapbox_access_token)
+        g = geocoder.mapbox(address, key=mapbox_access_token)
         g = g.latlng
         self.lat = g[0]
         self.long = g[1]
@@ -374,15 +403,18 @@ class Organizations(models.Model):
         for pill in pills:
             list.org_tags.add(pill)
 
+
 class FileListing(models.Model):
-    file = models.FileField(unique = True)
-    title = models.CharField(max_length = 50)
-    description = models.CharField(max_length = 100)
+    file = models.FileField(unique=True)
+    title = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
+
 
 class SubDirectory(models.Model):
-    name = models.CharField(max_length = 50, unique = True)
-    description = models.CharField(max_length = 200)
-    subdirectory_organization = models.ManyToManyField(Organizations, blank = True, related_name = "organizations")
+    name = models.CharField(max_length=50, unique=True)
+    description = models.CharField(max_length=200)
+    subdirectory_organization = models.ManyToManyField(
+        Organizations, blank=True, related_name="organizations")
 
     def __str__(self):
         return self.name
@@ -397,23 +429,28 @@ class SubDirectory(models.Model):
             list = SubDirectory.objects.get(name=subdir)
             list.subdirectory_organization.remove(org)
 
+
 class ResourceDirectory(models.Model):
-    dir_name = models.CharField(max_length = 50, unique = True)
-    dir_descript = models.CharField(max_length = 200)
-    dir_articles = models.ManyToManyField(Articles, blank = True, related_name="articles")
-    dir_services = models.ManyToManyField(Services, blank = True, related_name="services")
+    dir_name = models.CharField(max_length=50, unique=True)
+    dir_descript = models.CharField(max_length=200)
+    dir_articles = models.ManyToManyField(
+        Articles, blank=True, related_name="articles")
+    dir_services = models.ManyToManyField(
+        Services, blank=True, related_name="services")
 
     def __str__(self):
         return self.dir_name
+
 
 class UploadedFile(models.Model):
     file = models.FileField()
     owner = models.ForeignKey(Account, null=True, on_delete=models.PROTECT)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
+
 class TestModel(models.Model):
-    name = models.CharField(max_length = 10, unique = True)
-    testtags = models.ManyToManyField(PillTags, blank = True)
+    name = models.CharField(max_length=10, unique=True)
+    testtags = models.ManyToManyField(PillTags, blank=True)
 
     def __str__(self):
         return self.name
@@ -423,21 +460,24 @@ class TestModel(models.Model):
         for pill in pills:
             list.testtags.add(pill)
 
+
 class DirectoryFiles(models.Model):
-    file = models.FileField(upload_to='file_directory/', blank = False)
-    document_name = models.CharField(max_length = 50, blank = True)
-    description = models.CharField(max_length = 200, blank = True)
-    tags = models.ManyToManyField(PillTags, blank = True)
+    file = models.FileField(upload_to='file_directory/', blank=False)
+    document_name = models.CharField(max_length=50, blank=True)
+    description = models.CharField(max_length=200, blank=True)
+    tags = models.ManyToManyField(PillTags, blank=True)
 
     def __str__(self):
         return str(self.id)
 
+
 class FileSubFolder(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length = 50, blank = False)
-    file = models.ManyToManyField(DirectoryFiles, blank = True)
-    subfolder = models.ManyToManyField('self', blank = True, symmetrical=False)
-    
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, blank=False)
+    file = models.ManyToManyField(DirectoryFiles, blank=True)
+    subfolder = models.ManyToManyField('self', blank=True, symmetrical=False)
+
     class Meta:
         unique_together = (('user', 'name'))
 
@@ -459,7 +499,8 @@ class FileSubFolder(models.Model):
             try:
                 parent_folder = FileSubFolder.objects.get(subfolder=my_folder)
                 try:
-                    normal_folder = FileFolder.objects.get(subfolder=parent_folder)
+                    normal_folder = FileFolder.objects.get(
+                        subfolder=parent_folder)
                 except FileFolder.DoesNotExist:
                     normal_folder = None
                 if (normal_folder == None):
@@ -486,11 +527,13 @@ class FileSubFolder(models.Model):
             sub.delete()
         super(FileSubFolder, self).delete()
 
+
 class FileFolder(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length = 50, blank = False)
-    file = models.ManyToManyField(DirectoryFiles, blank = True)
-    subfolder = models.ManyToManyField(FileSubFolder, blank = True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, blank=False)
+    file = models.ManyToManyField(DirectoryFiles, blank=True)
+    subfolder = models.ManyToManyField(FileSubFolder, blank=True)
 
     class Meta:
         unique_together = (('user', 'name'))
@@ -516,10 +559,12 @@ class FileFolder(models.Model):
             sub.delete()
         super(FileFolder, self).delete()
 
+
 class SharedWithMe(models.Model):
-    name = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
-    organization = models.ManyToManyField(Organizations, blank = True)
-    file = models.ManyToManyField(DirectoryFiles, blank = True)
+    name = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
+    organization = models.ManyToManyField(Organizations, blank=True)
+    file = models.ManyToManyField(DirectoryFiles, blank=True)
 
     def __str__(self):
         return str(self.name) + " 's organizations"
@@ -577,9 +622,11 @@ class SharedWithMe(models.Model):
         thisobj = MyFileName(file=file, user=collab)
         thisobj.save()
 
+
 class RecentFiles(models.Model):
     file = models.ForeignKey(DirectoryFiles, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     time_viewed = models.DateField()
 
     def save(self, *args, **kwargs):
@@ -587,10 +634,12 @@ class RecentFiles(models.Model):
         self.time_viewed = timezone.now()
         return super(RecentFiles, self).save(*args, **kwargs)
 
+
 class MyFileName(models.Model):
     file = models.ForeignKey(DirectoryFiles, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    newname = models.CharField(max_length=50, blank = True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    newname = models.CharField(max_length=50, blank=True)
 
     class Meta:
         unique_together = (('file', 'user',))
@@ -608,6 +657,7 @@ class MyFileName(models.Model):
     def __str__(self):
         return str(self.newname) + "-" + str(self.user)
 
+
 class MySurvey(models.Model):
     DIFFICULTY_CHOICES = (
         ('Very Easy', 'Very Easy'),
@@ -616,10 +666,12 @@ class MySurvey(models.Model):
         ('Hard', 'Hard'),
         ('Very Hard', 'Very Hard'),
     )
-    
-    add_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
+
+    add_org_difficulty = models.CharField(
+        max_length=10, choices=DIFFICULTY_CHOICES)
     add_org_answer = models.TextField()
     add_org_comments = models.TextField(blank=True, null=True)
+
 
 class MySurvey2(models.Model):
     DIFFICULTY_CHOICES = (
@@ -630,9 +682,11 @@ class MySurvey2(models.Model):
         ('Very Hard', 'Very Hard'),
     )
 
-    edit_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
+    edit_org_difficulty = models.CharField(
+        max_length=10, choices=DIFFICULTY_CHOICES)
     edit_org_answer = models.TextField()
     edit_org_comments = models.TextField(blank=True, null=True)
+
 
 class MySurvey3(models.Model):
     DIFFICULTY_CHOICES = (
@@ -643,9 +697,11 @@ class MySurvey3(models.Model):
         ('Very Hard', 'Very Hard'),
     )
 
-    find_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
+    find_org_difficulty = models.CharField(
+        max_length=10, choices=DIFFICULTY_CHOICES)
     find_org_answer = models.TextField()
     find_org_comments = models.TextField(blank=True, null=True)
+
 
 class MySurvey4(models.Model):
     DIFFICULTY_CHOICES = (
@@ -656,7 +712,7 @@ class MySurvey4(models.Model):
         ('Very Hard', 'Very Hard'),
     )
 
-    add_folder_file_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
+    add_folder_file_difficulty = models.CharField(
+        max_length=10, choices=DIFFICULTY_CHOICES)
     add_folder_file_answer = models.TextField()
     add_folder_file_comments = models.TextField(blank=True, null=True)
-
