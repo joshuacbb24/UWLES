@@ -239,18 +239,6 @@ class ClientList(models.Model):
         for client in clients:
             list.clients.remove(client)
 
-class Articles(models.Model):
-    article_name = models.CharField(max_length = 100)
-    article_descript = models.CharField(max_length = 200)
-    article_content = models.CharField(max_length = 5000)
-
-
-    class Meta:
-        unique_together = (('article_name', 'article_descript'))
-
-    def __str__(self):
-        return self.article_name
-
 class Services(models.Model):
     COUNTY_CHOICES = (
         ('Worcester', 'Worcester'),
@@ -408,7 +396,6 @@ class FileListing(models.Model):
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
 
-
 class SubDirectory(models.Model):
     name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=200)
@@ -428,31 +415,10 @@ class SubDirectory(models.Model):
             list = SubDirectory.objects.get(name=subdir)
             list.subdirectory_organization.remove(org)
 
-class ResourceDirectory(models.Model):
-    dir_name = models.CharField(max_length = 50, unique = True)
-    dir_descript = models.CharField(max_length = 200)
-    dir_articles = models.ManyToManyField(Articles, blank = True, related_name="articles")
-    dir_services = models.ManyToManyField(Services, blank = True, related_name="services")
-
-    def __str__(self):
-        return self.dir_name
-
 class UploadedFile(models.Model):
     file = models.FileField()
     owner = models.ForeignKey(Account, null=True, on_delete=models.PROTECT)
     uploaded_at = models.DateTimeField(auto_now_add=True)
-
-class TestModel(models.Model):
-    name = models.CharField(max_length = 10, unique = True)
-    testtags = models.ManyToManyField(PillTags, blank = True)
-
-    def __str__(self):
-        return self.name
-
-    def addextra(testmodel, pills):
-        list = TestModel.objects.get(name=testmodel)
-        for pill in pills:
-            list.testtags.add(pill)
 
 class DirectoryFiles(models.Model):
     file = models.FileField(upload_to='file_directory/', blank=False)
@@ -462,7 +428,6 @@ class DirectoryFiles(models.Model):
 
     def __str__(self):
         return str(self.id)
-
 
 class FileSubFolder(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -520,7 +485,6 @@ class FileSubFolder(models.Model):
             sub.delete()
         super(FileSubFolder, self).delete()
 
-
 class FileFolder(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
@@ -551,7 +515,6 @@ class FileFolder(models.Model):
         for sub in self.subfolder.all():
             sub.delete()
         super(FileFolder, self).delete()
-
 
 class SharedWithMe(models.Model):
     name = models.OneToOneField(
@@ -615,7 +578,6 @@ class SharedWithMe(models.Model):
         thisobj = MyFileName(file=file, user=collab)
         thisobj.save()
 
-
 class RecentFiles(models.Model):
     file = models.ForeignKey(DirectoryFiles, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -626,7 +588,6 @@ class RecentFiles(models.Model):
         '''On save, update view time (time_viewed)'''
         self.time_viewed = timezone.now()
         return super(RecentFiles, self).save(*args, **kwargs)
-
 
 class MyFileName(models.Model):
     file = models.ForeignKey(DirectoryFiles, on_delete=models.CASCADE)
@@ -650,55 +611,26 @@ class MyFileName(models.Model):
     def __str__(self):
         return str(self.newname) + "-" + str(self.user)
 
-class MySurvey(models.Model):
-    DIFFICULTY_CHOICES = (
-        ('Very Easy', 'Very Easy'),
-        ('Easy', 'Easy'),
-        ('Moderate', 'Moderate'),
-        ('Hard', 'Hard'),
-        ('Very Hard', 'Very Hard'),
-    )
+class Priority(models.Model):
+    difficulty = models.CharField(max_length=400, unique=True, null=False, blank=False)
+
+class Tasks(models.Model):
+    assigner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="assigner")
+    assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="assignee")
+    title = models.CharField(max_length=50, blank=False, null=False)
+    description = models.CharField(max_length=500)
+    difficulty = models.ForeignKey(Priority, blank=False, null=False, on_delete=models.CASCADE)
+    due_date = models.DateTimeField()
+    completion_mark = models.BooleanField()
+
+    class Meta:
+        unique_together = (('assigner', 'title', 'description'))
+
+    def __str__(self):
+        return self.title
+
+class MyNotes(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    description = models.CharField(max_length=500, null=False, blank=False)
+    date = models.DateTimeField() 
     
-    add_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
-    add_org_answer = models.TextField()
-    add_org_comments = models.TextField(blank=True, null=True)
-
-class MySurvey2(models.Model):
-    DIFFICULTY_CHOICES = (
-        ('Very Easy', 'Very Easy'),
-        ('Easy', 'Easy'),
-        ('Moderate', 'Moderate'),
-        ('Hard', 'Hard'),
-        ('Very Hard', 'Very Hard'),
-    )
-
-    edit_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
-    edit_org_answer = models.TextField()
-    edit_org_comments = models.TextField(blank=True, null=True)
-
-class MySurvey3(models.Model):
-    DIFFICULTY_CHOICES = (
-        ('Very Easy', 'Very Easy'),
-        ('Easy', 'Easy'),
-        ('Moderate', 'Moderate'),
-        ('Hard', 'Hard'),
-        ('Very Hard', 'Very Hard'),
-    )
-
-    find_org_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
-    find_org_answer = models.TextField()
-    find_org_comments = models.TextField(blank=True, null=True)
-
-class MySurvey4(models.Model):
-    DIFFICULTY_CHOICES = (
-        ('Very Easy', 'Very Easy'),
-        ('Easy', 'Easy'),
-        ('Moderate', 'Moderate'),
-        ('Hard', 'Hard'),
-        ('Very Hard', 'Very Hard'),
-    )
-
-    add_folder_file_difficulty = models.CharField(max_length = 10, choices=DIFFICULTY_CHOICES)
-    add_folder_file_answer = models.TextField()
-    add_folder_file_comments = models.TextField(blank=True, null=True)
-
