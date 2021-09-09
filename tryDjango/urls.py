@@ -13,7 +13,7 @@ from django.conf.urls import include
 
 
 urlpatterns = [
-    path('', views.introduction, name='introduction'),
+    path('', views.dashboard, name='dashboard'),
     #path('contact/', views.contact, name='contact'),
     #path('about/', views.about, name='about'),
     path('login/',
@@ -39,13 +39,8 @@ urlpatterns = [
     path('clientsprofile/<int:client_id>/', views.client_profile, name='clientsprofile'),
     path('clientsinformation/<int:client_id>/', views.client_information, name='clientsinformation'),
     path('resourcedirectory/', views.resource_directory, name='resourcedirectory'),
-    #path('addindividuals/', views.add_individual, name='addindividuals'),
     path('directorylist/<int:pk>/', views.load_directory, name="directorylist"),
     path('resourcelist/' , views.resourcelist, name= "resourcelist"),
-    #path('addorganizations/', views.add_organization, name='addorganizations'),
-    #path('addservices/', views.add_services, name='addservices'),
-    #path('addskills/', views.add_skills, name='addskills'),
-    path('dashboard/', views.dashboard, name='dashboard'),
     path('makeclientaccount/', views.make_client_account, name='makeclientaccount'),
 
     path('full_directory/', views.full_directory, name='fulldirectory'),
@@ -57,25 +52,12 @@ urlpatterns = [
     path('document_directory', views.document_directory, name='documentdirectory'),
     path('document_folder_directory/<int:pk>/<int:option>', views.document_directory_folder, name='document_folder_directory'),
 
-    path('test/', views.testpage, name='test'),
-    path('test2/', views.testpage2, name='test2'),
-
     path('app/', include('app.urls')),
     path('reset_password/', PasswordResetView.as_view(template_name='app/reset_password.html'), name="reset_password"),
     path('reset_password_sent/', PasswordResetDoneView.as_view(template_name='app/reset_password_done.html'), name="password_reset_done"),
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(template_name='app/reset_password_confirm.html'), name="password_reset_confirm"), #encodes user ID in base 64, then uses the token to check if the password is valid, part of PasswordResetConfirmView documentation
     path('reset_password_complete/', PasswordResetCompleteView.as_view(template_name='app/reset_password_complete.html'), name="password_reset_complete"),
     path('upload/', views.BasicUploadView.as_view(), name='upload'),
-
-    path('add_survey1/', views.add_survey1, name='addSurvey1'),
-    path('edit_survey1/', views.edit_survey1, name='editSurvey1'),
-    path('add_survey2/', views.add_survey2, name='addSurvey2'),
-    path('edit_survey2/', views.edit_survey2, name='editSurvey2'),
-    path('add_survey3/', views.add_survey3, name='addSurvey3'),
-    path('edit_survey3/', views.edit_survey3, name='editSurvey3'),
-    path('add_survey4/', views.add_survey4, name='addSurvey4'),
-    path('edit_survey4/', views.edit_survey4, name='editSurvey4'),
-
 
     path('validateOrganization/', views.validate_org, name='validateOrganization'),
     path('validateAccount', views.validate_account, name='validateAccount'),
