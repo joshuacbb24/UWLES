@@ -66,13 +66,18 @@ class Account(AbstractBaseUser, PermissionsMixin):
         return True
 
     def populate_bgColor(self):
+        """
         random_number = random.randint(0, 16777215)
         hex_number = format(random_number, 'x')
         self.bgColor = '#' + hex_number
-        # TODO maybe remove this model?
-
+        """
+        random_number = random.randint(0, 16777215)
+        hex_number = str(hex(random_number))
+        self.bgColor = '#' + hex_number[2:]
 
 # TODO maybe remove this model?
+
+
 class Channels(models.Model):
     """The channel/socket associted with each user"""
     user = models.ForeignKey(Account, on_delete=models.PROTECT, unique=True)

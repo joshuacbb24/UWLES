@@ -2207,6 +2207,10 @@ is empty when first clicked -->
                     case "room_exists":
                         $("li[data-room-id=" + data.room_id + "]")[0].click();
                         break;
+                    case "read_message":
+                        var clickedroom = $("li[data-room-id=" + roomId + "]")[0];
+                        $(clickedroom).removeClass("unread");
+                        break;
                     case "sent_to_others":
                         if (roomId !== data.room) {
 

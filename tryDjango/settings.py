@@ -80,16 +80,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tryDjango.wsgi.application'
 ASGI_APPLICATION = 'tryDjango.asgi.application'
-REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+REDIS_HOST = os.environ.get('REDIS_TLS_URL', 'redis://localhost:6379/0')
 REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(REDIS_HOST, REDIS_PORT)],
+            "hosts": [REDIS_HOST],
         },
     },
 }
+
 NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS = True
 
 MSG_TYPE_MESSAGE = 0  # For standard messages
@@ -124,7 +125,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'TEST': {
-            'NAME': os.path.join(BASE_DIR, 'db_test.sqlite3') #change jc made
+            'NAME': os.path.join(BASE_DIR, 'db_test.sqlite3')  # change jc made
         }
     }
 }
@@ -161,7 +162,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-#SMTP Configuration
+# SMTP Configuration
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -170,8 +171,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'uwlestestowner@gmail.com'
 EMAIL_HOST_PASSWORD = 'weloveuwles'
 
-#User selection
-AUTH_USER_MODEL="app.Account"
+# User selection
+AUTH_USER_MODEL = "app.Account"
 
 MEDIA_ROOT = BASE_DIR + "/uploaded/"
 MEDIA_URL = "/uploaded/"
