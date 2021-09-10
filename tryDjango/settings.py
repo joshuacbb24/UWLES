@@ -80,14 +80,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tryDjango.wsgi.application'
 ASGI_APPLICATION = 'tryDjango.asgi.application'
-REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+REDIS_HOST = os.environ.get('REDIS_TLS_URL', 'redis://localhost:6379/0')
 REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
-REDIS_URL = os.environ.get('REDIS_URL')
 CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL','redis://ec2-18-210-181-101.compute-1.amazonaws.com:23430')],
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [REDIS_HOST],
         },
     },
 }
