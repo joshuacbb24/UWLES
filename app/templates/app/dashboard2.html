@@ -10,6 +10,7 @@
   <title>Dashboard</title>
   <link rel="stylesheet"
     href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <script src="https://kit.fontawesome.com/f0b88b09a7.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{% static 'app/content/style.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'app/content/chat.css' %}" />
   <link href="{% static 'app/content/main.css' %}" rel='stylesheet' />
@@ -227,38 +228,47 @@
     </div>
   </header>
 
-  <div class="menu3">
-    <div class="card-single-right">
-      <img id="act" src="{% static 'app/images/activity.png' %}">
-    </div>
-  </div>
-
   <div class="main-content">
     <div class="running">
       <div><span class="dash"><strong>Dashboard</strong></span><span id="dots" class="las la-ellipsis-v"></span></div>
     </div>
 
-
-
-    <div class="menu">
-      <div class="card-single-one">
-        <div id='calendar'></div>
+    <div class="submenu">
+      <div class="menu">
+        <div class="menu-header">
+          Coming Up
+        </div>
       </div>
-
-      <div class="card-single-two">
-        <img id="ref" src="{% static 'app/images/referral.png' %}">
-      </div>
-    </div>
-    <div class="menu2">
-      <div class="card-single-three">
-        <img id="rev" src="{% static 'app/images/review.png' %}">
-      </div>
-      <div class="card-single-four">
-        <img id="cli" src="{% static 'app/images/clients.png' %}">
+    
+      <div class="menu2">
+        <div class="menu-header">
+          Clients
+        </div>
       </div>
     </div>
 
+    <div class="menu3">
+      <div class="menu-header">
+          My Notes
+      </div>
+    </div>
 
+    <div class="menu4">
+      <div class="menu4-selection-box">
+        <div class="menu4-btn-container">
+          <div class="btn-my-tasks btn-active"><div class="btn-text">My Tasks</div></div>
+          <div class="btn-activity"><div class="btn-text">Activity</div></div>
+        </div>
+        <div class="menu4-filter-tasks">
+          <i class="fas fa-sliders-h fa-2x" id="filter-btn"></i>
+          <div class="filter-tasks-text">Filter Tasks</div>
+          <div class="btn-new-task"><div class="btn-text">New Task</div></div>
+        </div>
+      </div>
+      <div class="menu4-upcoming-tasks"><div class="menu4-submenu-title">Upcoming</div></div>
+      <div class="menu4-due-this-week"><div class="menu4-submenu-title">Due This Week</div></div>
+      <div class="menu4-past-due"><div class="menu4-submenu-title">Past Due</div></div>
+    </div>
     <div class="open-button">Chat<i id="opn_btn" style="font-size:25px;color:white;float:right;" class="las la-angle-up"
         onclick="openForm()"></i></div>
 

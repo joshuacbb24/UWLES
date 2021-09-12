@@ -70,18 +70,29 @@
     position: relative;
     height: 2.5rem;
     width: 100%;
+    left: 0;
     bottom: 2.4rem;
-    background-color: #ebf2f2;
+    background-color: white;
     top: 0;
 }
 
     .running .dash {
         position: relative;
         float: left;
-        color: #013d44;
-        line-height: 2.5rem;
-        font-size: 1rem;
-        padding-left: 1rem;
+        top: 5px;
+        font-family: Helvetica;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 24px;
+        line-height: 29px;
+        /* identical to box height */
+
+        display: flex;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        color: #013D44;
     }
 
     .running #dots {
@@ -102,7 +113,7 @@
     margin-top: 3.8rem;
     margin-left: 75px;
     margin-right: 0.5rem;
-    background: #ebf2f2;
+    background: white;
     height: 100vh;
 }
 
@@ -356,22 +367,232 @@
     float: left;
 }
 
+.fullmenu{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+.submenu{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.menu-header{
+    box-shadow: 0px 1px 1px white;
+    border-radius: 6px 6px 0px 0px;
+    padding-left: 30px;
+    padding-top: 15px;
+    width: 100%;
+    height: 50px;
+    background: #FCFCFC;
+    color: #013D44;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 20px;
+}
+
 .menu {
-    width: 40%;
+    width: 35%;
+    height: 40%;
     float: left;
-    padding: 15px;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(1, 61, 68, 0.15);
+    border-radius: 6px;
 }
 
 .menu2 {
-    width: 40%;
+    position: relative;
+    width: 35%;
+    top: 5%;
+    height: 40%;
     float: left;
-    padding: 15px;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(1, 61, 68, 0.15);
+    border-radius: 6px;
 }
 
 .menu3 {
-    width: 10%;
-    float: right;
+    position: absolute;
+    top: 10.75%;
+    left: 40%;
+    width: 35%;
+    height: 85%;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(1, 61, 68, 0.15);
+    border-radius: 6px;
 }
+
+.menu4{
+    position: absolute;
+    left: 80%;
+    top: 0%;
+    width: 20%;
+    height: 100%;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0px 4px 4px 4px rgba(0, 0, 0, 0.15);
+}
+
+.menu4-selection-box{
+    position: relative;
+    top: 6%;
+    width: 100%;
+    height: 160px;
+    background: grey;
+}
+
+.menu4-btn-container{
+    background: white;
+    width: 100%;
+    height: 80px;
+    border-bottom: 1px solid #DEDEDE;
+}
+
+.menu4-filter-tasks{
+    position: relative;
+    height: 80px;
+    background: white;
+    border-bottom: 1px solid #DEDEDE;
+}
+
+.menu4-upcoming-tasks{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;;
+}
+
+.menu4-due-this-week{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;;
+}
+
+.menu4-past-due{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;;
+}
+
+.menu4-submenu-title{
+    position: relative;
+    top: 18px;
+    left: 20px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    /* identical to box height, or 171% */
+
+    display: flex;
+    align-items: center;
+
+    color: #013D44;
+}
+
+#filter-btn{
+    position: relative;
+    top: 25px;
+    left: 20px;
+    color: #AFAFAF;
+}
+
+.filter-tasks-text{
+    position: relative;
+    left: 60px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    /* or 167% */
+
+    display: flex;
+    align-items: center;
+
+    color: #013D44;
+}
+
+.btn-active{
+    background: #015d67;
+    color: white;
+}
+
+.btn-my-tasks{
+    position: absolute;
+    top: 20px;
+    left: 5%;
+    width: 45%;
+    height: 40px;
+    box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1, 61, 68, 0.1);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    letter-spacing: 0.01em;
+    cursor: pointer
+}
+
+.btn-activity{
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 45%;
+    height: 40px;
+    box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1, 61, 68, 0.1);
+    border-radius: 4px;
+    background: #F3F3F3;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+}
+
+.btn-text{
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: 0.01em;
+}
+
+.btn-new-task{
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 45%;
+    height: 40px;
+    box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1, 61, 68, 0.1);
+    border-radius: 4px;
+    background: #F3F3F3;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    cursor: pointer;
+}
+
 
 @media screen and (max-width: 900px) {
     .menu,
@@ -509,6 +730,7 @@
 
     .running #dots {
         position: relative;
+        right: 225px;
         float: right;
         font-size: 1.7rem;
         line-height: 2.5rem;
@@ -633,7 +855,7 @@
 html,
 body {
     height: 100%;
-    background: #ebf2f2;
+    background: white;
     font-family: Helvetica;
 }
 
