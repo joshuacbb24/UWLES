@@ -80,16 +80,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tryDjango.wsgi.application'
 ASGI_APPLICATION = 'tryDjango.asgi.application'
-REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+REDIS_HOST = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
 REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(REDIS_HOST, REDIS_PORT)],
+            "hosts": [REDIS_HOST],
         },
     },
 }
+
 NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS = True
 
 MSG_TYPE_MESSAGE = 0  # For standard messages
