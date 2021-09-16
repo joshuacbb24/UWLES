@@ -716,3 +716,6 @@ class MySurvey4(models.Model):
         max_length=10, choices=DIFFICULTY_CHOICES)
     add_folder_file_answer = models.TextField()
     add_folder_file_comments = models.TextField(blank=True, null=True)
+
+class MyEvents(models.Model):
+    starttime = models.DateTimeField()
