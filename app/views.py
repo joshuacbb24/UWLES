@@ -446,11 +446,28 @@ def dashboard(request):
     users = Account.objects.exclude(pk=request.user.id)
     rooms = ChatGroup.objects.filter(
         members=request.user).order_by("group_name")
+    events = MyEvents.objects.filter(created_by = request.user.id)
+
+    if request.method == 'POST':
+        form = Event_Creation_Form(request.POST)
+        if form.is_valid():
+            eventform = form.save(commit=False)
+            eventform.populate_myself()
+            eventform.save()
+
+            title = form.cleaned_data.get('title')
+            description = form.cleaned_data.get('description')
+            day = form.cleaned_data.get('day')
+            start_time = form.cleaned_data.get('start_time')
+            end_time = form.cleaned_data.get(name="end_time")
+
+    else:
+        form = Event_Creation_Form()
     try:
         user_bg = BgInfo.objects.get(user=request.user.id)
     except BgInfo.DoesNotExist:
         user_bg = None
-    return render(request, 'app/dashboard2.html', {'users': users, 'user_bg': user_bg, "rooms": rooms, })
+    return render(request, 'app/dashboard2.html', {'users': users, 'user_bg': user_bg, "rooms": rooms, 'form': form, 'myEvents': events})
 
 
 @login_required(login_url='login')

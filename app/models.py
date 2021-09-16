@@ -350,3 +350,18 @@ class UploadedFile(models.Model):
     file = models.FileField()
     owner = models.ForeignKey(Account, null=True, on_delete=models.PROTECT)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+
+class MyEvents(models.Model):
+    created_by = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name='user_who_created_event')    
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    day = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+    def __str__(self):
+        return "{} {}".format(self.created_by, self.title)
+
+    def populate_myself(self):
+        self.created_by = self.user.username

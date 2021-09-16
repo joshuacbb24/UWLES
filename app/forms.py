@@ -165,3 +165,16 @@ class GetBackgroundColorForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['bgColor']
+
+class Event_Creation_Form(ModelForm):
+    title = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Title'}), required=True)
+    description = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Description'}), required=False)
+    day = forms.DateField(widget=forms.DateInput, required=True)
+    start_time = forms.TimeField(widget=forms.TimeInput, required=True)
+    end_time = forms.TimeField(widget=forms.TimeInput, required=True)
+
+    class Meta:
+        model = MyEvents
+        fields = ("title", "description","day", "start_time", "end_time")
