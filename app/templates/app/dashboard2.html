@@ -15,6 +15,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'app/content/chat.css' %}" />
   <link href="{% static 'app/content/main.css' %}" rel='stylesheet' />
   <link rel="stylesheet" href="{% static 'app/content/chatPopUp.css' %}" />
+  <link rel="stylesheet" href="{% static 'app/content/simple-calendar.css' %}" />
 
 
 
@@ -143,6 +144,58 @@
       font-family: Helvetica;
       font-size: 14px;
     }
+    #members-page {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 2;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+  padding-top: 60px;
+  overflow: hidden;
+}
+
+/* Modal Content/Box */
+#members-page-content {
+  background-color: #fefefe;
+  margin: 5% auto 15% auto;
+  /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #000;
+  width: 40%;
+  height: 80%;
+  z-index: 3;
+  border-radius: 5px;
+  margin-right: 27%;
+  /* Could be more or less, depending on screen size */
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  overflow: hidden;
+}
+.event-container{
+  display: none;
+  position: relative;
+    overflow: hidden;
+    text-transform: capitalize;
+    text-align: center;
+    font: 15px/1em inherit;
+    color: #545A5C;
+    margin-top: 0 !important;
+    top: 0 !important;
+    height: auto;
+    z-index: 1;
+    margin-bottom: 63%;
+}
   </style>
 </head>
 
@@ -235,11 +288,59 @@
 
     <div class="submenu">
       <div class="menu">
-        <div class="menu-header">
+        <!--<div class="menu-header">
           Coming Up
+        </div>-->
+        <div class="card-single-one">
+        <div id="container" class="calendar-container"></div>
+        <div class="event-container"><div class="event-wrapper"></div></div>
+        <div class="card-footer" style="
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        /* float: right; */
+    ">
+<div class="calendar-icons"><span style="float: right;"><i id="show-calendar" class="las la-calendar-plus show-calendar" style="color: gray;"></i><i id="show-events" class="las la-calendar-minus show-events"></i></span>
+</div>
+          
         </div>
       </div>
+      </div>
+
+      <div id="members-page">
+
+        <div id="members-page-content">
+            <header>
+                <div><span style="padding-left: 5%;font-size:x-large;">Add Event</span>
+                    <i class="las la-window-close" style="right:0; height: 10%; float:right; position: relative;"
+                        onclick="document.getElementById('members-page').style.display='none'" id="close"
+                        title="Close Modal"></i>
+                </div>    
+            </header>
     
+            <div>
+    
+                <div>
+                    <p style="margin-left: 10%;">
+                      <form action={% url 'createevents' %}  id="event_form" method="post">
+                        {% csrf_token %}
+                        {{ create_event_form }}
+                      <!--
+                        <div id="sandbox-container">
+                          <div class="input-append date">
+                            <input type="text" name="start_day" required id="id_start_day" class="span2">
+                            <span class="add-on"><i class="icon-th"></i></span>
+                          </div>
+                        </div>
+                      -->
+                        <button type="submit" class="btn btn-outline-secondary" value="Submit">Submit</button>
+                        <button type="button" class="btn btn-outline-secondary" name="cancel" id="canc">Cancel</button>
+                      </form>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
       <div class="menu2">
         <div class="menu-header">
           Clients
@@ -370,10 +471,72 @@
   <audio id="chatAudio">
     <source src="{% static 'app/audio/notification.mp3' %}" type="audio/mpeg">
   </audio>
+  <script src="{% static 'app/scripts/simple-calendar.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"
     integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA=="
     crossorigin="anonymous"></script>
   <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
+  <script>
+    $(document).ready(function () {
+    $("#container").simpleCalendar({
+        fixedStartDay: 0, // begin weeks by sunday
+        onDateSelect: function (date, events) {}, // Callback on date selection
+        disableEmptyDetails: true,
+        events: [
+            // generate new event after tomorrow for one hour
+            {
+                startDate: new Date(new Date().setHours(new Date().getHours() + 24)).toDateString(),
+                endDate: new Date(new Date().setHours(new Date().getHours() + 25)).toISOString(),
+                summary: 'Visit of the Eiffel Tower'
+            },
+            {
+                startDate: new Date(new Date().setHours(new Date().getHours() + 24)).toDateString(),
+                endDate: new Date(new Date().setHours(new Date().getHours() + 25)).toISOString(),
+                summary: 'Visit of the Eiffel Tower'
+            },
+            // generate new event for yesterday at noon
+            {
+                startDate: new Date(new Date().setHours(new Date().getHours() - new Date().getHours() - 12, 0)).toISOString(),
+                endDate: new Date(new Date().setHours(new Date().getHours() - new Date().getHours() - 11)).getTime(),
+                summary: 'Restaurant'
+            },
+            // generate new event for the last two days
+            {
+                startDate: new Date(new Date().setHours(new Date().getHours() - 48)).toISOString(),
+                endDate: new Date(new Date().setHours(new Date().getHours() - 24)).getTime(),
+                summary: 'Visit of the Louvre'
+            }
+        ],
+
+    });
+    document.querySelector(".today").click();
+
+    $("#add-event-button").on('click', function () {
+    $("#members-page").show();
+    });
+    $(".show-events").on('click', function () {
+    document.getElementById('show-events').style.pointerEvents = 'none';
+    document.getElementById('show-calendar').style.pointerEvents = 'auto';
+    $("#container").hide();
+    $(".event-container").show();
+    $(".show-events").css('color', 'gray');
+    $(".show-events").css('cursor', 'default');
+    $(".show-calendar").css('color', '#015D67');
+    $(".show-calendar").css('cursor', 'pointer');
+    });
+    $(".show-calendar").on('click', function () {
+    document.getElementById('show-calendar').style.pointerEvents = 'none';
+    document.getElementById('show-events').style.pointerEvents = 'auto';
+    $("#container").show();
+    $(".event-container").hide();
+    $(".show-events").css('color', '#015D67');
+    $(".show-events").css('cursor', 'pointer');
+    $(".show-calendar").css('color', 'gray');
+    $(".show-calendar").css('cursor', 'default');
+    });
+});
+
+</script>
   <script>
 
     $("#caret-icon").on('click', function () {
@@ -383,6 +546,9 @@
 
     $("#sidebar-toggle").on('click', function () {
       $(".sidebar").toggle('show hide');
+    })
+    $("#canc").on('click', function () {
+      $("#members-page").hide();
     })
   </script>
 

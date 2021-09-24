@@ -14,6 +14,7 @@ admin.site.enable_nav_sidebar = False
 admin.site.register(BgInfo)
 admin.site.register(EcInfo)
 admin.site.register(DemoInfo)
+admin.site.register(MyEvents)
 admin.site.register(ClientNotes)
 admin.site.register(Account)
 admin.site.register(ClientList)

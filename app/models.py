@@ -633,4 +633,33 @@ class MyNotes(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     description = models.CharField(max_length=500, null=False, blank=False)
     date = models.DateTimeField() 
+
+class MyEvents(models.Model):
+    """
+    REPEATING_CHOICES = (
+        (7, 'Weekly'),
+        ('Monthly', 'Monthly'),
+        (365, 'Yearly'),
+        (1, 'Daily'),
+        (14, 'Bi-Weekly')
+        (0, 'Do Not Repeat')
+    )
+    """
+    created_by = models.ForeignKey(
+        Account, on_delete=models.CASCADE, related_name='user_who_created_event')    
+    title = models.CharField(max_length=70)
+    description = models.TextField(max_length=200)
+    start_day = models.DateField()
+    start_time = models.TimeField()
+    end_day = models.DateField()
+    end_time = models.TimeField()
+    all_day = models.BooleanField()
+    #repeating_event = models.CharField(max_length=20, choices=REPEATING_CHOICES)
+
+
+    def __str__(self):
+        return "{} {}".format(self.created_by, self.title)
+
+    def populate_myself(self, user):
+        self.created_by = user
     

@@ -14,6 +14,7 @@ from django.conf.urls import include
 
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
+    path('createevents/', views.createevents, name='createevents'),
     #path('contact/', views.contact, name='contact'),
     #path('about/', views.about, name='about'),
     path('login/',

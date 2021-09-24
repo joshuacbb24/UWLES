@@ -222,3 +222,32 @@ DirFilesFormset = modelformset_factory(
     form=DirFileForm,
     extra=0,
     )
+    
+class Event_Creation_Form(forms.ModelForm):
+    
+    title = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Title'}), required=True)
+    description = forms.CharField(widget=forms.Textarea(attrs={'cols': 80, 'rows': 20}), required=False)
+    start_day = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}), required=True)
+    start_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=True)
+    end_day = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}), required=True)
+    end_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=True)
+    
+    all_day = forms.BooleanField(initial=False)
+   
+    
+    class Meta:
+        model = MyEvents
+        fields = ('__all__')
+        exclude = ['created_by']
+        """
+        widgets = {
+            'title': TextInput(attrs={}),
+            'description': Textarea(attrs={'cols': 80, 'rows': 20}),
+            'start_day': SelectDateWidget(attrs={}),
+            'start_time': TimeInput(attrs={}),
+            'end_day': SelectDateWidget(attrs={}),
+            'end_time': TimeInput(attrs={}),
+            'all_day': RadioSelect(attrs={}),
+        }
+        """

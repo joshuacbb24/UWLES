@@ -417,15 +417,41 @@ def add_organization(request):
         }
     return render(request, 'app/add_organizations.html', context)
 
+def createevents(request):
+    if request.method == 'POST':
+        print("post event")
+        form = Event_Creation_Form(request.POST)
+        if form.is_valid():
+            print("valid event")
+            eventform = form.save(commit=False)
+            eventform.populate_myself(request.user)
+            eventform.save()
+
+            return redirect ('/')
+        else:
+            print("form error", form.errors)
+ 
+    return dashboard(request)  
+    
 @login_required(login_url='login')
 def dashboard(request):
     users = Account.objects.exclude(pk=request.user.id)
-    rooms = ChatGroup.objects.filter(members=request.user).order_by("group_name")
+    rooms = ChatGroup.objects.filter(
+        members=request.user).order_by("group_name")
+    events = MyEvents.objects.filter(created_by = request.user.id)
+    
+    if request.method == 'POST':
+        # foo_form = FooForm(request.POST)
+        create_event_form = Event_Creation_Form(request.POST)
+    else:
+        create_event_form = Event_Creation_Form()
+    
     try:
         user_bg = BgInfo.objects.get(user=request.user.id)
     except BgInfo.DoesNotExist:
         user_bg = None
-    return render(request, 'app/dashboard2.html', {'users': users, 'user_bg': user_bg, "rooms": rooms,})
+    return render(request, 'app/dashboard2.html', {'users': users, 'user_bg': user_bg,
+     "rooms": rooms, 'events': events, "create_event_form": create_event_form})
 
 @login_required(login_url='login')
 def room(request):
