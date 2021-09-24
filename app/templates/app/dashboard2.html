@@ -15,7 +15,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'app/content/chat.css' %}" />
   <link href="{% static 'app/content/main.css' %}" rel='stylesheet' />
   <link rel="stylesheet" href="{% static 'app/content/chatPopUp.css' %}" />
-
+  <link rel="stylesheet" href="{% static 'app/content/myModal.css' %}" />
 
 
   <link rel="stylesheet" href="{% static 'app/content/instantmessage.css' %}" />
@@ -24,14 +24,15 @@
 
 
   <script src="{% static 'app/scripts/main.js' %}"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="{% static 'app/scripts/jquery.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <script src="{% static 'app/scripts/jquery.ui.widget.js' %}"></script>
   <script src="{% static 'app/scripts/jquery.iframe-transport.js' %}"></script>
   <script src="{% static 'app/scripts/jquery.fileupload.js' %}"></script>
-
+  <script src="{% static 'app/scripts/tasks.js ' %}"></script>
   <!--<script src="{% static 'app/scripts/pop.js' %}"></script>-->
   <script>
 
@@ -143,6 +144,10 @@
       font-family: Helvetica;
       font-size: 14px;
     }
+    .modal-backdrop.show:nth-child(even) {
+            z-index: 1040 !important;
+            opacity: .5;
+        }
   </style>
 </head>
 
@@ -262,13 +267,120 @@
         <div class="menu4-filter-tasks">
           <i class="fas fa-sliders-h fa-2x" id="filter-btn"></i>
           <div class="filter-tasks-text">Filter Tasks</div>
-          <div class="btn-new-task"><div class="btn-text">New Task</div></div>
+          <div class="btn-new-task" type="button" data-toggle="modal" data-target="#taskModal"><div class="btn-text">New Task</div></div>
         </div>
       </div>
-      <div class="menu4-upcoming-tasks"><div class="menu4-submenu-title">Upcoming</div></div>
-      <div class="menu4-due-this-week"><div class="menu4-submenu-title">Due This Week</div></div>
-      <div class="menu4-past-due"><div class="menu4-submenu-title">Past Due</div></div>
+      <div class="menu4-upcoming-tasks"><div class="menu4-submenu-title">Upcoming {% if upcoming_tasks %}({{ upcoming_tasks|length }}){% else %} {% endif %}</div><div class="menu4-dropbtn" id="upcoming-dd"><i class="fas fa-chevron-down fa-lg"></i></div></div>
+      <div class="upcoming-tasks-list inactive">
+        {% for task in upcoming_tasks %}
+          <div class="task-card">
+            {% if task.priority.priority == "Low" %}
+              <div class="task-banner-0"></div>
+            {% elif task.priority.priority == "Medium" %}
+              <div class="task-banner-1"></div>
+            {% elif task.priority.priority == "High" %}
+              <div class="task-banner-2"></div>
+            {% endif %}
+            <div class="task-title">{{ task.title }}</div>
+            <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
+            <div class="task-deadline">Deadline: {{ task.due_date }}</div>
+            <div class="task-mark-tick"></div>
+            <div class="task-mark">Mark as complete</div>
+            <div class="task-assignee">Assigned to me</div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="menu4-due-this-week"><div class="menu4-submenu-title">Due This Week {% if weekly_tasks and weekly_tasks.completion_mark == False %}({{ weekly_tasks|length }}){% else %} {% endif %} </div><div class="menu4-dropbtn" id="weekly-dd"><i class="fas fa-chevron-down fa-lg"></i></div></div>
+      <div class="weekly-tasks-list inactive">
+        {% for task in weekly_tasks %}
+          <div class="task-card">
+            {% if task.priority.priority == "Low" %}
+              <div class="task-banner-0"></div>
+            {% elif task.priority.priority == "Medium" %}
+              <div class="task-banner-1"></div>
+            {% elif task.priority.priority == "High" %}
+              <div class="task-banner-2"></div>
+            {% endif %}
+            <div class="task-title">{{ task.title }}</div>
+            <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
+            <div class="task-deadline">Deadline: {{ task.due_date }}</div>
+            <input type="checkbox" class="task-mark-tick" value="{{ task.id }}">
+            <div class="task-mark">Mark as complete</div>
+            <div class="task-assignee">Assigned to me</div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="menu4-past-due"><div class="menu4-submenu-title">Past Due {% if past_due_tasks %}({{ past_due_tasks|length }}){% else %} {% endif %}</div><div class="menu4-dropbtn" id="past-dd"><i class="fas fa-chevron-down fa-lg"></i></div></div>
+      <div class="past-tasks-list inactive">
+        {% for task in past_due_tasks %}
+          <div class="task-card">
+            {% if task.priority.priority == "Low" %}
+              <div class="task-banner-0"></div>
+            {% elif task.priority.priority == "Medium" %}
+              <div class="task-banner-1"></div>
+            {% elif task.priority.priority == "High" %}
+              <div class="task-banner-2"></div>
+            {% endif %}
+            <div class="task-title">{{ task.title }}</div>
+            <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
+            <div class="task-deadline">Deadline: {{ task.due_date }}</div>
+            <div class="task-mark-tick"></div>
+            <div class="task-mark">Mark as complete</div>
+            <div class="task-assignee">Assigned to me</div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
+
+    <form method="post">
+    <div class="modal box5 fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            {% csrf_token %}
+            {{ form1.title }}
+            {{ form1.due_date }}
+            {{ form1.assignees }}
+            <div id="due-date-title">Due Date</div>
+            {{ form1.priority }}
+            <div id="priority-title">Priority</div>
+            <div id="assignees-title">Assignee(s)</div>
+            <div id="assignees-add-btn" type="button" data-toggle="modal" data-target="#assigneeModal">+</div>
+            {{ form1.description }}
+            <button type="button" class="cancel-task-btn" data-dismiss="modal">CANCEL</button>
+            <button type="submit" class="create-task-btn">CREATE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal box5 fade" id="assigneeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="assignee-caseworker active-btn">Caseworkers</div>
+            <div class="assignee-client">Clients</div>
+            <div class="caseworker-box active-box">
+              {% for user in users %}
+              {% if user|has_group:"caseworker" %}
+                <div class="assignee-option" value='{{ user.id }}'>{{ user }}</div>
+              {% endif %}
+              {% endfor %}
+            </div>
+            <div class="client-box">
+              {% for user in users %}
+              {% if user|has_group:"client" %}
+                <div class="assignee-option" value='{{ user.id }}'>{{ user }}</div>
+              {% endif %}
+              {% endfor %}
+            </div>
+            <button type="button" class="confirm-assignees" data-dismiss="modal">CONFIRM</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    </form>
+
     <div class="open-button">Chat<i id="opn_btn" style="font-size:25px;color:white;float:right;" class="las la-angle-up"
         onclick="openForm()"></i></div>
 

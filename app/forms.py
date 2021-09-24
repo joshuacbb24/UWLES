@@ -4,6 +4,7 @@ Definition of forms.
 
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, ValidationError, modelformset_factory
 from .models import *
@@ -222,3 +223,14 @@ DirFilesFormset = modelformset_factory(
     form=DirFileForm,
     extra=0,
     )
+
+class TaskForm(forms.ModelForm):
+    assignees = forms.ModelMultipleChoiceField(queryset=Account.objects.all())
+    title = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Task Title'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Add a description for this task'}))
+    priority = forms.ModelChoiceField(queryset=Priority.objects.all(), empty_label=None)
+    due_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+    class Meta:
+        model = Tasks
+        fields = '__all__'
+        exclude = ('assigner', 'completion_mark',)
