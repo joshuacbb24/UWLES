@@ -631,6 +631,10 @@ class Tasks(models.Model):
 
 class MyNotes(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    description = models.CharField(max_length=500, null=False, blank=False)
-    date = models.DateTimeField() 
+    description = models.CharField(max_length=500, null=False, blank=False )
+    date = models.DateTimeField()
+     
+    class Meta:
+        ordering = ('date',)
+        
     

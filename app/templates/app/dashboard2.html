@@ -251,6 +251,29 @@
       <div class="menu-header">
           My Notes
       </div>
+      <br><br>
+      <form method="post" class="notes-form" action="{% url 'dashboard' %}">
+          {% csrf_token  %}
+          {{ notesForm }}
+      <br><br>
+      <button class="btn-save-notes"><div class="btn-text">Save</div></button>
+      <br><br>
+      </form>
+      <ul class="note-list">
+            {% for note in notes %}
+                <li class="notes-list-items">
+                    
+                        <p class="note-date">{{ note.date }}</p>
+
+                                <button class="fas fa-pencil-alt"></button>
+                                <button class="fas fa-times"></button>
+               
+                    <p class="note-descript">{{ note.description }}</p>
+                    
+                </li>
+            {% endfor %}                  
+       </ul>
+      </div>
     </div>
 
     <div class="menu4">

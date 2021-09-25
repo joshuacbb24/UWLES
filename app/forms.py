@@ -222,3 +222,10 @@ DirFilesFormset = modelformset_factory(
     form=DirFileForm,
     extra=0,
     )
+
+class MyNotesForm(ModelForm):
+     description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'type your thoughts here', 'maxlength': '500', 'class': 'my-notes-forms'}), required = False, label ='',)
+     class Meta:
+        model = MyNotes
+        fields = '__all__'
+        exclude = ('date','user')

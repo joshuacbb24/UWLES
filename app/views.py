@@ -122,6 +122,14 @@ def signup(request):
     return render(request, 'app/signup.html', {'form': form})
 
 
+
+
+def delete_note(request, NoteId):
+    note = MyNotes.objects.get(pk=NoteId)
+    note.delete()
+
+    return redirect('/?NoteId=0')
+
 def introduction(request):
     if request.is_ajax() and request.method == "POST":
         print(request.POST)
@@ -421,11 +429,45 @@ def add_organization(request):
 def dashboard(request):
     users = Account.objects.exclude(pk=request.user.id)
     rooms = ChatGroup.objects.filter(members=request.user).order_by("group_name")
+    notes = MyNotes.objects.filter(user=request.user.id)
+    notesForm = MyNotesForm()
     try:
         user_bg = BgInfo.objects.get(user=request.user.id)
     except BgInfo.DoesNotExist:
         user_bg = None
-    return render(request, 'app/dashboard2.html', {'users': users, 'user_bg': user_bg, "rooms": rooms,})
+
+    #Andrew's note stuff
+    
+    notes = MyNotes.objects.filter(user=request.user).order_by('-date')
+
+
+
+    if request.method == 'POST':
+
+        notesForm = MyNotesForm(request.POST)
+        if notesForm.is_valid():
+           notes_form = notesForm.save(commit=False)
+           notes_form.user=request.user
+           notes_form.date=timezone.now()
+           notes_form.save()
+           return redirect('/')
+        else:
+            print(notesForm.errors)
+
+       
+    context = {
+        'users' : users,
+        'notes': notes,
+        'user_bg' : user_bg,
+        'rooms' : rooms,
+        'notesForm' : notesForm,
+       
+    }
+    #End of Andrew's note stuff
+    
+
+
+    return render(request, 'app/dashboard2.html', context)
 
 @login_required(login_url='login')
 def room(request):
@@ -1846,6 +1888,10 @@ def document_directory_folder(request, pk, option):
         }
 
     return render(request, 'app/document_folder_directory.html', context)
+
+
+
+
 
 def validate_account(request):
     account_name = request.GET.get('account_name', None)
