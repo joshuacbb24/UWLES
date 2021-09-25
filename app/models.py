@@ -612,14 +612,17 @@ class MyFileName(models.Model):
         return str(self.newname) + "-" + str(self.user)
 
 class Priority(models.Model):
-    difficulty = models.CharField(max_length=400, unique=True, null=False, blank=False)
+    priority = models.CharField(max_length=400, unique=True, null=False, blank=False)
+
+    def __str__(self):
+        return self.priority
 
 class Tasks(models.Model):
     assigner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="assigner")
     assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="assignee")
     title = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=500)
-    difficulty = models.ForeignKey(Priority, blank=False, null=False, on_delete=models.CASCADE)
+    priority = models.ForeignKey(Priority, blank=False, null=False, on_delete=models.CASCADE)
     due_date = models.DateTimeField()
     completion_mark = models.BooleanField()
 

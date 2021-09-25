@@ -427,10 +427,20 @@ def add_organization(request):
 
 @login_required(login_url='login')
 def dashboard(request):
+    tasks = Tasks.objects.filter(assignees=request.user.id)
     users = Account.objects.exclude(pk=request.user.id)
     rooms = ChatGroup.objects.filter(members=request.user).order_by("group_name")
     notes = MyNotes.objects.filter(user=request.user.id)
     notesForm = MyNotesForm()
+
+    today = timezone.now().date()
+    week_from_today = today + timedelta(days=(today.isocalendar()[2] + 4))
+
+    upcoming_tasks = Tasks.objects.filter(assignees=request.user.id, due_date__gte=week_from_today)
+    weekly_tasks1 = Tasks.objects.filter(assignees=request.user.id, due_date__lte=week_from_today)
+    weekly_tasks = weekly_tasks1.filter(due_date__gt=today)
+    past_due_tasks = Tasks.objects.filter(assignees=request.user.id, due_date__lte=today)
+    
     try:
         user_bg = BgInfo.objects.get(user=request.user.id)
     except BgInfo.DoesNotExist:
@@ -467,6 +477,49 @@ def dashboard(request):
     
 
 
+    return render(request, 'app/dashboard2.html', context)
+    form1 = TaskForm(initial={'priority': '2'})
+    if request.is_ajax() and request.method == "POST":
+        print(request.POST)
+        taskid = request.POST['myid']
+        taskbool = request.POST['checkedval']
+        thistask = Tasks.objects.get(id=taskid)
+        if taskbool == "false":
+            thistask.completion_mark = False
+            thistask.save()
+        elif taskbool == "true":
+            thistask.completion_mark = True
+            thistask.save()
+        data = {
+            'msg': 'hello',
+        }
+        return JsonResponse(data)
+
+    if request.method == "POST":
+        form1 = TaskForm(request.POST, initial={'priority': '2'})
+        if form1.is_valid():
+            print("got here")
+            form_one = form1.save(commit=False)
+            form_one.assigner = request.user
+            assignees = form1.cleaned_data.get('assignees')
+            form_one.completion_mark = False
+            form_one.save()
+            form1.save_m2m()
+            return redirect('/')
+        else:
+            print(form1.errors)
+    context = {
+        'users': users, 
+        'user_bg': user_bg, 
+        "rooms": rooms, 
+        "form1": form1, 
+        "tasks": tasks, 
+        "today": today, 
+        "week_from_today": week_from_today,
+        "past_due_tasks": past_due_tasks,
+        'weekly_tasks': weekly_tasks,
+        'upcoming_tasks': upcoming_tasks,
+    }
     return render(request, 'app/dashboard2.html', context)
 
 @login_required(login_url='login')
