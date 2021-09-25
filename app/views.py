@@ -417,11 +417,36 @@ def add_organization(request):
         }
     return render(request, 'app/add_organizations.html', context)
 
+def createevents(request):
+    if request.method == 'POST':
+        print("post event")
+        form = Event_Creation_Form(request.POST)
+        if form.is_valid():
+            print("valid event")
+            eventform = form.save(commit=False)
+            eventform.populate_myself(request.user)
+            eventform.save()
+
+            return redirect ('/')
+        else:
+            print("form error", form.errors)
+ 
+    return dashboard(request)  
+
+def delete_note(request, NoteId):
+    note = MyNotes.objects.get(pk=NoteId)
+    note.delete()
+
+    return redirect('/?NoteId=0')
+
 @login_required(login_url='login')
 def dashboard(request):
     tasks = Tasks.objects.filter(assignees=request.user.id)
     users = Account.objects.exclude(pk=request.user.id)
     rooms = ChatGroup.objects.filter(members=request.user).order_by("group_name")
+    events = MyEvents.objects.filter(created_by = request.user.id)
+    notes = MyNotes.objects.filter(user=request.user.id)
+    notesForm = MyNotesForm()
 
     today = timezone.now().date()
     week_from_today = today + timedelta(days=(today.isocalendar()[2] + 4))
@@ -435,7 +460,11 @@ def dashboard(request):
         user_bg = BgInfo.objects.get(user=request.user.id)
     except BgInfo.DoesNotExist:
         user_bg = None
+
+    create_event_form = Event_Creation_Form()
     form1 = TaskForm(initial={'priority': '2'})
+    notes = MyNotes.objects.filter(user=request.user).order_by('-date')
+
     if request.is_ajax() and request.method == "POST":
         print(request.POST)
         taskid = request.POST['myid']
@@ -454,6 +483,8 @@ def dashboard(request):
 
     if request.method == "POST":
         form1 = TaskForm(request.POST, initial={'priority': '2'})
+        create_event_form = Event_Creation_Form(request.POST)
+        notesForm = MyNotesForm(request.POST)
         if form1.is_valid():
             print("got here")
             form_one = form1.save(commit=False)
@@ -465,11 +496,25 @@ def dashboard(request):
             return redirect('/')
         else:
             print(form1.errors)
+
+        if notesForm.is_valid():
+           notes_form = notesForm.save(commit=False)
+           notes_form.user=request.user
+           notes_form.date=timezone.now()
+           notes_form.save()
+           return redirect('/')
+        else:
+            print(notesForm.errors)
+
     context = {
         'users': users, 
         'user_bg': user_bg, 
         "rooms": rooms, 
         "form1": form1, 
+        'events': events,
+        'notes': notes,
+        'create_event_form': create_event_form,
+        'notesForm' : notesForm,
         "tasks": tasks, 
         "today": today, 
         "week_from_today": week_from_today,

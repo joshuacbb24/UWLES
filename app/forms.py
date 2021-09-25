@@ -226,11 +226,48 @@ DirFilesFormset = modelformset_factory(
 
 class TaskForm(forms.ModelForm):
     assignees = forms.ModelMultipleChoiceField(queryset=Account.objects.all())
-    title = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Task Title'}))
-    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Add a description for this task'}))
+    task_title = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Task Title'}))
+    task_description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Add a description for this task'}))
     priority = forms.ModelChoiceField(queryset=Priority.objects.all(), empty_label=None)
     due_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
     class Meta:
         model = Tasks
         fields = '__all__'
         exclude = ('assigner', 'completion_mark',)
+
+
+class Event_Creation_Form(forms.ModelForm):
+    
+    title = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Title'}), required=True)
+    description = forms.CharField(widget=forms.Textarea(attrs={'cols': 80, 'rows': 20}), required=False)
+    start_day = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}), required=True)
+    start_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=True)
+    end_day = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}), required=True)
+    end_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=True)
+    
+    all_day = forms.BooleanField(initial=False)
+   
+    
+    class Meta:
+        model = MyEvents
+        fields = ('__all__')
+        exclude = ['created_by']
+        """
+        widgets = {
+            'title': TextInput(attrs={}),
+            'description': Textarea(attrs={'cols': 80, 'rows': 20}),
+            'start_day': SelectDateWidget(attrs={}),
+            'start_time': TimeInput(attrs={}),
+            'end_day': SelectDateWidget(attrs={}),
+            'end_time': TimeInput(attrs={}),
+            'all_day': RadioSelect(attrs={}),
+        }
+        """
+
+class MyNotesForm(ModelForm):
+     description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'type your thoughts here', 'maxlength': '500', 'class': 'my-notes-forms'}), required = False, label ='',)
+     class Meta:
+        model = MyNotes
+        fields = '__all__'
+        exclude = ('date','user')

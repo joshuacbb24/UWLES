@@ -301,9 +301,11 @@
     background: #fff;
     border-radius: 5px;
     color: var(--text-grey);
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-    margin-bottom: 30px;
-    height: 480px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    margin-right: 60px;
+    margin-bottom: 20px;
+    height: 400px;
+    z-index: 0;
 }
 
 .card-single-two {
@@ -354,13 +356,19 @@
     z-index: 6;
     bottom: 2px;
 }
-
+.calendar .day.disabled .day-border {
+    border: 2px solid #015D67;
+}
+.calendar .day .day-border {
+    border: 2px solid #015D67;
+}
+.day-border {
+    border: 2px solid #015D67 !important;
+}
 .card-single-one i {
     position: relative;
-    font-size: 40px;
-    margin-top: 90px;
-    float: right;
-    color: #808080;
+    font-size: 28px;
+    margin-top: 16px;
 }
 
 .card-single-one .trash {
@@ -399,12 +407,8 @@
 }
 
 .menu {
-    width: 35%;
-    height: 40%;
+    width: 40%;
     float: left;
-    background: white;
-    box-shadow: 0px 4px 8px rgba(1, 61, 68, 0.15);
-    border-radius: 6px;
 }
 
 .menu2 {
@@ -718,9 +722,86 @@
     color: #013D44;
 }
 
-.btn-active{
+.notes-form {
+    position: relative;
+    padding-left: 30px;
+    padding-top: 15px;
+    border-radius: 6px;
+}
+    
+    
+.note-date {
+    position: relative;
+    float: left;
+}
+    
+.fas fa-pencil-alt {
+    cursor: pointer;
+}
+.fas fa-times {
+    cursor: pointer;
+}
+    
+    
+.my-notes-forms {
+    position: relative;
+    resize: none;
+    padding: 10px;
+    background: #FCFCFC;
+    border: 1px solid #D7D7D7;
+    box-sizing: border-box;
+    border-radius: 6px;
+    width: 94%;
+    height: 100px;
+}
+    
+.note-list {
+    position: relative;
+    padding: 20px;
+    left: 3%;
+    width:100%; 
+}
+    
+.notes-list-items {
+    margin: 1em 0;
+    padding: 10px;
+    position: relative;
+    width: 94%;
+    background: #FFF5D9;
+    overflow-wrap: break-word;
+}
+.notes-list-items:after {
+    content: "";
+    position: absolute;
+    right: 0%;
+    bottom: 0%;
+    width: 0px;
+    height: 0px;
+    border-top: 26px solid #C4C4C4;
+    border-right: 26px solid #FFFFFF;
+    border-bottom: 0px solid #FFFFFF;
+}
+.btn-active {
     background: #015d67;
     color: white;
+}
+    
+.btn-save-notes {
+    padding: 5px;
+    position: relative;
+    right:6%;
+    width:90px;
+    height:40px;
+    background: #015D67;
+    border-radius: 6px;
+    float: right;
+    color: white;
+       
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .btn-my-tasks{
@@ -1089,7 +1170,7 @@ body {
     overflow: hidden;
 }
 
-#id_title{
+#id_task_title{
     position: absolute;
     top: 25px;
     left: 25px;
@@ -1153,7 +1234,7 @@ body {
     color: #717171;
 }
 
-#id_description{
+#id_task_description{
     position: absolute;
     top: 340px;
     left: 25px;
