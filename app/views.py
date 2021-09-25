@@ -122,6 +122,14 @@ def signup(request):
     return render(request, 'app/signup.html', {'form': form})
 
 
+
+
+def delete_note(request, NoteId):
+    note = MyNotes.objects.get(pk=NoteId)
+    note.delete()
+
+    return redirect('/?NoteId=0')
+
 def introduction(request):
     if request.is_ajax() and request.method == "POST":
         print(request.POST)
@@ -1943,6 +1951,10 @@ def document_directory_folder(request, pk, option):
         }
 
     return render(request, 'app/document_folder_directory.html', context)
+
+
+
+
 
 def validate_account(request):
     account_name = request.GET.get('account_name', None)

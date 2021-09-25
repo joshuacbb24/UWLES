@@ -224,6 +224,14 @@ DirFilesFormset = modelformset_factory(
     extra=0,
     )
 
+class MyNotesForm(ModelForm):
+     description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'type your thoughts here', 'maxlength': '500', 'class': 'my-notes-forms'}), required = False, label ='',)
+     class Meta:
+        model = MyNotes
+        fields = '__all__'
+        exclude = ('date','user')
+    )
+
 class TaskForm(forms.ModelForm):
     assignees = forms.ModelMultipleChoiceField(queryset=Account.objects.all())
     task_title = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Task Title'}))

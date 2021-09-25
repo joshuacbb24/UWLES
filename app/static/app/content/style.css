@@ -390,8 +390,26 @@
     height: 100%;
 }
 
-.menu-header{
-    box-shadow: 0px 1px 1px white;
+.textarea {
+    background: #FCFCFC;
+    border: 1px solid #D7D7D7;
+    box-sizing: border-box;
+    border-radius: 6px;
+    resize: none;
+    font-family: Effra;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.01em;
+    color: #AFAFAF;
+    padding: 8px;
+}
+.menu-header {
+    box-shadow: 0px 1px 1px #EBF2F2;
     border-radius: 6px 6px 0px 0px;
     padding-left: 30px;
     padding-top: 15px;
@@ -427,10 +445,12 @@
     top: 10.75%;
     left: 40%;
     width: 35%;
+    overflow: hidden;
     height: 85%;
     background: white;
     box-shadow: 0px 4px 8px rgba(1, 61, 68, 0.15);
     border-radius: 6px;
+   /*overflow-y: auto; */
 }
 
 .menu4{
@@ -804,7 +824,25 @@
     cursor: pointer;
 }
 
-.btn-my-tasks{
+.btn-save-notes {
+    padding: 5px;
+    position: relative;
+    right:6%;
+    width:90px;
+    height:40px;
+    background: #015D67;
+    border-radius: 6px;
+    float: right;
+    color: white;
+   
+    font-family: Effra;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-my-tasks {
     position: absolute;
     top: 20px;
     left: 5%;
@@ -846,6 +884,10 @@
     letter-spacing: 0.01em;
 }
 
+
+.btn-edit-note {
+    cursor: pointer;
+}
 .btn-new-task{
     position: absolute;
     top: 20px;
