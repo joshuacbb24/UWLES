@@ -230,7 +230,6 @@ class MyNotesForm(ModelForm):
         model = MyNotes
         fields = '__all__'
         exclude = ('date','user')
-    )
 
 class TaskForm(forms.ModelForm):
     assignees = forms.ModelMultipleChoiceField(queryset=Account.objects.all())
