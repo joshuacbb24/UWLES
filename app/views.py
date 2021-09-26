@@ -436,7 +436,7 @@ def createevents(request):
         user = Account.objects.get(username=username)
         eventlist = MyEvents.objects.filter(created_by = user)
         for event in eventlist:
-            events.append({'title':event.title,'description':event.description,'start_day':event.start_day,'start_time':event.start_time,'end_day':event.end_day,'end_time':event.end_time, 'all_day': event.all_day})
+            events.append({'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day})
         data = {'events': events}
         return JsonResponse(data)
     return dashboard(request)  
