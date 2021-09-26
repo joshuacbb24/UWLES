@@ -16,10 +16,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'app/content/chat.css' %}" />
   <link href="{% static 'app/content/main.css' %}" rel='stylesheet' />
   <link rel="stylesheet" href="{% static 'app/content/chatPopUp.css' %}" />
-<<<<<<< HEAD
-=======
   <link rel="stylesheet" href="{% static 'app/content/myModal.css' %}" />
->>>>>>> 2c43c5bc0ee5a9119792e3af86baf7e29c32e16a
   <link rel="stylesheet" href="{% static 'app/content/simple-calendar.css' %}" />
 
 
@@ -150,13 +147,10 @@
       font-family: Helvetica;
       font-size: 14px;
     }
-<<<<<<< HEAD
-=======
     .modal-backdrop.show:nth-child(even) {
             z-index: 1040 !important;
             opacity: .5;
         }
->>>>>>> 2c43c5bc0ee5a9119792e3af86baf7e29c32e16a
     #members-page {
   display: none;
   /* Hidden by default */
@@ -202,7 +196,6 @@
     text-transform: capitalize;
     text-align: center;
     font: 15px/1em inherit;
-<<<<<<< HEAD
     margin-top: 0 !important;
     top: 0 !important;
     height: fit-content;
@@ -216,11 +209,7 @@
   margin-top: 5%;
 
 }
-.event-body{
-  position:relative;
-  height: 5%;
-  color: #545A5C;
-}
+
 .card-footer {
     padding: 0 !important;
     background-color: rgba(0,0,0,.03);
@@ -237,14 +226,6 @@
   box-sizing: border-box;
   height: 6%;
 
-=======
-    color: #545A5C;
-    margin-top: 0 !important;
-    top: 0 !important;
-    height: auto;
-    z-index: 1;
-    margin-bottom: 63%;
->>>>>>> 2c43c5bc0ee5a9119792e3af86baf7e29c32e16a
 }
   </style>
 </head>
@@ -343,16 +324,10 @@
         </div>-->
         <div class="card-single-one">
         <div id="container" class="calendar-container"></div>
-<<<<<<< HEAD
-        <div class="event-container"><div class="event-header"><h5 style="color:#015D67;text-align: left;margin-left: 2%;">Coming Up</h5></div><div class="event-body"></div></div>
-=======
-        <div class="event-container"><div class="event-wrapper"></div></div>
->>>>>>> 2c43c5bc0ee5a9119792e3af86baf7e29c32e16a
-        <div class="card-footer" style="
+        <div class="event-container"><div class="event-header"><h5 style="color:#015D67;text-align: left;margin-left: 2%;">Coming Up</h5></div><ul class="event-body"></ul></div>        <div class="card-footer" style="
         position: relative;
         z-index: 1;
         width: 100%;
-<<<<<<< HEAD
         height: 60px;
         bottom: 0 !important;
         margin-top: 20px;
@@ -361,12 +336,6 @@
         ">
         <div class="calendar-icons"><span style="float: right;"><i id="show-calendar" class="las la-calendar-plus show-calendar" style="color: gray;"></i><i id="show-events" class="las la-calendar-minus show-events"></i></span>
         </div>
-=======
-        /* float: right; */
-    ">
-<div class="calendar-icons"><span style="float: right;"><i id="show-calendar" class="las la-calendar-plus show-calendar" style="color: gray;"></i><i id="show-events" class="las la-calendar-minus show-events"></i></span>
-</div>
->>>>>>> 2c43c5bc0ee5a9119792e3af86baf7e29c32e16a
           
         </div>
       </div>
@@ -387,7 +356,6 @@
     
                 <div>
                     <p style="margin-left: 10%;">
-<<<<<<< HEAD
                       <form action={% url 'createevents' %}  id="event_form" method="post" style="height: fit-content;">
                         {% csrf_token %}
                         <div class="form-row">
@@ -418,11 +386,6 @@
                         <p>{{ create_event_form.description }}</p>
                       </div>
  
-=======
-                      <form action={% url 'createevents' %}  id="event_form" method="post">
-                        {% csrf_token %}
-                        {{ create_event_form }}
->>>>>>> 2c43c5bc0ee5a9119792e3af86baf7e29c32e16a
                       <!--
                         <div id="sandbox-container">
                           <div class="input-append date">
@@ -439,12 +402,6 @@
             </div>
         </div>
     </div>
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> 2c43c5bc0ee5a9119792e3af86baf7e29c32e16a
       <div class="menu2">
         <div class="menu-header">
           Clients
@@ -711,7 +668,6 @@
   <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
   <script>
     $(document).ready(function () {
-<<<<<<< HEAD
       var eventlist = [];
 
 $.ajax( 
@@ -732,8 +688,6 @@ console.log("eventlist", eventlist)
 dataType: 'json'
   }) 
   
-=======
->>>>>>> 2c43c5bc0ee5a9119792e3af86baf7e29c32e16a
     $("#container").simpleCalendar({
         fixedStartDay: 0, // begin weeks by sunday
         onDateSelect: function (date, events) {}, // Callback on date selection
