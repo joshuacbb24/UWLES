@@ -294,11 +294,13 @@ $(borderday).addClass('day-border');
       dStart.setHours(0,0,0);
       dEnd.setHours(23,59,59,999);
       d.setHours(12,0,0);
-      //console.log("dstart",dStart);
-      //console.log("dend",dEnd);
-      //console.log("d",d);
+      console.log("dstart",dStart);
+      console.log("dend",dEnd);
+      console.log("d",d);
       var returnvalue = dStart <= d && d <= dEnd
       //console.log("return",returnvalue);
+
+      //for repeating events do an if statement for the categories
       return dStart <= d && d <= dEnd;
     },
     formatDateEvent: function (dateStart, dateEnd) {
