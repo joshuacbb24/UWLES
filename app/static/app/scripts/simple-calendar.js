@@ -18,7 +18,7 @@
       onDateSelect: function (date, events) {}, // Callback on date selection
       onEventSelect: function () {},              // Callback fired when an event is selected     - see $(this).data('event')
       onEventCreate: function( $el ) {},          // Callback fired when an HTML event is created - see $(this).data('event')
-      onEventDelete: function ($el) {},
+      onEventDelete: function ($el) {},           // Callback fired when an event is deleted
       onDayCreate:   function( $el, d, m, y ) {}  // Callback fired when an HTML day is created   - see $(this).data('today'), .data('todayEvents')
     };
 
@@ -241,7 +241,9 @@ $(borderday).addClass('day-border');
           events.forEach(function (event) {
               var startDate = new Date(event.startDate);
               var endDate = new Date(event.endDate);
-              var $event = `<li class="event-list">`+'@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.summary + `</li>`;
+              //var eventId = event.eventID; //id for each event
+              var eventId = 1; //id for each event
+              var $event = `<li class="event-list" data-event="${eventId}">`+'@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.summary + `</li>`;
 
               // $event.data('event', event);
               console.log('event data +++', $event);
@@ -321,3 +323,4 @@ $(borderday).addClass('day-border');
   };
 
 }
+

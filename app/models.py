@@ -612,28 +612,34 @@ class MyFileName(models.Model):
         return str(self.newname) + "-" + str(self.user)
 
 class Priority(models.Model):
-    difficulty = models.CharField(max_length=400, unique=True, null=False, blank=False)
+    priority = models.CharField(max_length=400, unique=True, null=False, blank=False)
+
+    def __str__(self):
+        return self.priority
 
 class Tasks(models.Model):
     assigner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="assigner")
     assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="assignee")
-    title = models.CharField(max_length=50, blank=False, null=False)
-    description = models.CharField(max_length=500)
-    difficulty = models.ForeignKey(Priority, blank=False, null=False, on_delete=models.CASCADE)
+    task_title = models.CharField(max_length=50, blank=False, null=False)
+    task_description = models.CharField(max_length=500)
+    priority = models.ForeignKey(Priority, blank=False, null=False, on_delete=models.CASCADE)
     due_date = models.DateTimeField()
     completion_mark = models.BooleanField()
 
     class Meta:
-        unique_together = (('assigner', 'title', 'description'))
+        unique_together = (('assigner', 'task_title', 'task_description'))
 
     def __str__(self):
-        return self.title
+        return self.task_title
 
 class MyNotes(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     description = models.CharField(max_length=500, null=False, blank=False)
-    date = models.DateTimeField() 
+    date = models.DateTimeField()
 
+    class Meta:
+        ordering = ('date',)
+    
 class MyEvents(models.Model):
     """
     REPEATING_CHOICES = (
