@@ -430,7 +430,15 @@ def createevents(request):
             return redirect ('/')
         else:
             print("form error", form.errors)
- 
+    elif request.method == 'GET':
+        events = []
+        username = request.GET['username']
+        user = Account.objects.get(username=username)
+        eventlist = MyEvents.objects.filter(created_by = user)
+        for event in eventlist:
+            events.append({'title':event.title,'description':event.description,'start_day':event.start_day,'start_time':event.start_time,'end_day':event.end_day,'end_time':event.end_time, 'all_day': event.all_day})
+        data = {'events': events}
+        return JsonResponse(data)
     return dashboard(request)  
     
 @login_required(login_url='login')

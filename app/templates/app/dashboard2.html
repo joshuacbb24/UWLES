@@ -11,6 +11,7 @@
   <link rel="stylesheet"
     href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
   <script src="https://kit.fontawesome.com/f0b88b09a7.js" crossorigin="anonymous"></script>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
   <link rel="stylesheet" href="{% static 'app/content/style.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'app/content/chat.css' %}" />
   <link href="{% static 'app/content/main.css' %}" rel='stylesheet' />
@@ -189,12 +190,40 @@
     text-transform: capitalize;
     text-align: center;
     font: 15px/1em inherit;
-    color: #545A5C;
     margin-top: 0 !important;
     top: 0 !important;
-    height: auto;
+    height: fit-content;
     z-index: 1;
-    margin-bottom: 63%;
+    margin-bottom: 50.5%;
+}
+.event-body{
+  position:relative;
+  height: auto;
+  color: #545A5C;
+  margin-top: 5%;
+
+}
+.event-body{
+  position:relative;
+  height: 5%;
+  color: #545A5C;
+}
+.card-footer {
+    padding: 0 !important;
+    background-color: rgba(0,0,0,.03);
+    border-top: 1px solid rgba(0,0,0,.125);
+    height: initial;
+}
+#event_form input[type=text], input[type=email], select{
+  width: 10%;
+  padding: 12px 10px;
+  margin: 5px 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  box-sizing: border-box;
+  height: 6%;
+
 }
   </style>
 </head>
@@ -293,15 +322,19 @@
         </div>-->
         <div class="card-single-one">
         <div id="container" class="calendar-container"></div>
-        <div class="event-container"><div class="event-wrapper"></div></div>
+        <div class="event-container"><div class="event-header"><h5 style="color:#015D67;text-align: left;margin-left: 2%;">Coming Up</h5></div><div class="event-body"></div></div>
         <div class="card-footer" style="
         position: relative;
         z-index: 1;
         width: 100%;
+        height: 60px;
+        bottom: 0 !important;
+        margin-top: 20px;
+        margin-bottom: 0px !important;
         /* float: right; */
-    ">
-<div class="calendar-icons"><span style="float: right;"><i id="show-calendar" class="las la-calendar-plus show-calendar" style="color: gray;"></i><i id="show-events" class="las la-calendar-minus show-events"></i></span>
-</div>
+        ">
+        <div class="calendar-icons"><span style="float: right;"><i id="show-calendar" class="las la-calendar-plus show-calendar" style="color: gray;"></i><i id="show-events" class="las la-calendar-minus show-events"></i></span>
+        </div>
           
         </div>
       </div>
@@ -322,9 +355,36 @@
     
                 <div>
                     <p style="margin-left: 10%;">
-                      <form action={% url 'createevents' %}  id="event_form" method="post">
+                      <form action={% url 'createevents' %}  id="event_form" method="post" style="height: fit-content;">
                         {% csrf_token %}
-                        {{ create_event_form }}
+                        <div class="form-row">
+                          <p>{{ create_event_form.title }}</p>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                        <p>{{ create_event_form.start_day }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                          <p>{{ create_event_form.start_time }}</p>
+                        </div>
+                        <div class="form-group col-md-1">
+                          <p>{{ create_event_form.all_day }}</p>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                          <p>{{ create_event_form.end_day }}</p>
+                          </div>
+                        <div class="form-group col-md-4">
+                          <p>{{ create_event_form.end_time }}</p>
+                        </div>
+
+                      </div>
+                      <div class="form-row">
+
+                        <p>{{ create_event_form.description }}</p>
+                      </div>
+ 
                       <!--
                         <div id="sandbox-container">
                           <div class="input-append date">
@@ -341,6 +401,9 @@
             </div>
         </div>
     </div>
+
+
+
       <div class="menu2">
         <div class="menu-header">
           Clients
@@ -478,6 +541,26 @@
   <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
   <script>
     $(document).ready(function () {
+      var eventlist = [];
+
+$.ajax( 
+{ 
+    type:"GET", 
+    url: "createevents", 
+    data:{ 
+             username: $("#myself").val()
+          }, 
+success: function(data, textStatus) 
+{ 
+    for (var i = 0; i < data.events.length; i++)
+    {
+      eventlist[i] = data.events[i];
+    }
+console.log("eventlist", eventlist)
+},
+dataType: 'json'
+  }) 
+  
     $("#container").simpleCalendar({
         fixedStartDay: 0, // begin weeks by sunday
         onDateSelect: function (date, events) {}, // Callback on date selection

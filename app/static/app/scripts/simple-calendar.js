@@ -43,7 +43,7 @@
           var header = $('<header>' +
           '<div class="changer" style="justify-content: center;text-align: center;">'+
          '<a class="simple-calendar-btn btn-prev" href="#"></a>' +
-         '<h4 class="month"></h4>' +
+         '<h6 class="month"></h6>' +
          '<a class="simple-calendar-btn btn-next" href="#"></a>' +
          '</div>'+
          '<div class="adder" style="font-size: 20px; float: right;justify-content: right;margin-left: 58%;"><i id="add-event-button" class="las la-plus" style="cursor: pointer;"></i></div>'+
@@ -237,11 +237,11 @@ $(borderday).addClass('day-border');
       displayEventTexts: function (events) {
           var plugin = this;
           //var container = $(this.element).find('.eventContainer');
-          var container = $(".event-wrapper");
+          var container = $(".event-body");
           events.forEach(function (event) {
               var startDate = new Date(event.startDate);
               var endDate = new Date(event.endDate);
-              var $event = '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.summary;
+              var $event = `<li class="event-list">`+'@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.summary + `</li>`;
 
               // $event.data('event', event);
               console.log('event data +++', $event);
