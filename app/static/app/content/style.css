@@ -101,7 +101,7 @@
 
 .main-content {
     margin-top: 3.8rem;
-    margin-left: 75px;
+    margin-left: 41px;
     margin-right: 0.5rem;
     background: #ebf2f2;
     height: 100vh;
@@ -414,6 +414,7 @@
 }
 
 .menu {
+    margin-left: 15px;
     width: 40%;
     float: left;
 }

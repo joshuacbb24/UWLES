@@ -26,7 +26,6 @@
     rel="stylesheet">
 
 
-  <script src="{% static 'app/scripts/main.js' %}"></script>
   <script src="{% static 'app/scripts/jquery.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -37,109 +36,6 @@
   <script src="{% static 'app/scripts/jquery.fileupload.js' %}"></script>
   <script src="{% static 'app/scripts/tasks.js ' %}"></script>
   <!--<script src="{% static 'app/scripts/pop.js' %}"></script>-->
-  <script>
-
-    document.addEventListener('DOMContentLoaded', function () {
-      var calendarEl = document.getElementById('calendar');
-
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        footerToolbar: {
-
-        },
-        defaultView: 'basicWeek',
-        height: 500,
-        navLinks: true, // can click day/week names to navigate views
-        selectable: true,
-        selectMirror: true,
-        select: function (arg) {
-          var title = prompt('Event Title:');
-          if (title) {
-            calendar.addEvent({
-              title: title,
-              start: arg.start,
-              end: arg.end,
-              allDay: arg.allDay
-            })
-          }
-          calendar.unselect()
-        },
-
-        eventClick: function (arg) {
-          if (confirm('Are you sure you want to delete this event?')) {
-            arg.event.remove()
-          }
-        },
-        editable: true,
-        dayMaxEvents: true, // allow "more" link when too many events
-
-        events: [
-          {
-            title: 'All Day Event',
-            start: '2021-03-01'
-          },
-          {
-            title: 'Long Event',
-            start: '2021-09-07',
-            end: '2021-03-10'
-          },
-          {
-            groupId: 999,
-            title: 'Repeating Event',
-            start: '2021-03-09T16:00:00'
-          },
-          {
-            groupId: 999,
-            title: 'Repeating Event',
-            start: '2021-03-16T16:00:00'
-          },
-          {
-            title: 'Conference',
-            start: '2021-03-11',
-            end: '2021-03-13'
-          },
-          {
-            title: 'Meeting',
-            start: '2021-03-12T10:30:00',
-            end: '2021-03-12T12:30:00'
-          },
-          {
-            title: 'Lunch',
-            start: '2021-03-12T12:00:00'
-          },
-          {
-            title: 'Meeting',
-            start: '2021-03-12T14:30:00'
-          },
-          {
-            title: 'Happy Hour',
-            start: '2021-03-12T17:30:00'
-          },
-          {
-            title: 'Dinner',
-            start: '2021-03-12T20:00:00'
-          },
-          {
-            title: 'Birthday Party',
-            start: '2021-03-13T07:00:00'
-          },
-          {
-            title: 'Click for Google',
-            url: 'http://google.com/',
-            start: '2021-03-28'
-          }
-        ]
-      });
-
-      calendar.render();
-    });
-
-  </script>
   <style>
     body {
       margin: 40px 10px;
@@ -217,7 +113,7 @@
     height: initial;
 }
 #event_form input[type=text], input[type=email], select{
-  width: 10%;
+  width: 150%;
   padding: 12px 10px;
   margin: 5px 10px;
   display: inline-block;
