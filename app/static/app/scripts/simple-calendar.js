@@ -212,6 +212,107 @@ $(borderday).addClass('day-border');
 
 //selectedday = $(this).innerhtml
         //document.getElementById("eventContainer").innerHTML = "No events";
+        if ($(this).hasClass('today'))
+        {
+          var startday = new Date(new Date(date).setHours(new Date().getHours() + 1,0,0));
+          var endday = new Date(new Date(date).setHours(new Date().getHours() + 2,0,0));
+          var sday = ("0" + startday.getDate()).slice(-2);
+          var smonth = ("0" + (startday.getMonth() + 1)).slice(-2);
+          var eday = ("0" + endday.getDate()).slice(-2);
+          var emonth = ("0" + (endday.getMonth() + 1)).slice(-2);
+          var autosday = startday.getFullYear()+"-"+(smonth)+"-"+(sday);
+          var autoeday = endday.getFullYear()+"-"+(emonth)+"-"+(eday);
+          var shour=startday.getHours();
+          var smin=startday.getMinutes();
+          //var sampm = shour >= 12 ? 'pm' : 'am';
+          if (shour < 10)
+          {
+            shour = '0'+shour
+          }
+          if (smin < 10)
+          {
+            smin = '0'+smin
+          }
+          var startTime = shour + ':' + smin;
+          /*shour = shour % 12;
+          shour = shour ? shour : 12; // the hour '0' should be '12'
+          smin = smin < 10 ? '0'+smin : smin;
+          var startTime = shour + ':' + smin + ' ' + sampm;
+          */
+          var ehour= endday.getHours();
+          var emin= endday.getMinutes();
+          if (ehour < 10)
+          {
+            ehour = '0'+ehour
+          }
+          if (emin < 10)
+          {
+            emin = '0'+emin
+          }
+          //var eampm= ehour >= 12 ? 'pm' : 'am';
+    
+          var endTime = ehour + ':' + emin;
+          
+          /*ehour = ehour % 12;
+          ehour = ehour ? ehour : 12; // the hour '0' should be '12'
+          emin = emin < 10 ? '0'+emin : emin;
+          var endTime = ehour + ':' + emin + ' ' + eampm;
+          */
+          $("#id_start_time").val(startTime);
+          $("#id_start_day").val(autosday);
+          $("#id_end_time").val(endTime);
+          $("#id_end_day").val(autoeday);
+        }
+        else{
+          var startday = new Date(new Date(date).setHours(8,0,0));
+          var endday = new Date(new Date(date).setHours(9,0,0));
+          var sday = ("0" + startday.getDate()).slice(-2);
+          var smonth = ("0" + (startday.getMonth() + 1)).slice(-2);
+          var eday = ("0" + endday.getDate()).slice(-2);
+          var emonth = ("0" + (endday.getMonth() + 1)).slice(-2);
+          var autosday = startday.getFullYear()+"-"+(smonth)+"-"+(sday);
+          var autoeday = endday.getFullYear()+"-"+(emonth)+"-"+(eday);
+          var shour=startday.getHours();
+          var smin=startday.getMinutes();
+          //var sampm = shour >= 12 ? 'pm' : 'am';
+          if (shour < 10)
+          {
+            shour = '0'+shour
+          }
+          if (smin < 10)
+          {
+            smin = '0'+smin
+          }
+          var startTime = shour + ':' + smin;
+          /*shour = shour % 12;
+          shour = shour ? shour : 12; // the hour '0' should be '12'
+          smin = smin < 10 ? '0'+smin : smin;
+          var startTime = shour + ':' + smin + ' ' + sampm;
+          */
+          var ehour= endday.getHours();
+          var emin= endday.getMinutes();
+          if (ehour < 10)
+          {
+            ehour = '0'+ehour
+          }
+          if (emin < 10)
+          {
+            emin = '0'+emin
+          }
+          //var eampm= ehour >= 12 ? 'pm' : 'am';
+    
+          var endTime = ehour + ':' + emin;
+          
+          /*ehour = ehour % 12;
+          ehour = ehour ? ehour : 12; // the hour '0' should be '12'
+          emin = emin < 10 ? '0'+emin : emin;
+          var endTime = ehour + ':' + emin + ' ' + eampm;
+          */
+          $("#id_start_time").val(startTime);
+          $("#id_start_day").val(autosday);
+          $("#id_end_time").val(endTime);
+          $("#id_end_day").val(autoeday);
+        }
         if (!$(this).hasClass('disabled')) {
             // plugin.fillUp(e.pageX, e.pageY);
             // plugin.displayEvents(events);
