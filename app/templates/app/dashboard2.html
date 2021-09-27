@@ -735,6 +735,10 @@ dataType: 'json'
       $("#id_end_time").val(oldend);
       }
 });
+$("#canc").on('click', function () {
+      $("#members-page").hide();
+      $("#event_form").trigger("reset");
+    })
 });
 
 </script>
@@ -748,10 +752,7 @@ dataType: 'json'
     $("#sidebar-toggle").on('click', function () {
       $(".sidebar").toggle('show hide');
     })
-    $("#canc").on('click', function () {
-      $("#members-page").hide();
-      $("#event_form").trigger("reset");
-    })
+
   </script>
 
   <script>
