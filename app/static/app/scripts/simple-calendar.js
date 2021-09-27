@@ -344,7 +344,7 @@ $(borderday).addClass('day-border');
               var endDate = new Date(event.endDate);
               //var eventId = event.eventID; //id for each event
               var eventId = 1; //id for each event
-              var $event = `<li class="event-list" data-event="${eventId}">`+'@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.summary + `</li>`;
+              var $event = `<li class="event-list" data-event="${eventId}">`+`<div class="event-in-list" data-event="${eventId}">`+ '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.summary +`</div>`+ `</li>`;
 
               // $event.data('event', event);
               console.log('event data +++', $event);

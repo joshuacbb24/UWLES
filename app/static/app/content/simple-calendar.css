@@ -383,3 +383,16 @@ footer {
             line-height: 1.2;
             color: inherit;
         }
+        .event-list {
+          border: none;
+          -webkit-box-shadow: none;
+          box-shadow: none;
+          margin-bottom: 5px;
+          padding: 2px 5px;
+          background-color: #3174ad;
+          border-radius: 5px;
+          color: #fff;
+          cursor: pointer;
+          width: 100%;
+          text-align: left;
+        }
