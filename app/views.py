@@ -438,8 +438,17 @@ def createevents(request):
             return redirect ('/')
         else:
             print("form error", form.errors)
- 
-    return dashboard(request)  
+    elif request.method == 'GET':
+        events = []
+        username = request.GET['username']
+        user = Account.objects.get(username=username)
+        eventlist = MyEvents.objects.filter(created_by = user)
+        for event in eventlist:
+            events.append({'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
+            'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day, 'eventID':event.id})
+        data = {'events': events}
+        return JsonResponse(data)
+    return dashboard(request)    
 
 def delete_note(request, NoteId):
     note = MyNotes.objects.get(pk=NoteId)
