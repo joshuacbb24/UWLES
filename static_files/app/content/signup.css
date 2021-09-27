@@ -1,9 +1,11 @@
 .signup_layout {
     margin: auto;
+    width: 460px;
+    height: 500px;
 }
 
 #id_username {
-    width: 200px;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -14,7 +16,7 @@
 }
 
 #id_email {
-    width: 200px;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -25,7 +27,7 @@
 }
 
 #id_password1 {
-    width: 200px;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -36,7 +38,7 @@
 }
 
 #id_password2 {
-    width: 200px;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -46,6 +48,17 @@
     letter-spacing: 0.05em;
 }
 
+.profile-picture-upload{
+    position: relative;
+    width: 100%;
+    background: #FFFFFF;
+    opacity: 0.6;
+    border: 2px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 3px;
+}
 
 button[type=submit] {
     background-color: #4CAF50;
@@ -57,6 +70,15 @@ button[type=submit] {
     width: 100%;
 }
 
+input[type=file]{
+    display: none;
+}
+
 button:hover {
     opacity: 0.8;
+}
+
+
+.error-review{
+    background: rgba(233, 110, 76, 0.41) !important;
 }
