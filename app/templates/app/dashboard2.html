@@ -13,10 +13,10 @@
   <script src="https://kit.fontawesome.com/f0b88b09a7.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{% static 'app/content/style.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'app/content/chat.css' %}" />
-  <link href="{% static 'app/content/main.css' %}" rel='stylesheet' />
   <link rel="stylesheet" href="{% static 'app/content/chatPopUp.css' %}" />
   <link rel="stylesheet" href="{% static 'app/content/myModal.css' %}" />
   <link rel="stylesheet" href="{% static 'app/content/simple-calendar.css' %}" />
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />
 
 
 
@@ -25,7 +25,6 @@
     rel="stylesheet">
 
 
-  <script src="{% static 'app/scripts/main.js' %}"></script>
   <script src="{% static 'app/scripts/jquery.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -36,109 +35,6 @@
   <script src="{% static 'app/scripts/jquery.fileupload.js' %}"></script>
   <script src="{% static 'app/scripts/tasks.js ' %}"></script>
   <!--<script src="{% static 'app/scripts/pop.js' %}"></script>-->
-  <script>
-
-    document.addEventListener('DOMContentLoaded', function () {
-      var calendarEl = document.getElementById('calendar');
-
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        footerToolbar: {
-
-        },
-        defaultView: 'basicWeek',
-        height: 500,
-        navLinks: true, // can click day/week names to navigate views
-        selectable: true,
-        selectMirror: true,
-        select: function (arg) {
-          var title = prompt('Event Title:');
-          if (title) {
-            calendar.addEvent({
-              title: title,
-              start: arg.start,
-              end: arg.end,
-              allDay: arg.allDay
-            })
-          }
-          calendar.unselect()
-        },
-
-        eventClick: function (arg) {
-          if (confirm('Are you sure you want to delete this event?')) {
-            arg.event.remove()
-          }
-        },
-        editable: true,
-        dayMaxEvents: true, // allow "more" link when too many events
-
-        events: [
-          {
-            title: 'All Day Event',
-            start: '2021-03-01'
-          },
-          {
-            title: 'Long Event',
-            start: '2021-09-07',
-            end: '2021-03-10'
-          },
-          {
-            groupId: 999,
-            title: 'Repeating Event',
-            start: '2021-03-09T16:00:00'
-          },
-          {
-            groupId: 999,
-            title: 'Repeating Event',
-            start: '2021-03-16T16:00:00'
-          },
-          {
-            title: 'Conference',
-            start: '2021-03-11',
-            end: '2021-03-13'
-          },
-          {
-            title: 'Meeting',
-            start: '2021-03-12T10:30:00',
-            end: '2021-03-12T12:30:00'
-          },
-          {
-            title: 'Lunch',
-            start: '2021-03-12T12:00:00'
-          },
-          {
-            title: 'Meeting',
-            start: '2021-03-12T14:30:00'
-          },
-          {
-            title: 'Happy Hour',
-            start: '2021-03-12T17:30:00'
-          },
-          {
-            title: 'Dinner',
-            start: '2021-03-12T20:00:00'
-          },
-          {
-            title: 'Birthday Party',
-            start: '2021-03-13T07:00:00'
-          },
-          {
-            title: 'Click for Google',
-            url: 'http://google.com/',
-            start: '2021-03-28'
-          }
-        ]
-      });
-
-      calendar.render();
-    });
-
-  </script>
   <style>
     body {
       margin: 40px 10px;
@@ -195,12 +91,36 @@
     text-transform: capitalize;
     text-align: center;
     font: 15px/1em inherit;
-    color: #545A5C;
     margin-top: 0 !important;
     top: 0 !important;
-    height: auto;
+    height: fit-content;
     z-index: 1;
-    margin-bottom: 63%;
+    margin-bottom: 50.5%;
+}
+.event-body{
+  position:relative;
+  height: auto;
+  color: #545A5C;
+  margin-top: 5%;
+
+}
+
+.card-footer {
+    padding: 0 !important;
+    background-color: rgba(0,0,0,.03);
+    border-top: 1px solid rgba(0,0,0,.125);
+    height: initial;
+}
+#event_form input[type=text], input[type=email], select{
+  width: 150%;
+  padding: 12px 10px;
+  margin: 5px 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  box-sizing: border-box;
+  height: 6%;
+
 }
   </style>
 </head>
@@ -299,15 +219,18 @@
         </div>-->
         <div class="card-single-one">
         <div id="container" class="calendar-container"></div>
-        <div class="event-container"><div class="event-wrapper"></div></div>
-        <div class="card-footer" style="
+        <div class="event-container"><div class="event-header"><h5 style="color:#015D67;text-align: left;margin-left: 2%;">Coming Up</h5></div><ul class="event-body"></ul></div>        <div class="card-footer" style="
         position: relative;
         z-index: 1;
         width: 100%;
+        height: 60px;
+        bottom: 0 !important;
+        margin-top: 20px;
+        margin-bottom: 0px !important;
         /* float: right; */
-    ">
-<div class="calendar-icons"><span style="float: right;"><i id="show-calendar" class="las la-calendar-plus show-calendar" style="color: gray;"></i><i id="show-events" class="las la-calendar-minus show-events"></i></span>
-</div>
+        ">
+        <div class="calendar-icons"><span style="float: right;"><i id="show-calendar" class="las la-calendar-plus show-calendar" style="color: gray;"></i><i id="show-events" class="las la-calendar-minus show-events"></i></span>
+        </div>
           
         </div>
       </div>
@@ -328,9 +251,36 @@
     
                 <div>
                     <p style="margin-left: 10%;">
-                      <form action={% url 'createevents' %}  id="event_form" method="post">
+                      <form action={% url 'createevents' %}  id="event_form" method="post" style="height: fit-content;">
                         {% csrf_token %}
-                        {{ create_event_form }}
+                        <div class="form-row">
+                          <p>{{ create_event_form.title }}</p>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                        <p>{{ create_event_form.start_day }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                          <p>{{ create_event_form.start_time }}</p>
+                        </div>
+                        <div class="form-group col-md-1">
+                          <p>{{ create_event_form.all_day }}</p>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                          <p>{{ create_event_form.end_day }}</p>
+                          </div>
+                        <div class="form-group col-md-4">
+                          <p>{{ create_event_form.end_time }}</p>
+                        </div>
+
+                      </div>
+                      <div class="form-row">
+
+                        <p>{{ create_event_form.description }}</p>
+                      </div>
+ 
                       <!--
                         <div id="sandbox-container">
                           <div class="input-append date">
@@ -339,7 +289,19 @@
                           </div>
                         </div>
                       -->
-                        <button type="submit" class="btn btn-outline-secondary" value="Submit">Submit</button>
+                        <button type="submit" class="btn btn-outline-secondary" value="Submit" style="padding: 5px;
+                        position: relative;
+                        width: 90px;
+                        height: 40px;
+                        background: #015D67;
+                        border-radius: 6px;
+                        /*float: right;*/
+                        color: white;
+                        font-family: Effra;
+                        font-style: normal;
+                        font-weight: normal;
+                        font-size: 14px;
+                        cursor: pointer;">Submit</button>
                         <button type="button" class="btn btn-outline-secondary" name="cancel" id="canc">Cancel</button>
                       </form>
                     </p>
@@ -611,8 +573,29 @@
     integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA=="
     crossorigin="anonymous"></script>
   <script src="{% static 'app/scripts/default_avatar.js' %}"></script>
-  <script>
     $(document).ready(function () {
+      var oldstart = null;
+      var oldend = null;
+      var eventlist = [];
+
+$.ajax( 
+{ 
+    type:"GET", 
+    url: "createevents", 
+    data:{ 
+             username: $("#myself").val()
+          }, 
+success: function(data, textStatus) 
+{ 
+    for (var i = 0; i < data.events.length; i++)
+    {
+      eventlist[i] = data.events[i];
+    }
+console.log("eventlist", eventlist)
+},
+dataType: 'json'
+  }) 
+  
     $("#container").simpleCalendar({
         fixedStartDay: 0, // begin weeks by sunday
         onDateSelect: function (date, events) {}, // Callback on date selection
@@ -647,6 +630,54 @@
     document.querySelector(".today").click();
 
     $("#add-event-button").on('click', function () {
+      var startday = new Date(new Date().setHours(new Date().getHours() + 1,0,0));
+      var endday = new Date(new Date().setHours(new Date().getHours() + 2,0,0));
+      var sday = ("0" + startday.getDate()).slice(-2);
+      var smonth = ("0" + (startday.getMonth() + 1)).slice(-2);
+      var eday = ("0" + endday.getDate()).slice(-2);
+      var emonth = ("0" + (endday.getMonth() + 1)).slice(-2);
+      var autosday = startday.getFullYear()+"-"+(smonth)+"-"+(sday);
+      var autoeday = endday.getFullYear()+"-"+(emonth)+"-"+(eday);
+      var shour=startday.getHours();
+      var smin=startday.getMinutes();
+      //var sampm = shour >= 12 ? 'pm' : 'am';
+      if (shour < 10)
+      {
+        shour = '0'+shour
+      }
+      if (smin < 10)
+      {
+        smin = '0'+smin
+      }
+      var startTime = shour + ':' + smin;
+      /*shour = shour % 12;
+      shour = shour ? shour : 12; // the hour '0' should be '12'
+      smin = smin < 10 ? '0'+smin : smin;
+      var startTime = shour + ':' + smin + ' ' + sampm;
+      */
+      var ehour= endday.getHours();
+      var emin= endday.getMinutes();
+      if (ehour < 10)
+      {
+        ehour = '0'+ehour
+      }
+      if (emin < 10)
+      {
+        emin = '0'+emin
+      }
+      //var eampm= ehour >= 12 ? 'pm' : 'am';
+
+      var endTime = ehour + ':' + emin;
+      
+      /*ehour = ehour % 12;
+      ehour = ehour ? ehour : 12; // the hour '0' should be '12'
+      emin = emin < 10 ? '0'+emin : emin;
+      var endTime = ehour + ':' + emin + ' ' + eampm;
+      */
+      $("#id_start_time").val(startTime);
+      $("#id_start_day").val(autosday);
+      $("#id_end_time").val(endTime);
+      $("#id_end_day").val(autoeday);
     $("#members-page").show();
     });
     $(".show-events").on('click', function () {
@@ -669,6 +700,43 @@
     $(".show-calendar").css('color', 'gray');
     $(".show-calendar").css('cursor', 'default');
     });
+    $("#id_all_day").change(function() {
+
+
+
+      if ($("#id_all_day").prop('checked'))
+      {
+      oldstart = $("#id_start_time").val();
+      oldend = $("#id_end_time").val();
+      var start = '00:00';
+      var end = '23:59'
+      var startday = new Date(new Date().setHours(new Date().getHours(0),0,0));
+      var endday = new Date(new Date().setHours(new Date().getHours(23),59,59));
+      var sday = ("0" + startday.getDate()).slice(-2);
+      var smonth = ("0" + (startday.getMonth() + 1)).slice(-2);
+      var eday = ("0" + endday.getDate()).slice(-2);
+      var emonth = ("0" + (endday.getMonth() + 1)).slice(-2);
+      var autosday = startday.getFullYear()+"-"+(smonth)+"-"+(sday);
+      var autoeday = endday.getFullYear()+"-"+(emonth)+"-"+(eday);
+      $("#id_start_time").prop('disabled', true);
+      $("#id_end_time").prop('disabled', true);
+      $("#id_start_time").val(start);
+      $("#id_start_day").val(autosday);
+      $("#id_end_time").val(end);
+      $("#id_end_day").val(autoeday);
+      }
+      else 
+      {
+        $("#id_start_time").prop('disabled', false);
+      $("#id_end_time").prop('disabled', false);
+      $("#id_start_time").val(oldstart);
+      $("#id_end_time").val(oldend);
+      }
+});
+$("#canc").on('click', function () {
+      $("#members-page").hide();
+      $("#event_form").trigger("reset");
+    })
 });
 
 </script>
@@ -681,9 +749,6 @@
 
     $("#sidebar-toggle").on('click', function () {
       $(".sidebar").toggle('show hide');
-    })
-    $("#canc").on('click', function () {
-      $("#members-page").hide();
     })
   </script>
 
