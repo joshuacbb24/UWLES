@@ -12636,6 +12636,11 @@ var FullCalendar = (function (exports) {
                     scrollerEl.scrollTop = scrollTop;
                 }
             };
+
+
+       
+
+
             /* Header Render Methods
             ------------------------------------------------------------------------------------------------------------------*/
             _this.renderHeadAxis = function (rowKey, frameHeight) {
