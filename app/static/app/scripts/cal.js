@@ -14,8 +14,25 @@ success: function(data, textStatus)
 { 
   for (var i = 0; i < data.events.length; i++)
   {
-    eventlist[i] = data.events[i];
+    var theevent = data.events[i];
+    var startdate = theevent.startDate;
+    var starttime = theevent.startTime;
+    var enddate = theevent.endDate;
+    var endtime = theevent.endTime;
+    var startTime = startdate.concat(' ', starttime);
+    startTime = new Date (startTime);
+    var endTime = enddate.concat(' ', endtime);
+    endTime = new Date (endTime);
+    eventlist[i] = {    
+                        startDate: startTime,
+                        endDate: endTime,
+                        summary: theevent.summary,
+                        title: theevent.title,
+                    }
   }
+//console.log("theevent", theevent)
+//console.log("startime", startTime)
+//console.log("endtime", endTime)
 console.log("eventlist", eventlist)
 },
 dataType: 'json'
@@ -25,7 +42,9 @@ dataType: 'json'
       fixedStartDay: 0, // begin weeks by sunday
       onDateSelect: function (date, events) {}, // Callback on date selection
       disableEmptyDetails: true,
-      events: [
+      events: eventlist,
+
+      /*events: [
           // generate new event after tomorrow for one hour
           {
               startDate: new Date(new Date().setHours(new Date().getHours() + 24)).toDateString(),
@@ -49,7 +68,7 @@ dataType: 'json'
               endDate: new Date(new Date().setHours(new Date().getHours() - 24)).getTime(),
               summary: 'Visit of the Louvre'
           }
-      ],
+      ],*/
 
   });
   document.querySelector(".today").click();
