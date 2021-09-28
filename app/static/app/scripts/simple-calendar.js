@@ -41,7 +41,7 @@
 
       var calendar = $('<div class="calendar"></div>');
           var header = $('<header>' +
-          '<div class="changer" style="justify-content: center;text-align: center;">'+
+          '<div class="changer" style="justify-content: center;text-align: center;width: 30%;">'+
          '<a class="simple-calendar-btn btn-prev" href="#"></a>' +
          '<h6 class="month"></h6>' +
          '<a class="simple-calendar-btn btn-next" href="#"></a>' +
@@ -59,6 +59,8 @@
           //container.append(footer);
       this.bindEvents();
       this.settings.onInit(this);
+      document.querySelector(".today").click();
+
     },
 
     //Update the current month header
@@ -102,7 +104,7 @@
         }
         }
         var range = parseInt((lastDay - firstDay) / (1000 * 3600 * 24));
-
+        // Ensure there are enough days in the range to show 6 weeks
         if (range < 42) {
             lastDay.setDate(lastDay.getDate() + 7);
         }
@@ -113,6 +115,7 @@
       }
 
       //For firstDay to lastDay
+      var weeksShown = 0;
       for (var day = firstDay; day <= lastDay; day.setDate(day.getDate())) {
         var tr = $('<tr></tr>');
         //For each row
@@ -150,6 +153,11 @@
           day.setDate(day.getDate() + 1);
         }
         tbody.append(tr);
+        weeksShown++;
+        // Ensure that at most 6 weeks are shown
+        if (weeksShown >= 6) {
+          break;
+        }
       }
 
       body.append(thead);
@@ -344,7 +352,7 @@ $(borderday).addClass('day-border');
               var endDate = new Date(event.endDate);
               //var eventId = event.eventID; //id for each event
               var eventId = 1; //id for each event
-              var $event = `<li class="event-list" data-event="${eventId}">`+`<div class="event-in-list" data-event="${eventId}">`+ '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.summary +`</div>`+ `</li>`;
+              var $event = `<li class="event-list" data-event="${eventId}">`+`<div class="event-in-list" data-event="${eventId}">`+ '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.title +`</div>`+ `</li>`;
 
               // $event.data('event', event);
               console.log('event data +++', $event);
@@ -372,7 +380,7 @@ $(borderday).addClass('day-border');
           '<div class="event">' +
           ' <div class="event-hour">' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + '</div>' +
           ' <div class="event-date">' + plugin.formatDateEvent(startDate, endDate) + '</div>' +
-          ' <div class="event-summary">' + event.summary + '</div>' +
+          ' <div class="event-summary">' + event.title + '</div>' +
           '</div>');
 
         $event.data( 'event', event );
@@ -395,9 +403,9 @@ $(borderday).addClass('day-border');
       dStart.setHours(0,0,0);
       dEnd.setHours(23,59,59,999);
       d.setHours(12,0,0);
-      console.log("dstart",dStart);
-      console.log("dend",dEnd);
-      console.log("d",d);
+      //console.log("dstart",dStart);
+      //console.log("dend",dEnd);
+      //console.log("d",d);
       var returnvalue = dStart <= d && d <= dEnd
       //console.log("return",returnvalue);
 

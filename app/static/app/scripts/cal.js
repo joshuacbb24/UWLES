@@ -6,7 +6,7 @@ $(document).ready(function () {
 $.ajax( 
 { 
   type:"GET", 
-  url: "createevents", 
+  url: "createevents/", 
   data:{ 
            username: $("#myself").val()
         }, 
@@ -34,10 +34,11 @@ success: function(data, textStatus)
 //console.log("startime", startTime)
 //console.log("endtime", endTime)
 console.log("eventlist", eventlist)
+callCalendar();
 },
 dataType: 'json'
 }) 
-
+function callCalendar() {
   $("#container").simpleCalendar({
       fixedStartDay: 0, // begin weeks by sunday
       onDateSelect: function (date, events) {}, // Callback on date selection
@@ -69,9 +70,8 @@ dataType: 'json'
               summary: 'Visit of the Louvre'
           }
       ],*/
-
   });
-  document.querySelector(".today").click();
+};
 
   $("#add-event-button").on('click', function () {
   $("#members-page").show();

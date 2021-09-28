@@ -442,7 +442,7 @@ def createevents(request):
         events = []
         username = request.GET['username']
         user = Account.objects.get(username=username)
-        eventlist = MyEvents.objects.filter(created_by = user)
+        eventlist = MyEvents.objects.filter(created_by = user).order_by("start_day","-all_day","start_time")
         for event in eventlist:
             events.append({'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
             'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day, 'eventID':event.id})
