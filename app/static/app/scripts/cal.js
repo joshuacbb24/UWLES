@@ -28,6 +28,7 @@ success: function(data, textStatus)
                         endDate: endTime,
                         summary: theevent.summary,
                         title: theevent.title,
+                        allDay: theevent.allDay,
                     }
   }
 //console.log("theevent", theevent)

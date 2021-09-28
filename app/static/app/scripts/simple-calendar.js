@@ -352,8 +352,14 @@ $(borderday).addClass('day-border');
               var endDate = new Date(event.endDate);
               //var eventId = event.eventID; //id for each event
               var eventId = 1; //id for each event
-              var $event = `<li class="event-list" data-event="${eventId}">`+`<div class="event-in-list" data-event="${eventId}">`+ '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.title +`</div>`+ `</li>`;
+              if (!event.allDay)
+              {
+              var $event = `<li class="event-list" data-event="${eventId}">`+`<div class="event-in-list" data-event="${eventId}">`+ '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.title +`</div>`+ ` <div class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
+              }
+              else{
+                var $event = `<li class="event-list" data-event="${eventId}">`+`<div class="event-in-list" data-event="${eventId}">`+  event.title +`</div>`+ ` <div class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
 
+              }
               // $event.data('event', event);
               console.log('event data +++', $event);
               //document.getElementsByClassName("event-wrapper").innerHTML = JSON.stringify($event);
@@ -381,6 +387,7 @@ $(borderday).addClass('day-border');
           ' <div class="event-hour">' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + '</div>' +
           ' <div class="event-date">' + plugin.formatDateEvent(startDate, endDate) + '</div>' +
           ' <div class="event-summary">' + event.title + '</div>' +
+          ' <div class="event-description">' + event.summary + '</div>' +
           '</div>');
 
         $event.data( 'event', event );
