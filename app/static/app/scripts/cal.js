@@ -7,6 +7,7 @@ $(document).ready(function () {
     var id = null;
     var day = null;
     var call = 0;
+    var onmonth = 0;
 function getCalendar() {
 $.ajax( 
 { 
@@ -52,7 +53,11 @@ function callCalendar() {
       fixedStartDay: 0, // begin weeks by sunday
       onDateSelect: function (date, events, clickedday) {
         day = clickedday;
+        //this.changeMonth(onmonth);
       }, // Callback on date selection
+      onMonthChange: function (month, year, value) {
+        onmonth = onmonth + value;
+      },//callback on month change
       disableEmptyDetails: true,
       events: eventlist,
       onEventSelect: function (clickedevent) {
@@ -114,6 +119,7 @@ function callCalendar() {
   }
   else {
     day.click();
+    //simpleCalendar.changeMonth(onmonth);
   }
   $("#add-event-button").on('click', function () {
     choice = 0;

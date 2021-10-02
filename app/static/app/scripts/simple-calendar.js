@@ -14,7 +14,7 @@
       disableEmptyDetails: false, // disable showing empty date details
       events: [], // List of event
       onInit: function (calendar) {}, // Callback after first initialization
-      onMonthChange: function (month, year) {}, // Callback on month change
+      onMonthChange: function (month, year, value) {}, // Callback on month change
       onDateSelect: function (date, events, clickedday) {}, // Callback on date selection
       onEventSelect: function (clickedevent) {},              // Callback fired when an event is selected     - see $(this).data('event')
       onEventCreate: function( $el ) {},          // Callback fired when an HTML event is created - see $(this).data('event')
@@ -172,9 +172,8 @@
       this.currentDate.setMonth(this.currentDate.getMonth() + value, 1);
       this.buildCalendar(this.currentDate, $(this.element).find('.calendar'));
       this.updateHeader(this.currentDate, $(this.element).find('.calendar header'));
-      this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear())
+      this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear(), value)
     },
-
     eventclicked: function(wasclicked) {
       var plugin = this;
       $("#" + wasclicked).on('click', function ( e ) {
@@ -205,6 +204,7 @@
         console.log('event click +++');
         $(".event-wrapper").empty();
         var date = new Date($(this).data('date'));
+        console.log("the date", date);
         var clickedday = $(this);
         var events = plugin.getDateEvents(date);
         var days = document.getElementsByClassName('day-border')
