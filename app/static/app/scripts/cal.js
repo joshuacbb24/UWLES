@@ -65,6 +65,7 @@ function callCalendar() {
       disableEmptyDetails: true,
       events: eventlist,
       onEventSelect: function (clickedevent) {
+        call = 1;
         choice = 1;
         noevent = false;
         id = clickedevent;
@@ -119,7 +120,6 @@ function callCalendar() {
   if (call = 0)
   {
   document.querySelector(".today").click();
-  call = 1;
   }
   else {
     day.click();
@@ -206,6 +206,7 @@ $("#canc").on('click', function () {
       $("#members-page").hide();
       $("#event_form").trigger("reset");
       noevent = true;
+      call = 0;
       },
       //dataType: 'json'
     });
@@ -291,10 +292,12 @@ $("#canc").on('click', function () {
             editevent.text($event);
             editdescription.text($description);           
           }*/
-          noevent = true;
+
           getCalendar();
           $("#members-page").hide();
           $("#event_form").trigger("reset");
+          noevent = true;
+          call = 0;
         },
         //dataType: 'json'
       });   
