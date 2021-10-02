@@ -131,8 +131,10 @@ function callCalendar() {
     });
 };
 getCalendar();
-
-
+$("#close-modal").on('click', function(){
+  call = 0;
+  document.getElementById('members-page').style.display='none'
+});
   $(".show-events").on('click', function () {
   document.getElementById('show-events').style.pointerEvents = 'none';
   document.getElementById('show-calendar').style.pointerEvents = 'auto';
