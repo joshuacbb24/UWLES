@@ -6,6 +6,7 @@ $(document).ready(function () {
     var noevent = true;
     var id = null;
     var day = null;
+function getCalendar() {
 $.ajax( 
 { 
   type:"GET", 
@@ -43,7 +44,8 @@ console.log("eventlist", eventlist)
 callCalendar();
 },
 dataType: 'json'
-}) 
+});
+}
 function callCalendar() {
   $("#container").simpleCalendar({
       fixedStartDay: 0, // begin weeks by sunday
@@ -108,7 +110,7 @@ function callCalendar() {
     $("#members-page").show();
     });
 };
-
+getCalendar();
 
 
   $(".show-events").on('click', function () {
@@ -176,13 +178,14 @@ $("#canc").on('click', function () {
         eventid: id        
  }, // serializes the form's elements.
       success: function(data)
-      {
+      {/*
           var list = document.getElementById("event-body");
           var deletedevent = $(".event-list").find("[data-event=" + id + "]")[0];
-          list.removeChild(deletedevent);
+          list.removeChild(deletedevent);*/
       },
       //dataType: 'json'
     });
+    getCalendar();
     $("#members-page").hide();
     $("#event_form").trigger("reset");
     noevent = true;
@@ -201,7 +204,7 @@ $("#canc").on('click', function () {
       }, // serializes the form's elements.
       success: function(data)
       {
-        var list = document.getElementById("event-body");
+        /*var list = document.getElementById("event-body");
         var startdate = data.startDate;
         var starttime = data.startTime;
         var enddate = data.endDate;
@@ -218,7 +221,8 @@ $("#canc").on('click', function () {
         else{
         var $event = `<li class="event-list" data-event="${data.eventID}">`+`<div class="event-in-list" data-eventtext="${data.eventID}">`+  data.title +`</div>`+ ` <div data-eventdescription="${data.eventID}" class="event-description" style="word-wrap: break-word;">` + data.summary + `</div>` +`</li>`;
         list.append($event);
-        }
+        }*/
+        getCalendar();
         $("#members-page").hide();
         $("#event_form").trigger("reset");
       },
@@ -240,7 +244,7 @@ $("#canc").on('click', function () {
         }, // serializes the form's elements.
         success: function(data)
         {
-          var editevent = $(".event-in-list").find("[data-eventtext=" + id + "]")[0];
+          /*var editevent = $(".event-in-list").find("[data-eventtext=" + id + "]")[0];
           var editdescription = $(".event-description").find("[data-eventdescription=" + id + "]")[0];
 
             var startdate = data.startDate;
@@ -265,7 +269,9 @@ $("#canc").on('click', function () {
             var $description = data.summary;
             editevent.text($event);
             editdescription.text($description);           
-          }
+          }*/
+          noevent = true;
+          getCalendar();
           $("#members-page").hide();
           $("#event_form").trigger("reset");
         },
