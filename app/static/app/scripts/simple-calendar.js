@@ -15,7 +15,7 @@
       events: [], // List of event
       onInit: function (calendar) {}, // Callback after first initialization
       onMonthChange: function (month, year, value) {}, // Callback on month change
-      onDateSelect: function (date, events, clickedday) {}, // Callback on date selection
+      onDateSelect: function (date, events, clickedday, plug) {}, // Callback on date selection
       onEventSelect: function (clickedevent) {},              // Callback fired when an event is selected     - see $(this).data('event')
       onEventCreate: function( $el ) {},          // Callback fired when an HTML event is created - see $(this).data('event')
       onEventDelete: function ($el) {},           // Callback fired when an event is deleted
@@ -172,7 +172,7 @@
       this.currentDate.setMonth(this.currentDate.getMonth() + value, 1);
       this.buildCalendar(this.currentDate, $(this.element).find('.calendar'));
       this.updateHeader(this.currentDate, $(this.element).find('.calendar header'));
-      this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear(), value)
+      this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear(), value, this)
     },
     eventclicked: function(wasclicked) {
       var plugin = this;
@@ -344,7 +344,7 @@ $(borderday).addClass('day-border');
           $(".show-events").css('color', 'gray');
           $(".show-events").css('cursor', 'default');
         }
-        plugin.settings.onDateSelect(date, events, clickedday);
+        plugin.settings.onDateSelect(date, events, clickedday, plugin);
       });
 
       //Binding event container close

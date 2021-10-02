@@ -51,9 +51,13 @@ dataType: 'json'
 function callCalendar() {
   $("#container").simpleCalendar({
       fixedStartDay: 0, // begin weeks by sunday
-      onDateSelect: function (date, events, clickedday) {
+      onDateSelect: function (date, events, clickedday, plug) {
         day = clickedday;
-        //this.changeMonth(onmonth);
+        if (call = 1)
+        {
+        plug.changeMonth(onmonth);
+        }
+        console.log("plug", plug)
       }, // Callback on date selection
       onMonthChange: function (month, year, value) {
         onmonth = onmonth + value;
@@ -119,7 +123,6 @@ function callCalendar() {
   }
   else {
     day.click();
-    //simpleCalendar.changeMonth(onmonth);
   }
   $("#add-event-button").on('click', function () {
     choice = 0;
