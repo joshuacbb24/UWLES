@@ -16,7 +16,7 @@
       onInit: function (calendar) {}, // Callback after first initialization
       onMonthChange: function (month, year) {}, // Callback on month change
       onDateSelect: function (date, events) {}, // Callback on date selection
-      onEventSelect: function () {},              // Callback fired when an event is selected     - see $(this).data('event')
+      onEventSelect: function (clickedevent) {},              // Callback fired when an event is selected     - see $(this).data('event')
       onEventCreate: function( $el ) {},          // Callback fired when an HTML event is created - see $(this).data('event')
       onEventDelete: function ($el) {},           // Callback fired when an event is deleted
       onDayCreate:   function( $el, d, m, y ) {}  // Callback fired when an HTML day is created   - see $(this).data('today'), .data('todayEvents')
@@ -94,11 +94,11 @@
         // Backward compatibility
         startDayOfWeek =  this.settings.fixedStartDay ? 1 : this.settings.fixedStartDay;
 
-        // If first day of month is different of startDayOfWeek
+        // If first day of month is different from startDayOfWeek
         while (firstDay.getDay() !== startDayOfWeek) {
           firstDay.setDate(firstDay.getDate() - 1);
         }
-        // If last day of month is different of startDayOfWeek + 7
+        // If last day of month is different from startDayOfWeek + 7
         while (lastDay.getDay() !== ((startDayOfWeek + 7) % 7)) {
           lastDay.setDate(lastDay.getDate() + 1);
         }
@@ -173,6 +173,14 @@
       this.buildCalendar(this.currentDate, $(this.element).find('.calendar'));
       this.updateHeader(this.currentDate, $(this.element).find('.calendar header'));
       this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear())
+    },
+
+    eventclicked: function(wasclicked) {
+      var plugin = this;
+      $("#" + wasclicked).on('click', function ( e ) {
+        var clickedevent = $(this).data('event');
+        plugin.settings.onEventSelect(clickedevent);
+      });
     },
     //Init global events listeners
     bindEvents: function () {
@@ -351,13 +359,13 @@ $(borderday).addClass('day-border');
               var startDate = new Date(event.startDate);
               var endDate = new Date(event.endDate);
               //var eventId = event.eventID; //id for each event
-              var eventId = 1; //id for each event
+              var eventId = event.eventid; //id for each event
               if (!event.allDay)
               {
-              var $event = `<li class="event-list" data-event="${eventId}">`+`<div class="event-in-list" data-event="${eventId}">`+ '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.title +`</div>`+ ` <div class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
+              var $event = `<li class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+ '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
               }
               else{
-                var $event = `<li class="event-list" data-event="${eventId}">`+`<div class="event-in-list" data-event="${eventId}">`+  event.title +`</div>`+ ` <div class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
+              var $event = `<li class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
 
               }
               // $event.data('event', event);
@@ -373,6 +381,8 @@ $(borderday).addClass('day-border');
               // plugin.settings.onEventCreate($event);
 
               container.append($event);
+              plugin.eventclicked(`edit-${eventId}`);
+
           })
       },
     displayEvents: function (events) {

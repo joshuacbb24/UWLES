@@ -2,6 +2,7 @@
 Definition of views.
 """
 from django.contrib.auth import login, authenticate
+from django.contrib.auth import decorators
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
@@ -429,25 +430,65 @@ def createevents(request):
     if request.method == 'POST':
         print("post event")
         form = Event_Creation_Form(request.POST)
+        command = request.GET['command']
+        id = request.GET['eventid']
         if form.is_valid():
-            print("valid event")
-            eventform = form.save(commit=False)
-            eventform.populate_myself(request.user)
-            eventform.save()
-
-            return redirect ('/')
+            #print("valid event")
+            if command == "create":
+                eventform = form.save(commit=False)
+                eventform.populate_myself(request.user)
+                eventform.save()
+                eventid = eventform.pk
+                event = MyEvents.objects.get(pk=eventid)
+                data = {'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
+                'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day, 'eventID':event.id}
+                return JsonResponse(data)
+            
+            elif command == "edit":
+                event = MyEvents.objects.get(pk=id)
+                title = request.cleaned_data.get("title")
+                description = request.cleaned_data.get("description")
+                start_day = request.cleaned_data.get("start_day")
+                start_time = request.cleaned_data.get("start_time")
+                end_day = request.cleaned_data.get("end_day")
+                end_time = request.cleaned_data.get("end_time")
+                all_day = request.cleaned_data.get("all_day")
+                event.title = title
+                event.description = description
+                event.start_day = start_day
+                event.start_time = start_time
+                event.end_day = end_day
+                event.end_time = end_time
+                event.all_day = all_day
+                event.save()
+                data = {'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
+                'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day}
+                return JsonResponse(data)
+            elif command == "delete":
+                event = MyEvents.objects.get(pk=id)
+                event.delete()
+                event.save()
+                return JsonResponse("success")
         else:
             print("form error", form.errors)
     elif request.method == 'GET':
-        events = []
-        username = request.GET['username']
-        user = Account.objects.get(username=username)
-        eventlist = MyEvents.objects.filter(created_by = user).order_by("start_day","-all_day","start_time")
-        for event in eventlist:
-            events.append({'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
-            'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day, 'eventID':event.id})
-        data = {'events': events}
-        return JsonResponse(data)
+        command = request.GET['command']
+        if command == "edit":
+            id = request.GET['eventid']
+            event = MyEvents.objects.get(pk=id)
+            data = {'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
+                'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day}
+            return JsonResponse(data)
+        else:
+            events = []
+            username = request.GET['username']
+            user = Account.objects.get(username=username)
+            eventlist = MyEvents.objects.filter(created_by = user).order_by("start_day","-all_day","start_time")
+            for event in eventlist:
+                events.append({'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
+                'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day, 'eventID':event.id})
+            data = {'events': events}
+            return JsonResponse(data)
     return dashboard(request)   
     
  

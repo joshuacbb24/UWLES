@@ -2,12 +2,16 @@ $(document).ready(function () {
     var oldstarttime = null;
     var oldendtime = null;
     var eventlist = [];
-
+    var choice = null;
+    var noevent = true;
+    var id = null;
+    var day = null;
 $.ajax( 
 { 
   type:"GET", 
   url: "createevents/", 
   data:{ 
+           command: "retreive",
            username: $("#myself").val()
         }, 
 success: function(data, textStatus) 
@@ -29,6 +33,7 @@ success: function(data, textStatus)
                         summary: theevent.summary,
                         title: theevent.title,
                         allDay: theevent.allDay,
+                        eventid: theevent.eventID,
                     }
   }
 //console.log("theevent", theevent)
@@ -45,6 +50,31 @@ function callCalendar() {
       onDateSelect: function (date, events) {}, // Callback on date selection
       disableEmptyDetails: true,
       events: eventlist,
+      onEventSelect: function (clickedevent) {
+        choice = 1;
+        noevent = false;
+        id = clickedevent;
+        $.ajax( 
+          { 
+            type:"GET", 
+            url: "createevents/", 
+            data: {
+                     eventid: id,
+                     command: "edit"
+                  }, 
+          success: function(data, textStatus) 
+          { 
+            $("#id_title").val(data.title);
+            $("#id_description").val(data.summary);
+            $("#id_all_day").val(data.allDay);
+            $("#id_end_time").val(data.endTime);
+            $("#id_start_time").val(data.startTime);
+            $("#id_end_day").val(data.endDate);
+            $("#id_start_day").val(data.startDate);
+            $("#members-page").show();
+          }
+        })
+      },
 
       /*events: [
           // generate new event after tomorrow for one hour
@@ -72,11 +102,15 @@ function callCalendar() {
           }
       ],*/
   });
+  $("#add-event-button").on('click', function () {
+    choice = 0;
+    noevent = true;
+    $("#members-page").show();
+    });
 };
 
-  $("#add-event-button").on('click', function () {
-  $("#members-page").show();
-  });
+
+
   $(".show-events").on('click', function () {
   document.getElementById('show-events').style.pointerEvents = 'none';
   document.getElementById('show-calendar').style.pointerEvents = 'auto';
@@ -97,10 +131,8 @@ function callCalendar() {
   $(".show-calendar").css('color', 'gray');
   $(".show-calendar").css('cursor', 'default');
   });
+
   $("#id_all_day").change(function() {
-
-
-
     if ($("#id_all_day").prop('checked'))
     {
     oldstarttime = $("#id_start_time").val();
@@ -131,7 +163,114 @@ function callCalendar() {
     }
 });
 $("#canc").on('click', function () {
+  if (noevent === true){
     $("#members-page").hide();
     $("#event_form").trigger("reset");
-  })
+  }
+  else {
+    $.ajax({
+      type: "POST",
+      url: "createevents/",
+      data:{ 
+        command: "delete",
+        eventid: id        
+ }, // serializes the form's elements.
+      success: function(data)
+      {
+          var list = document.getElementById("event-body");
+          var deletedevent = $(".event-list").find("[data-event=" + id + "]")[0];
+          list.removeChild(deletedevent);
+      },
+      //dataType: 'json'
+    });
+    $("#members-page").hide();
+    $("#event_form").trigger("reset");
+    noevent = true;
+  }
+  });
+  $("#event_form").submit(function (e) {
+    if (choice == 0)
+    {
+    e.preventDefault();
+    var form = $(this);
+    $.ajax({
+      type: "POST",
+      url: "createevents/",
+      data:{ eventform: form.serialize(),
+        command: "create",
+      }, // serializes the form's elements.
+      success: function(data)
+      {
+        var list = document.getElementById("event-body");
+        var startdate = data.startDate;
+        var starttime = data.startTime;
+        var enddate = data.endDate;
+        var endtime = data.endTime;
+        var startTime = startdate.concat(' ', starttime);
+        startTime = new Date (startTime);
+        var endTime = enddate.concat(' ', endtime);
+        endTime = new Date (endTime);
+        if (!data.allDay)
+        {
+        var $event = `<li class="event-list" data-event="${data.eventID}">`+`<div class="event-in-list" data-eventtext="${data.eventID}">`+ '@ ' + startTime.getHours() + ':' + (startTime.getMinutes() < 10 ? '0' : '') + startTime.getMinutes() + ' On ' + plugin.formatDateEvent(startTime, endTime) + ' ' +  data.title +`</div>`+ ` <div data-eventdescription="${data.eventID}" class="event-description" style="word-wrap: break-word;">` + data.summary + `</div>` +`</li>`;
+        list.append($event);
+        }
+        else{
+        var $event = `<li class="event-list" data-event="${data.eventID}">`+`<div class="event-in-list" data-eventtext="${data.eventID}">`+  data.title +`</div>`+ ` <div data-eventdescription="${data.eventID}" class="event-description" style="word-wrap: break-word;">` + data.summary + `</div>` +`</li>`;
+        list.append($event);
+        }
+        $("#members-page").hide();
+        $("#event_form").trigger("reset");
+      },
+      //dataType: 'json'
+    });
+
+    
+    }
+    else{
+      e.preventDefault();
+      var form = $(this);   
+      var id = event_id;
+      $.ajax({
+        type: "POST",
+        url: "createevents/",
+        data:{ eventform: form.serialize(),
+               command: "edit",
+               eventid: id
+        }, // serializes the form's elements.
+        success: function(data)
+        {
+          var editevent = $(".event-in-list").find("[data-eventtext=" + id + "]")[0];
+          var editdescription = $(".event-description").find("[data-eventdescription=" + id + "]")[0];
+
+            var startdate = data.startDate;
+            var starttime = data.startTime;
+            var enddate = data.endDate;
+            var endtime = data.endTime;
+            var startTime = startdate.concat(' ', starttime);
+            startTime = new Date (startTime);
+            var endTime = enddate.concat(' ', endtime);
+            endTime = new Date (endTime);
+            editevent.text("");
+            editdescription.text("");
+            if (!data.allDay)
+            {
+              var $event = '@ ' + startTime.getHours() + ':' + (startTime.getMinutes() < 10 ? '0' : '') + startTime.getMinutes() + ' On ' + plugin.formatDateEvent(startTime, endTime) + ' ' +  data.title;
+              var $description = data.summary;
+              editevent.text($event);
+              editdescription.text($description);
+          }
+          else{
+            var $event = data.title;
+            var $description = data.summary;
+            editevent.text($event);
+            editdescription.text($description);           
+          }
+          $("#members-page").hide();
+          $("#event_form").trigger("reset");
+        },
+        //dataType: 'json'
+      });   
+    }
+});
 });
