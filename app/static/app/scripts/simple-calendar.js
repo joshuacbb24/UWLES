@@ -15,7 +15,7 @@
       events: [], // List of event
       onInit: function (calendar) {}, // Callback after first initialization
       onMonthChange: function (month, year) {}, // Callback on month change
-      onDateSelect: function (date, events) {}, // Callback on date selection
+      onDateSelect: function (date, events, clickedday) {}, // Callback on date selection
       onEventSelect: function (clickedevent) {},              // Callback fired when an event is selected     - see $(this).data('event')
       onEventCreate: function( $el ) {},          // Callback fired when an HTML event is created - see $(this).data('event')
       onEventDelete: function ($el) {},           // Callback fired when an event is deleted
@@ -205,6 +205,7 @@
         console.log('event click +++');
         $(".event-wrapper").empty();
         var date = new Date($(this).data('date'));
+        var clickedday = $(this);
         var events = plugin.getDateEvents(date);
         var days = document.getElementsByClassName('day-border')
         var selectedday;
@@ -343,7 +344,7 @@ $(borderday).addClass('day-border');
           $(".show-events").css('color', 'gray');
           $(".show-events").css('cursor', 'default');
         }
-        plugin.settings.onDateSelect(date, events);
+        plugin.settings.onDateSelect(date, events, clickedday);
       });
 
       //Binding event container close

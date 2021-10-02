@@ -6,6 +6,7 @@ $(document).ready(function () {
     var noevent = true;
     var id = null;
     var day = null;
+    var call = 0;
 function getCalendar() {
 $.ajax( 
 { 
@@ -49,7 +50,9 @@ dataType: 'json'
 function callCalendar() {
   $("#container").simpleCalendar({
       fixedStartDay: 0, // begin weeks by sunday
-      onDateSelect: function (date, events) {}, // Callback on date selection
+      onDateSelect: function (date, events, clickedday) {
+        day = clickedday;
+      }, // Callback on date selection
       disableEmptyDetails: true,
       events: eventlist,
       onEventSelect: function (clickedevent) {
@@ -104,6 +107,14 @@ function callCalendar() {
           }
       ],*/
   });
+  if (call = 0)
+  {
+  document.querySelector(".today").click();
+  call = 1;
+  }
+  else {
+    day.click();
+  }
   $("#add-event-button").on('click', function () {
     choice = 0;
     noevent = true;
@@ -181,14 +192,15 @@ $("#canc").on('click', function () {
       {/*
           var list = document.getElementById("event-body");
           var deletedevent = $(".event-list").find("[data-event=" + id + "]")[0];
-          list.removeChild(deletedevent);*/
+      list.removeChild(deletedevent);*/
+      getCalendar();
+      $("#members-page").hide();
+      $("#event_form").trigger("reset");
+      noevent = true;
       },
       //dataType: 'json'
     });
-    getCalendar();
-    $("#members-page").hide();
-    $("#event_form").trigger("reset");
-    noevent = true;
+
   }
   });
   $("#event_form").submit(function (e) {
