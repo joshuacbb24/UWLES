@@ -123,6 +123,7 @@ function callCalendar() {
   }
   else {
     day.click();
+    call = 0;
   }
   $("#add-event-button").on('click', function () {
     choice = 0;
