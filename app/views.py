@@ -429,48 +429,70 @@ def add_organization(request):
 def createevents(request):
     if request.method == 'POST':
         print("post event")
-        form = Event_Creation_Form(request.POST)
-        command = request.GET['command']
-        id = request.GET['eventid']
-        if form.is_valid():
-            #print("valid event")
-            if command == "create":
-                eventform = form.save(commit=False)
-                eventform.populate_myself(request.user)
-                eventform.save()
-                eventid = eventform.pk
-                event = MyEvents.objects.get(pk=eventid)
-                data = {'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
-                'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day, 'eventID':event.id}
-                return JsonResponse(data)
+        #form = Event_Creation_Form(request.POST)
+        #print("the form is", form)
+        command = request.POST['command']
+        #if form.is_valid():
+        if command == "create":
+            """
+            print("valid event")
+            eventform = form.save(commit=False)
+            eventform.populate_myself(request.user)
+            eventform.save()
+            """
+            title = request.POST.get("title")
+            description = request.POST.get("description")
+            start_day = request.POST.get("start_day")
+            start_time = request.POST.get("start_time")
+            end_day = request.POST.get("end_day")
+            end_time = request.POST.get("end_time")
+            all_day = request.POST.get("all_day")
+            if all_day == "true":
+                all_day = True
+            else:
+                all_day = False    
+            eventform = MyEvents.objects.create(created_by=request.user,title=title, description=description,start_day=start_day,start_time=start_time,
+            end_day=end_day,end_time=end_time,all_day=all_day)
+            eventform.save()
+            id = eventform.pk
+            data = {'title':title,'summary':description,'startDate':start_day,'startTime':start_time,
+            'endDate':end_day,'endTime':end_time, 'allDay': all_day, 'eventID':id}
+            return JsonResponse(data)
+        
+        elif command == "edit":
+            id = request.POST.get('eventid')
+            print("the id is", id)
+            event = MyEvents.objects.get(pk=id)
             
-            elif command == "edit":
-                event = MyEvents.objects.get(pk=id)
-                title = request.cleaned_data.get("title")
-                description = request.cleaned_data.get("description")
-                start_day = request.cleaned_data.get("start_day")
-                start_time = request.cleaned_data.get("start_time")
-                end_day = request.cleaned_data.get("end_day")
-                end_time = request.cleaned_data.get("end_time")
-                all_day = request.cleaned_data.get("all_day")
-                event.title = title
-                event.description = description
-                event.start_day = start_day
-                event.start_time = start_time
-                event.end_day = end_day
-                event.end_time = end_time
-                event.all_day = all_day
-                event.save()
-                data = {'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
-                'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day}
-                return JsonResponse(data)
-            elif command == "delete":
-                event = MyEvents.objects.get(pk=id)
-                event.delete()
-                event.save()
-                return JsonResponse("success")
-        else:
-            print("form error", form.errors)
+            title = request.POST.get("title")
+            print("title is", title)
+            description = request.POST.get("description")
+            start_day = request.POST.get("start_day")
+            start_time = request.POST.get("start_time")
+            end_day = request.POST.get("end_day")
+            end_time = request.POST.get("end_time")
+            all_day = request.POST.get("all_day")
+            if all_day == "true":
+                all_day = True
+            else:
+                all_day = False 
+            event.title = title
+            event.description = description
+            event.start_day = start_day
+            event.start_time = start_time
+            event.end_day = end_day
+            event.end_time = end_time
+            event.all_day = all_day
+            event.save()
+            data = {'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
+            'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day}
+            return JsonResponse(data)
+        elif command == "delete":
+            id = request.POST.get('eventid')
+            event = MyEvents.objects.get(pk=id)
+            event.delete()
+            event.save()
+            return JsonResponse("success")
     elif request.method == 'GET':
         command = request.GET['command']
         if command == "edit":
@@ -489,8 +511,6 @@ def createevents(request):
                 'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day, 'eventID':event.id})
             data = {'events': events}
             return JsonResponse(data)
-    return dashboard(request)   
-    
  
 def delete_note(request, NoteId):
     note = MyNotes.objects.get(pk=NoteId)

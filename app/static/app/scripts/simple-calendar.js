@@ -202,7 +202,7 @@
       //change variables and load into form as preset selections when create event is clicked
         $(plugin.element).on('click', '.day', function (e) {
         console.log('event click +++');
-        $(".event-wrapper").empty();
+        $(".event-body").empty();
         var date = new Date($(this).data('date'));
         console.log("the date", date);
         var clickedday = $(this);
