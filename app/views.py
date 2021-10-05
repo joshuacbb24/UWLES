@@ -491,8 +491,8 @@ def createevents(request):
             id = request.POST.get('eventid')
             event = MyEvents.objects.get(pk=id)
             event.delete()
-            event.save()
-            return JsonResponse("success")
+            data = {'eventID':id}
+            return JsonResponse(data)
     elif request.method == 'GET':
         command = request.GET['command']
         if command == "edit":

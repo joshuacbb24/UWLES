@@ -6,10 +6,10 @@ $(document).ready(function () {
   var noevent = true;
   var id = null;
   var day = null;
+  var calday = null;
   var call = 0;
   var onmonth = 0;
   let cal = null;
-  //var csrftoken = $("[name=csrfmiddlewaretoken]").val();
   function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -61,24 +61,49 @@ for (var i = 0; i < data.events.length; i++)
 //console.log("startime", startTime)
 //console.log("endtime", endTime)
 console.log("eventlist", eventlist)
-callCalendar();
+if (call == 0){
+  callCalendar(eventlist);
+}
+else{
+cal.settings.events = eventlist;
+cal.buildCalendar(calday, $(cal.element).find('.calendar'));
+cal.updateHeader(calday, $(cal.element).find('.calendar header'));
+if(onmonth == 0)
+{
+  day.click();
+  $("#members-page").hide();
+  $("#event_form").trigger("reset");
+  call = null; 
+}
+else 
+{
+cal.changeMonth(onmonth);
+day.click();
+$("#members-page").hide();
+$("#event_form").trigger("reset");
+call = null;
+}
+}
 },
 dataType: 'json'
 });
 }
-function callCalendar() {
+function callCalendar(events) {
+  //cardContainer = $("#container")
+  //var scal = new simpleCalendar(cardContainer, {
 $("#container").simpleCalendar({
     fixedStartDay: 0, // begin weeks by sunday
     onDateSelect: function (date, events, clickedday, plug) {
       day = clickedday;
       cal = plug;
+      calday = date;
       console.log("plug", plug)
     }, // Callback on date selection
     onMonthChange: function (month, year, value) {
       onmonth = onmonth + value;
     },//callback on month change
     disableEmptyDetails: true,
-    events: eventlist,
+    events: events,
     onEventSelect: function (clickedevent) {
       call = 1;
       choice = 1;
@@ -137,12 +162,6 @@ if (call == 0)
 {
 document.querySelector(".today").click();
 call = null;
-}
-if (call == 1)
-{
-  day.click();
-  cal.changeMonth(onmonth);
-  call = null;
 }
 $("#add-event-button").on('click', function () {
   choice = 0;
@@ -217,7 +236,6 @@ else {
     type: "POST",
     url: "createevents/",
     headers: {'X-CSRFToken': csrftoken},
-    //headers: {"X-CSRFToken": $.cookie("csrftoken")},
     data:{ 
       title: $('#id_title').val(),
       description: $('#id_description').val(),
@@ -228,15 +246,15 @@ else {
       end_day: $('#id_end_day').val(),
       command: "delete",
       eventid: id,      
-}, // serializes the form's elements.
+},
     success: function(data)
-    {/*
-        var list = document.getElementById("event-body");
-        var deletedevent = $(".event-list").find("[data-event=" + id + "]")[0];
-    list.removeChild(deletedevent);*/
+    {
+        
+    var deletedevent = $(".event-body").find("[data-event=" + id + "]")[0];
+    deletedevent.remove();
+    
+    eventlist = [];
     getCalendar();
-    $("#members-page").hide();
-    $("#event_form").trigger("reset");
     noevent = true;
     },
     //dataType: 'json'
@@ -253,7 +271,6 @@ $("#event_form").submit(function (e) {
     type: "POST",
     url: "createevents/",
     headers: {'X-CSRFToken': csrftoken},
-    //headers: {"X-CSRFToken": $.cookie("csrftoken")},
     data:{ 
       title: $('#id_title').val(),
       description: $('#id_description').val(),
@@ -263,30 +280,12 @@ $("#event_form").submit(function (e) {
       all_day: $('#id_all_day').val(),
       end_day: $('#id_end_day').val(),
       command: "create",
-    }, // serializes the form's elements.
+    },
     success: function(data)
     {
-      /*var list = document.getElementById("event-body");
-      var startdate = data.startDate;
-      var starttime = data.startTime;
-      var enddate = data.endDate;
-      var endtime = data.endTime;
-      var startTime = startdate.concat(' ', starttime);
-      startTime = new Date (startTime);
-      var endTime = enddate.concat(' ', endtime);
-      endTime = new Date (endTime);
-      if (!data.allDay)
-      {
-      var $event = `<li class="event-list" data-event="${data.eventID}">`+`<div class="event-in-list" data-eventtext="${data.eventID}">`+ '@ ' + startTime.getHours() + ':' + (startTime.getMinutes() < 10 ? '0' : '') + startTime.getMinutes() + ' On ' + plugin.formatDateEvent(startTime, endTime) + ' ' +  data.title +`</div>`+ ` <div data-eventdescription="${data.eventID}" class="event-description" style="word-wrap: break-word;">` + data.summary + `</div>` +`</li>`;
-      list.append($event);
-      }
-      else{
-      var $event = `<li class="event-list" data-event="${data.eventID}">`+`<div class="event-in-list" data-eventtext="${data.eventID}">`+  data.title +`</div>`+ ` <div data-eventdescription="${data.eventID}" class="event-description" style="word-wrap: break-word;">` + data.summary + `</div>` +`</li>`;
-      list.append($event);
-      }*/
-      getCalendar();
-      $("#members-page").hide();
-      $("#event_form").trigger("reset");
+      eventlist = [];
+      getCalendar();  
+      call = 1;
     },
     //dataType: 'json'
   });
@@ -309,39 +308,10 @@ $("#event_form").submit(function (e) {
         end_day: $('#id_end_day').val(),
         command: "edit",
         eventid: id
-      }, // serializes the form's elements.
-      //headers: {"X-CSRFToken": $.cookie("csrftoken")},
+      },
       success: function(data)
       {
-        /*var editevent = $(".event-in-list").find("[data-eventtext=" + id + "]")[0];
-        var editdescription = $(".event-description").find("[data-eventdescription=" + id + "]")[0];
-
-          var startdate = data.startDate;
-          var starttime = data.startTime;
-          var enddate = data.endDate;
-          var endtime = data.endTime;
-          var startTime = startdate.concat(' ', starttime);
-          startTime = new Date (startTime);
-          var endTime = enddate.concat(' ', endtime);
-          endTime = new Date (endTime);
-          editevent.text("");
-          editdescription.text("");
-          if (!data.allDay)
-          {
-            var $event = '@ ' + startTime.getHours() + ':' + (startTime.getMinutes() < 10 ? '0' : '') + startTime.getMinutes() + ' On ' + plugin.formatDateEvent(startTime, endTime) + ' ' +  data.title;
-            var $description = data.summary;
-            editevent.text($event);
-            editdescription.text($description);
-        }
-        else{
-          var $event = data.title;
-          var $description = data.summary;
-          editevent.text($event);
-          editdescription.text($description);           
-        }*/
         getCalendar();
-        $("#members-page").hide();
-        $("#event_form").trigger("reset");
         noevent = true;
       },
       //dataType: 'json'
