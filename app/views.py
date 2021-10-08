@@ -510,8 +510,8 @@ def createevents(request):
                 events.append({'title':event.title,'summary':event.description,'startDate':event.start_day,'startTime':event.start_time,
                 'endDate':event.end_day,'endTime':event.end_time, 'allDay': event.all_day, 'eventID':event.id})
             data = {'events': events}
-            return JsonResponse(data)
- 
+            return JsonResponse(data)   
+
 def delete_note(request, NoteId):
     note = MyNotes.objects.get(pk=NoteId)
     note.delete()
