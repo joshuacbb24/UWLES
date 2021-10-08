@@ -333,14 +333,12 @@ $(borderday).addClass('day-border');
         if (!$(this).hasClass('disabled')) {
             // plugin.fillUp(e.pageX, e.pageY);
             // plugin.displayEvents(events);
-            document.getElementById('show-events').style.pointerEvents = 'auto';
             $(".show-events").css('color', '#015D67');
             $(".show-events").css('cursor', 'pointer');
             plugin.displayEventTexts(events);
         }
         else 
         {
-          document.getElementById('show-events').style.pointerEvents = 'none';
           $(".show-events").css('color', 'gray');
           $(".show-events").css('cursor', 'default');
         }
