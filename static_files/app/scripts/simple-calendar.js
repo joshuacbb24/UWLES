@@ -14,9 +14,9 @@
       disableEmptyDetails: false, // disable showing empty date details
       events: [], // List of event
       onInit: function (calendar) {}, // Callback after first initialization
-      onMonthChange: function (month, year) {}, // Callback on month change
-      onDateSelect: function (date, events) {}, // Callback on date selection
-      onEventSelect: function () {},              // Callback fired when an event is selected     - see $(this).data('event')
+      onMonthChange: function (month, year, value) {}, // Callback on month change
+      onDateSelect: function (date, events, clickedday, plug) {}, // Callback on date selection
+      onEventSelect: function (clickedevent) {},              // Callback fired when an event is selected     - see $(this).data('event')
       onEventCreate: function( $el ) {},          // Callback fired when an HTML event is created - see $(this).data('event')
       onEventDelete: function ($el) {},           // Callback fired when an event is deleted
       onDayCreate:   function( $el, d, m, y ) {}  // Callback fired when an HTML day is created   - see $(this).data('today'), .data('todayEvents')
@@ -41,12 +41,12 @@
 
       var calendar = $('<div class="calendar"></div>');
           var header = $('<header>' +
-          '<div class="changer" style="justify-content: center;text-align: center;">'+
+          '<div class="changer" style="justify-content: center;text-align: center;width: 30%;">'+
          '<a class="simple-calendar-btn btn-prev" href="#"></a>' +
          '<h6 class="month"></h6>' +
          '<a class="simple-calendar-btn btn-next" href="#"></a>' +
          '</div>'+
-         '<div class="adder" style="font-size: 20px; float: right;justify-content: right;margin-left: 58%;"><i id="add-event-button" class="las la-plus" style="cursor: pointer;"></i></div>'+
+         '<div class="adder" style="font-size: 20px; float: right;justify-content: right;margin-left: 58%;"></div>'+
           '</header>');
           //footer += + ('<i class="las la-trash"></i><i class="las la-calendar"></i><i class="las la-calendar-plus"></i>');
 
@@ -59,6 +59,8 @@
           //container.append(footer);
       this.bindEvents();
       this.settings.onInit(this);
+      document.querySelector(".today").click();
+
     },
 
     //Update the current month header
@@ -92,17 +94,17 @@
         // Backward compatibility
         startDayOfWeek =  this.settings.fixedStartDay ? 1 : this.settings.fixedStartDay;
 
-        // If first day of month is different of startDayOfWeek
+        // If first day of month is different from startDayOfWeek
         while (firstDay.getDay() !== startDayOfWeek) {
           firstDay.setDate(firstDay.getDate() - 1);
         }
-        // If last day of month is different of startDayOfWeek + 7
+        // If last day of month is different from startDayOfWeek + 7
         while (lastDay.getDay() !== ((startDayOfWeek + 7) % 7)) {
           lastDay.setDate(lastDay.getDate() + 1);
         }
         }
         var range = parseInt((lastDay - firstDay) / (1000 * 3600 * 24));
-
+        // Ensure there are enough days in the range to show 6 weeks
         if (range < 42) {
             lastDay.setDate(lastDay.getDate() + 7);
         }
@@ -113,6 +115,7 @@
       }
 
       //For firstDay to lastDay
+      var weeksShown = 0;
       for (var day = firstDay; day <= lastDay; day.setDate(day.getDate())) {
         var tr = $('<tr></tr>');
         //For each row
@@ -150,6 +153,11 @@
           day.setDate(day.getDate() + 1);
         }
         tbody.append(tr);
+        weeksShown++;
+        // Ensure that at most 6 weeks are shown
+        if (weeksShown >= 6) {
+          break;
+        }
       }
 
       body.append(thead);
@@ -164,7 +172,14 @@
       this.currentDate.setMonth(this.currentDate.getMonth() + value, 1);
       this.buildCalendar(this.currentDate, $(this.element).find('.calendar'));
       this.updateHeader(this.currentDate, $(this.element).find('.calendar header'));
-      this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear())
+      this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear(), value, this)
+    },
+    eventclicked: function(wasclicked) {
+      var plugin = this;
+      $("#" + wasclicked).on('click', function ( e ) {
+        var clickedevent = $(this).data('event');
+        plugin.settings.onEventSelect(clickedevent);
+      });
     },
     //Init global events listeners
     bindEvents: function () {
@@ -187,8 +202,10 @@
       //change variables and load into form as preset selections when create event is clicked
         $(plugin.element).on('click', '.day', function (e) {
         console.log('event click +++');
-        $(".event-wrapper").empty();
+        $(".event-body").empty();
         var date = new Date($(this).data('date'));
+        console.log("the date", date);
+        var clickedday = $(this);
         var events = plugin.getDateEvents(date);
         var days = document.getElementsByClassName('day-border')
         var selectedday;
@@ -212,6 +229,107 @@ $(borderday).addClass('day-border');
 
 //selectedday = $(this).innerhtml
         //document.getElementById("eventContainer").innerHTML = "No events";
+        if ($(this).hasClass('today'))
+        {
+          var startday = new Date(new Date(date).setHours(new Date().getHours() + 1,0,0));
+          var endday = new Date(new Date(date).setHours(new Date().getHours() + 2,0,0));
+          var sday = ("0" + startday.getDate()).slice(-2);
+          var smonth = ("0" + (startday.getMonth() + 1)).slice(-2);
+          var eday = ("0" + endday.getDate()).slice(-2);
+          var emonth = ("0" + (endday.getMonth() + 1)).slice(-2);
+          var autosday = startday.getFullYear()+"-"+(smonth)+"-"+(sday);
+          var autoeday = endday.getFullYear()+"-"+(emonth)+"-"+(eday);
+          var shour=startday.getHours();
+          var smin=startday.getMinutes();
+          //var sampm = shour >= 12 ? 'pm' : 'am';
+          if (shour < 10)
+          {
+            shour = '0'+shour
+          }
+          if (smin < 10)
+          {
+            smin = '0'+smin
+          }
+          var startTime = shour + ':' + smin;
+          /*shour = shour % 12;
+          shour = shour ? shour : 12; // the hour '0' should be '12'
+          smin = smin < 10 ? '0'+smin : smin;
+          var startTime = shour + ':' + smin + ' ' + sampm;
+          */
+          var ehour= endday.getHours();
+          var emin= endday.getMinutes();
+          if (ehour < 10)
+          {
+            ehour = '0'+ehour
+          }
+          if (emin < 10)
+          {
+            emin = '0'+emin
+          }
+          //var eampm= ehour >= 12 ? 'pm' : 'am';
+    
+          var endTime = ehour + ':' + emin;
+          
+          /*ehour = ehour % 12;
+          ehour = ehour ? ehour : 12; // the hour '0' should be '12'
+          emin = emin < 10 ? '0'+emin : emin;
+          var endTime = ehour + ':' + emin + ' ' + eampm;
+          */
+          $("#id_start_time").val(startTime);
+          $("#id_start_day").val(autosday);
+          $("#id_end_time").val(endTime);
+          $("#id_end_day").val(autoeday);
+        }
+        else{
+          var startday = new Date(new Date(date).setHours(8,0,0));
+          var endday = new Date(new Date(date).setHours(9,0,0));
+          var sday = ("0" + startday.getDate()).slice(-2);
+          var smonth = ("0" + (startday.getMonth() + 1)).slice(-2);
+          var eday = ("0" + endday.getDate()).slice(-2);
+          var emonth = ("0" + (endday.getMonth() + 1)).slice(-2);
+          var autosday = startday.getFullYear()+"-"+(smonth)+"-"+(sday);
+          var autoeday = endday.getFullYear()+"-"+(emonth)+"-"+(eday);
+          var shour=startday.getHours();
+          var smin=startday.getMinutes();
+          //var sampm = shour >= 12 ? 'pm' : 'am';
+          if (shour < 10)
+          {
+            shour = '0'+shour
+          }
+          if (smin < 10)
+          {
+            smin = '0'+smin
+          }
+          var startTime = shour + ':' + smin;
+          /*shour = shour % 12;
+          shour = shour ? shour : 12; // the hour '0' should be '12'
+          smin = smin < 10 ? '0'+smin : smin;
+          var startTime = shour + ':' + smin + ' ' + sampm;
+          */
+          var ehour= endday.getHours();
+          var emin= endday.getMinutes();
+          if (ehour < 10)
+          {
+            ehour = '0'+ehour
+          }
+          if (emin < 10)
+          {
+            emin = '0'+emin
+          }
+          //var eampm= ehour >= 12 ? 'pm' : 'am';
+    
+          var endTime = ehour + ':' + emin;
+          
+          /*ehour = ehour % 12;
+          ehour = ehour ? ehour : 12; // the hour '0' should be '12'
+          emin = emin < 10 ? '0'+emin : emin;
+          var endTime = ehour + ':' + emin + ' ' + eampm;
+          */
+          $("#id_start_time").val(startTime);
+          $("#id_start_day").val(autosday);
+          $("#id_end_time").val(endTime);
+          $("#id_end_day").val(autoeday);
+        }
         if (!$(this).hasClass('disabled')) {
             // plugin.fillUp(e.pageX, e.pageY);
             // plugin.displayEvents(events);
@@ -226,7 +344,7 @@ $(borderday).addClass('day-border');
           $(".show-events").css('color', 'gray');
           $(".show-events").css('cursor', 'default');
         }
-        plugin.settings.onDateSelect(date, events);
+        plugin.settings.onDateSelect(date, events, clickedday, plugin);
       });
 
       //Binding event container close
@@ -242,9 +360,15 @@ $(borderday).addClass('day-border');
               var startDate = new Date(event.startDate);
               var endDate = new Date(event.endDate);
               //var eventId = event.eventID; //id for each event
-              var eventId = 1; //id for each event
-              var $event = `<li class="event-list" data-event="${eventId}">`+'@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.summary + `</li>`;
+              var eventId = event.eventid; //id for each event
+              if (!event.allDay)
+              {
+              var $event = `<li class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+ '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
+              }
+              else{
+              var $event = `<li class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
 
+              }
               // $event.data('event', event);
               console.log('event data +++', $event);
               //document.getElementsByClassName("event-wrapper").innerHTML = JSON.stringify($event);
@@ -258,6 +382,8 @@ $(borderday).addClass('day-border');
               // plugin.settings.onEventCreate($event);
 
               container.append($event);
+              plugin.eventclicked(`edit-${eventId}`);
+
           })
       },
     displayEvents: function (events) {
@@ -271,7 +397,8 @@ $(borderday).addClass('day-border');
           '<div class="event">' +
           ' <div class="event-hour">' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + '</div>' +
           ' <div class="event-date">' + plugin.formatDateEvent(startDate, endDate) + '</div>' +
-          ' <div class="event-summary">' + event.summary + '</div>' +
+          ' <div class="event-summary">' + event.title + '</div>' +
+          ' <div class="event-description">' + event.summary + '</div>' +
           '</div>');
 
         $event.data( 'event', event );
@@ -294,9 +421,9 @@ $(borderday).addClass('day-border');
       dStart.setHours(0,0,0);
       dEnd.setHours(23,59,59,999);
       d.setHours(12,0,0);
-      console.log("dstart",dStart);
-      console.log("dend",dEnd);
-      console.log("d",d);
+      //console.log("dstart",dStart);
+      //console.log("dend",dEnd);
+      //console.log("d",d);
       var returnvalue = dStart <= d && d <= dEnd
       //console.log("return",returnvalue);
 
