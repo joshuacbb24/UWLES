@@ -333,7 +333,18 @@ $(borderday).addClass('day-border');
         if (!$(this).hasClass('disabled')) {
             // plugin.fillUp(e.pageX, e.pageY);
             // plugin.displayEvents(events);
+            $(".show-events").css('color', '#015D67');
+            $(".show-events").css('cursor', 'pointer');
+            $(".show-calendar").css('color', '#015D67');
+            $(".show-calendar").css('cursor', 'pointer');
             plugin.displayEventTexts(events);
+        }
+        else 
+        {
+          $(".show-events").css('color', '#015D67');
+          $(".show-events").css('cursor', 'pointer');
+          $(".show-calendar").css('color', '#015D67');
+          $(".show-calendar").css('cursor', 'pointer');
         }
         plugin.settings.onDateSelect(date, events, clickedday, plugin);
       });
