@@ -146,7 +146,14 @@
         </div>-->
         <div class="card-single-one">
         <div id="container" class="calendar-container"></div>
-        <div class="event-container"><div class="event-header"><h5 style="color:#015D67;text-align: left;margin-left: 2%;">Coming Up</h5></div><ul class="event-body" id="event-body"></ul></div>        <div class="card-footer" style="
+        <div class="event-container"><div class="event-header"><h5 style="    color: #015D67;
+          text-align: left;
+          margin-left: 2%;
+          vertical-align: middle;
+          position: relative;
+          font-weight: bold;
+          font-size: initial;
+          padding-top: 1.5%;">Coming Up</h5><i id="add-event-button" class="las la-plus" style="cursor: pointer;"></i></div><ul class="event-body" id="event-body"></ul></div>        <div class="card-footer" style="
         position: relative;
         z-index: 1;
         width: 100%;
@@ -156,7 +163,7 @@
         margin-bottom: 0px !important;
         /* float: right; */
         ">
-        <div class="calendar-icons"><span style="float: right;"><i id="show-calendar" class="las la-calendar-plus show-calendar" style="color: gray;"></i><i id="show-events" class="las la-calendar-minus show-events"></i></span>
+        <div class="calendar-icons"><span style="float: right;"><i id="show-events" class="las la-calendar-minus show-events"></i></span>
         </div>
           
         </div>
@@ -505,6 +512,11 @@
     $("#caret-icon").on('click', function () {
       $(this).toggleClass('la-angle-up la-angle-down');
       $(".dropdown-content").toggle('show hide');
+    })
+    $(".show-events").on('click', function () {
+      $(this).toggleClass('las la-calendar-plus las la-calendar-minus');
+      $("#container").toggle();
+      $(".event-container").toggle();
     })
 
     $("#sidebar-toggle").on('click', function () {

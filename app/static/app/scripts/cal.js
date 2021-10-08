@@ -175,7 +175,7 @@ $("#close-modal").on('click', function(){
 call = 0;
 document.getElementById('members-page').style.display='none'
 });
-$(".show-events").on('click', function () {
+/*$(".show-events").on('click', function () {
 document.getElementById('show-events').style.pointerEvents = 'none';
 document.getElementById('show-calendar').style.pointerEvents = 'auto';
 $("#container").hide();
@@ -184,8 +184,8 @@ $(".show-events").css('color', 'gray');
 $(".show-events").css('cursor', 'default');
 $(".show-calendar").css('color', '#015D67');
 $(".show-calendar").css('cursor', 'pointer');
-});
-$(".show-calendar").on('click', function () {
+});*/
+/*$(".show-calendar").on('click', function () {
 document.getElementById('show-calendar').style.pointerEvents = 'none';
 document.getElementById('show-events').style.pointerEvents = 'auto';
 $("#container").show();
@@ -194,7 +194,7 @@ $(".show-events").css('color', '#015D67');
 $(".show-events").css('cursor', 'pointer');
 $(".show-calendar").css('color', 'gray');
 $(".show-calendar").css('cursor', 'default');
-});
+});*/
 
 $("#id_all_day").change(function() {
   if ($("#id_all_day").prop('checked'))
@@ -266,7 +266,26 @@ $("#event_form").submit(function (e) {
   if (choice == 0)
   {
   e.preventDefault();
-  var form = $(this);
+    /*
+    error list
+starttime.on change 
+-(end time cannot be before start time)
+if it is disable submit button and give error
+startday.on change
+-(end day cannot be before start day)
+if it is disable submit button and give error
+endtime.on change 
+-(end time cannot be before start time)
+if it is disable submit button and give error
+endday.on change
+-(end day cannot be before start day)
+if it is disable submit button and give error
+        $('#id_title').val(),
+        $('#id_start_day').val(),
+        $('#id_start_time').val(),
+        $('#id_end_day').val(),
+        $('#id_end_time').val(),
+    */
   $.ajax({
     type: "POST",
     url: "createevents/",
@@ -294,6 +313,26 @@ $("#event_form").submit(function (e) {
   }
   else{
     e.preventDefault();
+    /*
+error list
+starttime.on change 
+-(end time cannot be before start time)
+if it is disable submit button and give error
+startday.on change
+-(end day cannot be before start day)
+if it is disable submit button and give error
+endtime.on change 
+-(end time cannot be before start time)
+if it is disable submit button and give error
+endday.on change
+-(end day cannot be before start day)
+if it is disable submit button and give error
+        $('#id_title').val(),
+        $('#id_start_day').val(),
+        $('#id_start_time').val(),
+        $('#id_end_day').val(),
+        $('#id_end_time').val(),
+    */
     $.ajax({
       type: "POST",
       url: "/createevents/",

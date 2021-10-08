@@ -46,7 +46,7 @@
          '<h6 class="month"></h6>' +
          '<a class="simple-calendar-btn btn-next" href="#"></a>' +
          '</div>'+
-         '<div class="adder" style="font-size: 20px; float: right;justify-content: right;margin-left: 58%;"><i id="add-event-button" class="las la-plus" style="cursor: pointer;"></i></div>'+
+         '<div class="adder" style="font-size: 20px; float: right;justify-content: right;margin-left: 58%;"></div>'+
           '</header>');
           //footer += + ('<i class="las la-trash"></i><i class="las la-calendar"></i><i class="las la-calendar-plus"></i>');
 
