@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -250,6 +250,57 @@
       </div>
     </div>
 
+
+    <script>
+     const csrf1 = document.getElementsByName('csrfmiddlewaretoken')
+                         
+    
+
+    $(document).ready(function() {
+        $('body').on('click', '.fas.fa-times', function () {
+            var noteid = $(this).val();
+            const fd = new FormData()
+            fd.append('csrfmiddlewaretoken', csrf1[0].value)
+            fd.append('noteid-d', noteid)
+            $.ajax({
+                type: 'POST',
+                url: url,
+                enctype: 'multipart/form-data',
+                data: fd,
+                success: function (response) {
+                    $('.notes-list-items[value='+ noteid +']').remove();
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+                            cache: false,
+                            contentType: false,
+                             processData: false,
+                        })
+        })
+
+        $("body").on('click', '.btn-save-notes', function () {
+            var descrip = $('#id_description').val();
+            const fd = new FormData()
+            fd.append('csrfmiddlewaretoken', csrf1[0].value)
+            fd.append('id_description', descrip)
+                // Create Ajax Call
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    enctype: 'multipart/form-data',
+                    data: fd,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.user) {
+                          appendToUsrTable(data.user);
+                        }
+                    }
+                });
+              })
+    });
+        </script>
+
     <div class="menu3">
       <div class="menu-header">
           My Notes
@@ -265,14 +316,10 @@
       <ul class="note-list">
             {% for note in notes %}
                 <li class="notes-list-items">
-                    
-                        <p class="note-date">{{ note.date }}</p>
-
-                                <button class="fas fa-pencil-alt"></button>
-                                <button class="fas fa-times"></button>
-               
+                    <p class="note-date">{{ note.date }}</p>
+                    <button class="fas fa-pencil-alt"></button>
+                    <button class="fas fa-times" value="{{ note.id }}"></button>
                     <p class="note-descript">{{ note.description }}</p>
-                    
                 </li>
             {% endfor %}                  
        </ul>

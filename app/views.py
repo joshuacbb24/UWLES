@@ -545,15 +545,35 @@ def dashboard(request):
 
     if request.is_ajax() and request.method == "POST":
         print(request.POST)
-        taskid = request.POST['myid']
-        taskbool = request.POST['checkedval']
-        thistask = Tasks.objects.get(id=taskid)
-        if taskbool == "false":
-            thistask.completion_mark = False
-            thistask.save()
-        elif taskbool == "true":
-            thistask.completion_mark = True
-            thistask.save()
+        if 'noteid-d' in request.POST:      #if note delete is hit
+            noteid = request.POST['noteid-d']
+            note = MyNotes.objects.get(id=noteid)
+            note.delete()
+     #   if 'noteid-e' in request.POST:     #if note edit is hit
+     #       noteid = request.POST['noteid-e']
+     #       note = MyNotes.objects.get(id=noteid)
+     #   if 'id_description' in request.POST:
+     #       notesForm = MyNotesForm(request.POST)
+     #       if notesForm.is_valid():
+     #          notes_form = notesForm.save(commit=False)
+     #          notes_form.user=request.user
+     #          notes_form.date=timezone.now()
+     #          notes_form.save()
+     #          return redirect('/')
+     #   else:
+     #           print(notesForm.errors)
+
+               
+        else:
+            taskid = request.POST['myid']   #error happens when I hit the delete button,  might be from if statement -Andrew 
+            taskbool = request.POST['checkedval']
+            thistask = Tasks.objects.get(id=taskid)
+            if taskbool == "false":
+                thistask.completion_mark = False
+                thistask.save()
+            elif taskbool == "true":
+                thistask.completion_mark = True
+                thistask.save()
         data = {
             'msg': 'hello',
         }
