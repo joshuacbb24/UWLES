@@ -1,0 +1,919 @@
+.directoryBar {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 10px;
+    position: absolute;
+    width: 1090px;
+    height: 50px;
+    top: 20px;
+    left: 250px;
+    background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+    border-radius: 4px;
+}
+
+.fullActive {
+    position: absolute;
+    width: 350px;
+    height: 40px;
+    top: 25px;
+    left: 260px;
+    background: #EBF2F2;
+    box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+    border-radius: 4px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.01em;
+    text-transform: capitalize;
+    padding-top: 6px;
+    color: #013D44;
+    cursor: pointer;
+}
+
+.orgActive {
+    position: absolute;
+    width: 350px;
+    height: 40px;
+    top: 25px;
+    left: 620px;
+    background: #EBF2F2;
+    box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+    border-radius: 4px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.01em;
+    text-transform: capitalize;
+    padding-top: 6px;
+    color: #013D44;
+    cursor: pointer;
+}
+
+.fileActive {
+    position: absolute;
+    width: 350px;
+    height: 40px;
+    top: 25px;
+    left: 980px;
+    background: #EBF2F2;
+    box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1,61, 68, 0.1);
+    border-radius: 4px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.01em;
+    text-transform: capitalize;
+    padding-top: 6px;
+    color: #013D44;
+    cursor: pointer;
+}
+
+
+.fullHidden {
+    position: absolute;
+    width: 350px;
+    height: 40px;
+    top: 25px;
+    left: 260px;
+    background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.01cm;
+    text-transform: capitalize;
+    padding-top: 6px;
+    color: #878787;
+}
+
+    .fullHidden:hover {
+        cursor: pointer;
+        background: #E6EEF0;
+    }
+
+
+.orgHidden {
+    position: absolute;
+    width: 350px;
+    height: 40px;
+    top: 25px;
+    left: 620px;
+    background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.01cm;
+    text-transform: capitalize;
+    padding-top: 6px;
+    color: #878787;
+}
+
+    .orgHidden:hover {
+        cursor: pointer;
+        background: #E6EEF0;
+    }
+
+
+.fileHidden {
+    position: absolute;
+    width: 350px;
+    height: 40px;
+    top: 25px;
+    left: 980px;
+    background: linear-gradient(0deg, #F3F3F3, #F3F3F3);
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.01cm;
+    text-transform: capitalize;
+    padding-top: 6px;
+    color: #878787;
+}
+
+    .fileHidden:hover {
+        cursor: pointer;
+        background: #E6EEF0;
+    }
+
+.searchbarcontainer{
+    position: absolute;
+    height: 40px;
+    width: 1600px;
+    top: 100px;
+    background: #FFFFFF;
+    border: 1px solid #878787;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.searchbar {
+    position: absolute;
+    height: 37px;
+    width: 1600px;
+    padding-left: 50px;
+    background: #FFFFFF;
+    border: none;
+}
+
+#searchBarIcon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: black;
+}
+
+.locationDD {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 104px;
+    background: #FFFFFF;
+    border: 0.5px solid #5F5F5F;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.eligibilityDD {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 104px;
+    left: 140px;
+    background: #FFFFFF;
+    border: 0.5px solid #5F5F5F;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.DDcontent {
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    align-items: center;
+    text-align: center;
+    color: #5F5F5F;
+}
+
+.addBox {
+    position: absolute;
+    top: 180px;
+    left: 1300px;
+    height: 35px;
+    width: 72px;
+    background: #015D67;
+    cursor: pointer;
+    border: none;
+    justify-content: center;
+}
+
+.editBox {
+    position: absolute;
+    top: 180px;
+    left: 1390px;
+    height: 35px;
+    width: 72px;
+    background: #015D67;
+    cursor: pointer;
+    border: none;
+}
+
+.addContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    transform: translate(-50%, -50%);
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 17px;
+    color: #FFFFFF;
+    letter-spacing: 0.01cm;
+}
+
+#addIcon {
+}
+
+.divideLine {
+    position: absolute;
+    width: 0px;
+    height: 40px;
+    left: 1480px;
+    top: 180px;
+    border: 1px solid #979797
+}
+
+.gridBox {
+    position: absolute;
+    left: 1498px;
+    top: 180px;
+    width: 44px;
+    height: 35px;
+    background: #DEDEDE;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+#gridIcon {
+    position: absolute;
+    left: 1510px;
+    top: 190px;
+    color: black;
+    cursor: pointer;
+}
+
+#gridIcon2 {
+    position: absolute;
+    left: 1510px;
+    top: 190px;
+    color: #AFAFAF;
+    cursor: pointer;
+}
+
+.listBox {
+    position: absolute;
+    left: 1554px;
+    top: 180px;
+    width: 44px;
+    height: 35px;
+    background: #DEDEDE;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+#listIcon {
+    position: absolute;
+    left: 1570px;
+    top: 190px;
+    width: 22px;
+    height: 18px;
+    color: #AFAFAF;
+    cursor: pointer;
+}
+
+#listIcon2 {
+    position: absolute;
+    left: 1570px;
+    top: 190px;
+    width: 22px;
+    height: 18px;
+    color: black;
+    cursor: pointer;
+}
+
+.dirPath {
+    position: absolute;
+    top: 260px;
+    width: 150px;
+    height: 20px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 17px;
+    text-align: center;
+    color: #979797;
+}
+
+.gridLayout {
+    position: absolute;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: left;
+    list-style: none;
+    top: 300px;
+    width: 1680px;
+    min-height: 260px;
+}
+
+.dirCard {
+    width: 520px;
+    height: 200px;
+    margin-bottom: 40px;
+    margin-right: 40px;
+    background: #FFFFFF;
+    border-radius: 6px;
+    box-shadow: 3px 3px 3px -3px #999, 3px 3px 3px -3px #999, -3px 3px 3px -3px #999;
+}
+
+.circle {
+    position: relative;
+    top: 30px;
+    left: 30px;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    background: rgba(255, 186, 0, 0.2);
+}
+
+#AgingIcon {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #FFBA00;
+}
+
+#EducationIcon {
+    position: absolute;
+    top: 15px;
+    left: 10px;
+    color: #FFBA00;
+}
+
+#FoodIcon {
+    position: absolute;
+    top: 15px;
+    left: 17px;
+    color: #FFBA00;
+}
+
+#FamilyIcon {
+    position: absolute;
+    top: 15px;
+    left: 13px;
+    color: #FFBA00;
+}
+
+#DomesticIcon {
+    position: absolute;
+    top: 14px;
+    left: 17px;
+    color: #FFBA00;
+}
+
+#EmploymentIcon {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #FFBA00;
+}
+
+#HealthIcon {
+    position: absolute;
+    top: 16px;
+    left: 15px;
+    color: #FFBA00;
+}
+
+#HousingIcon {
+    position: absolute;
+    top: 14px;
+    left: 15px;
+    color: #FFBA00;
+}
+
+#LegalIcon {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    color: #FFBA00;
+}
+
+#UtilityIcon {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    color: #FFBA00;
+}
+
+#MentalIcon {
+    position: absolute;
+    top: 15px;
+    left: 16px;
+    color: #FFBA00;
+}
+
+#VeteransIcon {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #FFBA00;
+}
+
+.h2title {
+    position: relative;
+    bottom: 10px;
+    left: 120px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 20px;
+    color: #015D67;
+    width: 400px;
+    height: 20px;
+}
+
+.ptext {
+    position: relative;
+    top: 25px;
+    left: 30px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: 0.01cm;
+    color: #707070;
+}
+
+.explorebtn {
+    position: relative;
+    top: 50px;
+    left: 30px;
+    width: 100px;
+    height: 35px;
+    background: #015D67;
+    border-radius: 6px;
+    border: 0px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.01cm;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+#hidden {
+    visibility: hidden;
+}
+
+#visible {
+    visibility: visible;
+}
+
+.listLayout {
+    position: absolute;
+    top: 350px;
+    width: 1680px;
+    height: 900px;
+}
+
+.dir-list {
+    position: relative;
+    width: 1600px;
+    height: 65px;
+    background: rgba(196, 226, 238, 0.32);
+    border: 1px solid #ECF5F9;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+
+.dir-list:nth-child(even) {
+    background: rgba(238, 229, 196, 0.32);
+}
+
+.listName {
+    position: relative;
+    left: 30px;
+    top: 19px;
+    width: 350px;
+    height: 30px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.listDescript {
+    position: relative;
+    left: 500px;
+    width: 800px;
+    height: 30px;
+    bottom: 5px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    letter-spacing: 0.01cm;
+    color: #5F5F5F;
+}
+
+.listExplore1 {
+    position: relative;
+    left: 1400px;
+    width: 150px;
+    height: 38px;
+    bottom: 48px;
+    border: 1px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #015D67;
+    background: rgba(196, 226, 238, 0.32);
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    align-items: center;
+    text-align: center;
+}
+
+.listExplore2 {
+    position: relative;
+    left: 1400px;
+    width: 150px;
+    height: 38px;
+    bottom: 48px;
+    border: 1px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: #015D67;
+    background: rgba(238, 229, 196, 0.32);
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    align-items: center;
+    text-align: center;
+}
+
+.listExplore1:hover {
+    background: #015D67;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    align-items: center;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.listExplore2:hover {
+    background: #015D67;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    align-items: center;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+}
+
+.listCategory {
+    position: absolute;
+    top: 310px;
+    left: 30px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.01cm;
+    color: #676767;
+}
+
+.listDsc {
+    position: absolute;
+    top: 310px;
+    left: 500px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.01cm;
+    color: #676767;
+}
+
+.listOrder {
+    position: absolute;
+    top: 305px;
+    left: 150px;
+    width: 90px;
+    height: 30px;
+    background: #DEDEDE;
+    border-radius: 3px;
+}
+
+.listA {
+    position: absolute;
+    left: 14px;
+    top: 8px;
+    width: 18px;
+    height: 18px;
+}
+
+.listZ {
+    position: absolute;
+    left: 64px;
+    top: 8px;
+    width: 18px;
+    height: 18px;
+}
+
+#Arrow {
+    position: absolute;
+    left: 36px;
+    top: 8px;
+    width: 18px;
+    height: 18px;
+}
+
+.location-dorchester {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.location-somerset {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 130px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.location-wicomico {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 260px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.location-worcester {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 390px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-all {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 620px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-youth {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 750px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-teens {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 880px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-adults {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 1010px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.elig-seniors {
+    position: absolute;
+    top: 180px;
+    height: 35px;
+    width: 100px;
+    left: 1140px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 35px;
+    background: #FFFFFF;
+    border: 0.5px solid #015D67;
+    box-sizing: border-box;
+    border-radius: 4px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.filtered{
+    background: #015D67;
+    color: white;
+}
+
+.filtered2{
+    background: #015D67;
+    color: white;
+}
+
+.unfiltered{
+    background: #FFFFFF;
+    color: black;
+}
+
+.break-location{
+    position: absolute;
+    width: 0px;
+    height: 40px;
+    left: 555px;
+    top: 180px;
+    border: 1px solid #979797
+}
+
+.break-elig{
+    position: absolute;
+    width: 0px;
+    height: 40px;
+    left: 1260px;
+    top: 180px;
+    border: 1px solid #979797
+}

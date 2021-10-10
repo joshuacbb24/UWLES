@@ -247,13 +247,12 @@ class Event_Creation_Form(forms.ModelForm):
     
     title = forms.CharField(widget=forms.TextInput(
         attrs={'placeholder': 'Title'}), required=True)
-    description = forms.CharField(widget=forms.Textarea(attrs={'cols': 80, 'rows': 20}), required=False)
+    description = forms.CharField(widget=forms.Textarea(attrs={'cols': 40, 'rows': 5}), required=False)
     start_day = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}), required=True)
     start_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=True)
     end_day = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}), required=True)
     end_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=True)
-    
-    all_day = forms.BooleanField(initial=False)
+    all_day = forms.BooleanField(initial=False, required=False)
    
     
     class Meta:
