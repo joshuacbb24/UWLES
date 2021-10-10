@@ -1,7 +1,38 @@
-﻿<div class="testclass">
-    <form method="post">
-        {% csrf_token %}
-        {{ form1 }}
-        <button type="submit">submit</button>
-    </form>
-</div>
+﻿<script>
+    const csrf = document.getElementsByName('csrfmiddlewaretoken')
+    const url = ""
+    $(document).ready(function () {
+        $('body').on('click', '.fas.fa-pencil-alt', function(){
+            var noteid = $(this).val();
+            const fd = new FormData()
+            fd.append('csrfmiddlewaretoken', csrf[0].value)
+            fd.append('noteid', noteid)
+            $.ajax({
+                type: 'POST',
+                url: url,
+                enctype: 'multipart/form-data',
+                data: fd,
+                success: function (response) {
+                    $('.note-list-items[value='+ noteid +']').remove();
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+                cache: false,
+                contentType: false,
+                processData: false,
+            })
+    })
+});
+</script>
+
+<ul class="note-list">
+    {% note in notes %}
+    <li class="notes-list-items" id="noteList" value="{{ note.id }}">
+        <p class="note-date">{{ note.date }}</p>
+        <button class="fas fa-pencil-alt" value="{{ note.id }}"></button>
+        <button class="fas fa-times"></button>
+        <p class="note-descript">{{ note.description }}</p>
+    </li>
+    {% endfor %}
+</ul>
