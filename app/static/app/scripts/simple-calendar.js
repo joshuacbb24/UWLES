@@ -205,7 +205,8 @@
         $(".event-body").empty();
         var date = new Date($(this).data('date'));
         console.log("the date", date);
-        var clickedday = $(this);
+        var clickedday = $(this).data('date');
+        console.log("clickedday", clickedday);
         var events = plugin.getDateEvents(date);
         var days = document.getElementsByClassName('day-border')
         var selectedday;
@@ -333,16 +334,18 @@ $(borderday).addClass('day-border');
         if (!$(this).hasClass('disabled')) {
             // plugin.fillUp(e.pageX, e.pageY);
             // plugin.displayEvents(events);
-            document.getElementById('show-events').style.pointerEvents = 'auto';
             $(".show-events").css('color', '#015D67');
             $(".show-events").css('cursor', 'pointer');
+            $(".show-calendar").css('color', '#015D67');
+            $(".show-calendar").css('cursor', 'pointer');
             plugin.displayEventTexts(events);
         }
         else 
         {
-          document.getElementById('show-events').style.pointerEvents = 'none';
-          $(".show-events").css('color', 'gray');
-          $(".show-events").css('cursor', 'default');
+          $(".show-events").css('color', '#015D67');
+          $(".show-events").css('cursor', 'pointer');
+          $(".show-calendar").css('color', '#015D67');
+          $(".show-calendar").css('cursor', 'pointer');
         }
         plugin.settings.onDateSelect(date, events, clickedday, plugin);
       });

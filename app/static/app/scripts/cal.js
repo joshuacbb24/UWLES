@@ -63,24 +63,30 @@ for (var i = 0; i < data.events.length; i++)
 console.log("eventlist", eventlist)
 if (call == 0){
   callCalendar(eventlist);
+  call = null;
 }
 else{
 cal.settings.events = eventlist;
 cal.buildCalendar(calday, $(cal.element).find('.calendar'));
 cal.updateHeader(calday, $(cal.element).find('.calendar header'));
+call = null;
 if(onmonth == 0)
 {
-  day.click();
+  var newday = $("td").find(`[data-date='${day}']`)[0];
+  $(newday).click();
   $("#members-page").hide();
-  $("#event_form").trigger("reset");
+  $(".confirmation-chat-modal").hide();
+  //$("#event_form").trigger("reset");
   call = null; 
 }
 else 
 {
 cal.changeMonth(onmonth);
-day.click();
+var newday = $("td").find(`[data-date='${day}']`)[0];
+$(newday).click();
 $("#members-page").hide();
-$("#event_form").trigger("reset");
+$(".confirmation-chat-modal").hide();
+//$("#event_form").trigger("reset");
 call = null;
 }
 }
@@ -97,7 +103,13 @@ $("#container").simpleCalendar({
       day = clickedday;
       cal = plug;
       calday = date;
+      var taskday = date.toString();
       console.log("plug", plug)
+      taskday = taskday.split(" ");
+      taskday = (taskday[0] + ", " + taskday[1] + " " + taskday[2] + " " + taskday[3]);
+      $(".event-day").text("");
+      $(".event-day").append(taskday);
+
     }, // Callback on date selection
     onMonthChange: function (month, year, value) {
       onmonth = onmonth + value;
@@ -131,32 +143,6 @@ $("#container").simpleCalendar({
         }
       })
     },
-
-    /*events: [
-        // generate new event after tomorrow for one hour
-        {
-            startDate: new Date(new Date().setHours(new Date().getHours() + 24)).toDateString(),
-            endDate: new Date(new Date().setHours(new Date().getHours() + 25)).toISOString(),
-            summary: 'Visit of the Eiffel Tower'
-        },
-        {
-            startDate: new Date(new Date().setHours(new Date().getHours() + 24)).toDateString(),
-            endDate: new Date(new Date().setHours(new Date().getHours() + 25)).toISOString(),
-            summary: 'Visit of the Eiffel Tower'
-        },
-        // generate new event for yesterday at noon
-        {
-            startDate: new Date(new Date().setHours(new Date().getHours() - new Date().getHours() - 12, 0)).toISOString(),
-            endDate: new Date(new Date().setHours(new Date().getHours() - new Date().getHours() - 11)).getTime(),
-            summary: 'Restaurant'
-        },
-        // generate new event for the last two days
-        {
-            startDate: new Date(new Date().setHours(new Date().getHours() - 48)).toISOString(),
-            endDate: new Date(new Date().setHours(new Date().getHours() - 24)).getTime(),
-            summary: 'Visit of the Louvre'
-        }
-    ],*/
 });
 if (call == 0)
 {
@@ -229,9 +215,14 @@ $("#id_all_day").change(function() {
 $("#canc").on('click', function () {
 if (noevent === true){
   $("#members-page").hide();
-  $("#event_form").trigger("reset");
+  //$("#event_form").trigger("reset");
 }
+
 else {
+  $(".confirmation-chat-modal").show();
+}
+});
+$("#confirmation").on('click', function () {
   $.ajax({
     type: "POST",
     url: "createevents/",
@@ -250,8 +241,8 @@ else {
     success: function(data)
     {
         
-    var deletedevent = $(".event-body").find("[data-event=" + id + "]")[0];
-    deletedevent.remove();
+    //var deletedevent = $(".event-body").find("[data-event=" + id + "]")[0];
+    //deletedevent.remove();
     
     eventlist = [];
     getCalendar();
@@ -259,8 +250,9 @@ else {
     },
     //dataType: 'json'
   });
-
-}
+});
+$("#reverse").on('click', function () {
+  $(".confirmation-chat-modal").hide();
 });
 $("#event_form").submit(function (e) {
   if (choice == 0)
@@ -302,9 +294,9 @@ if it is disable submit button and give error
     },
     success: function(data)
     {
-      eventlist = [];
-      getCalendar();  
       call = 1;
+      eventlist = [];
+      getCalendar();      
     },
     //dataType: 'json'
   });
