@@ -205,7 +205,8 @@
         $(".event-body").empty();
         var date = new Date($(this).data('date'));
         console.log("the date", date);
-        var clickedday = $(this);
+        var clickedday = $(this).data('date');
+        console.log("clickedday", clickedday);
         var events = plugin.getDateEvents(date);
         var days = document.getElementsByClassName('day-border')
         var selectedday;
