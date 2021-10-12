@@ -704,11 +704,17 @@
       $(".dropdown-content").toggle('show hide');
     })
     $(".show-events").on('click', function () {
-      $(this).toggleClass('las la-calendar-plus las la-calendar-minus');
+      $(".show-events").toggle();
+      $(".show-calendar").toggle();
       $("#container").toggle();
       $(".event-container").toggle();
     })
-
+    $(".show-calendar").on('click', function () {
+      $(".show-events").toggle();
+      $(".show-calendar").toggle();
+      $("#container").toggle();
+      $(".event-container").toggle();
+    })
     $("#sidebar-toggle").on('click', function () {
       $(".sidebar").toggle('show hide');
     })
