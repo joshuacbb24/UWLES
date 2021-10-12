@@ -67,8 +67,8 @@ if (call == 0){
 }
 else{
 cal.settings.events = eventlist;
-cal.buildCalendar(calday, $(cal.element).find('.calendar'));
-cal.updateHeader(calday, $(cal.element).find('.calendar header'));
+cal.buildCalendar(new Date(), $(cal.element).find('.calendar'));
+cal.updateHeader(new Date(), $(cal.element).find('.calendar header'));
 call = null;
 if(onmonth == 0)
 {
