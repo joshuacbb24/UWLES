@@ -224,7 +224,7 @@ footer {
           /* 5% from the top, 15% from the bottom and centered */
           border: 1px solid #000;
           width: 40%;
-          height: 80%;
+          height: 65%;
           z-index: 3;
           border-radius: 5px;
           margin-right: 27%;
@@ -232,7 +232,43 @@ footer {
           box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
           overflow: hidden;
         }
-        
+        #confirmation-removal-page {
+          background-color: #fefefe;
+          margin: 5% auto 15% auto;
+          /* 5% from the top, 15% from the bottom and centered */
+          border: 1px solid #000;
+          width: 30%;
+          height: 30%;
+          z-index: 20;
+          border-radius: 5px;
+          margin-right: 33%;
+          /* Could be more or less, depending on screen size */
+          box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+          overflow: hidden;
+      }
+
+      .confirmation-chat-modal {
+          display: none;
+          /* Hidden by default */
+          position: fixed;
+          /* Stay in place */
+          z-index: 19;
+          /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%;
+          /* Full width */
+          height: 100%;
+          /* Full height */
+          overflow: auto;
+          /* Enable scroll if needed */
+          background-color: rgb(0, 0, 0);
+          /* Fallback color */
+          background-color: rgba(0, 0, 0, 0.4);
+          /* Black w/ opacity */
+          padding-top: 60px;
+          overflow: hidden;
+      }
         .event-container{
           display: none;
           position: relative;
@@ -260,8 +296,13 @@ footer {
             border-top: 1px solid rgba(0,0,0,.125);
             height: initial;
         }
+        #id_description {
+          margin: 0px;
+           width: 541px;
+            height: 113px;
+        }
         #event_form input[type=text], input[type=email], select{
-          width: 150%;
+          width: 275%;
           padding: 12px 10px;
           margin: 5px;
           display: inline-block;
@@ -320,7 +361,12 @@ footer {
             background-image: none;
             border-color: #6c757d;
         }
-        
+        .confirmation-chat-modal .btn-outline-secondary {
+          color: #6c757d;
+          background-color: transparent;
+          background-image: none;
+          border-color: #6c757d;
+      }       
         #event_form .btn {
             display: inline-block;
             font-weight: 400;
