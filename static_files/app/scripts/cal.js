@@ -72,7 +72,7 @@ cal.updateHeader(calday, $(cal.element).find('.calendar header'));
 call = null;
 if(onmonth == 0)
 {
-  var newday = $("td").find(`[data-date='${day}']`);
+  var newday = $("td.day").find(`[data-date='${day}']`);
   $(newday).click();
   $("#members-page").hide();
   $(".confirmation-chat-modal").hide();
@@ -82,7 +82,7 @@ if(onmonth == 0)
 else 
 {
 cal.changeMonth(onmonth);
-var newday = $("td").find(`[data-date='${day}']`);
+var newday = $("td.day").find(`[data-date='${day}']`);
 $(newday).click();
 $("#members-page").hide();
 $(".confirmation-chat-modal").hide();
