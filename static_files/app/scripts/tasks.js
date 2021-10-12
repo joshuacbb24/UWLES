@@ -2,18 +2,30 @@ const csrf = document.getElementsByName('csrfmiddlewaretoken')
 const url = ""
 
 $(document).ready(function () {
+    $('[data-toggle="popover"]').popover();
+
     $("body").on('click', '.assignee-option', function(){
         $(this).addClass('assignee-selected');
         $(this).removeClass('assignee-option');
         var thisval = $(this).attr('value');
+        var thistext = $(this).text();
         $("#id_assignees option[value="+ thisval + "]").prop("selected", true)
+        $('#assignees-box').append('<div class="assignees-pill" value=' + thisval + '>' + thistext + '</div>');
     });
     $("body").on('click', '.assignee-selected', function(){
         $(this).addClass('assignee-option');
         $(this).removeClass('assignee-selected');
         var thisval = $(this).attr('value');
         $("#id_assignees option[value="+ thisval + "]").prop("selected", false)
+        $('#assignees-box').children('div.assignees-pill[value='+ thisval + ']').remove()
     });
+    $("body").on('click', '.assignees-pill', function(){
+        var thisval = $(this).attr('value');
+        $("#id_assignees option[value="+ thisval + "]").prop("selected", false)
+        $('#assignees-box').children('div.assignees-pill[value='+ thisval + ']').remove()
+        $('.assignee-selected[value='+ thisval +']').addClass('assignee-option')
+        $('.assignee-selected[value='+ thisval +']').removeClass('assignee-selected');
+    })
     $("body").on('click', '.assignee-caseworker', function(){
         $(this).addClass('active-btn');
         $('.assignee-client').removeClass('active-btn');
@@ -50,7 +62,99 @@ $(document).ready(function () {
             $(".past-tasks-list").addClass('inactive')
         }
     })
+    
+    $("body").on('click', '#high-prio-dd.menu4-dropbtn', function(){
+        if ($(".high-prio-tasks-list").hasClass('inactive')){
+            $(".high-prio-tasks-list").removeClass('inactive')
+        }
+        else{
+            $(".high-prio-tasks-list").addClass('inactive')
+        }
+    })
+    $("body").on('click', '#med-prio-dd.menu4-dropbtn', function(){
+        if ($(".med-prio-tasks-list").hasClass('inactive')){
+            $(".med-prio-tasks-list").removeClass('inactive')
+        }
+        else{
+            $(".med-prio-tasks-list").addClass('inactive')
+        }
+    })
+    $("body").on('click', '#low-prio-dd.menu4-dropbtn', function(){
+        if ($(".low-prio-tasks-list").hasClass('inactive')){
+            $(".low-prio-tasks-list").removeClass('inactive')
+        }
+        else{
+            $(".low-prio-tasks-list").addClass('inactive')
+        }
+    })
+    $("body").on('click', '[id^=assigner-dd]', function(){
+        var thisid = $(this).attr('value')
+        if ($(".assigner-tasks-list[value=" + thisid +"]").hasClass('inactive')){
+            $(".assigner-tasks-list[value=" + thisid +"]").removeClass('inactive')
+        }
+        else{
+            $(".assigner-tasks-list[value=" + thisid +"]").addClass('inactive')
+        }
+    })
 
+    $("body").on('change', '[name=task_filter]', function(){
+        if ($(this).val() == 'by_date'){
+            $('.menu4-high-prio').addClass('menu4-hide')
+            $('.menu4-med-prio').addClass('menu4-hide')
+            $('.menu4-low-prio').addClass('menu4-hide')
+            $('.menu4-assigner-tasks').addClass('menu4-hide')
+            
+            $('.menu4-upcoming-tasks').removeClass('menu4-hide')
+            $('.menu4-due-this-week').removeClass('menu4-hide')
+            $('.menu4-past-due').removeClass('menu4-hide')
+
+            $('.upcoming-tasks-list').addClass('inactive')
+            $('.weekly-tasks-list').addClass('inactive')
+            $('.past-tasks-list').addClass('inactive')
+            $('.high-prio-tasks-list').addClass('inactive')
+            $('.med-prio-tasks-list').addClass('inactive')
+            $('.low-prio-tasks-list').addClass('inactive')
+            $('.assigner-tasks-list').addClass('inactive')
+            
+        }
+        else if($(this).val() == 'by_prio'){
+            $('.menu4-upcoming-tasks').addClass('menu4-hide')
+            $('.menu4-due-this-week').addClass('menu4-hide')
+            $('.menu4-past-due').addClass('menu4-hide')
+            $('.menu4-assigner-tasks').addClass('menu4-hide')
+
+            $('.menu4-high-prio').removeClass('menu4-hide')
+            $('.menu4-med-prio').removeClass('menu4-hide')
+            $('.menu4-low-prio').removeClass('menu4-hide')
+
+            $('.upcoming-tasks-list').addClass('inactive')
+            $('.weekly-tasks-list').addClass('inactive')
+            $('.past-tasks-list').addClass('inactive')
+            $('.high-prio-tasks-list').addClass('inactive')
+            $('.med-prio-tasks-list').addClass('inactive')
+            $('.low-prio-tasks-list').addClass('inactive')
+            $('.assigner-tasks-list').addClass('inactive')
+        }
+        else if($(this).val() == "by_assigner"){
+            $('.menu4-upcoming-tasks').addClass('menu4-hide')
+            $('.menu4-due-this-week').addClass('menu4-hide')
+            $('.menu4-past-due').addClass('menu4-hide')
+            $('.menu4-assigner-tasks').addClass('menu4-hide')
+            $('.menu4-high-prio').addClass('menu4-hide')
+            $('.menu4-med-prio').addClass('menu4-hide')
+            $('.menu4-low-prio').addClass('menu4-hide')
+
+            $('.menu4-assigner-tasks').removeClass('menu4-hide')
+
+            $('.upcoming-tasks-list').addClass('inactive')
+            $('.weekly-tasks-list').addClass('inactive')
+            $('.past-tasks-list').addClass('inactive')
+            $('.high-prio-tasks-list').addClass('inactive')
+            $('.med-prio-tasks-list').addClass('inactive')
+            $('.low-prio-tasks-list').addClass('inactive')
+            $('.assigner-tasks-list').addClass('inactive')
+        }
+    })
 
     $('body').on('click', '.task-mark-tick', function(){
         var myid = $(this).val();
