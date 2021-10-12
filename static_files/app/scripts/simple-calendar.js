@@ -120,7 +120,7 @@
         var tr = $('<tr></tr>');
         //For each row
         for (var i = 0; i < 7; i++) {
-          var td = $('<td><div class="day" data-date="' + day.toISOString() + '">' + day.getDate() + '</div></td>');
+          var td = $('<td><div class="day" id="' + day.toISOString() + '" data-date="' + day.toISOString() + '">' + day.getDate() + '</div></td>');
 
           var $day = td.find('.day');
 
