@@ -76,7 +76,7 @@ if(onmonth == 0)
   $(newday).click();
   $("#members-page").hide();
   $(".confirmation-chat-modal").hide();
-  $("#event_form").trigger("reset");
+  //$("#event_form").trigger("reset");
   call = null; 
 }
 else 
@@ -86,7 +86,7 @@ var newday = document.getElementById(day);
 $(newday).click();
 $("#members-page").hide();
 $(".confirmation-chat-modal").hide();
-$("#event_form").trigger("reset");
+//$("#event_form").trigger("reset");
 call = null;
 }
 }
@@ -218,7 +218,7 @@ $("#id_all_day").change(function() {
 $("#canc").on('click', function () {
 if (noevent === true){
   $("#members-page").hide();
-  $("#event_form").trigger("reset");
+  //$("#event_form").trigger("reset");
 }
 
 else {
