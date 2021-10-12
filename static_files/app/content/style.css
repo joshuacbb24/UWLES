@@ -298,13 +298,13 @@
 
 .card-single-one {
     display: grid;
-    background: #fff;
-    border-radius: 5px;
-    color: var(--text-grey);
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    background: #fff !important;
+    border-radius: 5px !important;
+    color: var(--text-grey) !important;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5) !important;
     margin-right: 60px;
-    margin-bottom: 20px;
-    height: 400px;
+    margin-bottom: 20px !important;
+    height: 400px !important;
     z-index: 0;
 }
 
