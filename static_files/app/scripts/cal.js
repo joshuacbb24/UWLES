@@ -152,6 +152,9 @@ call = null;
 $("#add-event-button").on('click', function () {
   choice = 0;
   noevent = true;
+  $("#id_all_day").val(false);
+  $("#id_title").val("");
+  $("#id_description").val("");
   $("#members-page").show();
   });
 };
