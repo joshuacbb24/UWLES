@@ -173,7 +173,7 @@
       this.currentDate.setMonth(this.currentDate.getMonth() + value, 1);
       this.buildCalendar(this.currentDate, $(this.element).find('.calendar'));
       this.updateHeader(this.currentDate, $(this.element).find('.calendar header'));
-      this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear(), value, this)
+      this.settings.onMonthChange(this.currentDate, this.currentDate.getFullYear(), value, this)
     },
     eventclicked: function(wasclicked) {
       var plugin = this;
