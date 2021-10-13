@@ -120,7 +120,8 @@
         var tr = $('<tr></tr>');
         //For each row
         for (var i = 0; i < 7; i++) {
-          var td = $('<td><div class="day" data-date="' + day.toISOString() + '">' + day.getDate() + '</div></td>');
+          var idday = day.getFullYear() + " " + day.getMonth() + " " + day.getDate();
+          var td = $('<td><div class="day" id="' + idday + '" data-date="' + day.toISOString() + '">' + day.getDate() + '</div></td>');
 
           var $day = td.find('.day');
 
@@ -172,7 +173,7 @@
       this.currentDate.setMonth(this.currentDate.getMonth() + value, 1);
       this.buildCalendar(this.currentDate, $(this.element).find('.calendar'));
       this.updateHeader(this.currentDate, $(this.element).find('.calendar header'));
-      this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear(), value, this)
+      this.settings.onMonthChange(this.currentDate, this.currentDate.getFullYear(), value, this)
     },
     eventclicked: function(wasclicked) {
       var plugin = this;
@@ -205,7 +206,7 @@
         $(".event-body").empty();
         var date = new Date($(this).data('date'));
         console.log("the date", date);
-        var clickedday = $(this).data('date');
+        var clickedday = this.id;
         console.log("clickedday", clickedday);
         var events = plugin.getDateEvents(date);
         var days = document.getElementsByClassName('day-border')

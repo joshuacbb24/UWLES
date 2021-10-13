@@ -66,30 +66,24 @@ if (call == 0){
   call = null;
 }
 else{
+if (call != 0 && onmonth == 0){
 cal.settings.events = eventlist;
-cal.buildCalendar(calday, $(cal.element).find('.calendar'));
-cal.updateHeader(calday, $(cal.element).find('.calendar header'));
+cal.buildCalendar(new Date(), $(cal.element).find('.calendar'));
+cal.updateHeader(new Date(), $(cal.element).find('.calendar header'));
 call = null;
-if(onmonth == 0)
-{
-  var newday = $("td").find(`[data-date='${day}']`)[0];
+}
+if (call != 0 && onmonth != 0){
+  cal.settings.events = eventlist;
+  cal.buildCalendar(onmonth, $(cal.element).find('.calendar'));
+  cal.updateHeader(onmonth, $(cal.element).find('.calendar header'));
+  call = null;
+  }
+  var newday = document.getElementById(day);
   $(newday).click();
   $("#members-page").hide();
   $(".confirmation-chat-modal").hide();
-  //$("#event_form").trigger("reset");
-  call = null; 
-}
-else 
-{
-cal.changeMonth(onmonth);
-var newday = $("td").find(`[data-date='${day}']`)[0];
-$(newday).click();
-$("#members-page").hide();
-$(".confirmation-chat-modal").hide();
-//$("#event_form").trigger("reset");
-call = null;
-}
-}
+  call = null;
+} 
 },
 dataType: 'json'
 });
@@ -112,7 +106,7 @@ $("#container").simpleCalendar({
 
     }, // Callback on date selection
     onMonthChange: function (month, year, value) {
-      onmonth = onmonth + value;
+      onmonth = month;
     },//callback on month change
     disableEmptyDetails: true,
     events: events,
@@ -152,6 +146,9 @@ call = null;
 $("#add-event-button").on('click', function () {
   choice = 0;
   noevent = true;
+  $("#id_all_day").val(false);
+  $("#id_title").val("");
+  $("#id_description").val("");
   $("#members-page").show();
   });
 };
