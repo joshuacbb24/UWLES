@@ -140,7 +140,7 @@
     </div>
 
     <div class="submenu">
-            <div class="menu">
+                 <div class="menu">
         <!--<div class="menu-header">
           Coming Up
         </div>-->
@@ -156,14 +156,14 @@
           padding-top: 1.5%;
           width: 20%;">Coming Up</h5><div class="event-day" style="    position: relative;
     height: 100%;
-    width: 22%;
+    width: 24%;
     margin-left: 40%;
     top: -35px;
     overflow-y: hidden;
     padding-top: 1.8%;"></div><i id="add-event-button" class="las la-plus" style="    position: relative;
     color: #015D67;
     cursor: pointer;
-    top: -38px;"></i></div><ul class="event-body" id="event-body"></ul></div>        <div class="card-footer" style="
+    top: -38px;"></i></div><div class="event-body" id="event-body"></div></div>        <div class="card-footer" style="
         position: relative;
         z-index: 1;
         width: 100%;
@@ -173,7 +173,12 @@
         margin-bottom: 0px !important;
         /* float: right; */
         ">
-        <div class="calendar-icons"><span style="float: right;"><img style="display: none;" id="show-calendar" class="show-calendar" src="{% static 'app/images/calendar-view.jpg' %}"><img id="show-events" class="show-events" src="{% static 'app/images/task-view-2.jpg' %}"></span>
+        <div class="calendar-icons"><span style="float: right;"><span style="color: black;display: none; cursor: pointer; margin-top: 15px;
+          margin-right: 15px;" class="material-icons cal">
+calendar_today
+</span><span style="color: black; cursor: pointer; margin-top: 15px; margin-right: 15px;" class="material-icons list">
+  view_list
+  </span></span>
         </div>
           
         </div>
