@@ -456,7 +456,7 @@ footer {
           box-shadow: none;
           padding: 2px 5px;
           cursor: pointer;
-          width: 70%;
+          width: 80%;
           text-align: left;
           position: relative;
           left: 35px;
@@ -467,6 +467,11 @@ footer {
           line-height: 17px;
           letter-spacing: 0.01em;
           color: #000;
+        }
+        .event-in-list {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
         .event-line{
           display: flex;

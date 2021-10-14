@@ -205,6 +205,7 @@
       //add border to selected date unless today
       //change variables and load into form as preset selections when create event is clicked
         $(plugin.element).on('click', '.day', function (e) {
+        var count = 0;
         console.log('event click +++');
         $(".event-body").empty();
         var date = new Date($(this).data('date'));
@@ -342,7 +343,7 @@
             $(".show-events").css('cursor', 'pointer');
             $(".show-calendar").css('color', '#015D67');
             $(".show-calendar").css('cursor', 'pointer');
-            var count = 0;
+            
             var status = null;
             var today = new Date().toJSON().slice(0, 10);
             var chosenday = new Date(date).toJSON().slice(0, 10);
@@ -360,15 +361,7 @@
             else {
               status = 1;
             }
-            //call eventStatus after every minute to check the status of event
-            //Is it possible to only do it if event container is shown and quit when not to cut back on processing time?
-            /*
-            if (count == 0)
-            {
-            intervalID = setInterval(plugin.eventStatus, 60000, events);
-              count++;
-            }
-            */
+
             plugin.displayEventTexts(events, status, today);
             
 
@@ -380,6 +373,18 @@
           $(".show-calendar").css('color', '#015D67');
           $(".show-calendar").css('cursor', 'pointer');
         }
+        
+        //call eventStatus after every minute to check the status of event
+        //Is it possible to only do it if event container is shown and quit when not to cut back on processing time?
+        /*if (intervalID != null)
+          {
+            clearInterval(intervalID);
+            // release our intervalID from the variable
+            intervalID = null; 
+          }
+        */
+       // intervalID = setInterval(plugin.eventStatus, 60000, events);
+
         plugin.settings.onDateSelect(date, events, clickedday, plugin);
       });
 
@@ -397,13 +402,7 @@
           var container = $(".event-body");
           var today = new Date();
           var intervalID = null;
-          /*if (intervalID != null)
-          {
-            clearInterval(intervalID);
-            // release our intervalID from the variable
-            intervalID = null; 
-            count = 0;
-          }*/
+
           function formatAMPM(date) {
             var hours = date.getHours();
             var minutes = date.getMinutes();
@@ -428,10 +427,10 @@
                   var eventline = document.getElementById("line-" + prevline);
                   $(eventline).show();
                 }
-              var $event = `<div style="margin-left: 20px;"><div style="display: inline-flex;width: 100%;margin-top: -4px;" ><div class="event-circle" id="circle-${circle}"></div><div class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">` + formatAMPM(startDate) + ' - ' + formatAMPM(endDate) + ': ' + event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word;">` + event.summary + `</div></div></div><div class="event-line" id="line-${line}"></div></div>`;
+              var $event = `<div style="margin-left: 20px;"><div style="display: inline-flex;width: 100%;margin-top: -4px;" ><div class="event-circle" id="circle-${circle}"></div><div class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">` + formatAMPM(startDate) + ' - ' + formatAMPM(endDate) + ': ' + event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word; display: none;">` + event.summary + `</div></div></div><div class="event-line" id="line-${line}"></div></div>`;
               }
               else{
-              var $event = `<div style="margin-left: 20px;"><div style="display: inline-flex;width: 100%;margin-top: -4px;"><div class="event-circle" id="circle-${circle}"></div><div class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word;">` + event.summary + `</div></div></div><div class="event-line" id="line-${line}"></div></div>`;
+              var $event = `<div style="margin-left: 20px;"><div style="display: inline-flex;width: 100%;margin-top: -4px;"><div class="event-circle" id="circle-${circle}"></div><div class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word; display: none;">` + event.summary + `</div></div></div><div class="event-line" id="line-${line}"></div></div>`;
               }
               // $event.data('event', event);
               console.log('event data +++', $event);
