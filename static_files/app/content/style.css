@@ -71,29 +71,18 @@
     position: relative;
     height: 2.5rem;
     width: 100%;
-    left: 0;
     bottom: 2.4rem;
-    background-color: white;
+    background-color: #ebf2f2;
     top: 0;
 }
 
     .running .dash {
         position: relative;
         float: left;
-        top: 5px;
-        font-family: Helvetica;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 24px;
-        line-height: 29px;
-        /* identical to box height */
-
-        display: flex;
-        align-items: center;
-        text-align: center;
-        letter-spacing: 0.01em;
-        text-transform: capitalize;
-        color: #013D44;
+        color: #013d44;
+        line-height: 2.5rem;
+        font-size: 1rem;
+        padding-left: 1rem;
     }
 
     .running #dots {
@@ -112,9 +101,9 @@
 
 .main-content {
     margin-top: 3.8rem;
-    margin-left: 75px;
+    margin-left: 41px;
     margin-right: 0.5rem;
-    background: white;
+    background: #ebf2f2;
     height: 100vh;
 }
 
@@ -301,11 +290,16 @@
     background: #fff !important;
     border-radius: 5px !important;
     color: var(--text-grey) !important;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.5) !important;
+    box-shadow: 2px 2px 5px rgb(0 0 0 / 50%) !important;
     margin-right: 60px;
     margin-bottom: 20px !important;
     height: 400px !important;
+    max-height: 400px !important;
+    min-height: 400px !important;
     z-index: 0;
+    width: 85% !important;
+    max-width: 85% !important;
+    min-width: 85% !important;
 }
 
 .card-single-two {
@@ -665,19 +659,15 @@
 }
 
 .menu {
+    margin-left: 15px;
     width: 40%;
     float: left;
 }
 
 .menu2 {
-    position: relative;
-    width: 35%;
-    top: 5%;
-    height: 40%;
+    width: 40%;
     float: left;
-    background: white;
-    box-shadow: 0px 4px 8px rgba(1, 61, 68, 0.15);
-    border-radius: 6px;
+    padding: 15px;
 }
 
 .menu2-body{
@@ -1337,8 +1327,7 @@
     box-sizing: border-box;
     border-radius: 5px;
 }
-
-
+/*
 @media screen and (max-width: 900px) {
     .menu,
     .menu2 {
@@ -1383,8 +1372,9 @@
         padding-left: 0rem;
         padding-right: 13rem;
     }
+    
 }
-
+*/
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
     /* STYLES GO HERE */
 }
@@ -1416,7 +1406,7 @@
 
 /* Desktops and laptops ----------- */
 @media only screen and (min-width: 1200px) {
-    /* STYLES GO HERE */
+    /* STYLES GO HERE 
 
     .card-single-one {
         display: grid;
@@ -1475,7 +1465,6 @@
 
     .running #dots {
         position: relative;
-        right: 225px;
         float: right;
         font-size: 1.7rem;
         line-height: 2.5rem;
@@ -1496,8 +1485,9 @@
         right: 250px;
         width: 20%;
     }
-
+*/
     /* The popup chat - hidden by default */
+    /*
     .chat-popup {
         display: none;
         position: fixed;
@@ -1507,11 +1497,13 @@
         z-index: 9;
         width: 21%;
     }
+    */
 }
 
 /* Large screens ----------- */
 @media only screen and (min-width: 1350px) {
     /* STYLES GO HERE */
+    
     .card-single-right {
         width: 13.6rem;
     }
@@ -1600,7 +1592,7 @@
 html,
 body {
     height: 100%;
-    background: white;
+    background: #ebf2f2;
     font-family: Helvetica;
 }
 
