@@ -11,7 +11,9 @@
   <link rel="stylesheet"
     href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
   <script src="https://kit.fontawesome.com/f0b88b09a7.js" crossorigin="anonymous"></script>
-  
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
   <link rel="stylesheet" href="{% static 'app/content/style.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'app/content/chat.css' %}" />
   <link rel="stylesheet" href="{% static 'app/content/chatPopUp.css' %}" />
@@ -163,7 +165,7 @@
     padding-top: 1.8%;"></div><i id="add-event-button" class="las la-plus" style="    position: relative;
     color: #015D67;
     cursor: pointer;
-    top: -38px;"></i></div><ul class="event-body" id="event-body"></ul></div>        <div class="card-footer" style="
+    top: -38px;"></i></div><div class="event-body" id="event-body"></div></div>        <div class="card-footer" style="
         position: relative;
         z-index: 1;
         width: 100%;
@@ -173,7 +175,11 @@
         margin-bottom: 0px !important;
         /* float: right; */
         ">
-        <div class="calendar-icons"><span style="float: right;"><img style="display: none;" id="show-calendar" class="show-calendar" src="{% static 'app/images/calendar-view.jpg' %}"><img id="show-events" class="show-events" src="{% static 'app/images/task-view-2.jpg' %}"></span>
+        <div class="calendar-icons"><span style="float: right;"><span style="color: black;display: none;" class="material-icons cal">
+calendar_today
+</span><span style="color: black;" class="material-icons list">
+  view_list
+  </span></span>
         </div>
           
         </div>
@@ -553,15 +559,15 @@
       $(this).toggleClass('la-angle-up la-angle-down');
       $(".dropdown-content").toggle('show hide');
     })
-    $(".show-events").on('click', function () {
-      $(".show-events").toggle();
-      $(".show-calendar").toggle();
+    $(".list").on('click', function () {
+      $(".list").toggle();
+      $(".cal").toggle();
       $("#container").toggle();
       $(".event-container").toggle();
     })
-    $(".show-calendar").on('click', function () {
-      $(".show-events").toggle();
-      $(".show-calendar").toggle();
+    $(".cal").on('click', function () {
+      $(".list").toggle();
+      $(".cal").toggle();
       $("#container").toggle();
       $(".event-container").toggle();
     })
