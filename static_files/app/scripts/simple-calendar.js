@@ -30,6 +30,7 @@
     this._defaults = defaults;
     this._name = pluginName;
     this.currentDate = new Date();
+
     this.init();
   }
 
@@ -120,7 +121,8 @@
         var tr = $('<tr></tr>');
         //For each row
         for (var i = 0; i < 7; i++) {
-          var td = $('<td><div class="day" data-date="' + day.toISOString() + '">' + day.getDate() + '</div></td>');
+          var idday = day.getFullYear() + " " + day.getMonth() + " " + day.getDate();
+          var td = $('<td><div class="day" id="' + idday + '" data-date="' + day.toISOString() + '">' + day.getDate() + '</div></td>');
 
           var $day = td.find('.day');
 
@@ -172,7 +174,7 @@
       this.currentDate.setMonth(this.currentDate.getMonth() + value, 1);
       this.buildCalendar(this.currentDate, $(this.element).find('.calendar'));
       this.updateHeader(this.currentDate, $(this.element).find('.calendar header'));
-      this.settings.onMonthChange(this.currentDate.getMonth(), this.currentDate.getFullYear(), value, this)
+      this.settings.onMonthChange(this.currentDate, this.currentDate.getFullYear(), value, this)
     },
     eventclicked: function(wasclicked) {
       var plugin = this;
@@ -197,39 +199,42 @@
         e.preventDefault();
       });
 
+      
+
       //Binding day event
       //add border to selected date unless today
       //change variables and load into form as preset selections when create event is clicked
         $(plugin.element).on('click', '.day', function (e) {
+        var count = 0;
         console.log('event click +++');
         $(".event-body").empty();
         var date = new Date($(this).data('date'));
         console.log("the date", date);
-        var clickedday = $(this).data('date');
+        var clickedday = this.id;
         console.log("clickedday", clickedday);
         var events = plugin.getDateEvents(date);
         var days = document.getElementsByClassName('day-border')
         var selectedday;
-var ul = document.getElementById("container");
-var li = ul.getElementsByClassName("day");
-for (i = 0; i < li.length; i++) {
-  var a = li[i].classList.contains('day-border');
-  if (a === true)
-  {
-    li[i].classList.remove('day-border');
-  }
-  else
-  {
+        var ul = document.getElementById("container");
+        var li = ul.getElementsByClassName("day");
+        for (i = 0; i < li.length; i++) {
+          var a = li[i].classList.contains('day-border');
+          if (a === true)
+          {
+            li[i].classList.remove('day-border');
+          }
+          else
+          {
 
-  }
-}
+          }
+        }
 
-selectedday = $(this).data( "date" );
-var borderday = $("div").find(`[data-date='${selectedday}']`)[0];
-$(borderday).addClass('day-border');
+        selectedday = $(this).data( "date" );
+        var borderday = $("div").find(`[data-date='${selectedday}']`)[0];
+        $(borderday).addClass('day-border');
 
-//selectedday = $(this).innerhtml
-        //document.getElementById("eventContainer").innerHTML = "No events";
+        //selectedday = $(this).innerhtml
+                //document.getElementById("eventContainer").innerHTML = "No events";
         if ($(this).hasClass('today'))
         {
           var startday = new Date(new Date(date).setHours(new Date().getHours() + 1,0,0));
@@ -334,17 +339,52 @@ $(borderday).addClass('day-border');
         if (!$(this).hasClass('disabled')) {
             // plugin.fillUp(e.pageX, e.pageY);
             // plugin.displayEvents(events);
-            document.getElementById('show-events').style.pointerEvents = 'auto';
             $(".show-events").css('color', '#015D67');
             $(".show-events").css('cursor', 'pointer');
-            plugin.displayEventTexts(events);
+            $(".show-calendar").css('color', '#015D67');
+            $(".show-calendar").css('cursor', 'pointer');
+            
+            var status = null;
+            var today = new Date().toJSON().slice(0, 10);
+            var chosenday = new Date(date).toJSON().slice(0, 10);
+            //if date is before today
+            if (chosenday < today)
+            {
+              status = -1;
+            }
+            
+            //if date is today
+            else if (chosenday == today) {
+              status = 0;
+            }
+            //if date is after today
+            else {
+              status = 1;
+            }
+
+            plugin.displayEventTexts(events, status, today);
+            
+
         }
         else 
         {
-          document.getElementById('show-events').style.pointerEvents = 'none';
-          $(".show-events").css('color', 'gray');
-          $(".show-events").css('cursor', 'default');
+          $(".show-events").css('color', '#015D67');
+          $(".show-events").css('cursor', 'pointer');
+          $(".show-calendar").css('color', '#015D67');
+          $(".show-calendar").css('cursor', 'pointer');
         }
+        
+        //call eventStatus after every minute to check the status of event
+        //Is it possible to only do it if event container is shown and quit when not to cut back on processing time?
+        /*if (intervalID != null)
+          {
+            clearInterval(intervalID);
+            // release our intervalID from the variable
+            intervalID = null; 
+          }
+        */
+       // intervalID = setInterval(plugin.eventStatus, 60000, events);
+
         plugin.settings.onDateSelect(date, events, clickedday, plugin);
       });
 
@@ -353,22 +393,44 @@ $(borderday).addClass('day-border');
         plugin.empty(e.pageX, e.pageY);
       });
       },
-      displayEventTexts: function (events) {
+      displayEventTexts: function (events, status) {
+        var count = 0;
+          var circle = 1;
+          var line = 1;
           var plugin = this;
           //var container = $(this.element).find('.eventContainer');
           var container = $(".event-body");
+          var today = new Date();
+          var intervalID = null;
+
+          function formatAMPM(date) {
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            return strTime;
+          }
           events.forEach(function (event) {
               var startDate = new Date(event.startDate);
               var endDate = new Date(event.endDate);
               //var eventId = event.eventID; //id for each event
               var eventId = event.eventid; //id for each event
+
               if (!event.allDay)
               {
-              var $event = `<li class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+ '@ ' + startDate.getHours() + ':' + (startDate.getMinutes() < 10 ? '0' : '') + startDate.getMinutes() + ' On ' + plugin.formatDateEvent(startDate, endDate) + ' ' +  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
+                if(line > 1)
+                {
+                  var prevline = line-1;
+                  var eventline = document.getElementById("line-" + prevline);
+                  $(eventline).show();
+                }
+              var $event = `<div style="margin-left: 20px;"><div style="display: inline-flex;width: 100%;margin-top: -4px;" ><div class="event-circle" id="circle-${circle}"></div><div class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">` + formatAMPM(startDate) + ' - ' + formatAMPM(endDate) + ': ' + event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word; display: none;">` + event.summary + `</div></div></div><div class="event-line" id="line-${line}"></div></div>`;
               }
               else{
-              var $event = `<li class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word;">` + event.summary + `</div>` +`</li>`;
-
+              var $event = `<div style="margin-left: 20px;"><div style="display: inline-flex;width: 100%;margin-top: -4px;"><div class="event-circle" id="circle-${circle}"></div><div class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word; display: none;">` + event.summary + `</div></div></div><div class="event-line" id="line-${line}"></div></div>`;
               }
               // $event.data('event', event);
               console.log('event data +++', $event);
@@ -384,12 +446,191 @@ $(borderday).addClass('day-border');
 
               container.append($event);
               plugin.eventclicked(`edit-${eventId}`);
+              /*if (status == -1)
+              {
+                var thisCircle = circle;
+                var thisLine = line;
+                var circleid = "circle-"+thisCircle;
+                var lineid = "line-"+thisLine;
+                var eventcircle = document.getElementById(circleid);
+                var eventline = document.getElementById(lineid);
+                $(eventline).addClass("expired-line");
+                $(eventcircle).addClass("expired-circle");
+              }*/
+              /*if (event.allDay && status == 0)
+              {
+                var thisCircle = circle;
+                var thisLine = line;
+                var circleid = "circle-"+thisCircle;
+                var lineid = "line-"+thisLine;
+                var eventcircle = document.getElementById(circleid);
+                var eventline = document.getElementById(lineid);
+                $(eventcircle).addClass("active-circle");
+                $(`#edit-${eventId}`).css("font-weight","Bold");
+              }*/
+              if (startDate <= today && endDate >= today)
+              {
+                var thisCircle = circle;
+                var thisLine = line-1;
+                var circleid = "circle-"+thisCircle;
+                var lineid = "line-"+thisLine;
+                var eventcircle = document.getElementById(circleid);
+                var eventline = document.getElementById(lineid);
+                $(eventcircle).addClass("active-circle");
+                if (circle >= 2) 
+                {
+                  thisCircle = circle-1;
+                  circleid = "circle-"+thisCircle;
+                  eventcircle = document.getElementById(circleid);
+                  if ($(eventcircle).hasClass("active-circle"))
+                  {
+                  $(eventline).addClass("active-line");
+                  }
+                  else{
+                    $(eventline).addClass("expired-line");
+                  }
+                }
+                $(`#edit-${eventId}`).css("font-weight","Bold");
+              }
+              if (endDate < today)
+              {
+                var thisCircle = circle;
+                var thisLine = line-1;
+                var circleid = "circle-"+thisCircle;
+                var lineid = "line-"+thisLine;
+                var eventcircle = document.getElementById(circleid);
+                var eventline = document.getElementById(lineid);
+                $(eventcircle).addClass("expired-circle");
+                if (circle >= 2) 
+                {
+                  thisCircle = circle-1;
+                  circleid = "circle-"+thisCircle;
+                  eventcircle = document.getElementById(circleid);
+                  if ($(eventcircle).hasClass("active-circle"))
+                  {
+                  $(eventline).addClass("active-line");
+                  }
+                  else{
+                    $(eventline).addClass("expired-line");
+                  }
+                }
+                $(`#edit-${eventId}`).css("font-weight","Normal");
+              }
 
+              circle++;
+              line++;
           })
+
       },
+    eventStatus: function (events) {
+      var circle = 1;
+      var line = 1;
+      var newtoday = new Date();
+      /*
+      var status = null;
+      var today = new Date().toJSON().slice(0, 10);
+      var chosenday = new Date(date).toJSON().slice(0, 10);
+      
+      //if date is before today
+      if (chosenday < today)
+      {
+        status = -1;
+      }
+      
+      //if date is today
+      else if (chosenday == today) {
+        status = 0;
+      }
+      //if date is after today
+      else {
+        status = 1;
+      }
+      */
+      events.forEach(function (event) {
+        var startDate = new Date(event.startDate);
+        var endDate = new Date(event.endDate);
+        /*if (status == -1)
+        {
+          var thisCircle = circle;
+          var thisLine = line;
+          var circleid = "circle-"+thisCircle;
+          var lineid = "line-"+thisLine;
+          var eventcircle = document.getElementById(circleid);
+          var eventline = document.getElementById(lineid);
+          $(eventline).addClass("expired-line");
+          $(eventcircle).addClass("expired-circle");
+        }
+        if (event.allDay && status == 0)
+        {
+          var thisCircle = circle;
+          var thisLine = line;
+          var circleid = "circle-"+thisCircle;
+          var lineid = "line-"+thisLine;
+          var eventcircle = document.getElementById(circleid);
+          var eventline = document.getElementById(lineid);
+          $(eventcircle).addClass("active-circle");
+          $(`#edit-${eventId}`).css("font-weight","Bold");
+        }*/
+        if (startDate <= newtoday && endDate >= newtoday)
+        {
+          var thisCircle = circle;
+          var thisLine = line-1;
+          var circleid = "circle-"+thisCircle;
+          var lineid = "line-"+thisLine;
+          var eventcircle = document.getElementById(circleid);
+          var eventline = document.getElementById(lineid);
+          $(eventcircle).addClass("active-circle");
+          if (circle >= 2) 
+          {
+            thisCircle = circle-1;
+            circleid = "circle-"+thisCircle;
+            eventcircle = document.getElementById(circleid);
+            if ($(eventcircle).hasClass("active-circle"))
+            {
+            $(eventline).addClass("active-line");
+            }
+            else{
+              $(eventline).addClass("expired-line");
+            }
+          }
+          $(`#edit-${eventId}`).css("font-weight","Bold");
+        }
+        if (endDate < newtoday)
+        {
+          var thisCircle = circle;
+          var thisLine = line-1;
+          var circleid = "circle-"+thisCircle;
+          var lineid = "line-"+thisLine;
+          var eventcircle = document.getElementById(circleid);
+          var eventline = document.getElementById(lineid);
+          $(eventcircle).addClass("expired-circle");
+          if (circle >= 2) 
+          {
+            thisCircle = circle-1;
+            circleid = "circle-"+thisCircle;
+            eventcircle = document.getElementById(circleid);
+            if ($(eventcircle).hasClass("active-circle"))
+            {
+            $(eventline).addClass("active-line");
+            }
+            else{
+              $(eventline).addClass("expired-line");
+            }
+          }
+          $(`#edit-${eventId}`).css("font-weight","Normal");
+        }
+
+        circle++;
+        line++;
+
+
+      })
+    },
     displayEvents: function (events) {
       var plugin = this;
       var container = $(this.element).find('.event-wrapper');
+                  var count = 0;
+
 
       events.forEach(function (event) {
         var startDate = new Date(event.startDate);

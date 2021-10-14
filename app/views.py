@@ -530,10 +530,33 @@ def dashboard(request):
     today = timezone.now().date()
     week_from_today = today + timedelta(days=(today.isocalendar()[2] + 4))
 
+    all_tasks = Tasks.objects.filter(assignees=request.user.id)
     upcoming_tasks = Tasks.objects.filter(assignees=request.user.id, due_date__gte=week_from_today)
     weekly_tasks1 = Tasks.objects.filter(assignees=request.user.id, due_date__lte=week_from_today)
     weekly_tasks = weekly_tasks1.filter(due_date__gt=today)
     past_due_tasks = Tasks.objects.filter(assignees=request.user.id, due_date__lte=today)
+    high_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=3)
+    med_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=2)
+    low_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=1)
+    assigner_tasks = Tasks.objects.filter(assignees=request.user.id).order_by("assigner")
+
+    assigner_dict = {}
+    check_list = []
+    for assigner in assigner_tasks:
+        if assigner.assigner.id not in check_list:
+            assigner_dict[assigner.assigner] = 1
+            check_list.append(assigner.assigner.id)
+        else:
+            assigner_dict[assigner.assigner] += 1
+
+    print(check_list)
+    print(assigner_dict)
+
+    my_clients = ClientList.objects.get(user=request.user.id)
+    client_tasks_pending = []
+    for client in my_clients.clients.all():
+        tasks_pending = Tasks.objects.filter(assigner=request.user.id, assignees=client).count()
+        client_tasks_pending.append(tasks_pending)
     
     try:
         user_bg = BgInfo.objects.get(user=request.user.id)
@@ -546,15 +569,35 @@ def dashboard(request):
 
     if request.is_ajax() and request.method == "POST":
         print(request.POST)
-        taskid = request.POST['myid']
-        taskbool = request.POST['checkedval']
-        thistask = Tasks.objects.get(id=taskid)
-        if taskbool == "false":
-            thistask.completion_mark = False
-            thistask.save()
-        elif taskbool == "true":
-            thistask.completion_mark = True
-            thistask.save()
+        if 'noteid-d' in request.POST:      #if note delete is hit
+            noteid = request.POST['noteid-d']
+            note = MyNotes.objects.get(id=noteid)
+            note.delete()
+     #   if 'noteid-e' in request.POST:     #if note edit is hit
+     #       noteid = request.POST['noteid-e']
+     #       note = MyNotes.objects.get(id=noteid)
+     #   if 'id_description' in request.POST:
+     #       notesForm = MyNotesForm(request.POST)
+     #       if notesForm.is_valid():
+     #          notes_form = notesForm.save(commit=False)
+     #          notes_form.user=request.user
+     #          notes_form.date=timezone.now()
+     #          notes_form.save()
+     #          return redirect('/')
+     #   else:
+     #           print(notesForm.errors)
+
+               
+        else:
+            taskid = request.POST['myid']   #error happens when I hit the delete button,  might be from if statement -Andrew 
+            taskbool = request.POST['checkedval']
+            thistask = Tasks.objects.get(id=taskid)
+            if taskbool == "false":
+                thistask.completion_mark = False
+                thistask.save()
+            elif taskbool == "true":
+                thistask.completion_mark = True
+                thistask.save()
         data = {
             'msg': 'hello',
         }
@@ -600,6 +643,13 @@ def dashboard(request):
         "past_due_tasks": past_due_tasks,
         'weekly_tasks': weekly_tasks,
         'upcoming_tasks': upcoming_tasks,
+        'high_prio_tasks': high_prio_tasks,
+        'med_prio_tasks': med_prio_tasks,
+        'low_prio_tasks': low_prio_tasks,
+        'my_clients': my_clients,
+        'client_tasks_pending': client_tasks_pending,
+        'all_tasks': all_tasks,
+        'assigner_dict': assigner_dict,
     }
     return render(request, 'app/dashboard2.html', context)
 

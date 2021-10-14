@@ -30,7 +30,7 @@
   <script src="{% static 'app/scripts/jquery.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 
   <script src="{% static 'app/scripts/tasks.js' %}"></script>
   <script src="{% static 'app/scripts/cal.js' %}"></script>
@@ -142,7 +142,7 @@
     </div>
 
     <div class="submenu">
-      <div class="menu">
+                 <div class="menu">
         <!--<div class="menu-header">
           Coming Up
         </div>-->
@@ -293,9 +293,75 @@ calendar_today
       <div class="menu2">
         <div class="menu-header">
           Clients
+          <i class="fas fa-plus fa-1x" id="client-add-btn"></i>
+        </div>
+        <div class="menu2-body">
+          <div class="menu2-body-header">
+            <i class="fas fa-sliders-h fa-2x" id="filter-client-btn"></i>
+            <div class="menu2-input-field">
+              <i class="fa fa-search fa-lg" id="client-search-icon"></i>
+              <input type="text" placeholder="Search" id="client-search-input" onkeyup="filterClientFunction()"/>
+            </div>
+          </div>
+          <div class="menu2-client-box">
+            {% for client in my_clients.clients.all %}
+              <div class="client-list-client" value="{{ client }}"><div class="menu2-client-pfp"></div> {{ client }} <div class="client-list-tasks">Tasks pending: {{ client_tasks_pending|index:forloop.counter0 }}</div></div>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>
+
+
+    <script>
+     const csrf1 = document.getElementsByName('csrfmiddlewaretoken')
+                         
+    
+
+    $(document).ready(function() {
+        $('body').on('click', '.fas.fa-times', function () {
+            var noteid = $(this).val();
+            const fd = new FormData()
+            fd.append('csrfmiddlewaretoken', csrf1[0].value)
+            fd.append('noteid-d', noteid)
+            $.ajax({
+                type: 'POST',
+                url: url,
+                enctype: 'multipart/form-data',
+                data: fd,
+                success: function (response) {
+                    $('.notes-list-items[value='+ noteid +']').remove();
+                },
+                error: function (error) {
+                    console.log(error)
+                },
+                            cache: false,
+                            contentType: false,
+                             processData: false,
+                        })
+        })
+
+        $("body").on('click', '.btn-save-notes', function () {
+            var descrip = $('#id_description').val();
+            const fd = new FormData()
+            fd.append('csrfmiddlewaretoken', csrf1[0].value)
+            fd.append('id_description', descrip)
+                // Create Ajax Call
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    enctype: 'multipart/form-data',
+                    data: fd,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.user) {
+                          appendToUsrTable(data.user);
+                        }
+                    }
+                });
+              })
+    });
+        </script>
 
     <div class="menu3">
       <div class="menu-header">
@@ -312,14 +378,10 @@ calendar_today
       <ul class="note-list">
             {% for note in notes %}
                 <li class="notes-list-items">
-                    
-                        <p class="note-date">{{ note.date }}</p>
-
-                                <button class="fas fa-pencil-alt"></button>
-                                <button class="fas fa-times"></button>
-               
+                    <p class="note-date">{{ note.date }}</p>
+                    <button class="fas fa-pencil-alt"></button>
+                    <button class="fas fa-times" value="{{ note.id }}"></button>
                     <p class="note-descript">{{ note.description }}</p>
-                    
                 </li>
             {% endfor %}                  
        </ul>
@@ -332,7 +394,13 @@ calendar_today
           <div class="btn-activity"><div class="btn-text">Activity</div></div>
         </div>
         <div class="menu4-filter-tasks">
-          <i class="fas fa-sliders-h fa-2x" id="filter-btn"></i>
+          <i class="fas fa-sliders-h fa-2x" id="filter-btn" data-html="true" data-container="body" data-toggle="popover" data-placement="left" 
+          data-content="<input type='radio' id='filter-date' name='task_filter' value='by_date' checked>
+            <label for='filter-date'>By Date</label><br>
+            <input type='radio' id='filter-prio' name='task_filter' value='by_prio'>
+            <label for='filter-prio'>By Priority</label><br>
+            <input type='radio' id='filter-assigner' name='task_filter' value='by_assigner'>
+            <label for='filter-assigner'>By Assigner</label><br>"></i>
           <div class="filter-tasks-text">Filter Tasks</div>
           <div class="btn-new-task" type="button" data-toggle="modal" data-target="#taskModal"><div class="btn-text">New Task</div></div>
         </div>
@@ -348,16 +416,16 @@ calendar_today
             {% elif task.priority.priority == "High" %}
               <div class="task-banner-2"></div>
             {% endif %}
-            <div class="task-title">{{ task.title }}</div>
+            <div class="task-title">{{ task.task_title }}</div>
             <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
             <div class="task-deadline">Deadline: {{ task.due_date }}</div>
-            <div class="task-mark-tick"></div>
+            <input type="checkbox" class="task-mark-tick" value="{{ task.id }}">
             <div class="task-mark">Mark as complete</div>
             <div class="task-assignee">Assigned to me</div>
           </div>
         {% endfor %}
       </div>
-      <div class="menu4-due-this-week"><div class="menu4-submenu-title">Due This Week {% if weekly_tasks and weekly_tasks.completion_mark == False %}({{ weekly_tasks|length }}){% else %} {% endif %} </div><div class="menu4-dropbtn" id="weekly-dd"><i class="fas fa-chevron-down fa-lg"></i></div></div>
+      <div class="menu4-due-this-week"><div class="menu4-submenu-title">Due This Week {% if weekly_tasks %}({{ weekly_tasks|length }}){% else %} {% endif %} </div><div class="menu4-dropbtn" id="weekly-dd"><i class="fas fa-chevron-down fa-lg"></i></div></div>
       <div class="weekly-tasks-list inactive">
         {% for task in weekly_tasks %}
           <div class="task-card">
@@ -368,7 +436,7 @@ calendar_today
             {% elif task.priority.priority == "High" %}
               <div class="task-banner-2"></div>
             {% endif %}
-            <div class="task-title">{{ task.title }}</div>
+            <div class="task-title">{{ task.task_title }}</div>
             <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
             <div class="task-deadline">Deadline: {{ task.due_date }}</div>
             <input type="checkbox" class="task-mark-tick" value="{{ task.id }}">
@@ -391,12 +459,78 @@ calendar_today
             <div class="task-title">{{ task.task_title }}</div>
             <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
             <div class="task-deadline">Deadline: {{ task.due_date }}</div>
-            <div class="task-mark-tick"></div>
+            <input type="checkbox" class="task-mark-tick" value="{{ task.id }}">
             <div class="task-mark">Mark as complete</div>
             <div class="task-assignee">Assigned to me</div>
           </div>
         {% endfor %}
       </div>
+      <div class="menu4-high-prio menu4-hide"><div class="menu4-submenu-title">High {% if high_prio_tasks %}({{ high_prio_tasks|length }}){% else %} {% endif %}</div><div class="menu4-dropbtn" id="high-prio-dd"><i class="fas fa-chevron-down fa-lg"></i></div></div>
+      <div class="high-prio-tasks-list inactive">
+        {% for task in high_prio_tasks %}
+          <div class="task-card">
+            <div class="task-banner-2"></div>
+            <div class="task-title">{{ task.task_title }}</div>
+            <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
+            <div class="task-deadline">Deadline: {{ task.due_date }}</div>
+            <input type="checkbox" class="task-mark-tick" value="{{ task.id }}">
+            <div class="task-mark">Mark as complete</div>
+            <div class="task-assignee">Assigned to me</div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="menu4-med-prio menu4-hide"><div class="menu4-submenu-title">Medium {% if med_prio_tasks %}({{ med_prio_tasks|length }}){% else %} {% endif %}</div><div class="menu4-dropbtn" id="med-prio-dd"><i class="fas fa-chevron-down fa-lg"></i></div></div>
+      <div class="med-prio-tasks-list inactive">
+        {% for task in med_prio_tasks %}
+          <div class="task-card">
+            <div class="task-banner-1"></div>
+            <div class="task-title">{{ task.task_title }}</div>
+            <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
+            <div class="task-deadline">Deadline: {{ task.due_date }}</div>
+            <input type="checkbox" class="task-mark-tick" value="{{ task.id }}">
+            <div class="task-mark">Mark as complete</div>
+            <div class="task-assignee">Assigned to me</div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="menu4-low-prio menu4-hide"><div class="menu4-submenu-title">Low {% if low_prio_tasks %}({{ low_prio_tasks|length }}){% else %} {% endif %}</div><div class="menu4-dropbtn" id="low-prio-dd"><i class="fas fa-chevron-down fa-lg"></i></div></div>
+      <div class="low-prio-tasks-list inactive">
+        {% for task in low_prio_tasks %}
+          <div class="task-card">
+            <div class="task-banner-0"></div>
+            <div class="task-title">{{ task.task_title }}</div>
+            <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
+            <div class="task-deadline">Deadline: {{ task.due_date }}</div>
+            <input type="checkbox" class="task-mark-tick" value="{{ task.id }}">
+            <div class="task-mark">Mark as complete</div>
+            <div class="task-assignee">Assigned to me</div>
+          </div>
+        {% endfor %}
+      </div>
+      {% for dict in assigner_dict %}
+        <div class="menu4-assigner-tasks menu4-hide"><div class="menu4-submenu-title">{{ dict }} ({{ assigner_dict|getvalue:dict }}) </div><div class="menu4-dropbtn" id="assigner-dd-{{ forloop.counter0 }}" value="{{ forloop.counter0 }}"><i class="fas fa-chevron-down fa-lg"></i></div></div>
+        <div class="assigner-tasks-list inactive" value="{{ forloop.counter0 }}">
+          {% for task in all_tasks %}
+            {% if task.assigner == dict %}
+              <div class="task-card">
+                {% if task.priority.priority == "Low" %}
+                  <div class="task-banner-0"></div>
+                {% elif task.priority.priority == "Medium" %}
+                  <div class="task-banner-1"></div>
+                {% elif task.priority.priority == "High" %}
+                  <div class="task-banner-2"></div>
+                {% endif %}
+                <div class="task-title">{{ task.task_title }}</div>
+                <div class="task-calender"><i class="far fa-calendar-alt fa-2x"></i></div>
+                <div class="task-deadline">Deadline: {{ task.due_date }}</div>
+                <input type="checkbox" class="task-mark-tick" value="{{ task.id }}">
+                <div class="task-mark">Mark as complete</div>
+                <div class="task-assignee">Assigned to me</div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endfor %}
     </div>
 
     <form method="post">
@@ -413,6 +547,7 @@ calendar_today
             <div id="priority-title">Priority</div>
             <div id="assignees-title">Assignee(s)</div>
             <div id="assignees-add-btn" type="button" data-toggle="modal" data-target="#assigneeModal">+</div>
+            <div id="assignees-box"></div>
             {{ form1.task_description }}
             <button type="button" class="cancel-task-btn" data-dismiss="modal">CANCEL</button>
             <button type="submit" class="create-task-btn">CREATE</button>
@@ -534,6 +669,21 @@ calendar_today
     </div>
     <input id="myself" type="hidden" value="{{request.user.username}}" />
     <script>
+      function filterClientFunction() {
+        var input, filter, div, a, i;
+        input = document.getElementById("client-search-input");
+        filter = input.value.toUpperCase();
+        a = document.getElementsByClassName("client-list-client")
+        for (i = 0; i < a.length; i++) {
+          txtValue = a[i].getAttribute("value")
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            $(a[i]).parent().css("display", "")
+          } else {
+            $(a[i]).parent().css("display", "none")
+          }
+        }
+      }
+
       function openForm() {
         document.getElementById("myForm").style.display = "block";
         $(".open-button").hide();

@@ -70,3 +70,7 @@ def myfilename2(file, user):
     filename = str(my_obj.newname)
     head, sep, tail = filename.partition('.')
     return head
+
+@register.filter(name='getvalue')
+def getvalue(dictionary, key):
+    return dictionary.get(key)
