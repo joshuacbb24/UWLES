@@ -42,10 +42,10 @@
 
       var calendar = $('<div class="calendar"></div>');
           var header = $('<header>' +
-          '<div class="changer" style="justify-content: center;text-align: center;width: 30%;">'+
-         '<a class="simple-calendar-btn btn-prev" href="#"></a>' +
-         '<h6 class="month"></h6>' +
-         '<a class="simple-calendar-btn btn-next" href="#"></a>' +
+          '<div class="changer" style="justify-content: center;text-align: center;width: 50%;">'+
+         '<i class="fas fa-chevron-left"></i>' +
+         '<h2 class="month"></h2>' +
+         '<i class="fas fa-chevron-right"></i>' +
          '</div>'+
          '<div class="adder" style="font-size: 20px; float: right;justify-content: right;margin-left: 58%;"></div>'+
           '</header>');
@@ -67,8 +67,9 @@
     //Update the current month header
     updateHeader: function (date, header) {
       var monthText = this.settings.months[date.getMonth()];
-      monthText += this.settings.displayYear ? ' <div class="year">' + date.getFullYear() : '</div>';
-      header.find('.month').html(monthText);
+      monthText += this.settings.displayYear ? ' ' + date.getFullYear() : '';
+      console.log("monthtext", monthText);
+      header.find('.month').text(monthText);
     },
 
     //Build calendar of a month from date
@@ -188,13 +189,13 @@
       var plugin = this;
 
       //Click previous month
-      $(plugin.element).on('click', '.btn-prev', function ( e ) {
+      $(plugin.element).on('click', '.fa-chevron-left', function ( e ) {
         plugin.changeMonth(-1)
         e.preventDefault();
       });
 
       //Click next month
-      $(plugin.element).on('click', '.btn-next', function ( e ) {
+      $(plugin.element).on('click', '.fa-chevron-right', function ( e ) {
         plugin.changeMonth(1);
         e.preventDefault();
       });

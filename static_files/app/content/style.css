@@ -293,13 +293,13 @@
     box-shadow: 2px 2px 5px rgb(0 0 0 / 50%) !important;
     margin-right: 60px;
     margin-bottom: 20px !important;
-    height: 400px !important;
-    max-height: 400px !important;
-    min-height: 400px !important;
+    height: 345px !important;
+    max-height: 345px !important;
+    min-height: 345px !important;
     z-index: 0;
-    width: 85% !important;
-    max-width: 85% !important;
-    min-width: 85% !important;
+    width: 470px !important;
+    max-width: 470px !important;
+    min-width: 470px !important;
 }
 
 .card-single-two {
