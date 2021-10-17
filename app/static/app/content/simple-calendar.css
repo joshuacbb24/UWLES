@@ -347,12 +347,15 @@ background: #21B5B7;
           background-color: red;
         }
         .input-error-box {
+          display: none;
           position: absolute;
           width: 200px;
           height: 50px;
           border: 1px solid grey;
         }
-        /*.input-error-box::before {
+        .input-error-box::before {
+          content: "&#9650";
+          /*
           width: 0;
           height: 0;
           margin: 0 auto;
@@ -361,13 +364,18 @@ background: #21B5B7;
           border-left: 10px solid transparent; 
           border-bottom: 10px solid white;
           border-right: 10px solid transparent;
-        }*/
-        .triangle {
+          */
           -webkit-text-stroke: 12px black;
           color: transparent;
           font-size: 200px;
           border-bottom: transparent;
         }
+        /*.triangle {
+          -webkit-text-stroke: 12px black;
+          color: transparent;
+          font-size: 200px;
+          border-bottom: transparent;
+        }*/
         #id_description {
           margin: 0px;
            width: 541px;

@@ -291,17 +291,36 @@ if it is disable submit button and give error
         //var starttime = new Date($('#id_start_day').val()).toJSON().slice(11, 16);
         //var endtime = new Date($('#id_end_day').val()).toJSON().slice(11, 16);
         var starttime = new Date($('#id_start_day').val());
-        var endtime = new Date($('#id_end_day').val());        
+        var endtime = new Date($('#id_end_day').val());
+        var errorFound = false;     
         if (isEmptyOrSpaces(titlestr)){
-     
+          $('#error-title').show("fast").delay(5000).fadeOut('fast');
+          $('#error-title').addClass("input-error");
+          errorFound = true; 
         }
-        else if (endday < startday){
-     
+        if (endday < startday){
+          $('#error-start-day').show("fast").delay(5000).fadeOut('fast');
+          $('#error-end-day').show("fast").delay(5000).fadeOut('fast');
+          $('#error-start-day').addClass("input-error");
+          $('#error-end-day').addClass("input-error");
+          errorFound = true; 
         }
-        else if (Date.parse(endtime) < Date.parse(starttime)){
-     
+        if (Date.parse(endtime) < Date.parse(starttime)){
+          $('#error-start-time').show("fast").delay(5000).fadeOut('fast');
+          $('#error-end-time').show("fast").delay(5000).fadeOut('fast');
+          $('#error-start-time').addClass("input-error");
+          $('#error-end-time').addClass("input-error");
+          errorFound = true; 
        }   
-        else {
+        if (!errorFound)
+        {
+          	
+          var errorfields = document.getElementsByClassName("input-error");
+          for (i = 0; i < errorfields.length; i++)
+          {
+            var el = $(errorfields[i])[0];
+            el.removeClass('input-error');
+          }
   $.ajax({
     type: "POST",
     url: "createevents/",
@@ -324,6 +343,9 @@ if it is disable submit button and give error
     },
     //dataType: 'json'
   });
+   }
+   else {
+     errorFound = false;
    }
   
   }
@@ -356,16 +378,34 @@ if it is disable submit button and give error
         //var endtime = new Date($('#id_end_day').val()).toJSON().slice(11, 16);
         var starttime = new Date($('#id_start_day').val());
         var endtime = new Date($('#id_end_day').val());        
+        var errorFound = false;     
         if (isEmptyOrSpaces(titlestr)){
-     
+          $('#error-title').show("fast").delay(5000).fadeOut('fast');
+          $('#error-title').addClass("input-error");
+          errorFound = true; 
         }
-        else if (endday < startday){
-     
+        if (endday < startday){
+          $('#error-start-day').show("fast").delay(5000).fadeOut('fast');
+          $('#error-end-day').show("fast").delay(5000).fadeOut('fast');
+          $('#error-start-day').addClass("input-error");
+          $('#error-end-day').addClass("input-error");
+          errorFound = true; 
         }
-        else if (Date.parse(endtime) < Date.parse(starttime)){
-     
-       }   
-        else {
+        if (Date.parse(endtime) < Date.parse(starttime)){
+          $('#error-start-time').show("fast").delay(5000).fadeOut('fast');
+          $('#error-end-time').show("fast").delay(5000).fadeOut('fast');
+          $('#error-start-time').addClass("input-error");
+          $('#error-end-time').addClass("input-error");
+          errorFound = true; 
+       }     
+        if (!errorFound)
+        {
+          var errorfields = document.getElementsByClassName("input-error");
+          for (i = 0; i < errorfields.length; i++)
+          {
+            var el = $(errorfields[i])[0];
+            el.removeClass('input-error');
+          }
     $.ajax({
       type: "POST",
       url: "/createevents/",
@@ -388,7 +428,10 @@ if it is disable submit button and give error
       },
       //dataType: 'json'
     }); 
-  }  
+  } 
+  else {
+    errorFound = false;
+  } 
   }
 });
 });

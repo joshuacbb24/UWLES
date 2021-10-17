@@ -234,19 +234,19 @@ calendar_today
                         {% csrf_token %}
                         <div class="form-row">
                           <p>{{ create_event_form.title }}</p>
-                          <div class="triangle">&#9650;</div>
-                          <div class="input-error-box"><p class="input-error-message">This field is required</p></div>
+                          <!--<div class="triangle">&#9650;</div> -->
+                          <div class="input-error-box" id="error-title"><p class="input-error-message">This field is required</p></div>
                       </div>
                       <div class="form-row">
                         <div class="form-group col-md-4">
                         <p>{{ create_event_form.start_day }}</p>
-                        <div class="triangle">&#9650;</div>
-                        <div class="input-error-box"><p class="input-error-message">start day cannot be after end day</p></div>
+                        <!--<div class="triangle">&#9650;</div> -->
+                        <div class="input-error-box"id="error-start-day"><p class="input-error-message">start day cannot be after end day</p></div>
                         </div>
                         <div class="form-group col-md-4">
                           <p>{{ create_event_form.start_time }}</p>
-                          <div class="triangle">&#9650;</div>
-                          <div class="input-error-box"><p class="input-error-message">start time cannot be after end time</p></div>
+                          <!--<div class="triangle">&#9650;</div> -->
+                          <div class="input-error-box" id="error-start-time"><p class="input-error-message">start time cannot be after end time</p></div>
                         </div>
                         <div class="form-group col-md-4">
                           <p>
@@ -258,18 +258,17 @@ calendar_today
                       <div class="form-row">
                         <div class="form-group col-md-4">
                           <p>{{ create_event_form.end_day }}</p>
-                          <div class="triangle">&#9650;</div>
-                          <div class="input-error-box"><p class="input-error-message">end day cannot be before start day</p></div>
+                          <!--<div class="triangle">&#9650;</div> -->
+                          <div class="input-error-box" id="error-end-day"><p class="input-error-message">end day cannot be before start day</p></div>
                           </div>
                         <div class="form-group col-md-4">
                           <p>{{ create_event_form.end_time }}</p>
-                          <div class="triangle">&#9650;</div>
-                          <div class="input-error-box"><p class="input-error-message">end time cannot be before start time</p></div>
+                          <!--<div class="triangle">&#9650;</div> -->
+                          <div class="input-error-box" id="error-end-time"><p class="input-error-message">end time cannot be before start time</p></div>
                         </div>
 
                       </div>
                       <div class="form-row">
-
                         <p>{{ create_event_form.description }}</p>
                       </div>
  
