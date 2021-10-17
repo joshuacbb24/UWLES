@@ -6,6 +6,7 @@ from channels.auth import AuthMiddlewareStack
 
 from app.consumers import ChatConsumer
 
+#from app.consumers import CalConsumer
 
 """
 # The channel routing defines what connections get handled by what consumers,
@@ -32,4 +33,7 @@ websocket_urlpatterns = [
     path("chat/stream/", ChatConsumer.as_asgi()),
     #path("ws/app/", consumers.ChatConsumer.as_asgi()),
     #re_path(r'ws/app/(?P<room_name>\w+)/$', ChatConsumer.as_asgi()),
+
+
+    #path("cal/stream/", CalConsumer.as_asgi()),
 ]

@@ -10,6 +10,10 @@ $(document).ready(function () {
   var call = 0;
   var onmonth = 0;
   let cal = null;
+
+  function isEmptyOrSpaces(str){
+    return str === null || str.match(/^ *$/) !== null || str.value.length < 1;
+}
   function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -78,8 +82,11 @@ if (call != 0 && onmonth != 0){
   cal.updateHeader(onmonth, $(cal.element).find('.calendar header'));
   call = null;
   }
+  if (day != null)
+  {
   var newday = document.getElementById(day);
   $(newday).click();
+  }
   $("#members-page").hide();
   $(".confirmation-chat-modal").hide();
   call = null;
@@ -107,6 +114,7 @@ $("#container").simpleCalendar({
     }, // Callback on date selection
     onMonthChange: function (month, year, value) {
       onmonth = month;
+      day = null;
     },//callback on month change
     disableEmptyDetails: true,
     events: events,
@@ -255,6 +263,8 @@ $("#event_form").submit(function (e) {
   if (choice == 0)
   {
   e.preventDefault();
+  
+  
     /*
     error list
 starttime.on change 
@@ -275,6 +285,23 @@ if it is disable submit button and give error
         $('#id_end_day').val(),
         $('#id_end_time').val(),
     */
+        var titlestr = $('#id_title').val();
+        var startday = new Date($('#id_start_day').val()).toJSON().slice(0, 10);
+        var endday = new Date($('#id_end_day').val()).toJSON().slice(0, 10);
+        //var starttime = new Date($('#id_start_day').val()).toJSON().slice(11, 16);
+        //var endtime = new Date($('#id_end_day').val()).toJSON().slice(11, 16);
+        var starttime = new Date($('#id_start_day').val());
+        var endtime = new Date($('#id_end_day').val());        
+        if (isEmptyOrSpaces(titlestr)){
+     
+        }
+        else if (endday < startday){
+     
+        }
+        else if (Date.parse(endtime) < Date.parse(starttime)){
+     
+       }   
+        else {
   $.ajax({
     type: "POST",
     url: "createevents/",
@@ -297,7 +324,7 @@ if it is disable submit button and give error
     },
     //dataType: 'json'
   });
-
+   }
   
   }
   else{
@@ -322,6 +349,23 @@ if it is disable submit button and give error
         $('#id_end_day').val(),
         $('#id_end_time').val(),
     */
+        var titlestr = $('#id_title').val();
+        var startday = new Date($('#id_start_day').val()).toJSON().slice(0, 10);
+        var endday = new Date($('#id_end_day').val()).toJSON().slice(0, 10);
+        //var starttime = new Date($('#id_start_day').val()).toJSON().slice(11, 16);
+        //var endtime = new Date($('#id_end_day').val()).toJSON().slice(11, 16);
+        var starttime = new Date($('#id_start_day').val());
+        var endtime = new Date($('#id_end_day').val());        
+        if (isEmptyOrSpaces(titlestr)){
+     
+        }
+        else if (endday < startday){
+     
+        }
+        else if (Date.parse(endtime) < Date.parse(starttime)){
+     
+       }   
+        else {
     $.ajax({
       type: "POST",
       url: "/createevents/",
@@ -343,7 +387,8 @@ if it is disable submit button and give error
         noevent = true;
       },
       //dataType: 'json'
-    });   
+    }); 
+  }  
   }
 });
 });

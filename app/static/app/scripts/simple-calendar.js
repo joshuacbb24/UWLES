@@ -550,6 +550,19 @@
       events.forEach(function (event) {
         var startDate = new Date(event.startDate);
         var endDate = new Date(event.endDate);
+        /*
+every thirty seconds 
+check the event start time
+check the current time
+subtract the event start time from the current time and store it in array
+if the event will become active within the next 30 seconds (if 30 added to current time will be equal or greater than start time but less than endtime of event)
+store event id in array for active events;
+if the event will expire within the next 30 seconds (if 30 added to current time will be equal or greater than end time )
+store event id in array for expired events;
+end looping of events
+wait for the stored amount of time from earlier (maybe settimeout)
+then change class on the events in the array
+*/
         /*if (status == -1)
         {
           var thisCircle = circle;
