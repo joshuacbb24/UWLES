@@ -68,7 +68,7 @@
     updateHeader: function (date, header) {
       var monthText = this.settings.months[date.getMonth()];
       monthText += this.settings.displayYear ? ' ' + date.getFullYear() : '';
-      console.log("monthtext", monthText);
+      //console.log("monthtext", monthText);
       header.find('.month').text(monthText);
     },
 
@@ -207,14 +207,20 @@
       //change variables and load into form as preset selections when create event is clicked
         $(plugin.element).on('click', '.day', function (e) {
         var count = 0;
-        console.log('event click +++');
+        var newtoday = new Date();
+        var newtoday2 = new Date(new Date().setMinutes(newtoday.getMinutes() + 1,0));
+        //console.log('newtoday', newtoday);
+        //console.log('newtoday2', newtoday2);
+        var diff = Math.abs(newtoday2 - newtoday);
+        //console.log('diff', diff);
+        //console.log('event click +++');
         $(".event-body").empty();
         var date = new Date($(this).data('date'));
         var dateclicked = new Date($(this).data('date'));
         dateclicked = dateclicked.toJSON().slice(0, 10);
-        console.log("the date", date);
+        //console.log("the date", date);
         var clickedday = this.id;
-        console.log("clickedday", clickedday);
+        //console.log("clickedday", clickedday);
         var events = plugin.getDateEvents(date);
         var days = document.getElementsByClassName('day-border')
         var selectedday;
@@ -366,7 +372,7 @@
             }
 
             plugin.displayEventTexts(events, status, dateclicked);
-            
+         
 
         }
         else 
@@ -376,17 +382,88 @@
           $(".show-calendar").css('color', '#015D67');
           $(".show-calendar").css('cursor', 'pointer');
         }
-        
         //call eventStatus after every minute to check the status of event
         //Is it possible to only do it if event container is shown and quit when not to cut back on processing time?
-        /*if (intervalID != null)
+        
+        setTimeout(function () {
+          var circle = 1;
+          var line = 1;
+          var intervalID = null;
+          console.log("during timeout/day");
+          var newtoday = new Date();
+        events.forEach(function (event) {
+          var eventId = event.eventid;
+        var startDate = new Date(event.startDate);
+        var endDate = new Date(event.endDate);
+
+        if (startDate <= newtoday && endDate >= newtoday)
+        {
+          var thisCircle = circle;
+          var thisLine = line-1;
+          var circleid = "circle-"+thisCircle;
+          var lineid = "line-"+thisLine;
+          var eventcircle = document.getElementById(circleid);
+          var eventline = document.getElementById(lineid);
+          $(eventcircle).addClass("active-circle");
+          if (circle >= 2) 
           {
-            clearInterval(intervalID);
-            // release our intervalID from the variable
-            intervalID = null; 
+            thisCircle = circle-1;
+            circleid = "circle-"+thisCircle;
+            eventcircle = document.getElementById(circleid);
+            if ($(eventcircle).hasClass("active-circle"))
+            {
+            $(eventline).addClass("active-line");
+            }
+            else{
+              $(eventline).addClass("expired-line");
+            }
           }
-        */
-       // intervalID = setInterval(plugin.eventStatus, 60000, events);
+          $(`#edit-${eventId}`).css("font-weight","Bold");
+        }
+        if (endDate < newtoday)
+        {
+          var thisCircle = circle;
+          var thisLine = line-1;
+          var circleid = "circle-"+thisCircle;
+          var lineid = "line-"+thisLine;
+          var eventcircle = document.getElementById(circleid);
+          var eventline = document.getElementById(lineid);
+          $(eventcircle).addClass("expired-circle");
+          if (circle >= 2) 
+          {
+            thisCircle = circle-1;
+            circleid = "circle-"+thisCircle;
+            eventcircle = document.getElementById(circleid);
+            if ($(eventcircle).hasClass("active-circle"))
+            {
+            $(eventline).addClass("active-line");
+            }
+            else{
+              $(eventline).addClass("expired-line");
+            }
+          }
+          $(`#edit-${eventId}`).css("font-weight","Normal");
+        }
+
+        circle++;
+        line++;
+
+
+      })
+
+
+            if (intervalID != null)
+            {
+              clearInterval(intervalID);
+              // release our intervalID from the variable
+              intervalID = null; 
+            }
+            intervalID = setInterval(plugin.eventStatus, 60000, events);  
+            }, diff);
+
+
+        console.log("after timeout/day");
+
 
         plugin.settings.onDateSelect(date, events, clickedday, plugin);
       });
@@ -397,6 +474,7 @@
       });
       },
       displayEventTexts: function (events, status, clicked) {
+        console.log("after timeout/events");
         var count = 0;
           var circle = 1;
           var line = 1;
@@ -405,7 +483,7 @@
           var container = $(".event-body");
           var today = new Date();
           var intervalID = null;
-          console.log("clicked", clicked);
+          //console.log("clicked", clicked);
           function formatAMPM(date) {
             var hours = date.getHours();
             var minutes = date.getMinutes();
@@ -422,7 +500,7 @@
               //var eventId = event.eventID; //id for each event
               var eventId = event.eventid; //id for each event
               var eventstart = startDate.getFullYear() + '-' + (startDate.getMonth() + 1) + '-' + startDate.getDate();
-              console.log("eventstart", eventstart);
+              //console.log("eventstart", eventstart);
               var eventend = endDate.getFullYear() + '-' + (endDate.getMonth() + 1) + '-' + endDate.getDate();;
               if (!event.allDay)
               {
@@ -457,7 +535,7 @@
               var $event = `<div style="margin-left: 20px;"><div style="display: inline-flex;width: 100%;margin-top: -4px;"><div class="event-circle" id="circle-${circle}"></div><div class="event-list" data-event="${eventId}" id="edit-${eventId}">`+`<div class="event-in-list" data-eventtext="${eventId}">`+  event.title +`</div>`+ ` <div data-eventdescription="${eventId}" class="event-description" style="word-wrap: break-word; display: none;">` + event.summary + `</div></div></div><div class="event-line" id="line-${line}"></div></div>`;
               }
               // $event.data('event', event);
-              console.log('event data +++', $event);
+              //console.log('event data +++', $event);
               //document.getElementsByClassName("event-wrapper").innerHTML = JSON.stringify($event);
              
 
@@ -547,67 +625,20 @@
 
       },
     eventStatus: function (events) {
+      console.log("eventStatus after 60 seconds");
       var circle = 1;
       var line = 1;
       var newtoday = new Date();
-      /*
-      var status = null;
-      var today = new Date().toJSON().slice(0, 10);
-      var chosenday = new Date(date).toJSON().slice(0, 10);
-      
-      //if date is before today
-      if (chosenday < today)
-      {
-        status = -1;
-      }
-      
-      //if date is today
-      else if (chosenday == today) {
-        status = 0;
-      }
-      //if date is after today
-      else {
-        status = 1;
-      }
-      */
+      var newtoday2 = new Date(new Date().setMinutes(newtoday.getMinutes() + 1,0));
+      var n = newtoday.getMinutes();
+      var m = newtoday.getSeconds();
+      new Date(new Date().setHours(new Date().getHours() + 24)).toDateString()
+
       events.forEach(function (event) {
+        var eventId = event.eventid;
         var startDate = new Date(event.startDate);
         var endDate = new Date(event.endDate);
-        /*
-every thirty seconds 
-check the event start time
-check the current time
-subtract the event start time from the current time and store it in array
-if the event will become active within the next 30 seconds (if 30 added to current time will be equal or greater than start time but less than endtime of event)
-store event id in array for active events;
-if the event will expire within the next 30 seconds (if 30 added to current time will be equal or greater than end time )
-store event id in array for expired events;
-end looping of events
-wait for the stored amount of time from earlier (maybe settimeout)
-then change class on the events in the array
-*/
-        /*if (status == -1)
-        {
-          var thisCircle = circle;
-          var thisLine = line;
-          var circleid = "circle-"+thisCircle;
-          var lineid = "line-"+thisLine;
-          var eventcircle = document.getElementById(circleid);
-          var eventline = document.getElementById(lineid);
-          $(eventline).addClass("expired-line");
-          $(eventcircle).addClass("expired-circle");
-        }
-        if (event.allDay && status == 0)
-        {
-          var thisCircle = circle;
-          var thisLine = line;
-          var circleid = "circle-"+thisCircle;
-          var lineid = "line-"+thisLine;
-          var eventcircle = document.getElementById(circleid);
-          var eventline = document.getElementById(lineid);
-          $(eventcircle).addClass("active-circle");
-          $(`#edit-${eventId}`).css("font-weight","Bold");
-        }*/
+
         if (startDate <= newtoday && endDate >= newtoday)
         {
           var thisCircle = circle;

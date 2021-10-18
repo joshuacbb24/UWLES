@@ -101,6 +101,7 @@ $(document).ready(function () {
   $("#container").simpleCalendar({
       fixedStartDay: 0, // begin weeks by sunday
       onDateSelect: function (date, events, clickedday, plug) {
+        console.log("after timeout/cal2");
         day = clickedday;
         cal = plug;
         calday = date;
@@ -146,11 +147,11 @@ $(document).ready(function () {
         })
       },
   });
-  if (call == 0)
+  /*if (call == 0)
   {
   document.querySelector(".today").click();
   call = null;
-  }
+  }*/
   $("#add-event-button").on('click', function () {
     choice = 0;
     noevent = true;

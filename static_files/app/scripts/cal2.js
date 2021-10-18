@@ -64,7 +64,7 @@ $(document).ready(function () {
   //console.log("theevent", theevent)
   //console.log("startime", startTime)
   //console.log("endtime", endTime)
-  console.log("eventlist", eventlist)
+  //console.log("eventlist", eventlist)
   if (call == 0){
     callCalendar(eventlist);
     call = null;
@@ -105,7 +105,7 @@ $(document).ready(function () {
         cal = plug;
         calday = date;
         var taskday = date.toString();
-        console.log("plug", plug)
+        //console.log("plug", plug)
         taskday = taskday.split(" ");
         taskday = (taskday[0] + ", " + taskday[1] + " " + taskday[2] + " " + taskday[3]);
         $(".event-day").text("");
@@ -123,7 +123,7 @@ $(document).ready(function () {
         choice = 1;
         noevent = false;
         id = clickedevent;
-        console.log("clickedevent", clickedevent)
+        //console.log("clickedevent", clickedevent)
         $.ajax( 
           { 
             type:"GET", 
