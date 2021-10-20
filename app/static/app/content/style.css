@@ -577,6 +577,15 @@
     height: 2em;
 }
 
+#filter-assignee{
+    position: absolute;
+    left: 10px;
+    top: 90px;
+    border: 0;
+    width: 2em;
+    height: 2em;
+}
+
 [for="filter-date"]{
     position: absolute;
     left: 50px;
@@ -604,6 +613,19 @@
 }
 
 [for="filter-assigner"]{
+    position: absolute;
+    left: 50px;
+    top: 95px;
+
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 13px;
+    letter-spacing: 0.01em;
+}
+
+[for="filter-assignee"]{
     position: absolute;
     left: 50px;
     top: 95px;
@@ -825,6 +847,14 @@
     border-bottom: 1px solid #DEDEDE;
 }
 
+.menu4-filter-sent-tasks{
+    position: relative;
+    height: 80px;
+    background: white;
+    border-bottom: 1px solid #DEDEDE;
+    display: none;
+}
+
 .menu4-upcoming-tasks{
     position: relative;
     top: 55px;
@@ -832,6 +862,16 @@
     height: 60px;
     background: #F5F5F5;
     border-bottom: 1px solid #013D44;
+}
+
+.menu4-upcoming-sent-tasks{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;
+    display: none;
 }
 
 .menu4-assigner-tasks{
@@ -843,12 +883,34 @@
     border-bottom: 1px solid #013D44;
 }
 
+.menu4-assignee-tasks{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;
+    display: none;
+}
+
 .inactive{
     display: none !important;
     visibility: hidden !important;
 }
 
 .upcoming-tasks-list{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 300px;
+    background: #D7D7D7;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    visibility: visible;
+}
+
+.sent-upcoming-tasks-list{
     position: relative;
     top: 55px;
     width: 100%;
@@ -872,7 +934,31 @@
     visibility: visible;
 }
 
+.sent-weekly-tasks-list{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 300px;
+    background: #D7D7D7;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    visibility: visible;
+}
+
 .past-tasks-list{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 300px;
+    background: #D7D7D7;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    visibility: visible;
+}
+
+.sent-past-tasks-list{
     position: relative;
     top: 55px;
     width: 100%;
@@ -896,7 +982,32 @@
     visibility: visible;
 }
 
+.sent-high-prio-tasks-list{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 300px;
+    background: #D7D7D7;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    visibility: visible;
+}
+
 .med-prio-tasks-list{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 300px;
+    background: #D7D7D7;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    visibility: visible;
+}
+
+
+.sent-med-prio-tasks-list{
     position: relative;
     top: 55px;
     width: 100%;
@@ -920,7 +1031,31 @@
     visibility: visible;
 }
 
+.sent-med-prio-tasks-list{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 300px;
+    background: #D7D7D7;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    visibility: visible;
+}
+
 .assigner-tasks-list{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 300px;
+    background: #D7D7D7;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    visibility: visible;
+}
+
+.assignee-tasks-list{
     position: relative;
     top: 55px;
     width: 100%;
@@ -1063,7 +1198,7 @@
 
 .menu4-hide{
     visibility: hidden;
-    display: none;
+    display: none !important;
 }
 
 .menu4-due-this-week{
@@ -1075,6 +1210,16 @@
     border-bottom: 1px solid #013D44;
 }
 
+.menu4-sent-due-this-week{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;
+    display: none;
+}
+
 .menu4-past-due{
     position: relative;
     top: 55px;
@@ -1082,6 +1227,16 @@
     height: 60px;
     background: #F5F5F5;
     border-bottom: 1px solid #013D44;
+}
+
+.menu4-sent-past-due{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;
+    display: none;
 }
 
 .menu4-high-prio{
@@ -1093,6 +1248,16 @@
     border-bottom: 1px solid #013D44;
 }
 
+.menu4-sent-high-prio{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;
+    display: none;
+}
+
 .menu4-med-prio{
     position: relative;
     top: 55px;
@@ -1102,6 +1267,16 @@
     border-bottom: 1px solid #013D44;
 }
 
+.menu4-sent-med-prio{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;
+    display: none;
+}
+
 .menu4-low-prio{
     position: relative;
     top: 55px;
@@ -1109,6 +1284,16 @@
     height: 60px;
     background: #F5F5F5;
     border-bottom: 1px solid #013D44;
+}
+
+.menu4-sent-low-prio{
+    position: relative;
+    top: 55px;
+    width: 100%;
+    height: 60px;
+    background: #F5F5F5;
+    border-bottom: 1px solid #013D44;
+    display: none;
 }
 
 .menu4-submenu-title{
@@ -1155,6 +1340,23 @@
 }
 
 .filter-tasks-text{
+    position: relative;
+    left: 60px;
+    width: 100px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 20px;
+    /* or 167% */
+
+    display: flex;
+    align-items: center;
+
+    color: #013D44;
+}
+
+.filter-sent-tasks-text{
     position: relative;
     left: 60px;
     width: 100px;
@@ -1295,7 +1497,6 @@
     height: 40px;
     box-shadow: -0.5px -0.5px 2px rgba(1, 61, 68, 0.09), 0.5px 0.5px 2px rgba(1, 61, 68, 0.1);
     border-radius: 4px;
-    background: #F3F3F3;
     display: flex;
     align-items: center;
     text-align: center;

@@ -539,6 +539,16 @@ def dashboard(request):
     low_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=1)
     assigner_tasks = Tasks.objects.filter(assignees=request.user.id).order_by("assigner")
 
+    sent_tasks = Tasks.objects.filter(assigner=request.user.id)
+    sent_upcoming_tasks = Tasks.objects.filter(assigner=request.user.id, due_date__gte=week_from_today)
+    sent_weekly_tasks1 = Tasks.objects.filter(assigner=request.user.id, due_date__lte=week_from_today)
+    sent_weekly_tasks = sent_weekly_tasks1.filter(due_date__gt=today)
+    sent_past_due_tasks = Tasks.objects.filter(assigner=request.user.id, due_date__lte=today)
+    sent_high_prio_tasks = Tasks.objects.filter(assigner=request.user.id, priority=3)
+    sent_med_prio_tasks = Tasks.objects.filter(assigner=request.user.id, priority=2)
+    sent_low_prio_tasks = Tasks.objects.filter(assigner=request.user.id, priority=1)
+    sent_assignee_tasks = Tasks.objects.filter(assigner=request.user.id)
+
     assigner_dict = {}
     check_list = []
     for assigner in assigner_tasks:
@@ -548,9 +558,18 @@ def dashboard(request):
         else:
             assigner_dict[assigner.assigner] += 1
 
-    print(check_list)
-    print(assigner_dict)
+    assignee_dict = {}
+    check_list_assignee = []
+    for assignee in sent_assignee_tasks:
+        for assignees in assignee.assignees.all():
+            if assignees.username not in check_list_assignee:
+                assignee_dict[assignees] = 1
+                check_list_assignee.append(assignees.username)
+            else:
+                assignee_dict[assignees] += 1
 
+    sorted_assignee_list = sorted(check_list_assignee)
+    
     my_clients = ClientList.objects.get(user=request.user.id)
     client_tasks_pending = []
     for client in my_clients.clients.all():
@@ -649,6 +668,15 @@ def dashboard(request):
         'client_tasks_pending': client_tasks_pending,
         'all_tasks': all_tasks,
         'assigner_dict': assigner_dict,
+
+        'sent_tasks':  sent_tasks,
+        'sent_upcoming_tasks': sent_upcoming_tasks,
+        'sent_weekly_tasks': sent_weekly_tasks,
+        'sent_past_due_tasks': sent_past_due_tasks,
+        'sent_high_prio_tasks': sent_high_prio_tasks,
+        'sent_med_prio_tasks': sent_med_prio_tasks,
+        'sent_low_prio_tasks': sent_low_prio_tasks,
+        'assignee_dict': assignee_dict,
     }
     return render(request, 'app/dashboard2.html', context)
 
