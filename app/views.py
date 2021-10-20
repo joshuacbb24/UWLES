@@ -2,6 +2,7 @@
 Definition of views.
 """
 from django.contrib.auth import login, authenticate
+from django.contrib.auth import decorators
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
