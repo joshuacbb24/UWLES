@@ -315,38 +315,81 @@ calendar_today
 
 
     <script>
-     const csrf1 = document.getElementsByName('csrfmiddlewaretoken')
-                         
+             const csrf1 = document.getElementsByName('csrfmiddlewaretoken')
+        var total_seconds = 5; // refresh every 5 seconds
+
+     
     
 
     $(document).ready(function() {
         $('body').on('click', '.fas.fa-times', function () {
             var noteid = $(this).val();
-            const fd = new FormData()
-            fd.append('csrfmiddlewaretoken', csrf1[0].value)
-            fd.append('noteid-d', noteid)
+            const fd = new FormData();
+            var result = confirm("Are you sure you want to delete this note?");
+            if (result) {
+                        fd.append('csrfmiddlewaretoken', csrf1[0].value);
+                    //alert(csrf1[0].value);
+                    fd.append('noteid-d', noteid);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        enctype: 'multipart/form-data',
+                        data: fd,
+                        success: function (response) {
+                            $('.notes-list-items[value=' + noteid + ']').remove();
+                            $('.notes-list-items').listview("refresh");
+                            //$(".notes-list-items li").eq(noteid).remove();
+                        },
+                        error: function (error) {
+                            console.log(error)
+                        },
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                    })
+        }
+        })
+
+
+
+        $('body').on('click', '.fas.fa-pencil-alt', function () {
+            var noteid = $(this).val();
+            let text;
+            let descrip = prompt("Edit note:, text here");
+           
+            const fd = new FormData();
+            fd.append('csrfmiddlewaretoken', csrf1[0].value);
+            fd.append('noteid-e', noteid);
+            fd.append('noteid-e-descrip', descrip)
+
             $.ajax({
                 type: 'POST',
                 url: url,
                 enctype: 'multipart/form-data',
                 data: fd,
-                success: function (response) {
-                    $('.notes-list-items[value='+ noteid +']').remove();
+                success: function (data) {
+                  $('#note-refresh').load(location.href + ' #note-refresh');
                 },
                 error: function (error) {
                     console.log(error)
                 },
-                            cache: false,
-                            contentType: false,
-                             processData: false,
-                        })
+                cache: false,
+                contentType: false,
+                processData: false,
+            })
+        
         })
 
-        $("body").on('click', '.btn-save-notes', function () {
-            var descrip = $('#id_description').val();
-            const fd = new FormData()
-            fd.append('csrfmiddlewaretoken', csrf1[0].value)
-            fd.append('id_description', descrip)
+        $("body").on('click', '.btn-save-notes', function (e) {
+            e.preventDefault();
+            var descrip = $('#id_description.my-notes-forms').val();
+            //alert(descrip);
+            
+                const fd = new FormData()
+                fd.append('csrfmiddlewaretoken', csrf1[0].value)
+                fd.append('id_description', descrip)
+            
                 // Create Ajax Call
                 $.ajax({
                     type: 'POST',
@@ -355,10 +398,18 @@ calendar_today
                     data: fd,
                     dataType: 'json',
                     success: function (data) {
-                        if (data.user) {
-                          appendToUsrTable(data.user);
-                        }
-                    }
+                  
+                        $('#note-refresh').load(location.href + ' #note-refresh');
+                        $('.my-notes-forms').val('');
+                        
+                        
+                    },
+                    error: function (error) {
+                          console.log(error)
+                    },
+                          cache: false,
+                            contentType: false,
+                             processData: false,
                 });
               })
     });
@@ -369,23 +420,25 @@ calendar_today
           My Notes
       </div>
       <br><br>
-      <form method="post" class="notes-form" action="{% url 'dashboard' %}">
+      <form method="post" class="notes-form" id="note-form" action="{% url 'dashboard' %}">
           {% csrf_token  %}
           {{ notesForm }}
       <br><br>
-      <button class="btn-save-notes"><div class="btn-text">Save</div></button>
+      <button class="btn-save-notes" type="submit"><div class="btn-text">Save</div></button>
       <br><br>
       </form>
+       <div id="note-refresh">
       <ul class="note-list">
             {% for note in notes %}
-                <li class="notes-list-items">
+                <li class="notes-list-items" value="{{ note.id }}">
                     <p class="note-date">{{ note.date }}</p>
-                    <button class="fas fa-pencil-alt"></button>
+                    <button class="fas fa-pencil-alt" value="{{ note.id }}"></button>
                     <button class="fas fa-times" value="{{ note.id }}"></button>
-                    <p class="note-descript">{{ note.description }}</p>
+                    <p class="note-descript" value="{{ note.description }}">{{ note.description }}</p>
                 </li>
             {% endfor %}                  
        </ul>
+      </div>
       </div>
 
     <div class="menu4">
