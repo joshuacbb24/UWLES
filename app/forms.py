@@ -246,7 +246,7 @@ class TaskForm(forms.ModelForm):
 class Event_Creation_Form(forms.ModelForm):
     
     title = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Title'}), required=True)
+        attrs={'placeholder': 'Title'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'cols': 40, 'rows': 5}), required=False)
     start_day = forms.DateField(widget=forms.NumberInput(attrs={'type': 'date'}), required=True)
     start_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}), required=True)

@@ -319,12 +319,25 @@ background: #21B5B7;
         
         .event-body{
           position:relative;
-          height: auto;
+          height: 78%;
           color: #545A5C;
           margin-top: 5%;
         
         }
+        .event-body::-webkit-scrollbar {
+          width: 10px;
+        }
+        .event-body::-webkit-scrollbar-track {
+          border-radius: 10px;
+          background: #e0e0e0; 
         
+        }
+        .event-body::-webkit-scrollbar-thumb {
+          background: #888; 
+          border-radius: 10px;
+        }
+        .event-body::-webkit-scrollbar-thumb:hover {
+          background: #555; }
         .card-footer {
             padding: 0 !important;
             background-color: #FFF;
@@ -512,3 +525,4 @@ background: #21B5B7;
         .expired-line{
           border-color: #D2F1F1;
         }
+

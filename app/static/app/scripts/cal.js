@@ -10,6 +10,10 @@ $(document).ready(function () {
   var call = 0;
   var onmonth = 0;
   let cal = null;
+
+  function isEmptyOrSpaces(str){
+    return str === null || str.match(/^ *$/) !== null || str.length < 1;
+}
   function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -78,8 +82,11 @@ if (call != 0 && onmonth != 0){
   cal.updateHeader(onmonth, $(cal.element).find('.calendar header'));
   call = null;
   }
+  if (day != null)
+  {
   var newday = document.getElementById(day);
   $(newday).click();
+  }
   $("#members-page").hide();
   $(".confirmation-chat-modal").hide();
   call = null;
@@ -107,6 +114,7 @@ $("#container").simpleCalendar({
     }, // Callback on date selection
     onMonthChange: function (month, year, value) {
       onmonth = month;
+      day = null;
     },//callback on month change
     disableEmptyDetails: true,
     events: events,
@@ -255,26 +263,49 @@ $("#event_form").submit(function (e) {
   if (choice == 0)
   {
   e.preventDefault();
-    /*
-    error list
-starttime.on change 
--(end time cannot be before start time)
-if it is disable submit button and give error
-startday.on change
--(end day cannot be before start day)
-if it is disable submit button and give error
-endtime.on change 
--(end time cannot be before start time)
-if it is disable submit button and give error
-endday.on change
--(end day cannot be before start day)
-if it is disable submit button and give error
-        $('#id_title').val(),
-        $('#id_start_day').val(),
-        $('#id_start_time').val(),
-        $('#id_end_day').val(),
-        $('#id_end_time').val(),
-    */
+        var titlestr = $('#id_title').val();
+        var startVal = $('#id_start_day').val();
+        var endVal = $('#id_end_day').val();
+        var starttime = $('#id_start_time').val();
+        var endtime = $('#id_end_time').val();
+
+        /*var startday = new Date(startVal);
+        var endday = new Date(endVal);
+        var eventstart = startday.getFullYear() + '-' + (startday.getMonth() + 1) + '-' + startday.getDate();
+        var eventend = endday.getFullYear() + '-' + (endday.getMonth() + 1) + '-' + endday.getDate();;
+        //var starttime = new Date($('#id_start_day').val()).toJSON().slice(11, 16);
+        //var endtime = new Date($('#id_end_day').val()).toJSON().slice(11, 16);
+        */
+
+        var errorFound = false;     
+        if (isEmptyOrSpaces(titlestr)){
+          $('#error-title').show("fast").delay(5000).fadeOut('fast');
+          $('#id_title').addClass("input-error");
+          errorFound = true; 
+        }
+        if (endVal < startVal){
+          $('#error-start-day').show("fast").delay(5000).fadeOut('fast');
+          $('#error-end-day').show("fast").delay(5000).fadeOut('fast');
+          $('#id_start_day').addClass("input-error");
+          $('#id_end_day').addClass("input-error");
+          errorFound = true; 
+        }
+        if ((endVal == startVal) && (endtime < starttime)){
+          $('#error-start-time').show("fast").delay(5000).fadeOut('fast');
+          $('#error-end-time').show("fast").delay(5000).fadeOut('fast');
+          $('#id_start_time').addClass("input-error");
+          $('#id_end_time').addClass("input-error");
+          errorFound = true; 
+       }   
+        if (!errorFound)
+        {
+          	
+          var errorfields = document.getElementsByClassName("input-error");
+          for (i = 0; i < errorfields.length; i++)
+          {
+            var el = $(errorfields[i])[0];
+            el.removeClass('input-error');
+          }
   $.ajax({
     type: "POST",
     url: "createevents/",
@@ -297,31 +328,56 @@ if it is disable submit button and give error
     },
     //dataType: 'json'
   });
-
+   }
+   else {
+     errorFound = false;
+   }
   
   }
   else{
     e.preventDefault();
-    /*
-error list
-starttime.on change 
--(end time cannot be before start time)
-if it is disable submit button and give error
-startday.on change
--(end day cannot be before start day)
-if it is disable submit button and give error
-endtime.on change 
--(end time cannot be before start time)
-if it is disable submit button and give error
-endday.on change
--(end day cannot be before start day)
-if it is disable submit button and give error
-        $('#id_title').val(),
-        $('#id_start_day').val(),
-        $('#id_start_time').val(),
-        $('#id_end_day').val(),
-        $('#id_end_time').val(),
-    */
+    var titlestr = $('#id_title').val();
+        var startVal = $('#id_start_day').val();
+        var endVal = $('#id_end_day').val();
+        var starttime = $('#id_start_time').val();
+        var endtime = $('#id_end_time').val();
+
+        /*var startday = new Date(startVal);
+        var endday = new Date(endVal);
+        var eventstart = startday.getFullYear() + '-' + (startday.getMonth() + 1) + '-' + startday.getDate();
+        var eventend = endday.getFullYear() + '-' + (endday.getMonth() + 1) + '-' + endday.getDate();;
+        //var starttime = new Date($('#id_start_day').val()).toJSON().slice(11, 16);
+        //var endtime = new Date($('#id_end_day').val()).toJSON().slice(11, 16);
+        */
+
+        var errorFound = false;     
+        if (isEmptyOrSpaces(titlestr)){
+          $('#error-title').show("fast").delay(5000).fadeOut('fast');
+          $('#error-title').addClass("input-error");
+          errorFound = true; 
+        }
+        if (endVal < startVal){
+          $('#error-start-day').show("fast").delay(5000).fadeOut('fast');
+          $('#error-end-day').show("fast").delay(5000).fadeOut('fast');
+          $('#error-start-day').addClass("input-error");
+          $('#error-end-day').addClass("input-error");
+          errorFound = true; 
+        }
+        if ((endVal <= startVal) && (endtime < starttime)){
+          $('#error-start-time').show("fast").delay(5000).fadeOut('fast');
+          $('#error-end-time').show("fast").delay(5000).fadeOut('fast');
+          $('#error-start-time').addClass("input-error");
+          $('#error-end-time').addClass("input-error");
+          errorFound = true; 
+       }       
+        if (!errorFound)
+        {
+          var errorfields = document.getElementsByClassName("input-error");
+          for (i = 0; i < errorfields.length; i++)
+          {
+            var el = $(errorfields[i])[0];
+            el.removeClass('input-error');
+          }
     $.ajax({
       type: "POST",
       url: "/createevents/",
@@ -343,7 +399,11 @@ if it is disable submit button and give error
         noevent = true;
       },
       //dataType: 'json'
-    });   
+    }); 
+  } 
+  else {
+    errorFound = false;
+  } 
   }
 });
 });

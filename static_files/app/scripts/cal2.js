@@ -12,7 +12,7 @@ $(document).ready(function () {
   let cal = null;
 
   function isEmptyOrSpaces(str){
-    return str === null || str.match(/^ *$/) !== null || str.value.length < 1;
+    return str === null || str.match(/^ *$/) !== null || str.length < 1;
 }
   function getCookie(name) {
     let cookieValue = null;
@@ -101,6 +101,7 @@ function callCalendar(events) {
 $("#container").simpleCalendar({
     fixedStartDay: 0, // begin weeks by sunday
     onDateSelect: function (date, events, clickedday, plug) {
+      console.log("after timeout/cal2");
       day = clickedday;
       cal = plug;
       calday = date;
@@ -146,11 +147,11 @@ $("#container").simpleCalendar({
       })
     },
 });
-if (call == 0)
+/*if (call == 0)
 {
 document.querySelector(".today").click();
 call = null;
-}
+}*/
 $("#add-event-button").on('click', function () {
   choice = 0;
   noevent = true;
@@ -264,39 +265,42 @@ $("#event_form").submit(function (e) {
   {
   e.preventDefault();
         var titlestr = $('#id_title').val();
-        var startday = new Date($('#id_start_day').val());
-        var endday = new Date($('#id_end_day').val());
+        var startVal = $('#id_start_day').val();
+        var endVal = $('#id_end_day').val();
+        var starttime = $('#id_start_time').val();
+        var endtime = $('#id_end_time').val();
+
+        /*var startday = new Date(startVal);
+        var endday = new Date(endVal);
         var eventstart = startday.getFullYear() + '-' + (startday.getMonth() + 1) + '-' + startday.getDate();
         var eventend = endday.getFullYear() + '-' + (endday.getMonth() + 1) + '-' + endday.getDate();;
         //var starttime = new Date($('#id_start_day').val()).toJSON().slice(11, 16);
         //var endtime = new Date($('#id_end_day').val()).toJSON().slice(11, 16);
-        var starttime = new Date($('#id_start_day').val());
-        var endtime = new Date($('#id_end_day').val());
-        var a = Date.parse(endtime);
-        var b = Date.parse(starttime);
+        */
+
         var errorFound = false;     
         if (isEmptyOrSpaces(titlestr)){
           $('#error-title').show("fast").delay(5000).fadeOut('fast');
-          $('#error-title').addClass("input-error");
+          $('#id_title').addClass("input-error");
           errorFound = true; 
         }
-        if (eventend < eventstart){
+        if (endVal < startVal){
           $('#error-start-day').show("fast").delay(5000).fadeOut('fast');
           $('#error-end-day').show("fast").delay(5000).fadeOut('fast');
-          $('#error-start-day').addClass("input-error");
-          $('#error-end-day').addClass("input-error");
+          $('#id_start_day').addClass("input-error");
+          $('#id_end_day').addClass("input-error");
           errorFound = true; 
         }
-        if (eventend <= eventstart && (Date.parse(endtime) < Date.parse(starttime))){
+        if ((endVal == startVal) && (endtime < starttime)){
           $('#error-start-time').show("fast").delay(5000).fadeOut('fast');
           $('#error-end-time').show("fast").delay(5000).fadeOut('fast');
-          $('#error-start-time').addClass("input-error");
-          $('#error-end-time').addClass("input-error");
+          $('#id_start_time').addClass("input-error");
+          $('#id_end_time').addClass("input-error");
           errorFound = true; 
        }   
         if (!errorFound)
         {
-          	
+              
           var errorfields = document.getElementsByClassName("input-error");
           for (i = 0; i < errorfields.length; i++)
           {
@@ -333,35 +337,40 @@ $("#event_form").submit(function (e) {
   }
   else{
     e.preventDefault();
-        var titlestr = $('#id_title').val();
-        var startday = new Date($('#id_start_day').val());
-        var endday = new Date($('#id_end_day').val());
+    var titlestr = $('#id_title').val();
+        var startVal = $('#id_start_day').val();
+        var endVal = $('#id_end_day').val();
+        var starttime = $('#id_start_time').val();
+        var endtime = $('#id_end_time').val();
+
+        /*var startday = new Date(startVal);
+        var endday = new Date(endVal);
         var eventstart = startday.getFullYear() + '-' + (startday.getMonth() + 1) + '-' + startday.getDate();
         var eventend = endday.getFullYear() + '-' + (endday.getMonth() + 1) + '-' + endday.getDate();;
         //var starttime = new Date($('#id_start_day').val()).toJSON().slice(11, 16);
         //var endtime = new Date($('#id_end_day').val()).toJSON().slice(11, 16);
-        var starttime = new Date($('#id_start_day').val());
-        var endtime = new Date($('#id_end_day').val());
+        */
+
         var errorFound = false;     
         if (isEmptyOrSpaces(titlestr)){
           $('#error-title').show("fast").delay(5000).fadeOut('fast');
           $('#error-title').addClass("input-error");
           errorFound = true; 
         }
-        if (eventend < eventstart){
+        if (endVal < startVal){
           $('#error-start-day').show("fast").delay(5000).fadeOut('fast');
           $('#error-end-day').show("fast").delay(5000).fadeOut('fast');
           $('#error-start-day').addClass("input-error");
           $('#error-end-day').addClass("input-error");
           errorFound = true; 
         }
-        if (eventend <= eventstart && (Date.parse(endtime) < Date.parse(starttime))){
+        if ((endVal <= startVal) && (endtime < starttime)){
           $('#error-start-time').show("fast").delay(5000).fadeOut('fast');
           $('#error-end-time').show("fast").delay(5000).fadeOut('fast');
           $('#error-start-time').addClass("input-error");
           $('#error-end-time').addClass("input-error");
           errorFound = true; 
-       }     
+       }       
         if (!errorFound)
         {
           var errorfields = document.getElementsByClassName("input-error");
