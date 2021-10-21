@@ -428,7 +428,7 @@ background: #21B5B7;
         #event_form [type=reset], [type=submit], button, html [type=button] {
             -webkit-appearance: button;
         }
-        #event_form .btn-outline-secondary {
+        .btn-outline-secondary {
             color: #6c757d;
             background-color: transparent;
             background-image: none;

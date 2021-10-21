@@ -391,6 +391,7 @@
           var intervalID = null;
           console.log("during timeout/day");
           var newtoday = new Date();
+          console.log("during timeout; newtoday", newtoday);
         events.forEach(function (event) {
           var eventId = event.eventid;
         var startDate = new Date(event.startDate);
@@ -496,6 +497,7 @@
           }
           events.forEach(function (event) {
               var startDate = new Date(event.startDate);
+              //console.log("startdate", startDate);
               var endDate = new Date(event.endDate);
               //var eventId = event.eventID; //id for each event
               var eventId = event.eventid; //id for each event
@@ -629,11 +631,7 @@
       var circle = 1;
       var line = 1;
       var newtoday = new Date();
-      var newtoday2 = new Date(new Date().setMinutes(newtoday.getMinutes() + 1,0));
-      var n = newtoday.getMinutes();
-      var m = newtoday.getSeconds();
-      new Date(new Date().setHours(new Date().getHours() + 24)).toDateString()
-
+      console.log("during intervel; newtoday", newtoday);
       events.forEach(function (event) {
         var eventId = event.eventid;
         var startDate = new Date(event.startDate);
