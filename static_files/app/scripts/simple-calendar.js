@@ -389,9 +389,9 @@
           var circle = 1;
           var line = 1;
           var intervalID = null;
-          console.log("during timeout/day");
+          //console.log("during timeout/day");
           var newtoday = new Date();
-          console.log("during timeout; newtoday", newtoday);
+          //console.log("during timeout; newtoday", newtoday);
         events.forEach(function (event) {
           var eventId = event.eventid;
         var startDate = new Date(event.startDate);
@@ -463,7 +463,7 @@
             }, diff);
 
 
-        console.log("after timeout/day");
+        //console.log("after timeout/day");
 
 
         plugin.settings.onDateSelect(date, events, clickedday, plugin);
@@ -475,7 +475,7 @@
       });
       },
       displayEventTexts: function (events, status, clicked) {
-        console.log("after timeout/events");
+        //console.log("after timeout/events");
         var count = 0;
           var circle = 1;
           var line = 1;
@@ -627,11 +627,11 @@
 
       },
     eventStatus: function (events) {
-      console.log("eventStatus after 60 seconds");
-      var circle = 1;
-      var line = 1;
+      //console.log("eventStatus after 60 seconds");
       var newtoday = new Date();
-      console.log("during intervel; newtoday", newtoday);
+      var circle = 1;
+      var line = 1; 
+      //console.log("during intervel; newtoday", newtoday);
       events.forEach(function (event) {
         var eventId = event.eventid;
         var startDate = new Date(event.startDate);
