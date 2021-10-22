@@ -308,9 +308,9 @@
     max-height: 345px !important;
     min-height: 345px !important;
     z-index: 0;
-    width: 470px !important;
-    max-width: 470px !important;
-    min-width: 470px !important;
+    width: 87% !important;
+    /*max-width: 470px !important;*/
+    /*min-width: 470px !important;*/
 }
 .calendar .day.disabled .day-border {
     border: 2px solid #21B5B7;
