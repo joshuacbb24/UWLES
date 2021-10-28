@@ -33,8 +33,8 @@ footer {
 }
 .event-header{
   position: relative;
-  /* justify-content: center; */
-  margin-bottom: 10px;
+  /* justify-content: center; 
+  margin-bottom: 10px;*/
   background: #FCFCFC;
   margin-top: 0 !important;
   top: 0 !important;
@@ -317,10 +317,11 @@ background: #21B5B7;
         }
         
         .event-body{
-          position:relative;
+          position: relative;
           height: 78%;
           color: #545A5C;
-          margin-top: 5%;
+          /*overflow-y: auto !important;*/
+          padding-top: 5%;
         
         }
         .event-body::-webkit-scrollbar {

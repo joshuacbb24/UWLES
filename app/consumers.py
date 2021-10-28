@@ -20,9 +20,9 @@ class CalConsumer(AsyncJsonWebsocketConsumer):
     self.user_channels[self.scope['user'].username] = self.channel_name
 
     async def disconnect(self, code):
+        self.user_channels[self.scope['user'].username] = None
         try:
             await self.leave_room(room_id)
-            self.user_channels[self.scope['user'].username] = None
         except ClientError:
             pass
     # Command helper methods called by receive_json
@@ -98,7 +98,14 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             await online(self.scope["user"])
         # Store which rooms the user has joined on this connection
         self.rooms = set()
+        #when user connects check to see if user already has a channel name connected to it
+        #if so set self.user_channels[self.scope['user'].username] to the already given channel name
+        #if not get a new one with self.user_channels[self.scope['user'].username] = self.channel_name
+        #
+        # self.user_channels.get(self.scope['user'].username)
+        print('channel_name', self.user_channels.get(self.scope['user'].username))
         self.user_channels[self.scope['user'].username] = self.channel_name
+        print('channel_name', self.user_channels.get(self.scope['user'].username))
 
     async def receive_json(self, content):
         """
@@ -433,10 +440,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         """
         # Leave all the rooms we are still in
         await offline(self.scope["user"])
+        self.user_channels[self.scope['user'].username] = None
         for room_id in list(self.rooms):
             try:
                 await self.leave_room(room_id)
-                self.user_channels[self.scope['user'].username] = None
             except ClientError:
                 pass
     # Command helper methods called by receive_json
