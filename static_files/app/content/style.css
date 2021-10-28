@@ -304,12 +304,15 @@
     box-shadow: 2px 2px 5px rgb(0 0 0 / 50%) !important;
     margin-right: 60px;
     margin-bottom: 20px !important;
-    height: 100% !important;
-    /*max-height: 345px !important;
-    min-height: 345px !important;*/
+    max-height: 345px !important;
+    min-height: 345px !important;
     z-index: 0;
+    width: 470px !important;
+    max-width: 470px !important;
+    min-width: 470px !important;
+    /*
     width: 87% !important;
-    /*max-width: 470px !important;*/
+    max-width: 470px !important;*/
     /*min-width: 470px !important;*/
 }
 .calendar .day.disabled .day-border {
