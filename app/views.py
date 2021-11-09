@@ -601,19 +601,26 @@ def dashboard(request):
             noteid = request.POST['noteid-d']
             note = MyNotes.objects.get(id=noteid)
             note.delete()
-     #   if 'noteid-e' in request.POST:     #if note edit is hit
-     #       noteid = request.POST['noteid-e']
-     #       note = MyNotes.objects.get(id=noteid)
-     #   if 'id_description' in request.POST:
-     #       notesForm = MyNotesForm(request.POST)
-     #       if notesForm.is_valid():
-     #          notes_form = notesForm.save(commit=False)
-     #          notes_form.user=request.user
-     #          notes_form.date=timezone.now()
-     #          notes_form.save()
-     #          return redirect('/')
-     #   else:
-     #           print(notesForm.errors)
+        elif 'noteid-e' in request.POST:     #if note edit is hit
+            noteid = request.POST['noteid-e']
+            descrip = request.POST['noteid-e-descrip']
+            noteObj = MyNotes.objects.get(id=noteid)
+            noteObj.description = descrip
+            noteObj.save()
+            
+        elif 'id_description' in request.POST:
+            notesForm = MyNotesForm(request.POST)
+            if notesForm.is_valid():
+               
+               notes_form = notesForm.save(commit=False)
+               notes_form.description=request.POST['id_description']
+               print(notes_form.description)
+               notes_form.user=request.user
+               notes_form.date=timezone.now()
+               notes_form.save()
+               #return redirect('/')
+            else:
+                print(notesForm.errors)
 
                
         else:
@@ -634,7 +641,7 @@ def dashboard(request):
     if request.method == "POST":
         form1 = TaskForm(request.POST, initial={'priority': '2'})
         create_event_form = Event_Creation_Form(request.POST)
-        notesForm = MyNotesForm(request.POST)
+      #  notesForm = MyNotesForm(request.POST)
         if form1.is_valid():
             print("got here")
             form_one = form1.save(commit=False)
@@ -647,14 +654,14 @@ def dashboard(request):
         else:
             print(form1.errors)
 
-        if notesForm.is_valid():
-           notes_form = notesForm.save(commit=False)
-           notes_form.user=request.user
-           notes_form.date=timezone.now()
-           notes_form.save()
-           return redirect('/')
-        else:
-            print(notesForm.errors)
+       # if notesForm.is_valid():
+       #    notes_form = notesForm.save(commit=False)
+       #    notes_form.user=request.user
+       #    notes_form.date=timezone.now()
+       #    notes_form.save()
+       #    return redirect('/')
+       # else:
+        #    print(notesForm.errors)
 
     context = {
         'users': users, 
