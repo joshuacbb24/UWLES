@@ -48,6 +48,39 @@
     letter-spacing: 0.05em;
 }
 
+#id_first_name {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: helvetica;
+    letter-spacing: 0.05em;
+}
+
+#id_middle_name {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: helvetica;
+    letter-spacing: 0.05em;
+}
+
+#id_last_name {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: helvetica;
+    letter-spacing: 0.05em;
+}
+
 .profile-picture-upload{
     position: relative;
     width: 100%;

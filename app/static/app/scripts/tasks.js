@@ -11,6 +11,7 @@ $(document).ready(function () {
         $(".menu4-upcoming-tasks").css("display", "")
         $(".menu4-due-this-week").css("display", "")
         $(".menu4-past-due").css("display", "")
+        $(".menu4-completed-tasks").css("display", "")
         $(".menu4-high-prio").css("display", "")
         $(".menu4-med-prio").css("display", "")
         $(".menu4-low-prio").css("display", "")
@@ -19,6 +20,7 @@ $(document).ready(function () {
         $(".menu4-filter-sent-tasks").css("display", "none")
         $(".menu4-upcoming-sent-tasks").css("display", "none")
         $(".menu4-sent-due-this-week").css("display", "none")
+        $(".menu4-sent-completed-tasks").css("display", "none")
         $(".menu4-sent-past-due").css("display", "none")
         $(".menu4-sent-high-prio").css("display", "none")
         $(".menu4-sent-med-prio").css("display", "none")
@@ -33,6 +35,7 @@ $(document).ready(function () {
         $(".menu4-upcoming-tasks").css("display", "none")
         $(".menu4-due-this-week").css("display", "none")
         $(".menu4-past-due").css("display", "none")
+        $(".menu4-completed-tasks").css("display", "none")
         $(".menu4-high-prio").css("display", "none")
         $(".menu4-med-prio").css("display", "none")
         $(".menu4-low-prio").css("display", "none")
@@ -42,6 +45,7 @@ $(document).ready(function () {
         $(".menu4-upcoming-sent-tasks").css("display", "block")
         $(".menu4-sent-due-this-week").css("display", "block")
         $(".menu4-sent-past-due").css("display", "block")
+        $(".menu4-sent-completed-tasks").css("display", "block")
         $(".menu4-sent-high-prio").css("display", "block")
         $(".menu4-sent-med-prio").css("display", "block")
         $(".menu4-sent-low-prio").css("display", "block")
@@ -56,6 +60,12 @@ $(document).ready(function () {
         $("#id_assignees option[value="+ thisval + "]").prop("selected", true)
         $('#assignees-box').append('<div class="assignees-pill" value=' + thisval + '>' + thistext + '</div>');
     });
+
+    $("body").on('click', '.add-client-option', function(){
+        $(this).addClass('add-client-selected');
+        $(this).removeClass('add-client-option');
+    });
+
     $("body").on('click', '.assignee-selected', function(){
         $(this).addClass('assignee-option');
         $(this).removeClass('assignee-selected');
@@ -63,6 +73,12 @@ $(document).ready(function () {
         $("#id_assignees option[value="+ thisval + "]").prop("selected", false)
         $('#assignees-box').children('div.assignees-pill[value='+ thisval + ']').remove()
     });
+
+    $("body").on('click', '.add-client-selected', function(){
+        $(this).addClass('add-client-option');
+        $(this).removeClass('add-client-selected');
+    });
+
     $("body").on('click', '.assignees-pill', function(){
         var thisval = $(this).attr('value');
         $("#id_assignees option[value="+ thisval + "]").prop("selected", false)
@@ -82,132 +98,247 @@ $(document).ready(function () {
         $('.caseworker-box').removeClass('active-box');
         $('.client-box').addClass('active-box');
     });
+
     $("body").on('click', '#upcoming-dd.menu4-dropbtn', function(){
         if ($(".upcoming-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".upcoming-tasks-list").removeClass('inactive')
         }
         else{
             $(".upcoming-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
+        }
+    })
+
+    $("body").on('click', '#completed-dd.menu4-dropbtn', function(){
+        if ($(".completed-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
+            $(".completed-tasks-list").removeClass('inactive')
+        }
+        else{
+            $(".completed-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
+        }
+    })
+
+    $("body").on('click', '#sent-completed-dd.menu4-dropbtn', function(){
+        if ($(".sent-completed-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
+            $(".sent-completed-tasks-list").removeClass('inactive')
+        }
+        else{
+            $(".sent-completed-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '#sent-upcoming-dd.menu4-dropbtn', function(){
         if ($(".sent-upcoming-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".sent-upcoming-tasks-list").removeClass('inactive')
         }
         else{
             $(".sent-upcoming-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '#weekly-dd.menu4-dropbtn', function(){
         if ($(".weekly-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".weekly-tasks-list").removeClass('inactive')
         }
         else{
             $(".weekly-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '#sent-weekly-dd.menu4-dropbtn', function(){
         if ($(".sent-weekly-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".sent-weekly-tasks-list").removeClass('inactive')
         }
         else{
             $(".sent-weekly-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '#past-dd.menu4-dropbtn', function(){
         if ($(".past-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".past-tasks-list").removeClass('inactive')
         }
         else{
             $(".past-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '#sent-past-dd.menu4-dropbtn', function(){
         if ($(".sent-past-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".sent-past-tasks-list").removeClass('inactive')
         }
         else{
             $(".sent-past-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
     
     $("body").on('click', '#high-prio-dd.menu4-dropbtn', function(){
         if ($(".high-prio-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".high-prio-tasks-list").removeClass('inactive')
         }
         else{
             $(".high-prio-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '#sent-high-prio-dd.menu4-dropbtn', function(){
         if ($(".sent-high-prio-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".sent-high-prio-tasks-list").removeClass('inactive')
         }
         else{
             $(".sent-high-prio-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
 
     $("body").on('click', '#med-prio-dd.menu4-dropbtn', function(){
         if ($(".med-prio-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".med-prio-tasks-list").removeClass('inactive')
         }
         else{
             $(".med-prio-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '#sent-med-prio-dd.menu4-dropbtn', function(){
         if ($(".sent-med-prio-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".sent-med-prio-tasks-list").removeClass('inactive')
         }
         else{
             $(".sent-med-prio-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '#low-prio-dd.menu4-dropbtn', function(){
         if ($(".low-prio-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".low-prio-tasks-list").removeClass('inactive')
         }
         else{
             $(".low-prio-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '#sent-low-prio-dd.menu4-dropbtn', function(){
         if ($(".sent-low-prio-tasks-list").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".sent-low-prio-tasks-list").removeClass('inactive')
         }
         else{
             $(".sent-low-prio-tasks-list").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '[id^=assigner-dd]', function(){
         var thisid = $(this).attr('value')
         if ($(".assigner-tasks-list[value=" + thisid +"]").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".assigner-tasks-list[value=" + thisid +"]").removeClass('inactive')
         }
         else{
             $(".assigner-tasks-list[value=" + thisid +"]").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 
     $("body").on('click', '[id^=assignee-dd]', function(){
         var thisid = $(this).attr('value')
         if ($(".assignee-tasks-list[value=" + thisid +"]").hasClass('inactive')){
+            $("[class$=-tasks-list").addClass('inactive')
+            $("[class*=fa-chevron-up").addClass("fa-chevron-down").removeClass("fa-chevron-up")
+            $(this).children().removeClass('fa-chevron-down')
+            $(this).children().addClass('fa-chevron-up')
             $(".assignee-tasks-list[value=" + thisid +"]").removeClass('inactive')
         }
         else{
             $(".assignee-tasks-list[value=" + thisid +"]").addClass('inactive')
+            $(this).children().removeClass('fa-chevron-up')
+            $(this).children().addClass('fa-chevron-down')
         }
     })
 

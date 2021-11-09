@@ -253,20 +253,20 @@ def profile(request):
 def clientlist(request):
     current_user = request.user
     try:
-        obj1 = ClientList.objects.get(user_id=current_user)
-        obj2 = Account.objects.all()
-        obj3 = BgInfo.objects.all()
+        myclients = ClientList.objects.get(user_id=current_user)
+        accts = Account.objects.all()
+        bgs = BgInfo.objects.all()
         list = []
-        for objs in obj3:
-            list.append(objs.user_id)
+        for bg in bgs:
+            list.append(bg.user_id)
     except ClientList.DoesNotExist:
-        obj1 = None
-        obj2 = None
-        obj3 = None
+        myclients = None
+        accts = None
+        bgs = None
     context = {
-            'object1': obj1,
-            'object2': obj2,
-            'object3': obj3,
+            'myclients': myclients,
+            'accts': accts,
+            'bgs': bgs,
             'list': list,
     }
     return render(request, 'app/clientlist.html', context)
@@ -530,26 +530,31 @@ def dashboard(request):
     today = timezone.now().date()
     week_from_today = today + timedelta(days=(today.isocalendar()[2] + 4))
 
-    all_tasks = Tasks.objects.filter(assignees=request.user.id)
-    upcoming_tasks = Tasks.objects.filter(assignees=request.user.id, due_date__gte=week_from_today)
-    weekly_tasks1 = Tasks.objects.filter(assignees=request.user.id, due_date__lte=week_from_today)
+    all_tasks = Tasks.objects.filter(assignees=request.user.id, completion_mark=False)
+    upcoming_tasks = Tasks.objects.filter(assignees=request.user.id, due_date__gte=week_from_today, completion_mark=False)
+    weekly_tasks1 = Tasks.objects.filter(assignees=request.user.id, due_date__lte=week_from_today, completion_mark=False)
     weekly_tasks = weekly_tasks1.filter(due_date__gt=today)
-    past_due_tasks = Tasks.objects.filter(assignees=request.user.id, due_date__lte=today)
-    high_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=3)
-    med_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=2)
-    low_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=1)
-    assigner_tasks = Tasks.objects.filter(assignees=request.user.id).order_by("assigner")
+    past_due_tasks = Tasks.objects.filter(assignees=request.user.id, due_date__lte=today, completion_mark=False)
+    high_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=3, completion_mark=False)
+    med_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=2, completion_mark=False)
+    low_prio_tasks = Tasks.objects.filter(assignees=request.user.id, priority=1, completion_mark=False)
+    assigner_tasks = Tasks.objects.filter(assignees=request.user.id, completion_mark=False).order_by("assigner")
 
     sent_tasks = Tasks.objects.filter(assigner=request.user.id)
-    sent_upcoming_tasks = Tasks.objects.filter(assigner=request.user.id, due_date__gte=week_from_today)
-    sent_weekly_tasks1 = Tasks.objects.filter(assigner=request.user.id, due_date__lte=week_from_today)
+    sent_upcoming_tasks = Tasks.objects.filter(assigner=request.user.id, due_date__gte=week_from_today, completion_mark=False)
+    sent_weekly_tasks1 = Tasks.objects.filter(assigner=request.user.id, due_date__lte=week_from_today, completion_mark=False)
     sent_weekly_tasks = sent_weekly_tasks1.filter(due_date__gt=today)
-    sent_past_due_tasks = Tasks.objects.filter(assigner=request.user.id, due_date__lte=today)
-    sent_high_prio_tasks = Tasks.objects.filter(assigner=request.user.id, priority=3)
-    sent_med_prio_tasks = Tasks.objects.filter(assigner=request.user.id, priority=2)
-    sent_low_prio_tasks = Tasks.objects.filter(assigner=request.user.id, priority=1)
-    sent_assignee_tasks = Tasks.objects.filter(assigner=request.user.id)
+    sent_past_due_tasks = Tasks.objects.filter(assigner=request.user.id, due_date__lte=today, completion_mark=False)
+    sent_high_prio_tasks = Tasks.objects.filter(assigner=request.user.id, priority=3, completion_mark=False)
+    sent_med_prio_tasks = Tasks.objects.filter(assigner=request.user.id, priority=2, completion_mark=False)
+    sent_low_prio_tasks = Tasks.objects.filter(assigner=request.user.id, priority=1, completion_mark=False)
+    sent_assignee_tasks = Tasks.objects.filter(assigner=request.user.id, completion_mark=False)
 
+    my_completed_tasks = Tasks.objects.filter(assignees=request.user.id, completion_mark=True)
+    my_sent_completed_tasks = Tasks.objects.filter(assigner=request.user.id, completion_mark=True)
+
+    print(my_sent_completed_tasks)
+    
     assigner_dict = {}
     check_list = []
     for assigner in assigner_tasks:
@@ -571,12 +576,16 @@ def dashboard(request):
 
     sorted_assignee_list = sorted(check_list_assignee)
     
-    my_clients = ClientList.objects.get(user=request.user.id)
-    client_tasks_pending = []
-    for client in my_clients.clients.all():
-        tasks_pending = Tasks.objects.filter(assigner=request.user.id, assignees=client).count()
-        client_tasks_pending.append(tasks_pending)
-    
+    try:
+        my_clients = ClientList.objects.get(user=request.user.id)
+        client_tasks_pending = []
+        for client in my_clients.clients.all():
+            tasks_pending = Tasks.objects.filter(assigner=request.user.id, assignees=client).count()
+            client_tasks_pending.append(tasks_pending)
+    except ClientList.DoesNotExist:
+        my_clients = None
+        client_tasks_pending = []
+
     try:
         user_bg = BgInfo.objects.get(user=request.user.id)
     except BgInfo.DoesNotExist:
@@ -678,6 +687,9 @@ def dashboard(request):
         'sent_med_prio_tasks': sent_med_prio_tasks,
         'sent_low_prio_tasks': sent_low_prio_tasks,
         'assignee_dict': assignee_dict,
+
+        'my_completed_tasks': my_completed_tasks,
+        'my_sent_completed_tasks': my_sent_completed_tasks,
     }
     return render(request, 'app/dashboard2.html', context)
 

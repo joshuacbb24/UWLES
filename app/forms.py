@@ -30,10 +30,15 @@ class User_Creation_Form(UserCreationForm):
         attrs={'placeholder': 'Password'}), required=True)
     password2 = forms.CharField(widget=forms.PasswordInput(
         attrs={'placeholder': 'Confirm'}), required=True)
-
+    first_name = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'First Name'}), required=True)
+    middle_name = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Middle Name'}), required=False)
+    last_name = forms.CharField(widget=forms.TextInput(
+        attrs={'placeholder': 'Last Name'}), required=True)
     class Meta:
         model = Account
-        fields = ("username", "email", "password1", "avatar")
+        fields = ("username", "email", "password1", "avatar", "first_name", "middle_name", "last_name",)
 
 class User_Bg(ModelForm):
     firstname = forms.CharField(label='First Name',)

@@ -1,63 +1,245 @@
 ﻿{% extends 'app/format.html' %}
+{% block header1 %}
+    <a href="{% url 'dashboard' %}">
+        <span id="fist-element" class="las la-home"></span>
+    </a>
+{% endblock %}
+{% block header2 %}
+    <a href="{% url 'fulldirectory' %}">
+        <span class="las la-book"></span>
+    </a>
+{% endblock %}
+{% block header3 %}
+    <a href="{% url 'multichat' %}">
+        <span class="las la-comment-alt"></span>
+    </a>
+{% endblock %}
+{% block header4 %}
+    <a href="{% url 'clientlist' %}" class="active">
+        <span class="las la-user-friends"></span>
+    </a>
+{% endblock %}
+{% block header5 %}
+    <a href="">
+        <span class="las la-plus-circle"></span>
+    </a>
+{% endblock %}
+
 {% block content %}
-<head>
-</head>
-<body>
-    <div class="sidebar">
+{% load static %}
+<link rel="stylesheet" href="{% static 'app/content/clientlist.css' %}" />
+<script src="{% static 'app/scripts/clientlist.js' %}"></script>
 
+<script>
+    function filterClientFunction() {
+    var input, filter, div, a, i;
+    input = document.getElementById("clist-searchbar");
+    filter = input.value.toUpperCase();
+    a = document.getElementsByClassName("clist-client-name-grid")
+    b = document.getElementsByClassName("clist-client-name-list");
+    for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            $(a[i]).parent().css("display", "")
+            $(b[i]).parent().css("display", "")
+        }
+        else {
+            $(a[i]).parent().css("display", "none")
+            $(b[i]).parent().css("display", "none")
+        }
+    }
+}
+</script>
 
-  <div class="sidebar-menu">
-      <ul>
-          <li>
-              <a href="{% url 'dashboard' %}">
-                  <span id="fist-element" class="las la-home"></span>
-              </a>
-          </li>
-          <li>
-              <a href="{% url 'resourcedirectory' %}">
-                  <span class="las la-book"></span>
-              </a>
-          </li>
-          <li>
-              <a href="{% url 'multichat' %}">
-                  <span class="las la-comment-alt"></span>
-              </a>
-          </li>
-          <li>
-              <a href="{% url 'clientlist' %}" class="active">
-                  <span class="las la-user-friends"></span>
-              </a>
-          </li>
-          <li>
-            <a href="{% url 'userinfo' %}">
-                <span class="las la-plus-circle"></span>
-            </a>
-        </li>
-      </ul>
-  </div>
+{% load project_templates %}
+
+<div class="clist-path-home show-title">Home</div><div class="clist-path-union show-title"> > </div><div class="clist-path-clist show-title" value="1">Client List</div><div class="clist-path-union2 hide-title"> > </div><div class="clist-path-cinfo hide-title">Client Info</div>
+
+<div class="clist-search-container">
+    <input type="text" placeholder="Search by Name" class="clist-searchbar" id="clist-searchbar" onkeyup="filterClientFunction()">
+    <i class="fa fa-search" aria-hidden="true" id="clist-searchbar-icon"></i>
 </div>
-</body>
-<h2>Client List</h2>
-<p>Client: <br /></p>
-    {% for clients in object1.clients.all %} 
-        {% for accounts in object2.all %}
-            {% if accounts.id == clients.id %}
-                {% if accounts.id in list %}
-                    {% for backgrounds in object3.all %}
-                    {% if backgrounds.user_id == accounts.id %}
-                        <li><a href="{% url 'clientsprofile' clients.id %}">{{ backgrounds }}'s Profile</a></li>
-                        <li><a href="{% url 'clientsinformation' clients.id %}">{{ backgrounds }}'s Information</a></li>
-                    {% endif %}
-                {% endfor %}
-                {% else %}
-                    <li><a href="{% url 'clientsprofile' clients.id %}">{{ accounts }}'s Profile</a></li>
-                    <li><a href="{% url 'clientsinformation' clients.id %}">{{ accounts }}'s Information</a></li>
-                {% endif %}
-            {% endif  %}
-        {% endfor %}
-    <br /> 
+
+<button class="clist-add-btn" type="button">Add New Client</button>
+
+<div class="clist-listBox" id="hidden"></div>
+<div class="clist-listPH" id="clist-listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
+
+<div class="clist-gridBox" id="visible"></div>
+<div class="clist-gridPH" id="clist-gridIcon"><i class="fa fa-th" aria-hidden="true"></i></div>
+
+<div class="clist-cname-list hidden">Client Name</div>
+<div class="clist-taskpen-list hidden">Task Pending</div>
+<div class="clist-lastup-list hidden">Last Updated</div>
+
+<div class="clist-cname-grid hidden">Client Name</div>
+
+<div class="clist-grid-layout visible">
+    {% for client in myclients.clients.all %}
+    <div class="clist-client-grid">
+        <div class="clist-client-icon-grid" value="{{ client.id }}"></div>
+        <div class="clist-client-name-grid">{{ client.first_name }} {{ client.last_name }}</div>
+        <div class="clist-client-email-grid">{{ client.email }}</div>
+        <div class="clist-client-phone-grid">(123)-456-7890</div>
+        <div class="clist-client-dob-grid">DOB: Oct 01, 1952</div>
+        <div class="clist-taskdue-grid">Task Pending: 1</div>
+        <div class="clist-lastupdated-grid">Last Updated: Oct 30, 2021</div>
+        <button class="clist-msg-grid" type="button">Send Message</button>
+    </div>
     {% endfor %}
-<li><a href="{% url 'addclients' %}">Add Clients</a></li>
-<li><a href="{% url 'removeclients' %}">Remove Clients</a></li>
-<li><a href="{% url 'makeclientaccount' %}">Create An Account For A Client</a></li>
+</div>
+
+<div class="clist-list-layout hidden">
+    {% for client in myclients.clients.all %}
+    <div class="clist-client-list">
+        <div class="clist-client-icon-list" value="{{ client.id }}"></div>
+        <div class="clist-client-name-list">{{ client.first_name }} {{ client.last_name }}</div>
+        <div class="clist-taskdue-list">1</div>
+        <div class="clist-lastupdated-list">Oct 30, 2021</div>
+        <button class="{% cycle 'clist-listExplore1' 'clist-listExplore2' %}" type="button">Send Message</button>
+    </div>
+    {% endfor %}
+</div>
+
+{% for client in myclients.clients.all %}
+
+<div class="client-profile hidden" value="{{ client.id }}">
+<div class="client-box1 hidden">
+    <div class="client-box1-pfp">
+
+    </div>
+    <div class="client-box1-name">
+        {{ client.first_name }} {{ client.last_name }}
+    </div>
+    <div class="client-box1-email">
+        {{ client.email }}
+    </div>
+    <div class="client-box1-tag1">
+        Housing Assistance
+    </div>
+    <div class="client-box1-tag2">
+        Senior
+    </div>
+    <button class="client-box1-sendmsg">
+        Send Message
+    </button>
+</div>
+
+<div class="client-box2 hidden">
+    <div class="client-box2-gender-name">
+        Gender
+    </div>
+    <div class="client-box2-gender-box">
+        Female
+    </div>
+    <div class="client-box2-birthday-name">
+        Birthday
+    </div>
+    <div class="client-box2-birthday-box">
+        Oct 01, 1952
+    </div>
+    <div class="client-box2-phone-name">
+        Phone Number
+    </div>
+    <div class="client-box2-phone-box">
+        (123)-456-7890
+    </div>
+    <div class="client-box2-street-name">
+        Street Address
+    </div>
+    <div class="client-box2-street-box">
+        #2 Parkham Apt
+    </div>
+    <div class="client-box2-city-name">
+        City
+    </div>
+    <div class="client-box2-city-box">
+        Salisbury
+    </div>
+    <div class="client-box2-zipcode-name">
+        Zipcode
+    </div>
+    <div class="client-box2-zipcode-box">
+        21804
+    </div>
+    <div class="client-box2-status-name">
+        Member Status
+    </div>
+    <div class="client-box2-status-box">
+        {% if client.is_active %}
+            Active Member
+        {% else %}
+            Inactive Member
+        {% endif %}
+    </div>
+    <div class="client-box2-registered-name">
+        Registered Date
+    </div>
+    <div class="client-box2-registered-box">
+        Jan 30th, 2019
+    </div>
+</div>
+
+<div class="client-box3 hidden">
+    <div class="client-box3-notes-title">
+        Notes
+    </div>
+    <div class="client-box3-notes-box">
+        Jennifer struggles with rent payments each month, although she has been able to work it out on her own. She recently has reached out to get more support for financial housing assistance. Jennifer would benefit from enrolling in Medicare or Medicaid. She has been referred to the Health Insurance Counseling team at MAC. Jennifer could also benefit from the Senior Care Program at MAC, due to her limited mobility. She has been referred to the Senior Care Program team at MAC.
+    </div>
+    <div class="client-box3-activity">
+        Basic Activity and Community Needs
+    </div>
+    <div class="client-box3-date-title">
+        October 12, 2020
+    </div>
+    <div class="client-box3-cm">
+        Kathy, 211 Case Manager
+    </div>
+</div>
+
+<div class="client-box4 hidden">
+    <button class="client-box4-upcoming">
+        Upcoming Appointments
+    </button>
+    <button class="client-box4-past">
+        Past Appointments
+    </button>
+    <button class="client-box4-service">
+        Service Referrals
+    </button>
+    <button class="client-box4-medical">
+        Medical Records
+    </button>
+    <div class="client-box4-box">
+
+    </div>
+</div>
+
+<div class="client-box5 hidden">
+    <div class="client-box5-title">
+        Resource / Documents
+    </div>
+    <div class="client-box5-file1">
+        <div class="client-box5-file-title">
+            Aging and Disability.pdf
+        </div>
+    </div>
+    <div class="client-box5-file2">
+        <div class="client-box5-file-title">
+            Legal and Tax Services.doc
+        </div>
+    </div>
+    <div class="client-box5-file3">
+        <div class="client-box5-file-title">
+            MD Housing and Shelter.png
+        </div>
+    </div>
+    <div class="client-box5-see-all">
+        See all
+    </div>
+</div>
+</div>
+{% endfor %}
+
 {% endblock %}
