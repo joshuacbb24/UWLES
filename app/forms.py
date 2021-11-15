@@ -41,13 +41,13 @@ class User_Creation_Form(UserCreationForm):
         fields = ("username", "email", "password1", "avatar", "first_name", "middle_name", "last_name",)
 
 class User_Bg(ModelForm):
-    firstname = forms.CharField(label='First Name',)
-    lastname = forms.CharField(label='Last Name',)
+    firstname = forms.CharField(label='First Name', required=False)
+    lastname = forms.CharField(label='Last Name', required=False)
     middle_initial = forms.CharField(label='Middle Initial', required=False)
     phone_number = forms.CharField(label='Phone Number',)
     birthday = forms.DateField(label ='Birthdate (m/d/y)', input_formats=['%m/%d/%Y'])
-    insurance_provider = forms.CharField(label='Insurance Provider',)
-    insurance_member_id = forms.CharField(label='Insurance Member ID',)
+    insurance_provider = forms.CharField(label='Insurance Provider', required=False)
+    insurance_member_id = forms.CharField(label='Insurance Member ID', required=False)
     class Meta:
         model = BgInfo
         fields = '__all__'
@@ -64,6 +64,8 @@ class User_EC(ModelForm):
 
 class User_Demo(ModelForm):
     apt_unit = forms.CharField(label='Apt Unit', required=False)
+    ethnicity = forms.CharField(label='Ethnicity', required=False)
+    race = forms.CharField(label='Race', required=False)
     class Meta:
         model = DemoInfo
         fields = '__all__'

@@ -256,6 +256,8 @@ def clientlist(request):
         myclients = ClientList.objects.get(user_id=current_user)
         accts = Account.objects.all()
         bgs = BgInfo.objects.all()
+        demos = DemoInfo.objects.all()
+        notes = ClientNotes.objects.all()
         list = []
         for bg in bgs:
             list.append(bg.user_id)
@@ -263,11 +265,80 @@ def clientlist(request):
         myclients = None
         accts = None
         bgs = None
+        demos = None
+        notes = None
+
+    if request.method == 'POST':
+        form1 = User_Creation_Form(request.POST, request.FILES)
+        form2 = User_Bg(request.POST)
+        form3 = User_Demo(request.POST)
+        form4 = User_Notes(request.POST)
+        if form1.is_valid() and form2.is_valid() and form3.is_valid() and form4.is_valid():
+            user = form1.save(commit=False)
+            user.populate_bgColor()
+            user.save()
+
+            username = form1.cleaned_data.get('username')
+            user_password = form1.cleaned_data.get('password1')
+            user_email = form1.cleaned_data.get('email')
+            user_avatar = form1.cleaned_data.get('avatar')
+            group = Group.objects.get(name="client")
+            user = authenticate(username=username, password=user_password)
+            user.groups.add(group)
+
+            first_name = form1.cleaned_data.get('first_name')
+            last_name = form1.cleaned_data.get('last_name')
+            middle_name = form1.cleaned_data.get('middle_name')
+            gender = form2.cleaned_data.get('gender')
+            phone = form2.cleaned_data.get('phone_number')
+            birthdate = form2.cleaned_data.get('birthday')
+
+            street = form3.cleaned_data.get('street_address')
+            apt = form3.cleaned_data.get('apt_unit')
+            county = form3.cleaned_data.get('county')
+            city = form3.cleaned_data.get('city')
+            state = form3.cleaned_data.get('state')
+            zipcode = form3.cleaned_data.get('zipcode')
+
+            note = form4.cleaned_data.get('notes')
+
+            new_bg = BgInfo(user=user, firstname=first_name, lastname = last_name, middle_initial=middle_name, 
+            phone_number=phone, birthday=birthdate, email=user_email, gender=gender)
+            new_bg.save()
+
+            new_demo = DemoInfo(background=new_bg, street_address=street, apt_unit=apt, city=city, 
+            zipcode=zipcode, county=county, state=state)
+            new_demo.save()
+
+            new_notes = ClientNotes(background=new_bg, notes=note)
+            new_notes.save()
+
+            client_list = ClientList.objects.get(user=current_user)
+            client_list.clients.add(user)
+
+            return redirect('/clientlist')
+        else:
+            print(form1.errors)
+            print(form2.errors)
+            print(form3.errors)
+            print(form4.errors)
+    else:
+        form1 = User_Creation_Form()
+        form2 = User_Bg()
+        form3 = User_Demo()
+        form4 = User_Notes()
+
     context = {
             'myclients': myclients,
             'accts': accts,
             'bgs': bgs,
+            'demos': demos,
+            'notes': notes,
             'list': list,
+            'form1': form1,
+            'form2': form2,
+            'form3': form3,
+            'form4': form4,
     }
     return render(request, 'app/clientlist.html', context)
 

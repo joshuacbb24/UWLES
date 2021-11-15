@@ -1338,3 +1338,500 @@
 
     color: rgba(0, 0, 0, 0.56);
 }
+
+.user-form-account-info{
+    width: 100%;
+    height: 150px;
+}
+.user-form-back-info{
+    width: 100%;
+    height: 200px;
+}
+.user-form-demo-info{
+    width: 100%;
+    height: 150px;
+}
+.user-form-notes{
+    width: 100%;
+    height: 150px;
+}
+.user-form-divider{
+    margin: 5px;
+    width: 100%;
+    border: 1px solid #DEDEDE;
+}
+
+.user-form-account-title{
+    position: absolute;
+    top: 85px;
+    left: 20px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 23px;
+    color: #404040;
+}
+.user-form-back-title{
+    position: absolute;
+    top: 275px;
+    left: 20px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 23px;
+    color: #404040;
+}
+.user-form-demo-title{
+    position: absolute;
+    top: 465px;
+    left: 20px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 23px;
+    color: #404040;
+}
+.user-form-notes-title{
+    position: absolute;
+    top: 635px;
+    left: 20px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 23px;
+    color: #404040;
+}
+.user-form-username-title{
+    position: absolute;
+    top: 85px;
+    left: 200px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-password1-title{
+    position: absolute;
+    top: 155px;
+    left: 200px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-password2-title{
+    position: absolute;
+    top: 155px;
+    left: 450px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-avatar-title{
+    position: absolute;
+    top: 85px;
+    left: 450px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+
+#id_username{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 200px;
+    top: 50px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_password1{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 200px;
+    top: 120px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_password2{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 450px;
+    top: 120px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_avatar{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 450px;
+    top: 50px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+
+#id_first_name{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 230px;
+    top: 200px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_last_name{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 400px;
+    top: 200px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_middle_name{
+    position: absolute;
+    width: 100px;
+    height: 25px;
+    left: 570px;
+    top: 200px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_gender{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 230px;
+    top: 260px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+
+#id_phone_number{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 400px;
+    top: 260px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_email{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 230px;
+    top: 320px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_birthday{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 400px;
+    top: 320px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+.user-form-firstname-title{
+    position: absolute;
+    top: 235px;
+    left: 230px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-lastname-title{
+    position: absolute;
+    top: 235px;
+    left: 400px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-middlename-title{
+    position: absolute;
+    top: 235px;
+    left: 570px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-gender-title{
+    position: absolute;
+    top: 295px;
+    left: 230px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-phone-title{
+    position: absolute;
+    top: 295px;
+    left: 400px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-email-title{
+    position: absolute;
+    top: 355px;
+    left: 230px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-birthdate-title{
+    position: absolute;
+    top: 355px;
+    left: 400px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+#id_street_address{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 200px;
+    top: 420px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_apt_unit{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 370px;
+    top: 420px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_county{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 540px;
+    top: 420px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_city{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 200px;
+    top: 490px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_state{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 370px;
+    top: 490px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_zipcode{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 540px;
+    top: 490px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+.user-form-street-title{
+    position: absolute;
+    top: 455px;
+    left: 200px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-apt-title{
+    position: absolute;
+    top: 455px;
+    left: 370px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-county-title{
+    position: absolute;
+    top: 455px;
+    left: 540px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-city-title{
+    position: absolute;
+    top: 525px;
+    left: 200px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-state-title{
+    position: absolute;
+    top: 525px;
+    left: 370px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+.user-form-zipcode-title{
+    position: absolute;
+    top: 525px;
+    left: 540px;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    display: flex;
+    align-items: center;
+    color: #404040;
+}
+#id_notes{
+    position: absolute;
+    width: 500px;
+    height: 120px;
+    left: 150px;
+    top: 580px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+    resize: none;
+}
+#add-client-exit{
+    position: absolute;
+    left: 650px;
+    top: 20px;
+    cursor: pointer;
+}
+.user-form-save-info{
+    position: absolute;
+    left: 575px;
+    width: 110px;
+    height: 30px;
+    background: #015D67;
+    border-radius: 6px;
+    border: none;
+    font-family: Helvetica;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.01cm;
+    color: #FFFFFF;
+    cursor: pointer;
+}

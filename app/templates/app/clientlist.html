@@ -28,6 +28,8 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'app/content/clientlist.css' %}" />
+<link rel="stylesheet" href="{% static 'app/content/myModal.css' %}" />
+<script src="https://kit.fontawesome.com/f0b88b09a7.js" crossorigin="anonymous"></script>
 <script src="{% static 'app/scripts/clientlist.js' %}"></script>
 
 <script>
@@ -60,7 +62,81 @@
     <i class="fa fa-search" aria-hidden="true" id="clist-searchbar-icon"></i>
 </div>
 
-<button class="clist-add-btn" type="button">Add New Client</button>
+<button class="clist-add-btn" type="button" data-toggle="modal" data-target="#addNewClient">Add New Client</button>
+<form method="post" enctype="multipart/form-data">
+<div class="modal box6 fade" id="addNewClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Add New Client</h5>
+          <i class="fas fa-times fa-lg" id="add-client-exit" data-dismiss="modal"></i>
+        </div>
+        {% csrf_token %}
+        <div class="modal-body">
+            {% csrf_token %}
+            <div class="user-form-divider"></div>
+            <div class="user-form-account-info">
+                <div class="user-form-account-title">Account Information</div>
+                <div class="user-form-username-title">Username</div>
+                <div class="user-form-password1-title">Password</div>
+                <div class="user-form-password2-title">Confirm Password</div>
+                <div class="user-form-avatar-title">Avatar</div>
+
+                {{ form1.username }}
+                {{ form1.password1 }}
+                {{ form1.password2 }}
+                {{ form1.avatar }}
+            </div>
+            <div class="user-form-divider"></div>
+            <div class="user-form-back-info">
+                <div class="user-form-back-title">Background Information</div>
+                <div class="user-form-firstname-title">First Name</div>
+                <div class="user-form-lastname-title">Last Name</div>
+                <div class="user-form-middlename-title">M.I.</div>
+                <div class="user-form-gender-title">Gender</div>
+                <div class="user-form-phone-title">Primary Phone</div>
+                <div class="user-form-email-title">Primary Email</div>
+                <div class="user-form-birthdate-title">Birthdate</div>
+
+                {{ form1.first_name }}
+                {{ form1.last_name }}
+                {{ form1.middle_name }}
+                {{ form2.gender }}
+                {{ form2.phone_number }}
+                {{ form1.email }}
+                {{ form2.birthday }}
+            </div>
+            <div class="user-form-divider"></div>
+            <div class="user-form-demo-info">
+                <div class="user-form-demo-title">Client Demographics</div>
+                <div class="user-form-street-title">Street Address</div>
+                <div class="user-form-apt-title">Apt./Unit Number</div>
+                <div class="user-form-county-title">County</div>
+                <div class="user-form-city-title">City</div>
+                <div class="user-form-state-title">State</div>
+                <div class="user-form-zipcode-title">Zipcode</div>
+
+                {{ form3.street_address }}
+                {{ form3.apt_unit }}
+                {{ form3.county }}
+                {{ form3.city }}
+                {{ form3.state }}
+                {{ form3.zipcode }}
+
+            </div>
+            <div class="user-form-divider"></div>
+            <div class="user-form-notes">
+                <div class="user-form-notes-title">Notes</div>
+                {{ form4.notes }}
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="user-form-save-info">Create Client</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
 
 <div class="clist-listBox" id="hidden"></div>
 <div class="clist-listPH" id="clist-listIcon"><i class="fa fa-bars" aria-hidden="true"></i></div>
@@ -102,7 +178,6 @@
 </div>
 
 {% for client in myclients.clients.all %}
-
 <div class="client-profile hidden" value="{{ client.id }}">
 <div class="client-box1 hidden">
     <div class="client-box1-pfp">
@@ -130,37 +205,73 @@
         Gender
     </div>
     <div class="client-box2-gender-box">
-        Female
+        {% for bg in bgs %}
+            {% if bg.user == client %}
+                {{ bg.gender }}
+            {% endif %}
+        {% endfor %}
     </div>
     <div class="client-box2-birthday-name">
         Birthday
     </div>
     <div class="client-box2-birthday-box">
-        Oct 01, 1952
+        {% for bg in bgs %}
+            {% if bg.user == client %}
+                {{ bg.birthday }}
+            {% endif %}
+        {% endfor %}
     </div>
     <div class="client-box2-phone-name">
         Phone Number
     </div>
     <div class="client-box2-phone-box">
-        (123)-456-7890
+        {% for bg in bgs %}
+            {% if bg.user == client %}
+                {{ bg.phone_number }}
+            {% endif %}
+        {% endfor %}
     </div>
     <div class="client-box2-street-name">
         Street Address
     </div>
     <div class="client-box2-street-box">
-        #2 Parkham Apt
+        {% for bg in bgs %}
+            {% if bg.user == client %}
+                {% for demo in demos %}
+                    {% if demo.background == bg %}
+                        {{ demo.street_address }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
     </div>
     <div class="client-box2-city-name">
         City
     </div>
     <div class="client-box2-city-box">
-        Salisbury
+        {% for bg in bgs %}
+            {% if bg.user == client %}
+                {% for demo in demos %}
+                    {% if demo.background == bg %}
+                        {{ demo.city }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
     </div>
     <div class="client-box2-zipcode-name">
         Zipcode
     </div>
     <div class="client-box2-zipcode-box">
-        21804
+        {% for bg in bgs %}
+            {% if bg.user == client %}
+                {% for demo in demos %}
+                    {% if demo.background == bg %}
+                        {{ demo.zipcode }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
     </div>
     <div class="client-box2-status-name">
         Member Status
@@ -185,7 +296,15 @@
         Notes
     </div>
     <div class="client-box3-notes-box">
-        Jennifer struggles with rent payments each month, although she has been able to work it out on her own. She recently has reached out to get more support for financial housing assistance. Jennifer would benefit from enrolling in Medicare or Medicaid. She has been referred to the Health Insurance Counseling team at MAC. Jennifer could also benefit from the Senior Care Program at MAC, due to her limited mobility. She has been referred to the Senior Care Program team at MAC.
+        {% for bg in bgs %}
+            {% if bg.user == client %}
+                {% for note in notes %}
+                    {% if note.background == bg %}
+                        {{ note.notes }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
     </div>
     <div class="client-box3-activity">
         Basic Activity and Community Needs
