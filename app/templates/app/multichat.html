@@ -2171,7 +2171,7 @@ is empty when first clicked -->
 
                         let extraUserscreate = data.avatars.length - i;
 
-                        $(".rooms").prepend(
+                        $(".rooms").append(
                             `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                             <div class="wrap">
                                 <div avatar-value="${data.room}" class="avatars">
@@ -2658,7 +2658,7 @@ is empty when first clicked -->
                         }
                         else {
 
-                            $(".rooms").prepend(
+                            $(".rooms").append(
                                 `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                                         <div class="wrap">
                                             <div avatar-value="${data.room}" class="avatars">
