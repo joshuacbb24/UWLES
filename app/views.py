@@ -220,6 +220,7 @@ def user_information(request):
 def profile(request):
     current_user = request.user
     try:
+        referrals = ServiceReferrals.objects.filter(referFor_id=current_user)
         obj1 = BgInfo.objects.get(user_id=current_user)
         obj2 = EcInfo.objects.get(background_id=obj1.id)
         obj3 = DemoInfo.objects.get(background_id=obj1.id)
@@ -237,6 +238,7 @@ def profile(request):
             'object2': obj2,
             'object3': obj3,
             'object4': obj4,
+            'referrals': referrals,
             'date_joined': date_joined,
     }
     return render(request, 'app/profile.html', context)
@@ -256,6 +258,7 @@ def clientlist(request):
         myclients = ClientList.objects.get(user_id=current_user)
         accts = Account.objects.all()
         bgs = BgInfo.objects.all()
+        referrals = ServiceReferrals.objects.filter(referFor_id=current_user)
         demos = DemoInfo.objects.all()
         notes = ClientNotes.objects.all()
         list = []
@@ -334,6 +337,7 @@ def clientlist(request):
             'bgs': bgs,
             'demos': demos,
             'notes': notes,
+            'referrals': referrals,
             'list': list,
             'form1': form1,
             'form2': form2,
@@ -597,6 +601,7 @@ def dashboard(request):
     events = MyEvents.objects.filter(created_by = request.user.id)
     notes = MyNotes.objects.filter(user=request.user.id)
     notesForm = MyNotesForm()
+    referServ = ReferServiceForm()
 
     today = timezone.now().date()
     week_from_today = today + timedelta(days=(today.isocalendar()[2] + 4))
@@ -713,6 +718,7 @@ def dashboard(request):
         form1 = TaskForm(request.POST, initial={'priority': '2'})
         create_event_form = Event_Creation_Form(request.POST)
       #  notesForm = MyNotesForm(request.POST)
+        referServ = ReferServiceForm(request.POST)
         if form1.is_valid():
             print("got here")
             form_one = form1.save(commit=False)
@@ -725,20 +731,22 @@ def dashboard(request):
         else:
             print(form1.errors)
 
-       # if notesForm.is_valid():
-       #    notes_form = notesForm.save(commit=False)
-       #    notes_form.user=request.user
-       #    notes_form.date=timezone.now()
-       #    notes_form.save()
-       #    return redirect('/')
-       # else:
-        #    print(notesForm.errors)
+        if referServ.is_valid():
+           refer_Serv = referServ.save(commit=False)
+           refer_Serv.referrer=request.user
+           refer_Serv.save()
+           return redirect('/')
+        else:
+            print(referServ.errors)
+
+       
 
     context = {
         'users': users, 
         'user_bg': user_bg, 
         "rooms": rooms, 
-        "form1": form1, 
+        "form1": form1,
+        'referServ' : referServ,
         'events': events,
         'notes': notes,
         'create_event_form': create_event_form,

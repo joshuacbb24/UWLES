@@ -187,7 +187,10 @@
 				</div>
 
 				<div id="referrals" class="tabcontent">
-					<p>This tab is for service referrals!</p>
+					{% for referral in referrals %}
+						<p>{{ referral.service }} - {{ referral.org }}</p>
+						<p>Referred by {{ referral.referrer }}</p>
+					{% endfor %}
 				</div>
 
 				<div id="records" class="tabcontent">

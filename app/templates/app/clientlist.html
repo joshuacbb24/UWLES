@@ -331,7 +331,10 @@
         Medical Records
     </button>
     <div class="client-box4-box">
-
+        {% for referral in referrals %}
+			<p>{{ referral.service }} - {{ referral.org }}</p>
+			<p>Referred by {{ referral.referrer }}</p>
+		{% endfor %}
     </div>
 </div>
 

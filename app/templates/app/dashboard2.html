@@ -305,26 +305,81 @@ calendar_today
             </div>
         </div>
     </div>
+
+        <script>
+            $(document).ready(function () {
+                $('body').on('click', '.refer-button', function () {
+                $('.refer-client-list').toggle();
+                 $('.refer-submission').toggle();
+
+                })
+
+                 $('body').on('click', '#refer-back', function () {
+                $('.refer-client-list').toggle();
+                 $('.refer-submission').toggle();
+
+            })
+              });
+         </script>
+
+
+
       <div class="menu2">
-        <div class="menu-header">
-          Clients
-          <i class="fas fa-plus fa-1x" id="client-add-btn" type="button" data-toggle="modal" data-target="#addclientModal"></i>
-        </div>
-        <div class="menu2-body">
-          <div class="menu2-body-header">
-            <i class="fas fa-sliders-h fa-2x" id="filter-client-btn"></i>
-            <div class="menu2-input-field">
-              <i class="fa fa-search fa-lg" id="client-search-icon"></i>
-              <input type="text" placeholder="Search" id="client-search-input" onkeyup="filterClientFunction()"/>
+        <div class="refer-client-list">
+            <div class="menu-header">
+              Clients
+              <button class="refer-button" value="{{ client.first_name }} {{ client.last_name }}">Refer To</button>
+              <i class="fas fa-plus fa-1x" id="client-add-btn" type="button" data-toggle="modal" data-target="#addclientModal"></i>
             </div>
-          </div>
-          <div class="menu2-client-box">
-            {% for client in my_clients.clients.all %}
-              <div class="client-list-client" value="{{ client.first_name }} {{ client.last_name }}"><div class="menu2-client-pfp"></div> {{ client.first_name }} {{ client.last_name }}<div class="client-list-tasks">Tasks pending: {{ client_tasks_pending|index:forloop.counter0 }}</div></div>
-            {% endfor %}
-          </div>
+            <div class="menu2-body">
+              <div class="menu2-body-header">
+                <i class="fas fa-sliders-h fa-2x" id="filter-client-btn"></i>
+                
+                <div class="menu2-input-field">
+                  <i class="fa fa-search fa-lg" id="client-search-icon"></i>
+                  <input type="text" placeholder="Search" id="client-search-input" onkeyup="filterClientFunction()"/>
+                  
+                </div>
+              </div>
+              <div class="menu2-client-box">
+                {% for client in my_clients.clients.all %}
+                  <div class="client-list-client" value="{{ client.first_name }} {{ client.last_name }}"><div class="menu2-client-pfp"></div> {{ client.first_name }} {{ client.last_name }}<div class="client-list-tasks">Tasks pending: {{ client_tasks_pending|index:forloop.counter0 }}</div> 
+              
+                            
+                  </div>
+          
+                {% endfor %}
+              </div>
+            </div>
         </div>
-      </div>
+          <div class="refer-submission">
+                <div class="menu-header">
+              Referrals
+              <i class="fas fa-plus fa-1x" id="client-add-btn"></i>
+            </div>
+                <div class="menu2-body-sub">
+                   
+                    
+                            
+                            <!--
+                            <div class="refer-searchbar">
+                                     
+                                    <div class="menu2-input-field-sub">
+                                       <input type="text" placeholder="Search" id="client-search-input-sub" onkeyup="filterClientFunction()"/>
+                                    </div>
+                            </div>
+                            -->
+                            <form method="post" class="refer-service-form" action="{% url 'dashboard' %}">
+                                 {% csrf_token %}
+                                 {{ referServ }}
+                                 <button class="refer-submit" type="submit">Refer Now</button>
+                            </form>
+                            <button id="refer-back" class="fas fa-arrow-left"></button>
+                        </div>
+                    </div>
+                </div>
+
+
     </div>
 
     <div class="modal box5 fade" id="addclientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -463,9 +518,12 @@ calendar_today
             {% for note in notes %}
                 <li class="notes-list-items" value="{{ note.id }}">
                     <p class="note-date">{{ note.date }}</p>
+                    <div id="note-button">
                     <button class="fas fa-pencil-alt" value="{{ note.id }}"></button>
-                    <button class="fas fa-times" value="{{ note.id }}"></button>
-                    <p class="note-descript" value="{{ note.description }}">{{ note.description }}</p>
+                    <button class="fas fa-trash" value="{{ note.id }}"></button>
+                    </div>
+                    <br><br>
+                    <p class="note-descript">{{ note.description }}</p>
                 </li>
             {% endfor %}                  
        </ul>
