@@ -228,7 +228,7 @@ background: #21B5B7;
       .calendar .event-container .event-summary {
         font-weight: 600; }
 
-        #members-page {
+        #event-page {
           display: none;
           /* Hidden by default */
           position: fixed;
@@ -252,7 +252,7 @@ background: #21B5B7;
         }
         
         /* Modal Content/Box */
-        #members-page-content {
+        #event-page-content {
           position: relative;
           background-color: #fefefe;
           margin: 5% auto 15% auto;
@@ -265,7 +265,7 @@ background: #21B5B7;
           box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
           overflow: hidden;
         }
-        #confirmation-removal-page {
+        #delete-page {
           background-color: #fefefe;
           margin: 5% auto 15% auto;
           /* 5% from the top, 15% from the bottom and centered */
@@ -280,7 +280,7 @@ background: #21B5B7;
           overflow: hidden;
       }
 
-      .confirmation-chat-modal {
+      .delete-modal {
           display: none;
           /* Hidden by default */
           position: fixed;
@@ -559,4 +559,3 @@ background: #21B5B7;
         .expired-line{
           border-color: #D2F1F1;
         }
-

@@ -64,7 +64,7 @@ for (var i = 0; i < data.events.length; i++)
 //console.log("theevent", theevent)
 //console.log("startime", startTime)
 //console.log("endtime", endTime)
-console.log("eventlist", eventlist)
+//console.log("eventlist", eventlist)
 if (call == 0){
   callCalendar(eventlist);
   call = null;
@@ -101,12 +101,12 @@ function callCalendar(events) {
 $("#container").simpleCalendar({
     fixedStartDay: 0, // begin weeks by sunday
     onDateSelect: function (date, events, clickedday, plug) {
-      console.log("after timeout/cal2");
+      //console.log("after timeout/cal2");
       day = clickedday;
       cal = plug;
       calday = date;
       var taskday = date.toString();
-      console.log("plug", plug)
+      //console.log("plug", plug)
       taskday = taskday.split(" ");
       taskday = (taskday[0] + ", " + taskday[1] + " " + taskday[2] + " " + taskday[3]);
       $(".event-day").text("");
@@ -124,7 +124,7 @@ $("#container").simpleCalendar({
       choice = 1;
       noevent = false;
       id = clickedevent;
-      console.log("clickedevent", clickedevent)
+      //console.log("clickedevent", clickedevent)
       $.ajax( 
         { 
           type:"GET", 
