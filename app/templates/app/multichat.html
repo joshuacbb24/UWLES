@@ -694,6 +694,14 @@
             bottom: -6px;
             left: 13px;
         }
+        .user-header .tagify {
+    min-width: 600px;
+    max-width: 600px;
+    min-height: 36px;
+    margin: 5%;
+    margin-top: 2%;
+    border-radius: 10px;
+}
     </style>
 </head>
 
@@ -864,10 +872,11 @@ is empty when first clicked -->
                 <div class="user-header">
                     <section id="users-list"
                         style="display: none; position: relative; background-color: #fff; bottom: 3px;">
-
-                        <input id="tag-input" style="display: none; position: relative; background-color: #fff;"
+                        <div style="display: inline-flex;">
+                            To:
+                        <input id="tag-input" style="display: none; position: relative; background-color: #fff;width:600px;"
                             name="users-list-tags" />
-
+                        </div>
                     </section>
                     <div class="title-wrap" style="display: inline;margin-top:10px">
                         <b>
@@ -908,7 +917,7 @@ is empty when first clicked -->
                 </div>
             </div>
             <div class="right-panel">
-                <button class="rightAccordion" style="display: none;">Members</button>
+                <button class="rightAccordion" style="display: none;">Members<i style=font-size:25px;float:right; class="las la-angle-down arrow-icon"></i></button>
                 <div class="rightPanel">
 
                     <ul class="right-btn-group">
@@ -917,7 +926,7 @@ is empty when first clicked -->
                         </li>
                     </ul>
                 </div>
-                <button class="rightAccordion">Files</button>
+                <button class="rightAccordion">Files<i style=font-size:25px;float:right; class="las la-angle-down arrow-icon"></i></button>
                 <div class="rightPanel">
                     <ul class="right-btn-group">
                         <li class="list-of-files">
@@ -926,7 +935,7 @@ is empty when first clicked -->
                     </ul>
                 </div>
 
-                <button class="rightAccordion">Links</button>
+                <button class="rightAccordion">Links<i style=font-size:25px;float:right; class="las la-angle-down arrow-icon"></i></button>
                 <div class="rightPanel">
                     <ul class="right-btn-group">
                         <li class="list-of-links">
@@ -1490,6 +1499,7 @@ is empty when first clicked -->
                         // Message
                         let pattern = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/[^><]*)?", "g")
                         let text = (data.message.text) ? data.message.text : data.message;
+                        let inroomid = (data.message.room) ? data.message.room : data.room;
                         let user = (data.message.from_user) ? data.message.from_user : data.username;
                         let useravatar = (data.message.avatar) ? data.message.avatar : data.avatar;
                         let defaultcolor = (data.message.default) ? data.message.default : data.default;
@@ -1534,7 +1544,7 @@ is empty when first clicked -->
                             }
                         }
                         //extract the url from the message
-                        if (notice && !is_file) {
+                        if (notice && !is_file && roomId == inroomid) {
                             console.log("slow it down");
                             console.log("slow it down");
                             console.log("slow it down");
@@ -1545,7 +1555,7 @@ is empty when first clicked -->
                                 `</span>` +
                                 `</div>`);
                         }
-                        else if (!is_file && !notice) {
+                        else if (!is_file && !notice  && roomId == inroomid) {
 
                             result = text.replace(pattern, function (url) {
                                 ;
@@ -1651,7 +1661,7 @@ is empty when first clicked -->
                                 }
                             }
                         }
-                        else if (is_file && !notice) {
+                        else if (is_file && !notice  && roomId == inroomid) {
                             ext = text.split(".");
                             extension = ext[ext.length - 1];
                             extension = extension.replace("</a>", "")
@@ -2161,7 +2171,7 @@ is empty when first clicked -->
 
                         let extraUserscreate = data.avatars.length - i;
 
-                        $(".rooms").append(
+                        $(".rooms").prepend(
                             `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                             <div class="wrap">
                                 <div avatar-value="${data.room}" class="avatars">
@@ -2648,7 +2658,7 @@ is empty when first clicked -->
                         }
                         else {
 
-                            $(".rooms").append(
+                            $(".rooms").prepend(
                                 `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                                         <div class="wrap">
                                             <div avatar-value="${data.room}" class="avatars">
