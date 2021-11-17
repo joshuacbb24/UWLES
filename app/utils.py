@@ -3,6 +3,8 @@ from channels.db import database_sync_to_async
 from .exceptions import ClientError
 from .models import ChatGroup, Messages, Account, OfflineMessage
 
+import datetime
+
 
 class RoomExistsException(Exception):
     def __init__(self, room):
@@ -54,6 +56,10 @@ def save_message(room_id, user, message, file, notice):
     else:
         message = Messages.objects.create(
             chat_group=room, from_user=user, message=message, is_file=False, is_notice=False)
+
+    current_datetime = datetime.datetime.now()
+    room.rank = current_datetime
+    print("current_datetime", current_datetime)
 
     return message
 
@@ -226,7 +232,7 @@ def fetch_rooms(user):
     try:
         members = []
         alert = "User made change to chat."
-        groups = ChatGroup.objects.filter(members=user)
+        groups = ChatGroup.objects.filter(members=user).order_by('-rank')
         for group in groups:
             unreadroom = OfflineMessage.objects.filter(
                 offline_user=user, chat_group=group)

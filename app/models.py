@@ -94,6 +94,7 @@ class ChatGroup(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     edited = models.BooleanField(default=False)
     solitary = models.BooleanField(default=False)
+    rank = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.group_name
