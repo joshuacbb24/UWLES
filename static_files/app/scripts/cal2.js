@@ -88,7 +88,7 @@ if (call != 0 && onmonth != 0){
   $(newday).click();
   }
   $("#event-page").hide();
-  $(".confirmation-chat-modal").hide();
+  $(".delete-modal").hide();
   call = null;
 } 
 },
@@ -165,7 +165,7 @@ $("#add-event-button").on('click', function () {
 getCalendar();
 $("#close-modal").on('click', function(){
 call = 0;
-document.getElementById('member-page').style.display='none'
+document.getElementById('event-page').style.display='none'
 });
 /*$(".show-events").on('click', function () {
 document.getElementById('show-events').style.pointerEvents = 'none';
@@ -220,12 +220,12 @@ $("#id_all_day").change(function() {
 });
 $("#canc").on('click', function () {
 if (noevent === true){
-  $("#members-page").hide();
+  $("#event-page").hide();
   //$("#event_form").trigger("reset");
 }
 
 else {
-  $(".delete-chat-modal").show();
+  $(".delete-modal").show();
 }
 });
 $("#confirmation").on('click', function () {
@@ -258,7 +258,7 @@ $("#confirmation").on('click', function () {
   });
 });
 $("#reverse").on('click', function () {
-  $(".confirmation-chat-modal").hide();
+  $(".delete-modal").hide();
 });
 $("#event_form").submit(function (e) {
   if (choice == 0)
