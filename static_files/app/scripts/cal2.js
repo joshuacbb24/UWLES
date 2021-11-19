@@ -218,7 +218,7 @@ $("#id_all_day").change(function() {
   $("#id_end_time").val(oldendtime);
   }
 });
-$("#canc").on('click', function () {
+$("#cancel-submit").on('click', function () {
 if (noevent === true){
   $("#event-page").hide();
   //$("#event_form").trigger("reset");
@@ -257,7 +257,7 @@ $("#confirmation-of-delete").on('click', function () {
     //dataType: 'json'
   });
 });
-$("#reverse").on('click', function () {
+$("#reverse-delete").on('click', function () {
   $(".delete-modal").hide();
 });
 $("#event_form").submit(function (e) {
