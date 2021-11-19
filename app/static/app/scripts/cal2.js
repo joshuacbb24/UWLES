@@ -228,7 +228,7 @@ else {
   $(".delete-modal").show();
 }
 });
-$("#confirmation").on('click', function () {
+$("#confirmation-of-delete").on('click', function () {
   $.ajax({
     type: "POST",
     url: "createevents/",
