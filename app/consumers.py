@@ -3,7 +3,6 @@ from django.conf import settings
 import pytz
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-
 from .exceptions import ClientError
 from .utils import get_room_or_error, save_message, create_group, fetch_recent, fetch_members, fetch_users, add_group, fetch_rooms, fetch_title, delete_room, delete_user, editname, unread, fetch_unread, acknowledged_message, get_self, delete_unread, offline, online, RoomExistsException
 
@@ -18,7 +17,6 @@ class CalConsumer(AsyncJsonWebsocketConsumer):
         # Accept the connection
         await self.accept()
     self.user_channels[self.scope['user'].username] = self.channel_name
-
     async def disconnect(self, code):
         self.user_channels[self.scope['user'].username] = None
         try:
@@ -26,7 +24,6 @@ class CalConsumer(AsyncJsonWebsocketConsumer):
         except ClientError:
             pass
     # Command helper methods called by receive_json
-
     async def receive_json(self, content):
         # Messages will have a "command" key we can switch on
         command = content.get("command", None)
@@ -61,7 +58,6 @@ class CalConsumer(AsyncJsonWebsocketConsumer):
                         'acknowledged': group.acknowledged,
                     }, 'msg_type': 'get_rooms', })        
         except:
-
 """
 
 
@@ -103,7 +99,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         #if not get a new one with self.user_channels[self.scope['user'].username] = self.channel_name
         #
         # self.user_channels.get(self.scope['user'].username)
-        print('channel_name', self.user_channels.get(self.scope['user'].username))
+        
+        print('channel_name self', self.channel_name)
         self.user_channels[self.scope['user'].username] = self.channel_name
         print('channel_name', self.user_channels.get(self.scope['user'].username))
 
@@ -129,6 +126,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         print("unreadobj", unreadobj)
                         await self.send_json({'message': {
                             'id': message.id,
+                            'room': content["room"],
                             'text': message.message,
                             'from_user': message.from_user.username,
                             'avatar': message.from_user.avatar.url if message.from_user.avatar else '',
@@ -372,6 +370,13 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 message = await save_message(content["room"], self.scope["user"], content["message"], content["file"], content["notice"])
                 roomusers, newroom = await fetch_members(content["room"])
                 await self.send_room(content["room"], message, notification=True)
+                """
+                user = self.scope["user"]
+                roomtrial = await get_room_or_error(content["room"], user)
+                ch_group_list = self.channel_layer.group_channels(roomtrial.group_name)
+                for ch_group in ch_group_list:
+                    print("channel list", ch_group)
+                """
                 for roomuser in roomusers:
                     channel_name = self.user_channels.get(roomuser.username)
                     print("username inside send", channel_name)
@@ -387,6 +392,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                                 "message": message.id,
                                 "messagestring": message.message,
                                 "is_notice": message.is_notice,
+                                "sender": self.scope["user"].username
                             }
                         )
                     elif not channel_name:
@@ -633,6 +639,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 "message": event["message"],
                 "messagestring": event["messagestring"],
                 "is_notice": event["is_notice"],
+                "sender": event["sender"]
             },
         )
 

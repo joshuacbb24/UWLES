@@ -19,10 +19,12 @@
   <link rel="stylesheet" href="{% static 'app/content/chatPopUp.css' %}" />
   <link rel="stylesheet" href="{% static 'app/content/myModal.css' %}" />
   <link rel="stylesheet" href="{% static 'app/content/simple-calendar.css' %}" />
+  <link rel="stylesheet" href="{% static 'app/content/tagify.css' %}" />
+  <link rel="stylesheet" href="{% static 'app/content/tags.css' %}" />
 
 
 
-  <link rel="stylesheet" href="{% static 'app/content/instantmessage.css' %}" />
+  <!--<link rel="stylesheet" href="{% static 'app/content/instantmessage.css' %}" />-->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css"
     rel="stylesheet">
 
@@ -34,11 +36,13 @@
 
   <script src="{% static 'app/scripts/tasks.js' %}"></script>
   <script src="{% static 'app/scripts/cal2.js' %}"></script>
-  <!--<script src="{% static 'app/scripts/chatPopUp.js' %}"></script>-->
+  <script src="{% static 'app/scripts/chatPopUp.js' %}"></script>
   <script src="{% static 'app/scripts/jquery.ui.widget.js' %}"></script>
   <script src="{% static 'app/scripts/jquery.iframe-transport.js' %}"></script>
   <script src="{% static 'app/scripts/jquery.fileupload.js' %}"></script>
   
+  <script src="{% static 'app/scripts/tag.js' %}"></script>
+  <script src="{% static 'app/scripts/jQuery.tagify.min.js' %}"></script>
   <!--<script src="{% static 'app/scripts/pop.js' %}"></script>-->
   <style>
     body {
@@ -188,8 +192,8 @@ calendar_today
         </div>
       </div>
       </div>
-      <div class="confirmation-chat-modal">
-        <div id="confirmation-removal-page">
+      <div class="delete-modal">
+        <div id="delete-page">
             <div>
                 <p style="margin-left: 5%; padding-top: 5%">
                     <strong>Remove Event</strong> <br>
@@ -199,7 +203,7 @@ calendar_today
                 </p>
             </div>
             <span style="margin-top: 5%; float: right; margin-right: 5%">
-                <button id="confirmation" type="button" class="btn btn-primary" style="padding: 5px;
+                <button id="confirmation-of-delete" type="button" class="btn btn-primary" style="padding: 5px;
                 position: relative;
                 width: 90px;
                 height: 40px;
@@ -212,13 +216,13 @@ calendar_today
                 font-weight: normal;
                 font-size: 14px;
                 cursor: pointer;">Confirm</button>
-                <button type="button" class="btn btn-outline-secondary" id="reverse">Cancel</button>
+                <button type="button" class="btn btn-outline-secondary" id="reverse-delete">Cancel</button>
             </span>
         </div>
     </div>
-      <div id="members-page">
+      <div id="event-page">
 
-        <div id="members-page-content">
+        <div id="event-page-content">
             <header>
                 <div><span style="padding-left: 5%;font-size:x-large;">Add Event</span>
                     <i class="las la-window-close" style="right:0; height: 10%; float:right; position: relative;"
@@ -294,33 +298,88 @@ calendar_today
                         font-weight: normal;
                         font-size: 14px;
                         cursor: pointer;">Save</button>
-                        <button type="button" class="btn btn-outline-secondary" name="cancel" id="canc">Delete</button>
+                        <button type="button" class="btn btn-outline-secondary" name="cancel-submit" id="cancel-submit">Delete</button>
                       </form>
                     </p>
                 </div>
             </div>
         </div>
     </div>
+
+        <script>
+            $(document).ready(function () {
+                $('body').on('click', '.refer-button', function () {
+                $('.refer-client-list').toggle();
+                 $('.refer-submission').toggle();
+
+                })
+
+                 $('body').on('click', '#refer-back', function () {
+                $('.refer-client-list').toggle();
+                 $('.refer-submission').toggle();
+
+            })
+              });
+         </script>
+
+
+
       <div class="menu2">
-        <div class="menu-header">
-          Clients
-          <i class="fas fa-plus fa-1x" id="client-add-btn" type="button" data-toggle="modal" data-target="#addclientModal"></i>
-        </div>
-        <div class="menu2-body">
-          <div class="menu2-body-header">
-            <i class="fas fa-sliders-h fa-2x" id="filter-client-btn"></i>
-            <div class="menu2-input-field">
-              <i class="fa fa-search fa-lg" id="client-search-icon"></i>
-              <input type="text" placeholder="Search" id="client-search-input" onkeyup="filterClientFunction()"/>
+        <div class="refer-client-list">
+            <div class="menu-header">
+              Clients
+              <button class="refer-button" value="{{ client.first_name }} {{ client.last_name }}">Refer To</button>
+              <i class="fas fa-plus fa-1x" id="client-add-btn" type="button" data-toggle="modal" data-target="#addclientModal"></i>
             </div>
-          </div>
-          <div class="menu2-client-box">
-            {% for client in my_clients.clients.all %}
-              <div class="client-list-client" value="{{ client.first_name }} {{ client.last_name }}"><div class="menu2-client-pfp"></div> {{ client.first_name }} {{ client.last_name }}<div class="client-list-tasks">Tasks pending: {{ client_tasks_pending|index:forloop.counter0 }}</div></div>
-            {% endfor %}
-          </div>
+            <div class="menu2-body">
+              <div class="menu2-body-header">
+                <i class="fas fa-sliders-h fa-2x" id="filter-client-btn"></i>
+                
+                <div class="menu2-input-field">
+                  <i class="fa fa-search fa-lg" id="client-search-icon"></i>
+                  <input type="text" placeholder="Search" id="client-search-input" onkeyup="filterClientFunction()"/>
+                  
+                </div>
+              </div>
+              <div class="menu2-client-box">
+                {% for client in my_clients.clients.all %}
+                  <div class="client-list-client" value="{{ client.first_name }} {{ client.last_name }}"><div class="menu2-client-pfp"></div> {{ client.first_name }} {{ client.last_name }}<div class="client-list-tasks">Tasks pending: {{ client_tasks_pending|index:forloop.counter0 }}</div> 
+              
+                            
+                  </div>
+          
+                {% endfor %}
+              </div>
+            </div>
         </div>
-      </div>
+          <div class="refer-submission">
+                <div class="menu-header">
+              Referrals
+              <i class="fas fa-plus fa-1x" id="client-add-btn"></i>
+            </div>
+                <div class="menu2-body-sub">
+                   
+                    
+                            
+                            <!--
+                            <div class="refer-searchbar">
+                                     
+                                    <div class="menu2-input-field-sub">
+                                       <input type="text" placeholder="Search" id="client-search-input-sub" onkeyup="filterClientFunction()"/>
+                                    </div>
+                            </div>
+                            -->
+                            <form method="post" class="refer-service-form" action="{% url 'dashboard' %}">
+                                 {% csrf_token %}
+                                 {{ referServ }}
+                                 <button class="refer-submit" type="submit">Refer Now</button>
+                            </form>
+                            <button id="refer-back" class="fas fa-arrow-left"></button>
+                        </div>
+                    </div>
+                </div>
+
+
     </div>
 
     <div class="modal box5 fade" id="addclientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -349,7 +408,7 @@ calendar_today
     
 
     $(document).ready(function() {
-        $('body').on('click', '.fas.fa-times', function () {
+        $('body').on('click', '.fas.fa-trash', function () {
             var noteid = $(this).val();
             const fd = new FormData();
             var result = confirm("Are you sure you want to delete this note?");
@@ -459,9 +518,12 @@ calendar_today
             {% for note in notes %}
                 <li class="notes-list-items" value="{{ note.id }}">
                     <p class="note-date">{{ note.date }}</p>
+                    <div id="note-button">
                     <button class="fas fa-pencil-alt" value="{{ note.id }}"></button>
-                    <button class="fas fa-times" value="{{ note.id }}"></button>
-                    <p class="note-descript" value="{{ note.description }}">{{ note.description }}</p>
+                    <button class="fas fa-trash" value="{{ note.id }}"></button>
+                    </div>
+                    <br><br>
+                    <p class="note-descript">{{ note.description }}</p>
                 </li>
             {% endfor %}                  
        </ul>
@@ -555,35 +617,25 @@ calendar_today
     </form>
 
     <div class="open-button">Chat<i id="opn_btn" style="font-size:25px;color:white;float:right;" class="las la-angle-up"
-        onclick="openForm()"></i></div>
+      onclick="openForm()"></i></div>
 
-    <div class="chat-popup" id="myForm">
-      <div class="chatHeader">Chat<i id="cls_btn" style="font-size:25px;color:white;float:right;"
-          class="las la-angle-down" onclick="closeForm()"></i></div>
-      <div class="left-panel" id="left-panel">
-        <div class="left-panel-header" style="height: 15%;">
-          <div class="search-container">
-            <input type=" text" placeholder="Search.." name="search">
-            <button type="submit"><i class="fa fa-search"></i></button>
-          </div>
-        </div>
-        <div class="rooms-container">
-          <div class="rooms">
-            {% for room in rooms %}
-            <li class="room-link" data-room-id="{{ room.id }}">{{ room }}</li>
-            {% endfor %}
-          </div>
+  <div class="chat-popup" id="myForm">
+    <div class="chatHeader">Chat<i id="cls_btn" style="font-size:25px;color:white;float:right;"
+        class="las la-angle-down" onclick="closeForm()"></i></div>
+    <div class="left-panel" id="left-panel">
+      <div class="left-panel-header" style="height: 15%;">
+        <div class="search-container">
+          <input style="outline: none;" id="myInput" type="text" placeholder="Search.." name="search"
+                          onkeyup="SearchFunction()" autocomplete="off" />
         </div>
       </div>
-      <div class="middle-panel" id="middle-panel">
-        <div class="user-header" style="height: 10%;">
-          <div>
-            <h4 style="margin-top: 3.5%;"></h4><button class="showMembers" style="display: none;">members</button>
-          </div>
-          <button class="add-user" style="display: none;">Add User</button>
-
-
-        </div>
+      <div class="rooms-container">
+        <ul id="rooms" class="rooms" style="height: 100%;">
+        </ul>
+      </div>
+    </div>
+    <div class="middle-panel" id="middle-panel">
+      <div class="user-header" style="height: 10%;">
         <section id="users-list" style="display: none; position: relative;">
           <p>
             <input id="tag-input" style="display: none; position: relative;" name="users-list-tags" /><button
@@ -592,52 +644,192 @@ calendar_today
             </button>
           </p>
         </section>
-        <div class="arrows" style="height: 10%;background-color: #F0F0F0;"><i id="go_back" class="las la-arrow-left"
-            style="font-size:25px;margin-top: 3.5%;"></i><i id="expand" class="las la-expand-arrows-alt"
-            style="font-size:25px;float:right;cursor: pointer;margin-top: 3.5%;"></i></div>
-        <div class="chat-log"></div>
-        <div class="input-section" style="height: 10%;background-color: #F0F0F0;">
-          <input id="fileupload" type="file" name="file" multiple style="display: none" data-url="{% url 'upload' %}"
-            data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' />
-          <form class="sending-form">
-            <div>
-              <input type="text" style="display: none; width: 75%;margin-top: 2%;" id="typed_msg"
-                placeholder="Type a message" required />
-              <i id="upload-photos-button" class="las la-paperclip"
-                style="display:none;cursor:pointer;font-size:25px;float: left;margin-top: 3%;margin-left: 1.5%;"></i>
-              <button class="msg_send_btn" style="display: none;float:left;margin-right: 1%;width: 9%;" type="submit"><i
-                  style="color: white;" class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
-            </div>
-          </form>
-        </div>
+        <div class="title-wrap" style="display: inline;margin-top:10px">
+          
+              <div class="avatars" id="avatars" style="margin-left: 10px; margin-block: auto;"></div>
+              <p class="room-title"
+                  style=" width: 50%; color:#015D67; font-size: large; overflow:hidden; white-space: nowrap;text-overflow:ellipsis;margin-left: 65px; padding-top: 6px;">
+              </p>
+          
+          <i id="add-members" class="las la-plus-circle" style="color:#015D67;cursor: pointer; position: absolute; top: 1px;margin-left: -20px;"></i>
       </div>
-      <div class="right-panel" id="right-panel" style="display: none;">
-        <button class="rightAccordion" style="display: none;">Members</button>
-        <div class="rightPanel">
-          <ul class="right-btn-group">
-            <li class="list-of-members"></li>
-          </ul>
-        </div>
-        <button class="rightAccordion">Files</button>
-        <div class="rightPanel">
-          <div class="right-btn-group">
-            <button>File 1</button>
-            <button>File 2</button>
-            <button>File 3</button>
+      </div>
+      <div class="arrows" style="height: 10%;background-color: #F0F0F0;"><i id="go_back" class="las la-arrow-left"
+          style="font-size:25px;margin-top: 3.5%;"></i><i id="expand" class="las la-expand-arrows-alt"
+          style="font-size:25px;float:right;cursor: pointer;margin-top: 3.5%;"></i></div>
+      <div class="chat-log"></div>
+      <div class="input-section" style="height: 10%;background-color: #F0F0F0;">
+        <input id="fileupload" type="file" name="file" multiple style="display: none" data-url="{% url 'upload' %}"
+          data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}' />
+        <form class="sending-form">
+          <div>
+            <input type="text" style="display: none; width: 75%;margin-top: 2%;" id="typed_msg"
+              placeholder="Type a message" required />
+            <i id="upload-photos-button" class="las la-paperclip"
+              style="display:none;cursor:pointer;font-size:25px;float: left;margin-top: 3%;margin-left: 1.5%;"></i>
+              <button class="msg_send_btn" style="display: none;" type="submit"><i
+                style="color: white;font-size: 22px;margin-top:4px;margin-left:2px;"
+                class="las la-paper-plane" aria-hidden="true"></i></button>
           </div>
-        </div>
-
-        <button class="rightAccordion">Links</button>
-        <div class="rightPanel">
-          <div class="right-btn-group">
-            <button>Link 1</button>
-            <button>Link 2</button>
-            <button>Link 3</button>
-          </div>
-        </div>
-        <script src="{% static 'app/scripts/rightChat.js' %}"></script>
+        </form>
       </div>
     </div>
+    <div class="right-panel" id="right-panel" style="display: none;">
+      <button class="rightAccordion" style="display: none;">Members<i style=font-size:25px;float:right; class="las la-angle-down arrow-icon"></i></button>
+      <div class="rightPanel">
+
+          <ul class="right-btn-group" style="    overflow-y: auto;
+          overflow-x: hidden;">
+              <li class="list-of-members" style="    overflow-y: auto;
+              overflow-x: hidden; margin-top: 5px;">
+
+              </li>
+          </ul>
+      </div>
+      <button class="rightAccordion">Files<i style=font-size:25px;float:right; class="las la-angle-down arrow-icon"></i></button>
+      <div class="rightPanel">
+          <ul class="right-btn-group" style="    overflow-y: auto;
+          overflow-x: hidden;">
+              <li class="list-of-files" style="    overflow-y: auto;
+              overflow-x: hidden; margin-top: 5px;">
+
+              </li>
+          </ul>
+      </div>
+
+      <button class="rightAccordion">Links<i style=font-size:25px;float:right; class="las la-angle-down arrow-icon"></i></button>
+      <div class="rightPanel">
+          <ul class="right-btn-group" style="    overflow-y: auto;
+          overflow-x: hidden;">
+              <li class="list-of-links" style="    overflow-y: auto;
+              overflow-x: hidden; margin-top: 5px;">
+
+              </li>
+          </ul>
+      </div>
+      <script src="{% static 'app/scripts/rightChat.js' %}"></script>
+  </div>
+  </div>
+  <div id="members-page">
+
+    <div id="members-page-content">
+        <header>
+            <div><span style="padding-left: 5%;font-size:x-large;">Add Members</span>
+                <i class="las la-window-close" style="right:0; height: 10%; float:right; position: relative;"
+                    onclick="document.getElementById('members-page').style.display='none'" id="close"
+                    title="Close Modal"></i>
+            </div>
+            <div><span class="room-name" style="padding-left: 5%;font-size:large;"></span></div>
+
+        </header>
+
+        <div>
+            <section id="section-manual-suggestions">
+                <input style="margin-left: 5%;" name='tags-manual-suggestions' placeholder='Search Users'
+                    id="user-input">
+            </section>
+
+            <div>
+                <p style="margin-left: 5%;">
+                    <strong>Privacy</strong> <br>
+                    - External users cannot be added <br>
+                    - New members will see previous messages and files
+                </p>
+            </div>
+        </div>
+        <footer style="margin-top: 1%;float: right">
+          <span style="
+margin-left: 400px;
+">
+                <button id="submit-users" type="button" class="btn btn-primary" disabled>Add Users</button>
+                <button type="button" class="btn btn-outline-secondary" name='cancel' id="canc">Cancel</button>
+            </span>
+        </footer>
+    </div>
+</div>
+<div class="confirmation-modal">
+    <div id="confirmation-page">
+        <div>
+            <p style="margin-left: 5%; padding-top: 5%">
+                <strong>Remove User</strong> <br>
+            <p style="margin-left: 5%; padding-top: 2%">
+                Are you sure you wish to remove this user? <br>
+                They will no longer be a member of this chat. <br>
+            </p>
+            </p>
+        </div>
+        <span style="margin-top: 5%; float: right; margin-right: 5%">
+            <button id="confirm" type="button" class="btn btn-primary">Confirm</button>
+            <button type="button" class="btn btn-outline-secondary" id="exit-member-removal">Cancel</button>
+        </span>
+    </div>
+</div>
+
+<div class="confirmation-chat-modal">
+    <div id="confirmation-removal-page">
+        <div>
+            <p style="margin-left: 5%; padding-top: 5%">
+                <strong>Remove Chat</strong> <br>
+            <p style="margin-left: 5%; padding-top: 2%">
+                Are you sure you wish to delete this chat? <br>
+                You will no longer be a member of this chat <br>
+                and you will no longer have access to past messages.
+            </p>
+            </p>
+        </div>
+        <span style="margin-top: 5%; float: right; margin-right: 5%">
+            <button id="confirmation" type="button" class="btn btn-primary">Confirm</button>
+            <button type="button" class="btn btn-outline-secondary" id="reverse">Cancel</button>
+        </span>
+    </div>
+</div>
+<div class="edit-chat-modal">
+    <div id="change-name-page">
+        <h3 style="margin-left: 5%;margin-top: 5%;">Edit Chat Name</h3>
+
+        <p style="margin-left: 5%;">
+            <input style="    padding: 6px;
+            margin-top: 5%;
+            font-size: 17px;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 5px;
+            border-color: #afafaf;
+            width: 95%;
+            position: relative;
+            height: 60%;" type="text" placeholder="New Name..." name='new-chat-name' id="chatName"
+                onkeyup="onChangeName()" onkeypress="return /[0-9a-zA-Z]/.test(event.key);" maxlength="100" />
+
+        </p>
+        <div>
+            <p style="margin-left: 5%; padding-top: 5%;">
+                <strong>Notice</strong> <br>
+                - Can not name room the same as another <br>
+                - Chat name can not be changed back
+            </p>
+        </div>
+
+        <span style="margin-top: 5%; float: right; margin-right: 5%">
+            <button id="confirmation-of-name" type="button" class="btn btn-primary" disabled>Confirm</button>
+            <button type="button" class="btn btn-outline-secondary" id="cancel-name">Cancel</button>
+        </span>
+    </div>
+
+</div>
+<div class="Disconnected-modal">
+    <div class="disconnected-message" style="
+    position: relative;
+    width: 46.4%;
+    background-color: white;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 3px;
+    margin-left: 25.1%;
+    text-align: center;
+    color: orange;
+    padding-top: 12px;
+"><u>Trying to Reconnect...</u></div>
+</div>
     <input id="myself" type="hidden" value="{{request.user.username}}" />
     <script>
       function filterClientFunction() {

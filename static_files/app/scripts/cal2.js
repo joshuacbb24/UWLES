@@ -64,7 +64,7 @@ for (var i = 0; i < data.events.length; i++)
 //console.log("theevent", theevent)
 //console.log("startime", startTime)
 //console.log("endtime", endTime)
-console.log("eventlist", eventlist)
+//console.log("eventlist", eventlist)
 if (call == 0){
   callCalendar(eventlist);
   call = null;
@@ -87,8 +87,8 @@ if (call != 0 && onmonth != 0){
   var newday = document.getElementById(day);
   $(newday).click();
   }
-  $("#members-page").hide();
-  $(".confirmation-chat-modal").hide();
+  $("#event-page").hide();
+  $(".delete-modal").hide();
   call = null;
 } 
 },
@@ -101,12 +101,12 @@ function callCalendar(events) {
 $("#container").simpleCalendar({
     fixedStartDay: 0, // begin weeks by sunday
     onDateSelect: function (date, events, clickedday, plug) {
-      console.log("after timeout/cal2");
+      //console.log("after timeout/cal2");
       day = clickedday;
       cal = plug;
       calday = date;
       var taskday = date.toString();
-      console.log("plug", plug)
+      //console.log("plug", plug)
       taskday = taskday.split(" ");
       taskday = (taskday[0] + ", " + taskday[1] + " " + taskday[2] + " " + taskday[3]);
       $(".event-day").text("");
@@ -124,7 +124,7 @@ $("#container").simpleCalendar({
       choice = 1;
       noevent = false;
       id = clickedevent;
-      console.log("clickedevent", clickedevent)
+      //console.log("clickedevent", clickedevent)
       $.ajax( 
         { 
           type:"GET", 
@@ -142,7 +142,7 @@ $("#container").simpleCalendar({
           $("#id_start_time").val(data.startTime);
           $("#id_end_day").val(data.endDate);
           $("#id_start_day").val(data.startDate);
-          $("#members-page").show();
+          $("#event-page").show();
         }
       })
     },
@@ -158,14 +158,14 @@ $("#add-event-button").on('click', function () {
   $("#id_all_day").val(false);
   $("#id_title").val("");
   $("#id_description").val("");
-  $("#members-page").show();
+  $("#event-page").show();
   });
 };
 
 getCalendar();
 $("#close-modal").on('click', function(){
 call = 0;
-document.getElementById('members-page').style.display='none'
+document.getElementById('event-page').style.display='none'
 });
 /*$(".show-events").on('click', function () {
 document.getElementById('show-events').style.pointerEvents = 'none';
@@ -218,17 +218,17 @@ $("#id_all_day").change(function() {
   $("#id_end_time").val(oldendtime);
   }
 });
-$("#canc").on('click', function () {
+$("#cancel-submit").on('click', function () {
 if (noevent === true){
-  $("#members-page").hide();
+  $("#event-page").hide();
   //$("#event_form").trigger("reset");
 }
 
 else {
-  $(".confirmation-chat-modal").show();
+  $(".delete-modal").show();
 }
 });
-$("#confirmation").on('click', function () {
+$("#confirmation-of-delete").on('click', function () {
   $.ajax({
     type: "POST",
     url: "createevents/",
@@ -257,8 +257,8 @@ $("#confirmation").on('click', function () {
     //dataType: 'json'
   });
 });
-$("#reverse").on('click', function () {
-  $(".confirmation-chat-modal").hide();
+$("#reverse-delete").on('click', function () {
+  $(".delete-modal").hide();
 });
 $("#event_form").submit(function (e) {
   if (choice == 0)
