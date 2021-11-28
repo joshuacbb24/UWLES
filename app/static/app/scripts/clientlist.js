@@ -1,4 +1,58 @@
+function formatPhone(){
+    var input = document.getElementById('id_phone_number');
+    var inputval = input.value.replace(/\D/g, '').substring(0,10);
+    var areaCode = inputval.substring(0, 3);
+    var midNums = inputval.substring(3, 6);
+    var lastNums = inputval.substring(6, 10);
+
+    if (inputval.length > 6){
+        input.value = `(${areaCode})${midNums}-${lastNums}`;
+    }
+    else if(inputval.length > 3){
+        input.value = `(${areaCode})${midNums}`;
+    }
+    else if(inputval.length > 0){
+        input.value = `${areaCode}`;
+    }
+}
+
+function formatDate(){
+    var input = document.getElementById('id_birthday');
+    var inputval = input.value.replace(/\D/g, '').substring(0, 8);
+    var month = inputval.substring(0, 2);
+    var day = inputval.substring(2, 4);
+    var year = inputval.substring(4, 8);
+
+    if (inputval.length > 4){
+        input.value = `${month}/${day}/${year}`;
+    }
+    else if(inputval.length > 2){
+        input.value = `${month}/${day}`;
+    }
+    else if(inputval.length > 0){
+        input.value = `${month}`;
+    }
+}
+
+function revertFormat1(){
+    var input1 = document.getElementById('id_phone_number');
+    var inputval = input1.value;
+    var inputval_new = inputval.replace(/\(|\)|\-/g, '');
+    document.getElementById('id_org_phone').value = inputval_new;
+}
+
+
 $(document).ready(function () {
+    $("#id_birthday").keyup(function(){
+        formatDate();
+    })
+    $("#id_phone_number").keyup(function(){
+        formatPhone();
+    });
+    $(".user-form-save-info").click(function(){
+        revertFormat1();
+    })
+
     $("#clist-listIcon").click(function () {
         var list = $(".clist-listBox");
         var grid = $(".clist-gridBox");

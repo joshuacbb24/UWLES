@@ -1,240 +1,268 @@
-﻿﻿<!--
-    profile.html
-    
-    This is the user profile page
--->
-{% load static %}
-{% load project_templates %}
+﻿﻿{% extends 'app/format.html' %}
+{% block header1 %}
+    <a href="{% url 'dashboard' %}">
+        <span id="fist-element" class="las la-home"></span>
+    </a>
+{% endblock %}
+{% block header2 %}
+    <a href="{% url 'fulldirectory' %}">
+        <span class="las la-book"></span>
+    </a>
+{% endblock %}
+{% block header3 %}
+    <a href="{% url 'multichat' %}">
+        <span class="las la-comment-alt"></span>
+    </a>
+{% endblock %}
+{% block header4 %}
+    <a href="{% url 'clientlist' %}" class="active">
+        <span class="las la-user-friends"></span>
+    </a>
+{% endblock %}
+{% block header5 %}
+    <a href="">
+        <span class="las la-plus-circle"></span>
+    </a>
+{% endblock %}
+
 {% block content %}
-{% if user.is_authenticated %}
-<head>
-	<link rel="stylesheet" type="text/css" href="{% static 'app/content/profile.css' %}"/>
-	<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
-    
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
-	<script src="{% static 'app/scripts/jquery.js' %}"></script>
-	<script src="{% static 'app/scripts/main.js' %}"></script>
-	<script src="{% static 'app/scripts/format.js' %}"></script>
-</head>
-<ul class="nav navbar-nav">
-    <li><a href="{% url 'dashboard' %}">Home</a></li>
-    <li><a href="{% url 'userinfo' %}">User Info Form</a></li>
-</ul>
-<body>
-	<div class="sidebar">
+{% load static %}
+<link rel="stylesheet" href="{% static 'app/content/clientlist.css' %}" />
+<link rel="stylesheet" href="{% static 'app/content/myModal.css' %}" />
+<script src="https://kit.fontawesome.com/f0b88b09a7.js" crossorigin="anonymous"></script>
+<script src="{% static 'app/scripts/clientlist.js' %}"></script>
 
+<script>
+    function filterClientFunction() {
+    var input, filter, div, a, i;
+    input = document.getElementById("clist-searchbar");
+    filter = input.value.toUpperCase();
+    a = document.getElementsByClassName("clist-client-name-grid")
+    b = document.getElementsByClassName("clist-client-name-list");
+    for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            $(a[i]).parent().css("display", "")
+            $(b[i]).parent().css("display", "")
+        }
+        else {
+            $(a[i]).parent().css("display", "none")
+            $(b[i]).parent().css("display", "none")
+        }
+    }
+}
+</script>
 
-		<div class="sidebar-menu">
-			<ul>
-				<li>
-					<a href="{% url 'dashboard' %}" class="active">
-						<span id="fist-element" class="las la-home"></span>
-					</a>
-				</li>
-				<li>
-					<a href="{% url 'fulldirectory' %}">
-						<span class="las la-book"></span>
-					</a>
-				</li>
-				<li>
-					<a href="{% url 'multichat' %}">
-						<span class="las la-comment-alt"></span>
-					</a>
-				</li>
-				<li>
-					<a href="">
-						<span class="las la-user-friends"></span>
-					</a>
-				</li>
-				<li>
-				  <a href="">
-					  <span class="las la-plus-circle"></span>
-				  </a>
-			  </li>
-			</ul>
-		</div>
-	  </div>
-	  
-	  
-	  
-	  <header class="dash-header">
-	  
-		<div class="sidebar-header">
-			<span id="sidebar-toggle" class="las la-bars"></span>
-		</div>
-	  <div id="leftside">
-		<div class="search-wrapper">
-			<span class="las la-search"></span>
-			<input type="search" placeholder="Search here" />
-		</div>
-		<div class="vl"></div>
-		  <div class="dropdown">
-			<div class="user-wrapper">
-			  <div class="user-wrapper">
-          <a href="{% url 'profile' %}"><div class="profile-pic-wrapper" data-username="{{user.username}}" data-bgcolor="{{user.bgColor}}">
-            {% if user.avatar %}
-            <img class="profile-pic" src="{{user.avatar.url}}">
-            {% endif %}
-          </div></a>
-				  <i id="caret-icon" style=font-size:25px;color:white;float:right; class="las la-angle-down"></i>
-				<div class="dropdown-content">
-            <div id="usermenu">
-            {% if user.id in userlist %}
-                {% for back in background %}
-                    {% if back.user_id == user.id %}
-                        <h3>{{ back.firstname }} {{ back.lastname }}</h3>
-                    {% endif %}
-                {% endfor %}
-            {% else %}
-                <h3>{{ user.username }}</h3>
-            {% endif %}
-			{% if request.user|has_group:"caseworker" %}
-                <h4>Caseworker</h4>
-            {% elif request.user|has_group:"client" %}
-                <h4>Client</h4>
-            {% else %}
-                <h4>Not implemented</h4>
-            {% endif %}
+{% load project_templates %}
+
+<div class="clist-path-home show-title">Home</div><div class="clist-path-union show-title"> > </div><a href="{% url 'clientlist' %}" class="clist-path-clist show-title">Client List</a><div class="clist-path-union2 show-title"> > </div><div class="clist-path-cinfo show-title">Client Info</div>
+
+<button class="clist-add-btn" type="button" data-toggle="modal" data-target="#addNewClient">Edit Client</button>
+<form method="post" enctype="multipart/form-data">
+<div class="modal box6 fade" id="addNewClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit Client</h5>
+          <i class="fas fa-times fa-lg" id="add-client-exit" data-dismiss="modal"></i>
+        </div>
+        {% csrf_token %}
+        <div class="modal-body">
+            {% csrf_token %}
+            <div class="user-form-divider"></div>
+            <div class="user-form-account-info">
+				{% if client.avatar %}
+					<img class="client-form-profile-icon" src="{{client.avatar.url}}">
+				{% endif %}
             </div>
-            <a href="{% url 'logout' %}">Log out</a>
-          </div>
-			</div>
-		</div>
-	  </div>
-	  </header>
-	  
-	<div class="container">
-		<div id="profile">
-			{% if user.avatar %}
-            <img src="{{user.avatar.url}}" class="profilePic" alt="default profile picture">
-			{% else %}
-			<img src="{% static 'app/content/Deafult-Profile-Picture.png' %}" class="profilePic" alt="default profile picture"/>
-            {% endif %}
-			<p class="name"> {{ object1.firstname }} {{ object1.lastname }} </p>
-			<p class="email">{{ object1.email }}</p>
-			<div class="tags">
-				<p class="profileTags"> Housing Assistance </p>
-				<p class="profileTags"> Senior </p>
-			</div>
-			<hr />
-			<button class="button profileButton"> SEND MESSAGE </button>
-		</div>
-		<div id="personalInfo">
-			<div class="piContainer">
-				<div id="gender">
-					<p class="personalTitle"> Gender </p>
-					<p class="info"> {{ object1.gender }} </p>
-				</div>
-				<div id="street">
-					<p class="personalTitle"> Street Address </p>
-					<p class="info"> {{ object3.street_address }} </p>
-				</div>
-				<div id="status"> 
-					<p class="personalTitle"> Member Status </p>
-					<p class="info"> Active Member </p>
-				</div>
-				<div id="bday"> 
-					<p class="personalTitle"> Birthday </p>
-					<p class="info"> {{ object1.birthday }} </p>
-				</div>
-				<div id="city">
-					<p class="personalTitle"> City </p>
-					<p class="info"> {{ object3.city }} </p>
-				</div>
-				<div id="rdate">
-					<p class="personalTitle"> Registered Date </p>
-					<p class="info"> {{ date_joined|date:"F d, Y" }}</p>
-				</div>
-				<div id="phone"> 
-					<p class="personalTitle"> Phone Number </p>
-					<p class="info"> {{ object1.phone_number }} </p>
-				</div>
-				<div id="zip"> 
-					<p class="personalTitle"> ZIP Code </p>
-					<p class="info"> {{ object3.zipcode }} </p>
-				</div>
-			</div>
-		</div>
-		<div id="notes">
-			<h1 class="notes"> Notes </h1>
-			<div id="notesBox">
-				<p class="notesBox">
-					{{ object4.notes }}
-				</p>
-			</div>	
-			<p class="notesDescription">
-				Basic Activity and Community Needs
-			</p>
-			<div class="notesDetails">
-				<p class="notesAuthor"> Kathy, 211 Case Manager </p>
-				<p class="notesDate"> October 12, 2020 </p>
-			</div>			
-			
-		</div>
-		<div id="info">
-			<div id="infoBox">
-				<button class="tablink" onclick="openPage('upcoming', this, 'white')">Upcoming Appointments</button>
-				<button class="tablink" onclick="openPage('past', this, 'white')">Past Appointments</button>
-				<button class="tablink" onclick="openPage('referrals', this, 'white')" id="defaultOpen">Service Referrals</button>
-				<button class="tablink" onclick="openPage('records', this, 'white')">Medical Records</button>
+            <div class="user-form-divider"></div>
+            <div class="user-form-back-info">
+                <div class="user-form-back-title">Background Information</div>
+                <div class="user-form-firstname-title">First Name</div>
+                <div class="user-form-lastname-title">Last Name</div>
+                <div class="user-form-middlename-title">M.I.</div>
+                <div class="user-form-gender-title">Gender</div>
+                <div class="user-form-phone-title">Primary Phone</div>
+                <div class="user-form-email-title">Primary Email</div>
+                <div class="user-form-birthdate-title">Birthdate</div>
 
-				<div id="upcoming" class="tabcontent">
-					<p>This tab is for upcoming appointments!</p>
-				</div>
+                {{ form1.firstname }}
+                {{ form1.lastname }}
+                {{ form1.middle_initial }}
+                {{ form1.gender }}
+                {{ form1.phone_number }}
+                {{ form1.email }}
+                {{ form1.birthday }}
+            </div>
+            <div class="user-form-divider"></div>
+            <div class="user-form-demo-info">
+                <div class="user-form-demo-title">Client Demographics</div>
+                <div class="user-form-street-title">Street Address</div>
+                <div class="user-form-apt-title">Apt./Unit Number</div>
+                <div class="user-form-county-title">County</div>
+                <div class="user-form-city-title">City</div>
+                <div class="user-form-state-title">State</div>
+                <div class="user-form-zipcode-title">Zipcode</div>
 
-				<div id="past" class="tabcontent">
-					<p>This tab is for past appointments!</p>
-				</div>
+                {{ form2.street_address }}
+                {{ form2.apt_unit }}
+                {{ form2.county }}
+                {{ form2.city }}
+                {{ form2.state }}
+                {{ form2.zipcode }}
 
-				<div id="referrals" class="tabcontent">
-					<p>This tab is for service referrals!</p>
-				</div>
+            </div>
+            <div class="user-form-divider"></div>
+            <div class="user-form-notes">
+                <div class="user-form-notes-title">Notes</div>
+                {{ form3.notes }}
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="user-form-save-info">Edit Client</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
 
-				<div id="records" class="tabcontent">
-					<p>This tab is for medical records!</p>
-					</div>
-					
-					<script>
-					function openPage(pageName,elmnt,color) {
-					var i, tabcontent, tablinks;
-					tabcontent = document.getElementsByClassName("tabcontent");
-					for (i = 0; i < tabcontent.length; i++) {
-						tabcontent[i].style.display = "none";
-					}
-					tablinks = document.getElementsByClassName("tablink");
-					for (i = 0; i < tablinks.length; i++) {
-						tablinks[i].style.backgroundColor = "";
-					}
-					document.getElementById(pageName).style.display = "block";
-					elmnt.style.backgroundColor = color;
-					}
+<div class="client-profile visible" value="{{ client.id }}">
+<div class="client-box1 visible">
+    <i class="far fa-edit fa-lg client-edit-icon" value="{{ client.id }}"></i>
+	{% if client.avatar %}
+		<img class="client-box1-pfp" src="{{client.avatar.url}}">
+	{% endif %}
+    <div class="client-box1-name">
+        {{ client.first_name }} {{ client.last_name }}
+    </div>
+    <div class="client-box1-email">
+        {{ client.email }}
+    </div>
+    <div class="client-box1-tag1">
+        Housing Assistance
+    </div>
+    <div class="client-box1-tag2">
+        Senior
+    </div>
+    <button class="client-box1-sendmsg">
+        Send Message
+    </button>
+</div>
 
-					// Get the element with id="defaultOpen" and click on it
-					document.getElementById("defaultOpen").click();
-					</script>
-			</div>
-		</div>
-		<div id="resources">
-		{% block uploadContent %}	
-			<h1 class="resources"> Resources / Documents </h1>
-			<form method="post" enctype="multipart/form-data">
-				{% csrf_token %}
-				<input type="file" name="document">
-				<button type="submit">Upload file</button>
-			  </form>
-			  {% if url %}
-				<p>Uploaded file: <a href="{{ url }}">{{ url }}</a></p>
-			  {% endif %}
-		{% endblock %}
-		</div>
-	</div>
+<div class="client-box2 visible">
+    <div class="client-box2-gender-name">
+        Gender
+    </div>
+    <div class="client-box2-gender-box">
+        {{ clientbg.gender }}
+    </div>
+    <div class="client-box2-birthday-name">
+        Birthday
+    </div>
+    <div class="client-box2-birthday-box">
+        {{ clientbg.birthday|date:'M d, Y' }}
+    </div>
+    <div class="client-box2-phone-name">
+        Phone Number
+    </div>
+    <div class="client-box2-phone-box">
+        {{ clientbg.phone_number }}
+    </div>
+    <div class="client-box2-street-name">
+        Street Address
+    </div>
+    <div class="client-box2-street-box">
+        {{ clientdemo.street_address }}
+    </div>
+    <div class="client-box2-city-name">
+        City
+    </div>
+    <div class="client-box2-city-box">
+        {{ clientdemo.city }}
+    </div>
+    <div class="client-box2-zipcode-name">
+        Zipcode
+    </div>
+    <div class="client-box2-zipcode-box">
+		{{ clientdemo.zipcode }}
+    </div>
+    <div class="client-box2-status-name">
+        Member Status
+    </div>
+    <div class="client-box2-status-box">
+        {% if client.is_active %}
+            Active Member
+        {% else %}
+            Inactive Member
+        {% endif %}
+    </div>
+    <div class="client-box2-registered-name">
+        Registered Date
+    </div>
+    <div class="client-box2-registered-box">
+        {{ date_joined }}
+    </div>
+</div>
 
-</body>
+<div class="client-box3 visible">
+    <div class="client-box3-notes-title">
+        Notes
+    </div>
+    <div class="client-box3-notes-box">
+        {{ clientnote.notes }}
+    </div>
+    <div class="client-box3-activity">
+        Basic Activity and Community Needs
+    </div>
+    <div class="client-box3-date-title">
+        October 12, 2020
+    </div>
+    <div class="client-box3-cm">
+        Kathy, 211 Case Manager
+    </div>
+</div>
 
-{% else %}
+<div class="client-box4 visible">
+    <button class="client-box4-upcoming">
+        Upcoming Appointments
+    </button>
+    <button class="client-box4-past">
+        Past Appointments
+    </button>
+    <button class="client-box4-service">
+        Service Referrals
+    </button>
+    <button class="client-box4-medical">
+        Medical Records
+    </button>
+    <div class="client-box4-box">
 
- <p>Not signed in!</p>
+    </div>
+</div>
 
+<div class="client-box5 visible">
+    <div class="client-box5-title">
+        Resource / Documents
+    </div>
+    <div class="client-box5-file1">
+        <div class="client-box5-file-title">
+            Aging and Disability.pdf
+        </div>
+    </div>
+    <div class="client-box5-file2">
+        <div class="client-box5-file-title">
+            Legal and Tax Services.doc
+        </div>
+    </div>
+    <div class="client-box5-file3">
+        <div class="client-box5-file-title">
+            MD Housing and Shelter.png
+        </div>
+    </div>
+    <div class="client-box5-see-all">
+        See all
+    </div>
+</div>
+</div>
 
-{% endif %}
 {% endblock %}

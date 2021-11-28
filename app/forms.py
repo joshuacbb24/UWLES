@@ -22,20 +22,20 @@ class BootstrapAuthenticationForm(AuthenticationForm):
 
 class User_Creation_Form(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Username'}), required=True)
+        attrs={'placeholder': ''}), required=True)
     email = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Email'}), required=True)
+        attrs={'placeholder': ''}), required=True)
     avatar = forms.ImageField(widget=forms.FileInput, required=False)
     password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Password'}), required=True)
+        attrs={'placeholder': ''}), required=True)
     password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={'placeholder': 'Confirm'}), required=True)
+        attrs={'placeholder': ''}), required=True)
     first_name = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'First Name'}), required=True)
+        attrs={'placeholder': ''}), required=True)
     middle_name = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Middle Name'}), required=False)
+        attrs={'placeholder': ''}), required=False)
     last_name = forms.CharField(widget=forms.TextInput(
-        attrs={'placeholder': 'Last Name'}), required=True)
+        attrs={'placeholder': ''}), required=True)
     class Meta:
         model = Account
         fields = ("username", "email", "password1", "avatar", "first_name", "middle_name", "last_name",)
@@ -45,7 +45,7 @@ class User_Bg(ModelForm):
     lastname = forms.CharField(label='Last Name', required=False)
     middle_initial = forms.CharField(label='Middle Initial', required=False)
     phone_number = forms.CharField(label='Phone Number',)
-    birthday = forms.DateField(label ='Birthdate (m/d/y)', input_formats=['%m/%d/%Y'])
+    birthday = forms.DateField(label ='Birthdate (m/d/y)', widget=forms.DateInput(format='%m/%d/%Y'), input_formats=['%m/%d/%Y'])
     insurance_provider = forms.CharField(label='Insurance Provider', required=False)
     insurance_member_id = forms.CharField(label='Insurance Member ID', required=False)
     class Meta:

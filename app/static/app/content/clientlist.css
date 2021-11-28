@@ -1509,6 +1509,16 @@
     border: none;
     border-radius: 3px;
 }
+#id_firstname{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 230px;
+    top: 200px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
 #id_last_name{
     position: absolute;
     width: 150px;
@@ -1519,7 +1529,27 @@
     border: none;
     border-radius: 3px;
 }
+#id_lastname{
+    position: absolute;
+    width: 150px;
+    height: 25px;
+    left: 400px;
+    top: 200px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
 #id_middle_name{
+    position: absolute;
+    width: 100px;
+    height: 25px;
+    left: 570px;
+    top: 200px;
+    background: #F5F5F5;
+    border: none;
+    border-radius: 3px;
+}
+#id_middle_initial{
     position: absolute;
     width: 100px;
     height: 25px;
@@ -1834,4 +1864,20 @@
     letter-spacing: 0.01cm;
     color: #FFFFFF;
     cursor: pointer;
+}
+.client-edit-icon{
+    color: #979797;
+    position: absolute;
+    top: 10px;
+    left: 310px;
+}
+.client-form-profile-icon{
+    position: absolute;
+    top: 28px;
+    left: 250px;
+    width: 150px;
+    height: 150px;
+
+    border-radius: 50%;
+    background-color: white;
 }

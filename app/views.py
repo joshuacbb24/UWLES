@@ -390,23 +390,60 @@ def client_profile(request, client_id):
     try:
         obj0 = Account.objects.get(id=current_client)
         obj1 = BgInfo.objects.get(user_id=current_client)
-        obj2 = EcInfo.objects.get(background_id=obj1.id)
         obj3 = DemoInfo.objects.get(background_id=obj1.id)
         obj4 = ClientNotes.objects.get(background_id=obj1.id)
         date_joined = obj0.date_joined
         date_joined.strftime("%d:%B:%y")
+
+        instance1 = BgInfo.objects.get(user_id=current_client)
+        instance2 = DemoInfo.objects.get(background=instance1)
+        instance3 = ClientNotes.objects.get(background=instance1)
     except BgInfo.DoesNotExist:
+        obj0 = Account.objects.get(id=current_client)
         obj1 = None
-        obj2 = None
         obj3 = None
         obj4 = None
         date_joined = None
+
+        instance1 = None
+        instance2 = None
+        instance3 = None
+
+
+    if request.method == 'POST':
+        form1 = User_Bg(request.POST, instance=instance1)
+        form2 = User_Demo(request.POST, instance=instance2)
+        form3 = User_Notes(request.POST, instance=instance3)
+
+        if form1.is_valid() and form2.is_valid() and form3.is_valid():
+            form_one = form1.save(commit=False)
+            form_one.user = Account.objects.get(id=current_client)
+            form_one = form1.save()
+            form_two = form2.save(commit=False)
+            form_two.background = form_one
+            form_two.save()
+            form_three = form3.save(commit=False)
+            form_three.background = form_one
+            form_three.save()
+            return redirect(request.path_info)
+        else:
+            print(form1.errors)
+            print(form2.errors)
+            print(form3.errors)
+    else:
+        form1 = User_Bg(instance=instance1)
+        form2 = User_Demo(instance=instance2)
+        form3 = User_Notes(instance=instance3)
+
     context = {
-            'object1': obj1,
-            'object2': obj2,
-            'object3': obj3,
-            'object4': obj4,
+            'client': obj0,
+            'clientbg': obj1,
+            'clientdemo': obj3,
+            'clientnote': obj4,
             'date_joined': date_joined,
+            'form1': form1,
+            'form2': form2,
+            'form3': form3,
     }
     return render(request, 'app/profile.html', context)
 

@@ -153,7 +153,7 @@
 <div class="clist-grid-layout visible">
     {% for client in myclients.clients.all %}
     <div class="clist-client-grid">
-        <div class="clist-client-icon-grid" value="{{ client.id }}"></div>
+        <div class="clist-client-icon-grid" value="{{ client.id }}" onclick="location.href='{% url 'clientsprofile' client.id %}'"></div>
         <div class="clist-client-name-grid">{{ client.first_name }} {{ client.last_name }}</div>
         <div class="clist-client-email-grid">{{ client.email }}</div>
         <div class="clist-client-phone-grid">(123)-456-7890</div>
@@ -168,7 +168,7 @@
 <div class="clist-list-layout hidden">
     {% for client in myclients.clients.all %}
     <div class="clist-client-list">
-        <div class="clist-client-icon-list" value="{{ client.id }}"></div>
+        <div class="clist-client-icon-list" value="{{ client.id }}" onclick="location.href='{% url 'clientsprofile' client.id %}'"></div>
         <div class="clist-client-name-list">{{ client.first_name }} {{ client.last_name }}</div>
         <div class="clist-taskdue-list">1</div>
         <div class="clist-lastupdated-list">Oct 30, 2021</div>
@@ -176,189 +176,5 @@
     </div>
     {% endfor %}
 </div>
-
-{% for client in myclients.clients.all %}
-<div class="client-profile hidden" value="{{ client.id }}">
-<div class="client-box1 hidden">
-    <div class="client-box1-pfp">
-
-    </div>
-    <div class="client-box1-name">
-        {{ client.first_name }} {{ client.last_name }}
-    </div>
-    <div class="client-box1-email">
-        {{ client.email }}
-    </div>
-    <div class="client-box1-tag1">
-        Housing Assistance
-    </div>
-    <div class="client-box1-tag2">
-        Senior
-    </div>
-    <button class="client-box1-sendmsg">
-        Send Message
-    </button>
-</div>
-
-<div class="client-box2 hidden">
-    <div class="client-box2-gender-name">
-        Gender
-    </div>
-    <div class="client-box2-gender-box">
-        {% for bg in bgs %}
-            {% if bg.user == client %}
-                {{ bg.gender }}
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="client-box2-birthday-name">
-        Birthday
-    </div>
-    <div class="client-box2-birthday-box">
-        {% for bg in bgs %}
-            {% if bg.user == client %}
-                {{ bg.birthday }}
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="client-box2-phone-name">
-        Phone Number
-    </div>
-    <div class="client-box2-phone-box">
-        {% for bg in bgs %}
-            {% if bg.user == client %}
-                {{ bg.phone_number }}
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="client-box2-street-name">
-        Street Address
-    </div>
-    <div class="client-box2-street-box">
-        {% for bg in bgs %}
-            {% if bg.user == client %}
-                {% for demo in demos %}
-                    {% if demo.background == bg %}
-                        {{ demo.street_address }}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="client-box2-city-name">
-        City
-    </div>
-    <div class="client-box2-city-box">
-        {% for bg in bgs %}
-            {% if bg.user == client %}
-                {% for demo in demos %}
-                    {% if demo.background == bg %}
-                        {{ demo.city }}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="client-box2-zipcode-name">
-        Zipcode
-    </div>
-    <div class="client-box2-zipcode-box">
-        {% for bg in bgs %}
-            {% if bg.user == client %}
-                {% for demo in demos %}
-                    {% if demo.background == bg %}
-                        {{ demo.zipcode }}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="client-box2-status-name">
-        Member Status
-    </div>
-    <div class="client-box2-status-box">
-        {% if client.is_active %}
-            Active Member
-        {% else %}
-            Inactive Member
-        {% endif %}
-    </div>
-    <div class="client-box2-registered-name">
-        Registered Date
-    </div>
-    <div class="client-box2-registered-box">
-        Jan 30th, 2019
-    </div>
-</div>
-
-<div class="client-box3 hidden">
-    <div class="client-box3-notes-title">
-        Notes
-    </div>
-    <div class="client-box3-notes-box">
-        {% for bg in bgs %}
-            {% if bg.user == client %}
-                {% for note in notes %}
-                    {% if note.background == bg %}
-                        {{ note.notes }}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="client-box3-activity">
-        Basic Activity and Community Needs
-    </div>
-    <div class="client-box3-date-title">
-        October 12, 2020
-    </div>
-    <div class="client-box3-cm">
-        Kathy, 211 Case Manager
-    </div>
-</div>
-
-<div class="client-box4 hidden">
-    <button class="client-box4-upcoming">
-        Upcoming Appointments
-    </button>
-    <button class="client-box4-past">
-        Past Appointments
-    </button>
-    <button class="client-box4-service">
-        Service Referrals
-    </button>
-    <button class="client-box4-medical">
-        Medical Records
-    </button>
-    <div class="client-box4-box">
-
-    </div>
-</div>
-
-<div class="client-box5 hidden">
-    <div class="client-box5-title">
-        Resource / Documents
-    </div>
-    <div class="client-box5-file1">
-        <div class="client-box5-file-title">
-            Aging and Disability.pdf
-        </div>
-    </div>
-    <div class="client-box5-file2">
-        <div class="client-box5-file-title">
-            Legal and Tax Services.doc
-        </div>
-    </div>
-    <div class="client-box5-file3">
-        <div class="client-box5-file-title">
-            MD Housing and Shelter.png
-        </div>
-    </div>
-    <div class="client-box5-see-all">
-        See all
-    </div>
-</div>
-</div>
-{% endfor %}
 
 {% endblock %}
