@@ -59,7 +59,8 @@ def save_message(room_id, user, message, file, notice):
 
     current_datetime = datetime.datetime.now()
     room.rank = current_datetime
-    print("current_datetime", current_datetime)
+    #print("current_datetime", current_datetime)
+    room.save()
 
     return message
 
@@ -95,7 +96,7 @@ def create_group(newUsers, user):
                                         group_name=name)
         for member in newUsers:
             room.members.add(member['value'])
-            print("tag value", member['value'])
+            #print("tag value", member['value'])
         room.members.add(user)
 
         avatararrs = room.members.all()
@@ -119,7 +120,7 @@ def create_group(newUsers, user):
 @database_sync_to_async
 def fetch_recent(room_id):
     """
-    Print out past messages
+    ##print out past messages
     """
     # Find the room they requested (by ID)
     try:
@@ -205,7 +206,7 @@ def add_group(room_id, newUsers, user):
         last_message = Messages.objects.filter(
             chat_group=room_id).latest('sent_at')
         message.append(last_message.message)
-        print("message", message)
+        #print("message", message)
         mem.preview = message
         for avatararr in avatararrs:
 
@@ -247,16 +248,16 @@ def fetch_rooms(user):
             avatararrs = group.members.all()
             avatararray = []
             message = []
-            print("last_message", group, group.id)
+            #print("last_message", group, group.id)
             last_message = Messages.objects.filter(
                 chat_group=group).latest('sent_at')
             if last_message.is_notice == False:
                 message.append(last_message.message)
-                print("message", message)
+                #print("message", message)
                 group.preview = message
             else:
                 message.append(alert)
-                print("message", alert)
+                #print("message", alert)
                 group.preview = message
             for avatararr in avatararrs:
 
@@ -370,12 +371,12 @@ def delete_user(room_id, old_user):
 
         room.group_name = name + suffix
         room.save()
-        print("something")
+        #print("something")
         user_account = Account.objects.get(pk=old_user)
         new_room = ChatGroup.objects.create(
             group_name=old_name, created_by=user_account)
         new_room.solitary = True
-        print("new room", new_room)
+        #print("new room", new_room)
         new_room.members.add(old_user)
         new_room.save()
 
@@ -410,7 +411,7 @@ def delete_user(room_id, old_user):
         new_room.avatars = avatararrayremove
 
     except ChatGroup.DoesNotExist:
-        print("except")
+        #print("except")
         raise ClientError("Members do not exist")
 
     return room, list(room.members.all()), user_account, new_room
@@ -458,7 +459,7 @@ def fetch_unread(room_id, new_name, message):
             chat_group=room, offline_user=new_name, message=message)
         if offlineusers.exists():
             offlineuser = offlineusers[0]
-            print("utiles fetch unread", offlineuser)
+            #print("utiles fetch unread", offlineuser)
             return offlineuser
         else:
             return False
@@ -501,7 +502,7 @@ def delete_unread(room_id, new_name, message):
         offlineusers = OfflineMessage.objects.get(
             chat_group=room, offline_user=new_name, message=message)
         if offlineusers:
-            print("utiles delete unread", offlineusers)
+            #print("utiles delete unread", offlineusers)
             offlineusers.delete()
 
     except OfflineMessage.DoesNotExist:

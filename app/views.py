@@ -571,11 +571,12 @@ def dashboard(request):
 
     sorted_assignee_list = sorted(check_list_assignee)
     
-    my_clients = ClientList.objects.get(user=request.user.id)
+    my_clients = ClientList.objects.filter(user=request.user.id).first()
     client_tasks_pending = []
-    for client in my_clients.clients.all():
-        tasks_pending = Tasks.objects.filter(assigner=request.user.id, assignees=client).count()
-        client_tasks_pending.append(tasks_pending)
+    if my_clients:
+        for client in my_clients.clients.all():
+            tasks_pending = Tasks.objects.filter(assigner=request.user.id, assignees=client).count()
+            client_tasks_pending.append(tasks_pending)
     
     try:
         user_bg = BgInfo.objects.get(user=request.user.id)
