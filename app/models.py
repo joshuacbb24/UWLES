@@ -673,11 +673,10 @@ class MyEvents(models.Model):
         self.created_by = user
     
 class ServiceReferrals(models.Model):
-    #Get information of user (the user that is reffering)
-
+      #Get information of user (the user that is reffering)
+    
     referrer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE ,related_name="referrer")
     referFor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="referFor")
-    
     org = models.ForeignKey(Organizations, on_delete=models.CASCADE)
     service = models.CharField(max_length=50 ,null=False, blank=False)
     #org = what organziation that can helpn with service

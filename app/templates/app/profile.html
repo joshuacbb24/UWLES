@@ -236,6 +236,16 @@
         Medical Records
     </button>
     <div class="client-box4-box">
+        <div id="referrals">
+					<ul class="referral-list">
+					{% for referral in referrals %}
+						<li class="referral-list-items" >
+							<p class="refService" style="color: blue;"> {{ referral.service }} - {{ referral.org }} </p>
+							<p class="refItal" style="font-style: italic;"> Referred by {{ referral.referrer }} </p>
+						</li>
+					{% endfor %}
+					</ul>
+		</div>
 
     </div>
 </div>

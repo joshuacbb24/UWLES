@@ -258,7 +258,7 @@ def clientlist(request):
         myclients = ClientList.objects.get(user_id=current_user)
         accts = Account.objects.all()
         bgs = BgInfo.objects.all()
-        referrals = ServiceReferrals.objects.filter(referFor_id=current_user)
+        
         demos = DemoInfo.objects.all()
         notes = ClientNotes.objects.all()
         list = []
@@ -337,7 +337,6 @@ def clientlist(request):
             'bgs': bgs,
             'demos': demos,
             'notes': notes,
-            'referrals': referrals,
             'list': list,
             'form1': form1,
             'form2': form2,
@@ -392,10 +391,12 @@ def remove_clients(request):
 def client_profile(request, client_id):
     current_client = client_id
     try:
+        referrals = ServiceReferrals.objects.filter(referFor_id=current_client)
         obj0 = Account.objects.get(id=current_client)
         obj1 = BgInfo.objects.get(user_id=current_client)
         obj3 = DemoInfo.objects.get(background_id=obj1.id)
         obj4 = ClientNotes.objects.get(background_id=obj1.id)
+        
         date_joined = obj0.date_joined
         date_joined.strftime("%d:%B:%y")
 
@@ -448,6 +449,7 @@ def client_profile(request, client_id):
             'form1': form1,
             'form2': form2,
             'form3': form3,
+            'referrals': referrals,
     }
     return render(request, 'app/profile.html', context)
 
