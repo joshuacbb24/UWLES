@@ -43,6 +43,22 @@ function revertFormat1(){
 
 
 $(document).ready(function () {
+    $('.clist-add-btn').click(function(){
+        var input1 = document.getElementById('id_phone_number');
+        var inputval = input1.value
+        var areaCode = inputval.substring(0, 3)
+        var midNums = inputval.substring(3, 6);
+        var lastNums = inputval.substring(6, 10);
+        if (inputval > 6){
+            input1.value = `(${areaCode})${midNums}-${lastNums}`;
+        }
+        else if(inputval > 3){
+            input1.value = `(${areaCode})${midNums}`;
+        }
+        else if(inputval > 0){
+            input1.value = `(${areaCode}`;
+        }
+    })
     $("#id_birthday").keyup(function(){
         formatDate();
     })

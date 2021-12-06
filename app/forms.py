@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms import ModelForm, ValidationError, modelformset_factory
 from .models import *
 
+
 class BootstrapAuthenticationForm(AuthenticationForm):
     """Authentication form which uses boostrap CSS."""
     username = forms.CharField(max_length=254,
@@ -20,6 +21,8 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                    'class': 'form-control',
                                    'placeholder':'Password'}))
 
+
+"""Form for user creation"""
 class User_Creation_Form(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(
         attrs={'placeholder': ''}), required=True)
@@ -40,6 +43,7 @@ class User_Creation_Form(UserCreationForm):
         model = Account
         fields = ("username", "email", "password1", "avatar", "first_name", "middle_name", "last_name",)
 
+"""Form for user background information"""
 class User_Bg(ModelForm):
     firstname = forms.CharField(label='First Name', required=False)
     lastname = forms.CharField(label='Last Name', required=False)
@@ -53,6 +57,7 @@ class User_Bg(ModelForm):
         fields = '__all__'
         exclude = ('user',)
 
+"""Form for user emergency contact information, not currently used in recent versions of the website, but it might be needed later"""
 class User_EC(ModelForm):
     phone_number = forms.CharField(label='Phone Number',)
     primary_care_physician = forms.CharField(label='Primary Care Physician',)
@@ -62,6 +67,7 @@ class User_EC(ModelForm):
         fields = '__all__'
         exclude = ('background',)
 
+"""Form for user demographic information"""
 class User_Demo(ModelForm):
     apt_unit = forms.CharField(label='Apt Unit', required=False)
     ethnicity = forms.CharField(label='Ethnicity', required=False)
@@ -71,6 +77,7 @@ class User_Demo(ModelForm):
         fields = '__all__'
         exclude = ('background',)
 
+"""Form for user notes, aka the notes on a users profile (different than the ones seen on the dashboard)"""
 class User_Notes(ModelForm):
     notes = forms.CharField(widget=forms.Textarea, label='',)
     class Meta:
@@ -78,6 +85,7 @@ class User_Notes(ModelForm):
         fields = '__all__'
         exclude = ('background',)
 
+"""Form for adding clients to a client list (not currently used)"""
 class Client_List(ModelForm):
     clients = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(is_client=True, has_caseworker=False), widget=forms.CheckboxSelectMultiple)
     def __init__(self, request, *args, **kwargs):
@@ -93,6 +101,7 @@ class Client_List(ModelForm):
         fields = '__all__'
         exclude = ('user',)
 
+"""Form for removing clients from a client list (not currently used)"""
 class Remove_Clients(ModelForm):
     clients = forms.ModelMultipleChoiceField(queryset=Account.objects.none(), widget=forms.CheckboxSelectMultiple)
 
@@ -110,6 +119,7 @@ class Remove_Clients(ModelForm):
         fields = '__all__'
         exclude = ('user',)
 
+"""Form for adding a new organization"""
 class Add_Organization(ModelForm):
     STATE_OPTIONS = (
             ('MD', 'MD'),
@@ -180,38 +190,43 @@ class GetBackgroundColorForm(forms.ModelForm):
         model = Account
         fields = ['bgColor']
 
+"""Form for adding an org to a sub directory"""
 class AddOrgToSubDir(forms.Form):
     sub_dirs = forms.ModelMultipleChoiceField(queryset=SubDirectory.objects.all(), widget=forms.CheckboxSelectMultiple(attrs={'class': 'customCBox'}))
 
+"""Formset (allows for multiple of the same form) for adding tags"""
 AddTagsFormset = modelformset_factory(
     PillTags,
     fields=('__all__'),
     extra=1,
 )
 
+"""Formset (allows for multiple of the same form) for adding organizations"""
 AddOrgsFormset = modelformset_factory(
     Organizations,
     form=Add_Organization,
     extra=0
     )
 
-class TestForm2(forms.ModelForm):
-    organization = forms.ModelChoiceField(queryset=Organizations.objects.none(), required = False, empty_label = None)
+"""this was only used to test stuff, feel free to delete it"""
+#class TestForm2(forms.ModelForm):
+    #organization = forms.ModelChoiceField(queryset=Organizations.objects.none(), required = False, empty_label = None)
 
-    def __init__(self, *args, **kwargs):
-        user_id = kwargs.pop('user_id', None)
-        super(TestForm2, self).__init__(*args, **kwargs)
-        if user_id:
-            current_orgs = SharedWithMe.objects.get(name=user_id)
-            queryset = current_orgs.organization.all()
-        self.fields['organization'].queryset = queryset
+    #def __init__(self, *args, **kwargs):
+        #user_id = kwargs.pop('user_id', None)
+        #super(TestForm2, self).__init__(*args, **kwargs)
+        #if user_id:
+            #current_orgs = SharedWithMe.objects.get(name=user_id)
+            #queryset = current_orgs.organization.all()
+        #self.fields['organization'].queryset = queryset
 
 
-    class Meta:
-        model = SharedWithMe
-        fields = '__all__'
-        exclude = ('name',)
+    #class Meta:
+        #model = SharedWithMe
+        #fields = '__all__'
+        #exclude = ('name',)
 
+"""Form for adding new files to the document directory"""
 class DirFileForm(forms.ModelForm):
     file = forms.FileField(widget=forms.FileInput(attrs={'class': 'drop-zone__input__prefix__', 'name': 'myFile'}), required = True)
     document_name = forms.CharField(widget=forms.TextInput(attrs={'maxlength': '50', 'placeholder': 'Add alternative name'}), required = False)
@@ -225,12 +240,14 @@ class DirFileForm(forms.ModelForm):
         model = DirectoryFiles
         fields = '__all__'
 
+"""Formset for adding new files to the document directory"""
 DirFilesFormset = modelformset_factory(
     DirectoryFiles,
     form=DirFileForm,
     extra=0,
     )
 
+"""Form for adding notes to your dashboard"""
 class MyNotesForm(ModelForm):
      description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'type your thoughts here', 'maxlength': '500', 'class': 'my-notes-forms'}), required = False, label ='',)
      class Meta:
@@ -238,6 +255,7 @@ class MyNotesForm(ModelForm):
         fields = '__all__'
         exclude = ('date','user')
 
+"""Form for creating tasks"""
 class TaskForm(forms.ModelForm):
     assignees = forms.ModelMultipleChoiceField(queryset=Account.objects.all())
     task_title = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Task Title'}))
@@ -250,6 +268,7 @@ class TaskForm(forms.ModelForm):
         exclude = ('assigner', 'completion_mark',)
 
 
+"""Form for creating events on the calendar"""
 class Event_Creation_Form(forms.ModelForm):
     
     title = forms.CharField(widget=forms.TextInput(
@@ -278,6 +297,7 @@ class Event_Creation_Form(forms.ModelForm):
         }
         """
 
+"""Form for adding notes to your dashboard"""
 class MyNotesForm(ModelForm):
      description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'type your thoughts here', 'maxlength': '500', 'class': 'my-notes-forms'}), required = False, label ='',)
      class Meta:
@@ -285,7 +305,7 @@ class MyNotesForm(ModelForm):
         fields = '__all__'
         exclude = ('date','user')
 
-
+"""Form for creating a referall"""
 class ReferServiceForm(ModelForm):
       service = forms.CharField(widget=forms.Textarea(attrs={'maxlength': '500' ,'placeholder': 'Enter Service Needed' ,'class': 'refer-service-textarea'}), required = True, label ='',)
       referFor = forms.ModelChoiceField(widget=forms.Select(attrs={ 'class': 'refer-for'}), queryset=Account.objects.all(),)

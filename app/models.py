@@ -13,8 +13,11 @@ from django.utils import timezone
 
 mapbox_access_token = 'pk.eyJ1IjoidXdsZXN0ZXN0YWRtaW4iLCJhIjoiY2twdTYzZnU0MHdidjJ2cG0xM2h0dXJsdyJ9.lktGtwWKbT-GAmSUOQNEdA'
 
-
 class MyAccountManager(BaseUserManager):
+    """This is the manager for making a new account. 
+    When a new user is added, the manager is activated, and properly sets up the user based on what is
+    defined in the manager.
+    """
     def create_user(self, email, username, password=None):
         if not email:
             raise ValueError("Users must have an email address")
@@ -42,6 +45,7 @@ class MyAccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
+    """This is the account model for all accounts in the system. It is finished off by activating the account manager."""
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
     avatar = models.ImageField(null=True, blank=True, upload_to='profile_pics')
@@ -79,9 +83,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
         random_number = random.randint(0, 16777215)
         hex_number = format(random_number, 'x')
         self.bgColor = '#' + hex_number
-        # TODO maybe remove this model?
-
-# TODO maybe remove this model?
 
 
 class Channels(models.Model):
@@ -138,6 +139,7 @@ class OfflineMessage(models.Model):
 
 
 class BgInfo(models.Model):
+    """Background information for all clients"""
     GENDER_CHOICES = (
         ('Male', 'Male'),
         ('Female', 'Female'),
@@ -165,6 +167,8 @@ class BgInfo(models.Model):
 
 
 class EcInfo(models.Model):
+    """Emergency contact for all clients. Do note however that this is currently not implemented, it was at one point, but it isn't now. 
+    Keeping this around just in case it is needed in the future"""
     background = models.ForeignKey(BgInfo, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=10)
@@ -177,6 +181,7 @@ class EcInfo(models.Model):
 
 
 class DemoInfo(models.Model):
+    """Demographic info for all clients."""
     COUNTY_CHOICES = (
         ('Worcester', 'Worcester'),
         ('Wicomico', 'Wicomico'),
@@ -216,6 +221,7 @@ class DemoInfo(models.Model):
 
 
 class ClientNotes(models.Model):
+    """Notes for all clients. This will need to be changed, as there should be many notes per client, instead of just 1."""
     background = models.ForeignKey(BgInfo, on_delete=models.CASCADE)
     notes = models.CharField(max_length=10000)
 
@@ -224,6 +230,7 @@ class ClientNotes(models.Model):
 
 
 class ClientList(models.Model):
+    """Client list for caseworkers."""
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     clients = models.ManyToManyField(
@@ -232,17 +239,20 @@ class ClientList(models.Model):
     def __str__(self):
         return self.user.username
 
+    """function to add clients to a client list"""
     def add_client(self, clients):
         list = ClientList.objects.get(user_id=self.id)
         for client in clients:
             list.clients.add(client)
 
+    """function to remove clients to a client list"""
     def remove_client(self, clients):
         list = ClientList.objects.get(user_id=self.id)
         for client in clients:
             list.clients.remove(client)
 
 class Services(models.Model):
+    """Old services model, you can probably just delete this."""
     COUNTY_CHOICES = (
         ('Worcester', 'Worcester'),
         ('Wicomico', 'Wicomico'),
@@ -274,6 +284,8 @@ class Services(models.Model):
 
 
 class PillTags(models.Model):
+    """The model for tags. These dont have much use right now besides being applied to organizations upon being added to the database, 
+    but in the future they should be used for finding organizaitons"""
     tag = models.CharField(max_length=25, unique=True)
 
     def __str__(self):
@@ -281,6 +293,7 @@ class PillTags(models.Model):
 
 
 class Eligibility(models.Model):
+    """Eligibility descriptions for organizations"""
     ELIGIBILITY_CHOICES = (
         ('All Ages', 'All Ages'),
         ('Youth(under 12)', 'Youth(under 12)'),
@@ -295,6 +308,7 @@ class Eligibility(models.Model):
 
 
 class Counties(models.Model):
+    """County descriptions for organizations"""
     COUNTY_CHOICES = (
         ('Worcester', 'Worcester'),
         ('Wicomico', 'Wicomico'),
@@ -309,6 +323,7 @@ class Counties(models.Model):
 
 
 class Languages(models.Model):
+    """Language descriptions for organizations"""
     LANGUAGE_CHOICES = (
         ('English', 'English'),
         ('Spanish', 'Spanish'),
@@ -322,6 +337,7 @@ class Languages(models.Model):
 
 
 class Organizations(models.Model):
+    """Organizations model, very important!!!"""
     COUNTY_CHOICES = (
         ('Worcester', 'Worcester'),
         ('Wicomico', 'Wicomico'),
@@ -388,6 +404,7 @@ class Organizations(models.Model):
         self.long = g[1]
         return super(Organizations, self).save(*args, **kwargs)
 
+    """function to add tags to an org"""
     def addextra(testmodel, pills):
         list = Organizations.objects.get(org_name=testmodel)
         for pill in pills:
@@ -395,11 +412,13 @@ class Organizations(models.Model):
 
 
 class FileListing(models.Model):
+    """File model for document directory"""
     file = models.FileField(unique=True)
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=100)
 
 class SubDirectory(models.Model):
+    """Directory model for the different types of subdirectories"""
     name = models.CharField(max_length=50, unique=True)
     description = models.CharField(max_length=200)
     subdirectory_organization = models.ManyToManyField(
@@ -408,6 +427,7 @@ class SubDirectory(models.Model):
     def __str__(self):
         return self.name
 
+    """"Function to add an organization to a subdirectory"""
     def add_org(org, subdirs):
         test1 = SubDirectory.objects.all()
         test2 = test1.difference(subdirs)
@@ -424,6 +444,7 @@ class UploadedFile(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 class DirectoryFiles(models.Model):
+    """File model for showing files in directory"""
     file = models.FileField(upload_to='file_directory/', blank=False)
     document_name = models.CharField(max_length=50, blank=True)
     description = models.CharField(max_length=200, blank=True)
@@ -433,6 +454,7 @@ class DirectoryFiles(models.Model):
         return str(self.id)
 
 class FileSubFolder(models.Model):
+    """Folder system for files model"""
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     name = models.CharField(max_length=50, blank=False)
@@ -445,12 +467,14 @@ class FileSubFolder(models.Model):
     def __str__(self):
         return str(self.user) + "'s " + str(self.name)
 
+    """Function to add a new folder in a folder"""
     def add_to_folder(file, user, folder):
         my_folder = FileSubFolder.objects.get(name=folder, user=user)
         my_folder.file.add(file)
         my_all_folder = FileFolder.objects.get(name="All Files", user=user)
         my_all_folder.file.add(file)
 
+    """function to get file path"""
     def findpath(folder, user):
         hasParent = True
         original_folder = FileSubFolder.objects.get(id=folder, user=user)
@@ -483,12 +507,14 @@ class FileSubFolder(models.Model):
                 my_path[original_folder] = [original_folder.id, 2]
         return my_path
 
+    """function to delete subfolders"""
     def delete(self):
         for sub in self.subfolder.all():
             sub.delete()
         super(FileSubFolder, self).delete()
 
 class FileFolder(models.Model):
+    """Folder system part 2 for files model"""
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     name = models.CharField(max_length=50, blank=False)
@@ -501,6 +527,7 @@ class FileFolder(models.Model):
     def __str__(self):
         return str(self.user) + "'s " + str(self.name)
 
+    """Create these 3 folders upon account creation"""
     @receiver(post_save, sender=get_user_model())
     def create_defaults(sender, instance, created, **kwargs):
         if created:
@@ -508,18 +535,21 @@ class FileFolder(models.Model):
             FileFolder.objects.create(user=instance, name="Shared With Me")
             FileFolder.objects.create(user=instance, name="Personal")
 
+    """Function for adding a new folder"""
     def add_to_folder(file, user, folder):
         my_folder = FileFolder.objects.get(name=folder, user=user)
         my_folder.file.add(file)
         my_all_folder = FileFolder.objects.get(name="All Files", user=user)
         my_all_folder.file.add(file)
 
+    """Function for deleting a folder"""
     def delete(self):
         for sub in self.subfolder.all():
             sub.delete()
         super(FileFolder, self).delete()
 
 class SharedWithMe(models.Model):
+    """Model that handles all the shared resources between individuals"""
     name = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
     organization = models.ManyToManyField(Organizations, blank=True)
@@ -528,6 +558,7 @@ class SharedWithMe(models.Model):
     def __str__(self):
         return str(self.name) + " 's organizations"
 
+    """Share organization to multiple individuals"""
     def addorg(collabs, org):
         test1 = Account.objects.filter(is_caseworker=True)
         test2 = test1.difference(collabs)
@@ -547,6 +578,7 @@ class SharedWithMe(models.Model):
                 obj.save()
             obj.organization.remove(org)
 
+    """Share organization to a specific individual"""
     def addindorg(collab, org):
         try:
             obj = SharedWithMe.objects.get(name=collab)
@@ -556,6 +588,7 @@ class SharedWithMe(models.Model):
 
         obj.organization.add(org)
 
+    """Share file to multiple individuals"""
     def addfile(collabs, file):
         for collab in collabs:
             try:
@@ -569,6 +602,7 @@ class SharedWithMe(models.Model):
             thisobj = MyFileName(file=file, user=collab)
             thisobj.save()
 
+    """Share file to a specific individual"""
     def addindfile(collab, file):
         try:
             obj = SharedWithMe.objects.get(name=collab)
@@ -582,6 +616,7 @@ class SharedWithMe(models.Model):
         thisobj.save()
 
 class RecentFiles(models.Model):
+    """Update any file when its viewed or downloaded so the system counts it as recently viewed"""
     file = models.ForeignKey(DirectoryFiles, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
@@ -593,6 +628,7 @@ class RecentFiles(models.Model):
         return super(RecentFiles, self).save(*args, **kwargs)
 
 class MyFileName(models.Model):
+    """Unique names for files per person, that way users can change file names of files that were given to them."""
     file = models.ForeignKey(DirectoryFiles, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
@@ -615,12 +651,14 @@ class MyFileName(models.Model):
         return str(self.newname) + "-" + str(self.user)
 
 class Priority(models.Model):
+    """Model for priority options, available in tasks"""
     priority = models.CharField(max_length=400, unique=True, null=False, blank=False)
 
     def __str__(self):
         return self.priority
 
 class Tasks(models.Model):
+    """Tasks model. Assigner is the person giving the task, assignees are the people receiving the tasks."""
     assigner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="assigner")
     assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="assignee")
     task_title = models.CharField(max_length=50, blank=False, null=False)
@@ -636,6 +674,7 @@ class Tasks(models.Model):
         return self.task_title
 
 class MyNotes(models.Model):
+    """Not to be confused with client notes. These are the notes that appear on the dashboard."""
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     description = models.CharField(max_length=500, null=False, blank=False)
     date = models.DateTimeField()

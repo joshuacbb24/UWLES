@@ -23,7 +23,7 @@ from django.core.exceptions import ValidationError
 
 @login_required(login_url='login')
 def home(request):
-    """Renders the home page."""
+    """Renders the home page (not used anymore)."""
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -37,7 +37,7 @@ def home(request):
     )
 
 def contact(request):
-    """Renders the contact page."""
+    """Renders the contact page (not used anymore)."""
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -50,7 +50,7 @@ def contact(request):
     )
 
 def about(request):
-    """Renders the about page."""
+    """Renders the about page (not used anymore)."""
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -63,6 +63,7 @@ def about(request):
     )
 
 def resourcelist(request):
+    """not used anymore, feel free to delete"""
     directories = ResourceDirectory.objects.all()
     services = Services.objects.all()
 
@@ -113,7 +114,7 @@ def signup(request):
             user_password = form.cleaned_data.get('password1')
             user_email = form.cleaned_data.get('email')
             user_avatar = form.cleaned_data.get('avatar')
-            group = Group.objects.get(name="caseworker")
+            group = Group.objects.get(name="client")
             user = authenticate(username=username, password=user_password)
             user.groups.add(group)
             login(request, user)
@@ -132,6 +133,7 @@ def delete_note(request, NoteId):
     return redirect('/?NoteId=0')
 
 def introduction(request):
+    """Was used for client testing in Summer 2021, no longer used."""
     if request.is_ajax() and request.method == "POST":
         print(request.POST)
         difficulty1 = request.POST['add_org_difficulty']
@@ -170,6 +172,7 @@ def introduction(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker', 'client'])
 def user_information(request):
+    """No longer used, was originally for the original client intake form"""
     try:
         instance1 = BgInfo.objects.get(user_id=request.user)
         instance2 = EcInfo.objects.get(background=instance1)
@@ -218,26 +221,25 @@ def user_information(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker', 'client'])
 def profile(request):
+    """renders the profile of the currently logged in user"""
     current_user = request.user
     try:
         referrals = ServiceReferrals.objects.filter(referFor_id=current_user)
         obj1 = BgInfo.objects.get(user_id=current_user)
-        obj2 = EcInfo.objects.get(background_id=obj1.id)
         obj3 = DemoInfo.objects.get(background_id=obj1.id)
         obj4 = ClientNotes.objects.get(background_id=obj1.id)
         date_joined = request.user.date_joined
         date_joined.strftime("%d:%B:%y")
     except BgInfo.DoesNotExist:
         obj1 = None
-        obj2 = None
         obj3 = None
         obj4 = None
         date_joined = None
     context = {
-            'object1': obj1,
-            'object2': obj2,
-            'object3': obj3,
-            'object4': obj4,
+            'client': current_user,
+            'clientbg': obj1,
+            'clientdemo': obj3,
+            'clientnote': obj4,
             'referrals': referrals,
             'date_joined': date_joined,
     }
@@ -253,6 +255,7 @@ def profile(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def clientlist(request):
+    """renders the client list of the currently logged in caseworker, as well as handles certain forms"""
     current_user = request.user
     try:
         myclients = ClientList.objects.get(user_id=current_user)
@@ -349,6 +352,7 @@ def clientlist(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def add_clients(request):
+    """No longer used, feel free to delete"""
     form1 = Client_List(request)
     if request.method == 'POST':
         form1 = Client_List(request, request.POST)
@@ -373,6 +377,7 @@ def add_clients(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def remove_clients(request):
+    """No longer used, feel free to delete"""
     form1 = Remove_Clients(request)
     if request.method == 'POST':
         form1 = Remove_Clients(request, request.POST)
@@ -390,6 +395,7 @@ def remove_clients(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def client_profile(request, client_id):
+    """Renders the selected clients profile for the current caseworker"""
     current_client = client_id
     try:
         obj0 = Account.objects.get(id=current_client)
@@ -454,6 +460,7 @@ def client_profile(request, client_id):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def client_information(request, client_id):
+    """No longer used, feel free to delete"""
     #allows caseworkers to edit client information
     current_client = client_id
     try:
@@ -502,6 +509,7 @@ def client_information(request, client_id):
     return render(request, 'app/userinfo.html', context)
 
 def resource_directory(request):
+    """No longer used, feel free to delete"""
     healthcare = ResourceDirectory.objects.get(dir_name="Healthcare")
     aging_disability = ResourceDirectory.objects.get(dir_name="Aging and Disability")
     children_families = ResourceDirectory.objects.get(dir_name="Children and Families")
@@ -528,6 +536,7 @@ def resource_directory(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def add_organization(request):
+    """No longer used, feel free to delete"""
     form1 = Add_Organization(request.POST)
     if request.method == 'POST':
         if form1.is_valid():
@@ -632,6 +641,7 @@ def delete_note(request, NoteId):
 
 @login_required(login_url='login')
 def dashboard(request):
+    """One of the most important views. This is used to display the dashboard and handle the forms used on it."""
     tasks = Tasks.objects.filter(assignees=request.user.id)
     users = Account.objects.exclude(pk=request.user.id)
     rooms = ChatGroup.objects.filter(members=request.user).order_by("group_name")
@@ -824,6 +834,7 @@ def room(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def make_client_account(request):
+    """No longer used, feel free to delete"""
     if request.method == 'POST':
         form = User_Creation_Form(request.POST)
         if form.is_valid():
@@ -879,6 +890,7 @@ class BasicUploadView(View):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def full_directory(request):
+    """View for the full directory. You can simplify a lot of this, specifically with form handling. """
     user = request.user
     try:
         swme = SharedWithMe.objects.get(name=user)
@@ -1215,6 +1227,7 @@ def full_directory(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def sub_directory(request, pk, option):
+    """View for the sub directories. """
     try:
         directory = SubDirectory.objects.filter(id=pk)
     except SubDirectory.DoesNotExist:
@@ -1238,6 +1251,7 @@ def sub_directory(request, pk, option):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def org_directory(request):
+    """View for the organization directory. You can simplify a lot of this, specifically with form handling. """
     organizations = Organizations.objects.all()
 
     user = request.user
@@ -1535,6 +1549,7 @@ def org_directory(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def org_sub_directory(request, pk):
+    """View for loading the data for an organization. """
     try:
         organization = Organizations.objects.get(id=pk)
     except Organizations.DoesNotExist:
@@ -1548,6 +1563,7 @@ def org_sub_directory(request, pk):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def document_directory(request):
+    """View for the document directory. You can simplify a lot of this, specifically with form handling. """
     user = request.user
     try:
         swme = SharedWithMe.objects.get(name=user)
@@ -1938,6 +1954,7 @@ def document_directory(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['caseworker'])
 def document_directory_folder(request, pk, option):
+    """View for folder content in the document directory. You can simplify a lot of this, specifically with form handling. """
     reverseurl = reverse('document_folder_directory', kwargs={'pk': pk, 'option': option})
     user = request.user
     my_path = None
@@ -2237,10 +2254,8 @@ def document_directory_folder(request, pk, option):
     return render(request, 'app/document_folder_directory.html', context)
 
 
-
-
-
 def validate_account(request):
+    """View used to validate whether the below info is valid, via Ajax"""
     account_name = request.GET.get('account_name', None)
     test_name = Account.objects.filter(username=account_name).exists()
     if (test_name):
@@ -2270,6 +2285,7 @@ def validate_account(request):
     return JsonResponse(data)
 
 def validate_org(request):
+    """View used to validate whether the below info is valid, via Ajax"""
     org_name = request.GET.get('org_name', None)
     test_name = Organizations.objects.filter(org_name=org_name).exists()
     if(test_name):
