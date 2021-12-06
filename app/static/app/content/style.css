@@ -800,22 +800,31 @@
     padding: 10px;
 }
 
+    .refer-service-form.label {
+        background-color: #373737;
+    }
+
+
+
 #id_referFor {
-    width: 40%;
-    color: #373737;
+    width: 20%;
+    border-radius: 6px;
     font-size: 16px;
+    background-color: white;
 }
 
 #id_referTo {
-    width: 35%;
-    color: #373737;
+    width: 20%;
+    border-radius: 6px;
+    background-color: white;
     font-size: 16px;
 }
 
 #id_org {
-    width: 40%;
-    color: #373737;
+    width: 20%;
+    border-radius: 6px;
     font-size: 16px;
+    background-color: white;
 }
 
 #client-add-btn{

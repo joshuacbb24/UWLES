@@ -307,10 +307,12 @@ class MyNotesForm(ModelForm):
 
 """Form for creating a referall"""
 class ReferServiceForm(ModelForm):
-      service = forms.CharField(widget=forms.Textarea(attrs={'maxlength': '500' ,'placeholder': 'Enter Service Needed' ,'class': 'refer-service-textarea'}), required = True, label ='',)
-      referFor = forms.ModelChoiceField(widget=forms.Select(attrs={ 'class': 'refer-for'}), queryset=Account.objects.all(),)
-      
-      class Meta:
-          model = ServiceReferrals
-          fields = '__all__'
-          exclude = ('referrer',)
+ 
+    service = forms.CharField(widget=forms.Textarea(attrs={'maxlength': '500' ,'placeholder': 'Enter Service Needed' ,'class': 'refer-service-textarea'}), required = True, label ='',)
+    referFor = forms.ModelChoiceField(widget=forms.Select(attrs={ 'class': 'refer-for', 'placeholder': 'Refer To','border-radius': '6px','background-color':'#373737',}), queryset=Account.objects.filter(is_client=True),label ='Refer To',)
+    org = forms.ModelChoiceField(widget=forms.Select(attrs={ 'class': 'refer-org', 'placeholder': 'Organization',}), queryset=Organizations.objects.all(),label ='Organization',)
+
+    class Meta:
+        model = ServiceReferrals
+        fields = '__all__'
+        exclude = ('referrer',)

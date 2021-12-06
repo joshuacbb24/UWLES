@@ -371,6 +371,7 @@ calendar_today
                             -->
                             <form method="post" class="refer-service-form" action="{% url 'dashboard' %}">
                                  {% csrf_token %}
+                                <label class="refer-label-class">{{ referServ.label }}</label>
                                  {{ referServ }}
                                  <button class="refer-submit" type="submit">Refer Now</button>
                             </form>
