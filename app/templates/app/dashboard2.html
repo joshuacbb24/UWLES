@@ -307,6 +307,8 @@ calendar_today
     </div>
 
         <script>
+
+            // This functions is to switch from the client list and the refer submission
             $(document).ready(function () {
                 $('body').on('click', '.refer-button', function () {
                 $('.refer-client-list').toggle();
@@ -324,11 +326,11 @@ calendar_today
 
 
 
-      <div class="menu2">
-        <div class="refer-client-list">
+       <div class="menu2">
+        <div class="refer-client-list">    <!--The first card, toggles with the refer-submission-->
             <div class="menu-header">
               Clients
-              <button class="refer-button" value="{{ client.first_name }} {{ client.last_name }}">Refer To</button>
+              <button class="refer-button" >Refer To</button>  <!--the Refer button, used to switch to the refer submission card-->
               <i class="fas fa-plus fa-1x" id="client-add-btn" type="button" data-toggle="modal" data-target="#addclientModal"></i>
             </div>
             <div class="menu2-body">
@@ -352,30 +354,19 @@ calendar_today
               </div>
             </div>
         </div>
-          <div class="refer-submission">
+          <div class="refer-submission">   <!--The second card, toggles with the client list-->
                 <div class="menu-header">
               Referrals
               <i class="fas fa-plus fa-1x" id="client-add-btn"></i>
             </div>
                 <div class="menu2-body-sub">
-                   
-                    
-                            
-                            <!--
-                            <div class="refer-searchbar">
-                                     
-                                    <div class="menu2-input-field-sub">
-                                       <input type="text" placeholder="Search" id="client-search-input-sub" onkeyup="filterClientFunction()"/>
-                                    </div>
-                            </div>
-                            -->
                             <form method="post" class="refer-service-form" action="{% url 'dashboard' %}">
                                  {% csrf_token %}
                                 <label class="refer-label-class">{{ referServ.label }}</label>
                                  {{ referServ }}
                                  <button class="refer-submit" type="submit">Refer Now</button>
                             </form>
-                            <button id="refer-back" class="fas fa-arrow-left"></button>
+                            <button id="refer-back" class="fas fa-arrow-left"></button>  <!--back button, used to go back to the client list-->
                         </div>
                     </div>
                 </div>
@@ -408,9 +399,9 @@ calendar_today
      
     
 
-    $(document).ready(function() {
+       $(document).ready(function() {
         $('body').on('click', '.fas.fa-trash', function () {
-            var noteid = $(this).val();
+            var noteid = $(this).val();  //take the value from the trash button
             const fd = new FormData();
             var result = confirm("Are you sure you want to delete this note?");
             if (result) {
@@ -424,8 +415,8 @@ calendar_today
                         enctype: 'multipart/form-data',
                         data: fd,
                         success: function (response) {
-                            $('.notes-list-items[value=' + noteid + ']').remove();
-                            $('.notes-list-items').listview("refresh");
+                            $('.notes-list-items[value=' + noteid + ']').remove();    //remove the item from the list
+                            $('.notes-list-items').listview("refresh");               //refresh the list
                             //$(".notes-list-items li").eq(noteid).remove();
                         },
                         error: function (error) {
@@ -442,36 +433,36 @@ calendar_today
 
         $('body').on('click', '.fas.fa-pencil-alt', function () {
             var noteid = $(this).val();
-            let text;
-            let descrip = prompt("Edit note:, text here");
-           
-            const fd = new FormData();
-            fd.append('csrfmiddlewaretoken', csrf1[0].value);
-            fd.append('noteid-e', noteid);
-            fd.append('noteid-e-descrip', descrip)
+            
+            let descrip = prompt("Edit note:, text here");        //prompt to edit text
+            if (descrip != null) {
+                const fd = new FormData();
+                fd.append('csrfmiddlewaretoken', csrf1[0].value);
+                fd.append('noteid-e', noteid);                    //to change the values of the selected note in views
+                fd.append('noteid-e-descrip', descrip)
 
-            $.ajax({
-                type: 'POST',
-                url: url,
-                enctype: 'multipart/form-data',
-                data: fd,
-                success: function (data) {
-                  $('#note-refresh').load(location.href + ' #note-refresh');
-                },
-                error: function (error) {
-                    console.log(error)
-                },
-                cache: false,
-                contentType: false,
-                processData: false,
-            })
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    enctype: 'multipart/form-data',
+                    data: fd,
+                    success: function (data) {
+                        $('#note-refresh').load(location.href + ' #note-refresh'); //after the fd.appends, refresh the notes list
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                })
+            }
         
         })
 
         $("body").on('click', '.btn-save-notes', function (e) {
             e.preventDefault();
-            var descrip = $('#id_description.my-notes-forms').val();
-            //alert(descrip);
+            var descrip = $('#id_description.my-notes-forms').val();  // #id_description.my-notes-forms is the value of the input from the text area
             
                 const fd = new FormData()
                 fd.append('csrfmiddlewaretoken', csrf1[0].value)
@@ -487,7 +478,7 @@ calendar_today
                     success: function (data) {
                   
                         $('#note-refresh').load(location.href + ' #note-refresh');
-                        $('.my-notes-forms').val('');
+                        $('.my-notes-forms').val('');     //reset text-area
                         
                         
                     },
@@ -502,11 +493,13 @@ calendar_today
     });
         </script>
 
+    <!--For menu3, the user will be able to create,edit and delete notes that they can view on the dashboard -->
     <div class="menu3">
       <div class="menu-header">
           My Notes
       </div>
       <br><br>
+        <!-- the form where the user can create new notes by typing something in the textarea and then hitting the Save button-->
       <form method="post" class="notes-form" id="note-form" action="{% url 'dashboard' %}">
           {% csrf_token  %}
           {{ notesForm }}
