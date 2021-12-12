@@ -110,6 +110,7 @@
 
     <a href="{% url 'orgdirectory' %}" class="orgPath">Organizational Directory</a>
 
+    <!--load all organizations in grid layout-->
     <div class="org-grid--layout" id="visible">
         {% for org in organizations %}
             <div class="orgCard">
@@ -139,6 +140,7 @@
     <!--<div class="org-listOrder" id="hidden"><div class="org-listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="orgArrow"></i><div class="org-listZ">Z</div></div>-->
    <div class="org-listDsc" id="hidden">Organization Description</div>
 
+   <!--load all organizations in list layout-->
     <div class="org-list--layout" id="hidden">
         {% for org in organizations %}
             <div class="org-list">
@@ -160,6 +162,7 @@
     <script src="{% static 'app/scripts/formvalidation.js' %}"></script>
     <script src="{% static 'app/scripts/test.js' %}"></script>
     <script>
+        //error handling for forms
         document.formHasErrors = {% if form1.errors %}true{% else %}false{% endif %}
         
         $('#id_org_name').on('input', function (){

@@ -97,6 +97,7 @@
         </div>
     {% endif %}
 
+    <!--display folders-->
     <div class="folder-container">
         <div class="folderBox">
             {% for folder in mysubfolders %}
@@ -115,6 +116,7 @@
         <div class="addFolder" type="button" data-toggle="modal" data-target="#addFolderModal"><p class="addContent">Add Folder</p></div>
     </div>
 
+    <!--display documents in grid-->
     <div class="documentLayout" id="visible">
             {% if folder.name != 'Shared With Me' and folder.name != 'All Files' %}
                 {% for file in folder.file.all %}
@@ -243,6 +245,7 @@
     <div class="doclistDsc" id="hidden">Date Accessed</div>
     <div class="doclistTags" id="hidden">Tags</div>
 
+    <!--display documents in list-->
     <div class="doclistLayout" id="hidden">
             {% if folder.name != 'Shared With Me' and folder.name != 'All Files' %}
                 {% for file in folder.file.all %}

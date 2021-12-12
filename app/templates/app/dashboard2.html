@@ -563,10 +563,12 @@ calendar_today
 
       </div>
 
+      <!--Load tasks below-->
       {% include "app/dashboard_tasks.html" %}
 
     </div>
 
+    <!--Modal window for adding a new task-->
     <form method="post">
     <div class="modal box5 fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -590,6 +592,7 @@ calendar_today
       </div>
     </div>
 
+    <!--Modal window for selecting a client / caseworker for adding a new task-->
     <div class="modal box5 fade" id="assigneeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">

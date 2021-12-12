@@ -57,11 +57,13 @@
 
 <div class="clist-path-home show-title">Home</div><div class="clist-path-union show-title"> > </div><div class="clist-path-clist show-title" value="1">Client List</div><div class="clist-path-union2 hide-title"> > </div><div class="clist-path-cinfo hide-title">Client Info</div>
 
+<!--search bar for client list-->
 <div class="clist-search-container">
     <input type="text" placeholder="Search by Name" class="clist-searchbar" id="clist-searchbar" onkeyup="filterClientFunction()">
     <i class="fa fa-search" aria-hidden="true" id="clist-searchbar-icon"></i>
 </div>
 
+<!--Add new client form with modal window-->
 <button class="clist-add-btn" type="button" data-toggle="modal" data-target="#addNewClient">Add New Client</button>
 <form method="post" enctype="multipart/form-data">
 <div class="modal box6 fade" id="addNewClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -150,6 +152,7 @@
 
 <div class="clist-cname-grid hidden">Client Name</div>
 
+<!--grid layout for client list-->
 <div class="clist-grid-layout visible">
     {% for client in myclients.clients.all %}
     <div class="clist-client-grid">
@@ -165,6 +168,7 @@
     {% endfor %}
 </div>
 
+<!--list layout for client list-->
 <div class="clist-list-layout hidden">
     {% for client in myclients.clients.all %}
     <div class="clist-client-list">

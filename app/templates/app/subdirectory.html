@@ -38,6 +38,7 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css' rel='stylesheet' />
 </head>
 <body>
+<!--never got to cleaning up the css-->
 <style>
     body {
         overflow-x: hidden;
@@ -1738,6 +1739,7 @@
     {% endfor %}
 
     {% if option == 1 %}
+        <!--load resources in grid layout-->
         <div class="resourceLayout" id="visible">
         {% for directory in directories %}
             {% for organization in directory.subdirectory_organization.all %}
@@ -1896,6 +1898,7 @@
     {% endif %}
 
     {% if option == 2 %}
+        <!--load resources in list layout-->
         <div class="rlistLayout" id="visible">
             {% for directory in directories %}
                 {% for organization in directory.subdirectory_organization.all %}

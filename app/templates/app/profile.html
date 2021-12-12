@@ -57,6 +57,7 @@
 
 <div class="clist-path-home show-title">Home</div><div class="clist-path-union show-title"> > </div><a href="{% url 'clientlist' %}" class="clist-path-clist show-title">Client List</a><div class="clist-path-union2 show-title"> > </div><div class="clist-path-cinfo show-title">Client Info</div>
 
+<!--edit client form with modal window-->
 <button class="clist-add-btn" type="button" data-toggle="modal" data-target="#addNewClient">Edit Client</button>
 <form method="post" enctype="multipart/form-data">
 <div class="modal box6 fade" id="addNewClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -126,6 +127,7 @@
   </div>
 </form>
 
+<!--load info related to user (client / current users profile)-->
 <div class="client-profile visible" value="{{ client.id }}">
 <div class="client-box1 visible">
     <i class="far fa-edit fa-lg client-edit-icon" value="{{ client.id }}"></i>
@@ -222,6 +224,7 @@
     </div>
 </div>
 
+<!--load referrals for current user / client-->
 <div class="client-box4 visible">
     <button class="client-box4-upcoming">
         Upcoming Appointments

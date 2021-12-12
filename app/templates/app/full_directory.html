@@ -270,6 +270,7 @@
 
     <a href="{% url 'fulldirectory' %}" class="dirPath">Category Directory</a>
 
+    <!--grid view for all sub directories-->
     <div class="gridLayout" id="visible" name="gridlayout">
         <div class="dirCard"><div class="circle"><i class="fas fa-wine-bottle fa-2x"></i></div><h2 class="h2title">{{ addiction.name }}</h2><p class="ptext">{{ addiction.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' addiction.id 1 %}'">Explore</button></div>
         <div class="dirCard"><div class="circle"><i class="fas fa-male fa-2x"></i><i class="fas fa-female fa-2x"></i></div><h2 class="h2title">{{ adults.name }}</h2><p class="ptext">{{ adults.description|truncatechars_html:70 }}</p><button class="explorebtn" onclick="location.href='{% url 'subdirectory' adults.id 1 %}'">Explore</button></div>
@@ -302,6 +303,7 @@
     <div class="listCategory" id="hidden">Category</div>
     <!--<div class="listOrder" id="hidden"><div class="listA">A</div><i class="fa fa-arrow-right" aria-hidden="true" id="Arrow"></i><div class="listZ">Z</div></div>-->
     <div class="listDsc" id="hidden">Description</div>
+    <!--list view for all sub directories-->
     <div class="listLayout" id="hidden">
         <div class="dir-list"><div class="listName">{{ addiction.name }}</div><div class="listDescript">{{ addiction.description|truncatechars_html:70 }}</div><button class="listExplore1" onclick="location.href='{% url 'subdirectory' addiction.id 2 %}'">Explore</button></div>
         <div class="dir-list"><div class="listName">{{ adults.name }}</div><div class="listDescript">{{ adults.description|truncatechars_html:70 }}</div><button class="listExplore2" onclick="location.href='{% url 'subdirectory' adults.id 2 %}'">Explore</button></div>
@@ -334,6 +336,7 @@
     <script src="{% static 'app/scripts/test2.js' %}"></script>
     <script src="{% static 'app/scripts/test.js' %}"></script>
     <script>
+        //error handling for forms
         document.formHasErrors = {% if form1.errors %}true{% else %}false{% endif %}
 
         $('#id_org_name').on('input', function (){

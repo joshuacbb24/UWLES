@@ -85,6 +85,7 @@
 
     <a href="{% url 'documentdirectory' %}" class="docDirPath">Document Directory</a>
 
+    <!--display all folders for current user-->
     <div class="folderBox">
         {% for folder in myfolders %}
             <div class="{% cycle 'myFolder1' 'myFolder2' 'myFolder3' %}"><i class="bi bi-folder-fill" style="color: #68D0D1; font-size: 2rem;"></i><div class="folderName" onclick="location.href='{% url 'document_folder_directory' folder.id 1 %}'">{{ folder.name }}</div>
@@ -106,6 +107,7 @@
 
     <div class="viewFilesTitle">Recent Files</div>
 
+    <!--display recent documents in grid-->
     <div class="documentLayout" id="visible">
         {% for recent in recent_files %}
         <div class="document-card">
@@ -154,6 +156,7 @@
     <div class="doclistDsc" id="hidden">Date Accessed</div>
     <div class="doclistTags" id="hidden">Tags</div>
 
+    <!--display recent documents in list-->
     <div class="doclistLayout" id="hidden">
         {% for recent in recent_files %}
             <div class="{% cycle 'docList1' 'docList2' %}">
@@ -188,6 +191,7 @@
     <script src="{% static 'app/scripts/test.js' %}"></script>
     <script src="{% static 'app/scripts/file-folder.js' %}"></script>
     <script>
+        // error checking for forms
         document.formHasErrors = {% if form1.errors %}true{% else %}false{% endif %}
         $('#id_org_name').on('input', function (){
             var id_org_name = $(this).val();

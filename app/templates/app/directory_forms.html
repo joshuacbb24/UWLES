@@ -1,5 +1,6 @@
 {% load static %}
 {% load project_templates %}
+<!--edit org modal window-->
 <div class="modal box1 fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -41,6 +42,7 @@
     <div id="form_set3">
         {% for formx in formset2.forms %}
 
+        <!--first modal window for editing organization info-->
         <div class="modal box1 fade" id="editform{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -116,6 +118,7 @@
             </div>
         </div>
 
+        <!--second modal window for editing organization info-->
         <div class="modal box1 fade" id="editFormPT2{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -187,7 +190,7 @@
             </div>
           </div>
 
-
+    <!--third modal window for editing organization info-->
     <div class="modal box1 fade" id="editorgForm2{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
@@ -257,6 +260,7 @@
 </div>
 </div>
 
+<!--fourth modal window for editing organization info-->
 <div class="modal box1 fade" id="editorgForm3{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
 <div class="modal-dialog" role="document">
   <div class="modal-content">
@@ -310,6 +314,7 @@
   </div>
 </div>
 
+<!--fifth modal window for editing organization info-->
 <div class="modal box1 fade" id="editorgForm4{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
@@ -393,6 +398,7 @@
 </div>
 </div>
 
+<!--final modal window for editing organization info-->
 <div class="modal box1 fade" id="editorgForm5{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" value="{{ forloop.counter0 }}">
 <div class="modal-dialog" role="document">
   <div class="modal-content">
@@ -439,6 +445,7 @@
 {% endfor %}
     </div>
 
+    <!--modal window for adding new tags to organization-->
     <div class="modal box2 fade" id="editexampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -470,7 +477,7 @@
     </div>
 
 
-
+<!--modal window for adding new organiztion or document-->
 <div class="modal box1 fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -486,6 +493,7 @@
 </div>
 </div>
 
+<!--first modal window for adding organization info-->
 <div class="modal box1 fade" id="orgForm1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
@@ -571,6 +579,7 @@
 </div>
 </div>
 
+<!--second modal window for adding organization info-->
 <div class="modal box1 fade" id="orgFormPT2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
   <div class="modal-content">
@@ -643,6 +652,7 @@
 </div>
 </div>
 
+<!--third modal window for adding organization info-->
 <div class="modal box1 fade" id="orgForm2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
   <div class="modal-content">
@@ -705,7 +715,7 @@
 </div>
 </div>
 
-
+<!--fourth modal window for adding organization info-->
 <div class="modal box1 fade" id="orgForm2PT2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
@@ -760,6 +770,7 @@
 </div>
 </div>
 
+<!--modal window for adding tags to organization info-->
 <div class="modal box2 fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -790,7 +801,7 @@
     </div>
     </div>
 
-
+<!--fifth modal window for adding organization info-->
 <div class="modal box1 fade" id="orgForm3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
@@ -871,6 +882,7 @@
 </div>
 </div>
 
+<!--final modal window for adding organization info-->
 <div class="modal box1 fade" id="orgForm3PT2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document">
   <div class="modal-content">
@@ -914,6 +926,7 @@
 </div>
 </div>
 
+<!--modal window for confirmation on organization info-->
 <div class="modal box4 fade" id="orgFormErrorMsg" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -931,6 +944,7 @@
     </div>
     </div>
 
+<!--modal for adding new files-->
 <div class="modal box1 fade" id="fileForm1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -970,6 +984,7 @@
     </div>
 </div>
 
+<!--modal for adding collaborators to file-->
 <div class="modal box3 fade" id="collabModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -999,6 +1014,7 @@
     </div>
 </div>
 
+<!--modal for adding tags to file-->
 <div class="modal box3 fade" id="filetagModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -1026,6 +1042,7 @@
     </div>
 </div>
 
+<!--confirmation modal for keeping file titles-->
 <div class="modal box3 fade" id="confirmation-file-modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
       <div class="modal-content">
