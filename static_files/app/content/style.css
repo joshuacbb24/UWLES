@@ -804,9 +804,7 @@
         background-color: #373737;
     }
 
-#id_refer-back {
-    width: 20px;
-}
+
 
 #id_referFor {
     width: 20%;
@@ -2293,6 +2291,7 @@ body {
     visibility: hidden;
     display: block;
 }
+
 
 .active-btn{
     background: #015D67 !important;
