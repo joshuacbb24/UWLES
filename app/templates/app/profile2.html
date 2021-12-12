@@ -1,0 +1,281 @@
+{% extends 'app/format.html' %}
+{% block header1 %}
+    <a href="{% url 'dashboard' %}">
+        <span id="fist-element" class="las la-home"></span>
+    </a>
+{% endblock %}
+{% block header2 %}
+    <a href="{% url 'fulldirectory' %}">
+        <span class="las la-book"></span>
+    </a>
+{% endblock %}
+{% block header3 %}
+    <a href="{% url 'multichat' %}">
+        <span class="las la-comment-alt"></span>
+    </a>
+{% endblock %}
+{% block header4 %}
+    <a href="{% url 'clientlist' %}">
+        <span class="las la-user-friends"></span>
+    </a>
+{% endblock %}
+{% block header5 %}
+    <a href="">
+        <span class="las la-plus-circle"></span>
+    </a>
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'app/content/clientlist.css' %}" />
+<link rel="stylesheet" href="{% static 'app/content/myModal.css' %}" />
+<script src="https://kit.fontawesome.com/f0b88b09a7.js" crossorigin="anonymous"></script>
+<script src="{% static 'app/scripts/clientlist.js' %}"></script>
+
+<script>
+    function filterClientFunction() {
+    var input, filter, div, a, i;
+    input = document.getElementById("clist-searchbar");
+    filter = input.value.toUpperCase();
+    a = document.getElementsByClassName("clist-client-name-grid")
+    b = document.getElementsByClassName("clist-client-name-list");
+    for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            $(a[i]).parent().css("display", "")
+            $(b[i]).parent().css("display", "")
+        }
+        else {
+            $(a[i]).parent().css("display", "none")
+            $(b[i]).parent().css("display", "none")
+        }
+    }
+}
+</script>
+
+{% load project_templates %}
+
+<div class="clist-path-home show-title">Profile</div>
+
+<!--edit client form with modal window-->
+<button class="clist-add-btn" type="button" data-toggle="modal" data-target="#addNewClient">Edit Profile</button>
+<form method="post" enctype="multipart/form-data">
+<div class="modal box6 fade" id="addNewClient" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit Client</h5>
+          <i class="fas fa-times fa-lg" id="add-client-exit" data-dismiss="modal"></i>
+        </div>
+        {% csrf_token %}
+        <div class="modal-body">
+            {% csrf_token %}
+            <div class="user-form-divider"></div>
+            <div class="user-form-account-info">
+				{% if client.avatar %}
+					<img class="client-form-profile-icon" src="{{client.avatar.url}}">
+				{% endif %}
+            </div>
+            <div class="user-form-divider"></div>
+            <div class="user-form-back-info">
+                <div class="user-form-back-title">Background Information</div>
+                <div class="user-form-firstname-title">First Name</div>
+                <div class="user-form-lastname-title">Last Name</div>
+                <div class="user-form-middlename-title">M.I.</div>
+                <div class="user-form-gender-title">Gender</div>
+                <div class="user-form-phone-title">Primary Phone</div>
+                <div class="user-form-email-title">Primary Email</div>
+                <div class="user-form-birthdate-title">Birthdate</div>
+
+                {{ form1.firstname }}
+                {{ form1.lastname }}
+                {{ form1.middle_initial }}
+                {{ form1.gender }}
+                {{ form1.phone_number }}
+                {{ form1.email }}
+                {{ form1.birthday }}
+            </div>
+            <div class="user-form-divider"></div>
+            <div class="user-form-demo-info">
+                <div class="user-form-demo-title">Client Demographics</div>
+                <div class="user-form-street-title">Street Address</div>
+                <div class="user-form-apt-title">Apt./Unit Number</div>
+                <div class="user-form-county-title">County</div>
+                <div class="user-form-city-title">City</div>
+                <div class="user-form-state-title">State</div>
+                <div class="user-form-zipcode-title">Zipcode</div>
+
+                {{ form2.street_address }}
+                {{ form2.apt_unit }}
+                {{ form2.county }}
+                {{ form2.city }}
+                {{ form2.state }}
+                {{ form2.zipcode }}
+
+            </div>
+            <div class="user-form-divider"></div>
+            <div class="user-form-notes">
+                <div class="user-form-notes-title">Notes</div>
+                {{ form3.notes }}
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="user-form-save-info">Edit Client</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!--load info related to user (client / current users profile)-->
+<div class="client-profile visible" value="{{ client.id }}">
+<div class="client-box1 visible">
+    <i class="far fa-edit fa-lg client-edit-icon" value="{{ client.id }}"></i>
+	{% if client.avatar %}
+		<img class="client-box1-pfp" src="{{client.avatar.url}}">
+	{% endif %}
+    <div class="client-box1-name">
+        {{ client.first_name }} {{ client.last_name }}
+    </div>
+    <div class="client-box1-email">
+        {{ client.email }}
+    </div>
+    <div class="client-box1-tag1">
+        Housing Assistance
+    </div>
+    <div class="client-box1-tag2">
+        Senior
+    </div>
+    <button class="client-box1-sendmsg">
+        Send Message
+    </button>
+</div>
+
+<div class="client-box2 visible">
+    <div class="client-box2-gender-name">
+        Gender
+    </div>
+    <div class="client-box2-gender-box">
+        {{ clientbg.gender }}
+    </div>
+    <div class="client-box2-birthday-name">
+        Birthday
+    </div>
+    <div class="client-box2-birthday-box">
+        {{ clientbg.birthday|date:'M d, Y' }}
+    </div>
+    <div class="client-box2-phone-name">
+        Phone Number
+    </div>
+    <div class="client-box2-phone-box">
+        {{ clientbg.phone_number }}
+    </div>
+    <div class="client-box2-street-name">
+        Street Address
+    </div>
+    <div class="client-box2-street-box">
+        {{ clientdemo.street_address }}
+    </div>
+    <div class="client-box2-city-name">
+        City
+    </div>
+    <div class="client-box2-city-box">
+        {{ clientdemo.city }}
+    </div>
+    <div class="client-box2-zipcode-name">
+        Zipcode
+    </div>
+    <div class="client-box2-zipcode-box">
+		{{ clientdemo.zipcode }}
+    </div>
+    <div class="client-box2-status-name">
+        Member Status
+    </div>
+    <div class="client-box2-status-box">
+        {% if client.is_active %}
+            Active Member
+        {% else %}
+            Inactive Member
+        {% endif %}
+    </div>
+    <div class="client-box2-registered-name">
+        Registered Date
+    </div>
+    <div class="client-box2-registered-box">
+        {{ date_joined }}
+    </div>
+</div>
+
+<div class="client-box3 visible">
+    <div class="client-box3-notes-title">
+        Notes
+    </div>
+    <div class="client-box3-notes-box">
+        {{ clientnote.notes }}
+    </div>
+    <div class="client-box3-activity">
+        Basic Activity and Community Needs
+    </div>
+    <div class="client-box3-date-title">
+        October 12, 2020
+    </div>
+    <div class="client-box3-cm">
+        Kathy, 211 Case Manager
+    </div>
+</div>
+
+<!--load referrals for current user / client-->
+<div class="client-box4 visible">
+    <button class="client-box4-upcoming">
+        Upcoming Appointments
+    </button>
+    <button class="client-box4-past">
+        Past Appointments
+    </button>
+    <button class="client-box4-service">
+        Service Referrals
+    </button>
+    <button class="client-box4-medical">
+        Medical Records
+    </button>
+    <div class="client-box4-box"  style="align-items: start;">
+        <div id="referrals">
+					<ul class="referral-list">
+					{% for referral in referrals %}
+						<li class="referral-list-items" >
+							<p class="refService" style="color: blue;"> {{ referral.service }} - {{ referral.org }} </p>
+							<p class="refItal" style="font-style: italic;"> Referred by {{ referral.referrer }} </p>
+						</li>
+					{% endfor %}
+					</ul>
+		</div>
+
+    </div>
+</div>
+
+<div class="client-box5 visible">
+    <div class="client-box5-title">
+        Resource / Documents
+    </div>
+    <div class="client-box5-file1">
+        <div class="client-box5-file-title">
+            Aging and Disability.pdf
+        </div>
+    </div>
+    <div class="client-box5-file2">
+        <div class="client-box5-file-title">
+            Legal and Tax Services.doc
+        </div>
+    </div>
+    <div class="client-box5-file3">
+        <div class="client-box5-file-title">
+            MD Housing and Shelter.png
+        </div>
+    </div>
+    <div class="client-box5-see-all">
+        See all
+    </div>
+</div>
+</div>
+
+{% endblock %}

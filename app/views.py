@@ -243,7 +243,7 @@ def profile(request):
             'referrals': referrals,
             'date_joined': date_joined,
     }
-    return render(request, 'app/profile.html', context)
+    return render(request, 'app/profile2.html', context)
     context = {}
     if request.method == 'POST':
         uploaded_file = request.FILES['document']
