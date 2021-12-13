@@ -82,6 +82,11 @@
     margin-left: 50%;
 }
 
+.main-content {
+    margin-left: 41px;
+    margin-right: -10px;
+    background: #ebf2f2;
+}
   
   .notice-message {
     margin-bottom: 20px;
@@ -491,6 +496,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
     background: white;
     word-wrap: break-word;
     color: black;
+    margin-left: 15px;
   }
 
 .outgoing {
@@ -793,12 +799,11 @@ body {
 }
 
 .wrap img {
-    min-width: 32px;
-    min-height: 32px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     display: inline-flex;
     flex-direction: row;
-    margin-left: 15px;
 }
 
 .unread {
