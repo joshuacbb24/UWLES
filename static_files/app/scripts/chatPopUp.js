@@ -49,6 +49,7 @@ function onChangeName(event) {
 
     /* alphanumeric = /[0-9a-zA-Z]/;
      let isValid = alphanumeric.test(event.key);
+
      let inputLength = newChat.value.length;
      if (isValid) {
          inputLength += 1;
@@ -93,6 +94,7 @@ function SearchFunction() {
             return false;
         }
     }
+
     else {
         return true;
     }
@@ -160,6 +162,7 @@ function enableScroll() {
         scrollroomsoffset.pageYOffset || document.documentElement.scrollTop;
     scrollLeft =
         scrollroomsoffset.pageXOffset || document.documentElement.scrollLeft,
+
         // if any scroll is attempted,
         // set this to the previous value
         scrollrooms.on("scroll", function () {
@@ -173,11 +176,13 @@ function enableScroll() {
     var element = document.getElementById('rooms');
     scrollTop = element.pageYOffset || document.documentElement.scrollTop;
     scrollLeft = element.pageXOffset || document.documentElement.scrollLeft,
+
         // if any scroll is attempted, set this to the previous value
         element.onscroll = function () {
             element.scrollTo(scrollLeft, scrollTop);
         };
 }
+
 function enableScroll() {
     element.onscroll = function () { };
 }*/
@@ -1071,7 +1076,7 @@ $(function () {
 
                     let extraUserscreate = data.avatars.length - i;
 
-                    $(".rooms").prepend(
+                    $(".rooms").append(
                         `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                         <div class="wrap">
                             <div avatar-value="${data.room}" class="avatars">
@@ -1092,6 +1097,7 @@ $(function () {
                                 </div>
                             </div>
                         </div>
+
                     </li>`);
                     if ($("#myself").val() != data.created_by) {
                         var noticeofcreatedchat = document.getElementById("chatAudio");
@@ -1561,7 +1567,7 @@ $(function () {
                     }
                     else {
 
-                        $(".rooms").prepend(
+                        $(".rooms").append(
                             `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                                     <div class="wrap">
                                         <div avatar-value="${data.room}" class="avatars">
@@ -1577,11 +1583,13 @@ $(function () {
                                         <div class="chat-dropdown"> 
                                             
                                             <div chat-dropdown-value="${data.room}" class="chat-dropdown-content">
+
                                             <a edit-button-value="${data.room}" class="edit-button" id="edit-${data.room}">Edit Name</a>
                                             <a delete-button-value="${data.room}" class="delete-button" id="delete-${data.room}">Delete Room</a>
                                                     </div>
                                         </div>
                                     </div>
+
                                     </li>`);
                         editbuttonclicked(`ellipsis-${data.room}`);
                         menuclicked(`delete-${data.room}`, `edit-${data.room}`);
@@ -1919,6 +1927,7 @@ $(function () {
                             <span
                                  ellipsis-value="${roomie.id}" id="ellipsis-${roomie.id}" class="las la-ellipsis-v ellipsis">
                                 </span>
+
                         </div>
                         <div class="chat-dropdown">
                             <div chat-dropdown-value="${roomie.id}" class="chat-dropdown-content dropdown-menu">

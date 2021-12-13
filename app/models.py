@@ -98,6 +98,7 @@ class ChatGroup(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     edited = models.BooleanField(default=False)
     solitary = models.BooleanField(default=False)
+    #rank = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.group_name
@@ -439,6 +440,9 @@ class SubDirectory(models.Model):
             list.subdirectory_organization.remove(org)
 
 class UploadedFile(models.Model):
+    """
+    model for uploaded files for chat and profile picture
+    """
     file = models.FileField()
     owner = models.ForeignKey(Account, null=True, on_delete=models.PROTECT)
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -684,14 +688,7 @@ class MyNotes(models.Model):
     
 class MyEvents(models.Model):
     """
-    REPEATING_CHOICES = (
-        (7, 'Weekly'),
-        ('Monthly', 'Monthly'),
-        (365, 'Yearly'),
-        (1, 'Daily'),
-        (14, 'Bi-Weekly')
-        (0, 'Do Not Repeat')
-    )
+    this is the event creation model for events in the calendar
     """
     created_by = models.ForeignKey(
         Account, on_delete=models.CASCADE, related_name='user_who_created_event')    

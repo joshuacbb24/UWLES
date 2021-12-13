@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -721,28 +721,30 @@ is empty when first clicked -->
             <ul>
                 <li>
                     <a href="{% url 'dashboard' %}">
-                        <span id="fist-element" class="las la-home"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'fulldirectory' %}">
-                        <span class="las la-book"></span>
-                    </a>
-                </li>
-                <li>
-                    <a class="active" href="{% url 'multichat' %}">
-                        <span class="las la-comment-alt"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'clientlist' %}">
-                        <span class="las la-user-friends"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <span class="las la-plus-circle"></span>
-                    </a>
+            <span id="fist-element" class="las la-home"></span>
+          </a>
+        </li>
+        <li>
+          <a href="/full_directory/">
+            <span class="las la-book"></span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'multichat' %}"  class="active">
+            <span class="las la-comment-alt"></span>
+          </a>
+        </li>
+        <li>
+          <!--<a href="{% url 'clientlist' %}">-->
+            <a href="{% url 'clientlist' %}">
+            <span class="las la-user-friends"></span>
+          </a>
+        </li>
+        <li>
+          <!--<a href="{% url 'userinfo' %}">-->
+          <a href="">
+            <span class="las la-plus-circle"></span>
+          </a>
                 </li>
             </ul>
         </div>
@@ -1115,7 +1117,7 @@ is empty when first clicked -->
     let typedmessage = null;
     let found = null;
     var prefix = 'https://';
-    var prefix2 = 'http://'
+    var prefix2 = 'http://';
     let ellipsisClicked = false;
     //let hideellipsis = false;
     let timeid = 0;
@@ -1354,11 +1356,15 @@ is empty when first clicked -->
             }
         });
 
+
+            
+            /* 1. OPEN THE FILE EXPLORER WINDOW */
         $("#upload-photos-button").click(function () {
             $("#fileupload").click();
         });
 
         /* 2. INITIALIZE THE FILE UPLOAD COMPONENT */
+        //hook up sending files
         $("#fileupload").fileupload({
             dataType: 'json',
             done: function (e, data2) {  /* 3. PROCESS THE RESPONSE FROM THE SERVER */
@@ -1448,8 +1454,7 @@ is empty when first clicked -->
 
 
 
-                //hook up sending files
-                /* 1. OPEN THE FILE EXPLORER WINDOW */
+               
                 var obj = data.title;
                 //var extra = ", ";
 
@@ -1491,8 +1496,7 @@ is empty when first clicked -->
 
 
 
-                // msg types are defined in chat/settings.py
-                // Only for demo purposes is hardcoded, in production scenarios, consider call a service.
+                // msg types are defined in settings.py/consumer.py
                 const LEFT_ROOM = 5;
                 switch (data.msg_type) {
                     case 0:
@@ -1529,6 +1533,9 @@ is empty when first clicked -->
                             time = time.replace(",", "");
 
                         }
+                        //To-Do:
+                        //$(this).parent().prepend(this);
+                        //$("#topNumber").prependTo("#ImportantNumbers");
                         if (notificationofmessage) {
                             if (!notice) {
                                 $("[message-preview-value=" + data.room + "]").html("");
@@ -2128,6 +2135,7 @@ is empty when first clicked -->
                         // User left room
                         break;
                     case "created":
+                        //chat created
                         var obj = data.name;
                         var me = $("#myself").val() + ", ";
                         var me2 = ", " + $("#myself").val();
@@ -2171,7 +2179,7 @@ is empty when first clicked -->
 
                         let extraUserscreate = data.avatars.length - i;
 
-                        $(".rooms").append(
+                        $(".rooms").prepend(
                             `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                             <div class="wrap">
                                 <div avatar-value="${data.room}" class="avatars">
@@ -2215,9 +2223,11 @@ is empty when first clicked -->
 
                         break;
                     case "room_exists":
+                        //chat already created
                         $("li[data-room-id=" + data.room_id + "]")[0].click();
                         break;
                     case "sent_to_others":
+                        //messages sent to others not joined in room
                         if (roomId !== data.room) {
 
                             socket.send(
@@ -2233,6 +2243,7 @@ is empty when first clicked -->
                         }
                         break;
                     case "get_unread":
+                        //make message unread
                         var unreadroom = $("li[data-room-id=" + data.unread.room + "]")[0];
                         var otherppl = document.getElementById("chatAudio");
                         otherppl.play();
@@ -2253,6 +2264,7 @@ is empty when first clicked -->
                         );
                         break;
                     case "get_members":
+                        //get members of chat
                         var people = data.member
                         //TO-DO: if awayclicked = false {let coloricon = green or red} else {let color icon = grey}
                         let coloricon = people.online ? `<div data-link-id="${people.id}" class="online_icon" style="background-color: green;"></div>` : `<div data-link-id="${people.id}" class="online_icon" style="background-color: red;"></div>`
@@ -2296,6 +2308,7 @@ is empty when first clicked -->
                         }
                         break;
                     case "delete_room":
+                        //chat is deleted
                         removedelement = $("li[data-room-id=" + data.room + "]")[0];
                         var list = document.getElementById("rooms");
                         var obj = data.name;
@@ -2479,7 +2492,7 @@ is empty when first clicked -->
                         showDefaultAvatar();
                         break;
                     case "get_users":
-
+                        //get all users
                         var allusers = data.user
                         //let avatarofusers = allusers.avatar ? '<img class="profile-pic" src="' + allusers.avatar + '">' : '<div class="profile-pic-wrapper" style="display: inline; width: 10%;" data-username="' + allusers.username + '" data-bgcolor="' + allusers.default + '"></div>'
 
@@ -2496,8 +2509,7 @@ is empty when first clicked -->
                         //populate();
                         break;
                     case "get_additional":
-
-                        //var newTitle = data.adder
+                        //add people to chat
                         var list = document.getElementById("rooms");
                         var obj = data.name;
                         var me = $("#myself").val();
@@ -2658,7 +2670,7 @@ is empty when first clicked -->
                         }
                         else {
 
-                            $(".rooms").append(
+                            $(".rooms").prepend(
                                 `<li id="room-link" class="room-link" data-room-id="${data.room}" name="${data.room}">
                                         <div class="wrap">
                                             <div avatar-value="${data.room}" class="avatars">
@@ -2695,7 +2707,7 @@ is empty when first clicked -->
                         break;
                     case "remove_user":
 
-                        //var newTitle = data.adder
+                        //remove user from chat but keep chat history
                         let old_room = $("li[data-room-id=" + data.room + "]")[0];
                         let old_room_edit_id = $("#edit-" + data.room)[0];
                         let old_room_delete_id = $("#delete-" + data.room)[0];
@@ -2928,6 +2940,7 @@ is empty when first clicked -->
                         break;
 
                     case "get_rooms":
+                        //get all chats for user
                         roomie = data.rooms;
                         let o = 0;
                         allRooms[o] = roomie.id;
@@ -3048,10 +3061,12 @@ is empty when first clicked -->
                         break;
 
                     case "print_title":
+                        //get chat title
                         var new_title = data.room;
                         title = new_title.name;
                         break;
                     case "change_status":
+                        //change status to available
                         //TO-DO: if awayclicked = false {let coloricon = green} else {let color icon = grey}
                         console.log("change_status");
                         var onlinelink = $("[data-link-id=" + data.id + "]");
@@ -3060,6 +3075,7 @@ is empty when first clicked -->
                         $(".status-message").append("Available");
                         break;
                     case "change_status_off":
+                        //change status to away
                         //TO-DO: if awayclicked = false {let coloricon = red} else {let color icon = grey}
                         console.log("change_status");
                         var onlinelink = $("[data-link-id=" + data.id + "]");
@@ -3068,6 +3084,7 @@ is empty when first clicked -->
                         $(".status-message").append("Away");
                         break;
                     case "edit":
+                        //change name of chat
                         var target_li = $("li[data-room-id=" + data.room + "]")[0];
                         var nameOfChat = target_li.getElementsByTagName("span")[0];
 
@@ -3119,7 +3136,8 @@ is empty when first clicked -->
                 console.log("Cannot handle message!");
             }
         };
-
+        
+        //add members to chat button
         $("#add-members").click(function () {
             $(".unread-break-line").hide();
             /*if (hideellipsis) {
@@ -3208,6 +3226,7 @@ is empty when first clicked -->
 
 
 
+//wire up ellipsis for chat dropdown
         function editbuttonclicked(buttonclicked) {
             $("#" + buttonclicked).click(function (event) {
                 chatDropdownId = $(this).attr("ellipsis-value");
@@ -3235,8 +3254,9 @@ is empty when first clicked -->
             });
         }
 
-
+        //wire up options in chat dropdown
         function menuclicked(deletechat, edit) {
+            //if delete chat is clicked in chat dropdown
             $("#" + deletechat).click(function () {
                 $(".unread-break-line").hide();
                 deleteroom = $(this).attr("delete-button-value");
@@ -3245,6 +3265,7 @@ is empty when first clicked -->
                 $("[chat-dropdown-value=" + chatDropdownId + "]").hide();
 
             });
+            //if edit name clicked in chat dropdown
             $("#" + edit).click(function () {
                 $(".unread-break-line").hide();
                 editroom = $(this).attr("edit-button-value");
@@ -3258,7 +3279,9 @@ is empty when first clicked -->
 
 
         }
+        //wire up remove user from chat button
         function removeduserclicked(userclicked) {
+            //if remove user button is clicked
             $("#" + userclicked).click(function () {
                 $(".unread-break-line").hide();
                 removeduser = $(this).attr("data-id");
@@ -3326,6 +3349,7 @@ is empty when first clicked -->
         $("#cancel-name").click(function () {
             $(".edit-chat-modal").hide();
         })
+        //add members to active chat
         $("#submit-users").on('click', function () {
             let arrayofnewusers = [];
             var noticemsg;
@@ -3357,6 +3381,8 @@ is empty when first clicked -->
         $("#canc").on('click', function () {
             document.getElementById('members-page').style.display = 'none'
         });
+        
+        //when a chat is clicked
         function roomClick() {
             let b = 0;
             xisweird = 0;
@@ -3520,7 +3546,7 @@ is empty when first clicked -->
         }
         $(document).on('click', '.room-link', roomClick)
 
-        // Creating Rooms
+        // Creating Chats
 
         $("#create-chat").click(function () {
             wasclicked = false;
@@ -3616,6 +3642,7 @@ is empty when first clicked -->
         })
 
         // Helpful debugging
+        //socket open
         socket.onopen = function () {
             console.log("Connected to chat socket");
             socketopen = true;
@@ -3648,6 +3675,7 @@ is empty when first clicked -->
                 }
             }
         };
+        //if socket close
         socket.onclose = function () {
             socketopen = false;
             console.log("Disconnected from chat socket");
@@ -3664,6 +3692,7 @@ is empty when first clicked -->
             }
         };
 
+        //populate tags for adding member to chat
         function fillarray2() {
 
             var input = document.querySelector('input[name=tags-manual-suggestions]');
@@ -3840,7 +3869,7 @@ is empty when first clicked -->
 
         }
 
-
+// get user tags for creating a chat
         function getallusers() {
             var inputElm = document.querySelector('input[name=users-list-tags]');
 

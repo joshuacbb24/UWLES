@@ -252,19 +252,28 @@ background: #21B5B7;
         }
         
         /* Modal Content/Box */
-        #event-page-content {
-          position: relative;
-          background-color: #fefefe;
-          margin: 5% auto 15% auto;
-          border: 1px solid #000;
-          width: 40%;
-          height: 67%;
-          z-index: 3;
-          border-radius: 5px;
-          margin-right: 27%;
-          box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
-          overflow: hidden;
-        }
+#event-page-content {
+    /* position: absolute; */
+    /* left: 31.94%; */
+    /* right: 33.19%; */
+    top: 0.79%;
+    bottom: 18.55%;
+    background: #FCFCFC;
+    box-shadow: 0px 8px 10px rgb(0 0 0 / 14%), 0px 3px 14px rgb(0 0 0 / 12%), 0px 4px 5px rgb(0 0 0 / 20%);
+    border-radius: 4px;
+    position: relative;
+    /* background-color: #fefefe; */
+    margin: 5% auto 15% auto;
+    /* border: 1px solid #000; */
+    width: 40%;
+    height: 76%;
+    /* z-index: 3; */
+    /* border-radius: 5px; */
+    margin-right: 27%;
+    /* box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%); */
+    /* overflow: hidden; */
+
+}
         #delete-page {
           background-color: #fefefe;
           margin: 5% auto 15% auto;
@@ -381,17 +390,19 @@ background: #21B5B7;
            width: 541px;
             height: 113px;
         }
-        #event_form input[type=text], input[type=email], select{
-          width: 275%;
-          padding: 12px 10px;
-          margin: 5px;
-          display: inline-block;
-          border: 1px solid #ccc;
-          border-radius: 2px;
-          box-sizing: border-box;
-          height: 6%;
-        
-        }
+#event_form input[type=text], input[type=email], select {
+    width: 275%;
+    padding: 12px 10px;
+    margin: 5px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    box-sizing: border-box;
+    height: 6%;
+    /* background: #EBF2F2; */
+    height: 50px;
+    border: none;
+}
             .btn-outline-secondary:not(:disabled):not(.disabled).active, .btn-outline-secondary:not(:disabled):not(.disabled):active, .show>.btn-outline-secondary.dropdown-toggle {
             color: #fff;
             background-color: #6c757d;

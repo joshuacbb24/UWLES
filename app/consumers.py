@@ -4,7 +4,7 @@ import pytz
 
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from .exceptions import ClientError
-from .utils import get_room_or_error, save_message, create_group, fetch_recent, fetch_members, fetch_users, add_group, fetch_rooms, fetch_title, delete_room, delete_user, editname, unread, fetch_unread, acknowledged_message, get_self, delete_unread, offline, online, RoomExistsException
+from .utils import fetch_unread_message_id, get_room_or_error, save_message, create_group, fetch_recent, fetch_members, fetch_users, add_group, fetch_rooms, fetch_title, delete_room, delete_user, editname, unread, fetch_unread, acknowledged_message, get_self, delete_unread, offline, online, fetch_unread_message_id, RoomExistsException
 
 """
 class CalConsumer(AsyncJsonWebsocketConsumer):
@@ -17,6 +17,7 @@ class CalConsumer(AsyncJsonWebsocketConsumer):
         # Accept the connection
         await self.accept()
     self.user_channels[self.scope['user'].username] = self.channel_name
+
     async def disconnect(self, code):
         self.user_channels[self.scope['user'].username] = None
         try:
@@ -24,6 +25,7 @@ class CalConsumer(AsyncJsonWebsocketConsumer):
         except ClientError:
             pass
     # Command helper methods called by receive_json
+
     async def receive_json(self, content):
         # Messages will have a "command" key we can switch on
         command = content.get("command", None)
@@ -58,6 +60,7 @@ class CalConsumer(AsyncJsonWebsocketConsumer):
                         'acknowledged': group.acknowledged,
                     }, 'msg_type': 'get_rooms', })        
         except:
+
 """
 
 
@@ -70,6 +73,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     http://channels.readthedocs.io/en/latest/topics/consumers.html
     """
     user_channels = {}
+    user_connections = {}
     timeformat = "%b %d, %I:%M %p"
 
     def formatdatetime(self, mydate):
@@ -91,7 +95,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         else:
             # Accept the connection
             await self.accept()
-            await online(self.scope["user"])
+            
         # Store which rooms the user has joined on this connection
         self.rooms = set()
         #when user connects check to see if user already has a channel name connected to it
@@ -99,10 +103,27 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         #if not get a new one with self.user_channels[self.scope['user'].username] = self.channel_name
         #
         # self.user_channels.get(self.scope['user'].username)
-        
-        print('channel_name self', self.channel_name)
-        self.user_channels[self.scope['user'].username] = self.channel_name
-        print('channel_name', self.user_channels.get(self.scope['user'].username))
+        #print("user channels", self.user_channels)
+        #print('channel_name self', self.channel_name)
+        #print('channel_name scope', self.scope["user"].username)
+        #print('channel_name', self.user_channels.get(self.scope['user'].username))
+        ch_name = self.user_channels.get(self.scope['user'].username)
+        if not ch_name:
+            self.user_channels[self.scope['user'].username] = self.channel_name
+            #self.user_connections[self.scope['user'].username] = 1
+            await online(self.scope["user"])
+        else:
+            #ch_connect = self.user_connections.get(self.scope['user'].username)
+            #print("ch_connect", ch_connect)
+            #new_value = ch_connect + 1
+            #print("new_value", new_value)
+            #self.user_connections[self.scope['user'].username] = new_value
+            self.channel_name = self.user_channels.get(self.scope['user'].username)
+        #print('channel_name changed', self.user_channels.get(self.scope['user'].username), self.channel_name)
+        #print("user connections", self.user_connections.get(self.scope['user'].username))
+
+        print("all user channel names", self.user_channels)
+        print("all user connections", self.user_connections)
 
     async def receive_json(self, content):
         """
@@ -111,19 +132,19 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         """
         # Messages will have a "command" key we can switch on
         command = content.get("command", None)
-        print('received command', command)
+        #print('received command', command)
         try:
             if command == "join":
                 myself = self.scope["user"]
                 wasclicked = content["wasclicked"]
                 if wasclicked == True:
                     # Make them join the room
-                    print("joined room")
+                    #print("joined room")
                     await self.join_room(content["room"])
                     messages = await fetch_recent(content["room"])
                     for message in messages:
-                        unreadobj = await fetch_unread(content["room"], myself, message)
-                        print("unreadobj", unreadobj)
+                        unreadmessageid = await fetch_unread_message_id(content["room"], myself, message)
+                        print("unreadmessageid", unreadmessageid)
                         await self.send_json({'message': {
                             'id': message.id,
                             'room': content["room"],
@@ -135,10 +156,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                             'sent_at': self.formatdatetime(message.sent_at),
                             'is_file': message.is_file,
                             'notice': message.is_notice,
-                            'unread': True if unreadobj and message.id == unreadobj.message.id else False,
+                            'unread': True if unreadmessageid and message.id == unreadmessageid else False,
                             'received': False,
                         }, 'msg_type': 0, })
-                        if unreadobj and message.id == unreadobj.message.id:
+                        if unreadmessageid and message.id == unreadmessageid:
                             await delete_unread(content["room"], myself, message)
                 else:
                     await self.join_room(content["room"])
@@ -149,7 +170,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 await online(self.scope["user"])
                 person = await get_self(self.scope["user"])
                 users = await fetch_users(self.scope["user"])
-                print("users", users)
+                #print("users", users)
                 for user in users:
                     channel_name = self.user_channels.get(user.username)
                     if channel_name:
@@ -171,7 +192,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 await offline(self.scope["user"])
                 person = await get_self(self.scope["user"])
                 users = await fetch_users(self.scope["user"])
-                print("users", users)
+                #print("users", users)
                 for user in users:
                     channel_name = self.user_channels.get(user.username)
                     if channel_name:
@@ -215,11 +236,11 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             elif command == "members":
                 # get the members of the room
                 members, theroom = await fetch_members(content["room"])
-                print('members', members)
+                #print('members', members)
 
                 for member in members:
                     channel_name = self.user_channels.get(member.username)
-                    print("channel_name", channel_name)
+                    #print("channel_name", channel_name)
                     await self.send_json({'member': {
                         'id': member.id,
                         'username': member.username,
@@ -230,7 +251,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         'online': member.is_online
                     }, 'msg_type': 'get_members', })
             elif command == "rooms":
-                # get the members of the room
+                # get the chats associated with user
 
                 groups = await fetch_rooms(self.scope["user"])
 
@@ -259,15 +280,15 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         'online': user.is_online
                     }, 'msg_type': 'get_users', })
             elif command == "title":
-                # get users in database
+                # get title of chat
                 room_title = await fetch_title(content["room"])
                 await self.send_json({'room': {
                     'name': room_title.group_name,
                 }, 'msg_type': 'print_title', })
             elif command == "create_unread":
-                # get users in database
+                # make a chat unread
                 await unread(content["room"], self.scope["user"], int(content["messageId"]))
-                print("content", content)
+                #print("content", content)
                 await self.send_json({'unread': {
                     'room': content["room"],
                     'is_notice': content["notice"],
@@ -278,7 +299,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                 for user in users:
                     # Send a message to this user's channel
                     channel_name = self.user_channels.get(user.username)
-                    print("channel_name", channel_name)
+                    #print("channel_name", channel_name)
                     if channel_name:
                         await self.channel_layer.send(
                             channel_name,
@@ -294,9 +315,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         )
 
                 channel_name = self.user_channels.get(myself.username)
-                print("channel_name for myself", channel_name)
+                #print("channel_name for myself", channel_name)
                 if channel_name:
-                    print("channel_name inside if", channel_name)
+                    #print("channel_name inside if", channel_name)
                     await self.channel_layer.send(
                         channel_name,
                         {
@@ -311,6 +332,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     )
                 message = await save_message(content["room"], self.scope["user"], content["message"], content["file"], content["notice"])
             elif command == "edit":
+                #change name of chat
                 room, new_name = await editname(content["room"], content["newName"])
                 users, newroom = await fetch_members(content["room"])
                 for user in users:
@@ -329,6 +351,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                         )
                 message = await save_message(content["room"], self.scope["user"], content["message"], content["file"], content["notice"])
             elif command == "remove":
+                #remove user from chat
                 room, users, olduser, newRoom = await delete_user(content["room"], content["old_user"])
                 for user in users:
                     # Send a message to this user's channel
@@ -367,7 +390,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     )
                 message = await save_message(content["room"], self.scope["user"], content["message"], content["file"], content["notice"])
             elif command == "send":
+                #send message to chat
                 message = await save_message(content["room"], self.scope["user"], content["message"], content["file"], content["notice"])
+                print("message", content["message"])
+
                 roomusers, newroom = await fetch_members(content["room"])
                 await self.send_room(content["room"], message, notification=True)
                 """
@@ -382,7 +408,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     print("username inside send", channel_name)
                     print("roomuser.username", roomuser.username)
                     if channel_name:
-                        print("username inside send if", channel_name)
+                        #print("username inside send if", channel_name)
                         await self.channel_layer.send(
                             channel_name,
                             {
@@ -405,6 +431,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     # when a message is sent from unread chat or room is clicked again the unread message bar will go away
 
             elif command == "create":
+                #create a new chat
                 # maybe a primary key for name
                 # json parse new users for name of chat
                 try:
@@ -412,7 +439,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
                     room, users = await create_group(content["newUsers"], self.scope["user"])
                     message = await save_message(room.id, self.scope["user"], content["message"], content["file"], content["notice"])
                     # await self.send_room(room, message, notification=True)
-                    print('user channels', self.user_channels)
+                    #print('user channels', self.user_channels)
                     for user in users:
                         if user.username != self.scope["user"].username:
                             await unread(room.id, user, message)
@@ -445,13 +472,22 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         Called when the WebSocket closes for any reason.
         """
         # Leave all the rooms we are still in
+        print("was disconnected")
+        #ch_connect = self.user_connections.get(self.scope['user'].username)
+        #if ch_connect == 1:
         await offline(self.scope["user"])
         self.user_channels[self.scope['user'].username] = None
+        #    self.user_connections[self.scope['user'].username] = None           
+        #else:
+        #   new_value = ch_connect - 1
+        #   self.user_connections[self.scope['user'].username] = new_value
+
         for room_id in list(self.rooms):
             try:
                 await self.leave_room(room_id)
             except ClientError:
                 pass
+
     # Command helper methods called by receive_json
 
     async def join_room(self, room_id):
@@ -494,6 +530,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         print('leaving room', room_id)
         room = await get_room_or_error(room_id, self.scope["user"])
         # Send a leave message if it's turned on
+        #ch_connect = self.user_connections.get(self.scope['user'].username)
+        #if not ch_connect:
         if settings.NOTIFY_USERS_ON_ENTER_OR_LEAVE_ROOMS:
             await self.channel_layer.group_send(
                 room.group_name,
@@ -506,14 +544,22 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         # Remove that we're in the room
         self.rooms.discard(room_id)
         # Remove them from the group so they no longer get room messages
+
+        #To-Do: For functions where user is removed from chat have to do manually
+
+        #self.rooms.discard(room_id)
         await self.channel_layer.group_discard(
             room.group_name,
             self.channel_name,
         )
+        
         # Instruct their client to finish closing the room
         await self.send_json({
             "leave": str(room.id),
         })
+        #else:
+        #    new_value = ch_connect - 1
+        #    self.user_connections[self.scope['user'].username] = new_value
 
     async def send_room(self, room_id, message, notification):
         """
@@ -524,7 +570,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             raise ClientError("ROOM_ACCESS_DENIED")
         # Get the room and send to the group about it
         room = await get_room_or_error(room_id, self.scope["user"])
-        print("edit message received", message.message)
+        #print("edit message received", message.message)
         await self.channel_layer.group_send(
             room.group_name,
             {
@@ -547,7 +593,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def chat_add(self, event):
         """
-        Called when someone has added people to a chat.
+        Called when someone has created a chat.
         """
         # Send a message down to the client
         await self.send_json(
@@ -564,6 +610,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def chat_status(self, event):
+        """
+        Called when someone has connected.
+        """        
         await self.send_json(
             {
                 "msg_type": "change_status",
@@ -572,6 +621,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def chat_statusoff(self, event):
+        """
+        Called when someone has disconnected.
+        """         
         await self.send_json(
             {
                 "msg_type": "change_status_off",
@@ -581,7 +633,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def chat_edit(self, event):
         """
-        Called when someone has added people to a chat.
+        Called when someone has changed name of a chat.
         """
         # Send a message down to the client
         await self.send_json(
@@ -596,7 +648,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
     async def chat_remove(self, event):
         """
-        Called when someone has added people to a chat.
+        Called when someone has removed user from a chat.
         """
         # Send a message down to the client
         await self.send_json(
@@ -614,6 +666,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def chat_append(self, event):
+        """
+        Called when someone has added people to a chat.
+        """        
         await self.send_json(
             {
                 "msg_type": "get_additional",
@@ -629,8 +684,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def chat_send(self, event):
-
-        print("reached inside send")
+        """
+        Called when users who are online but not in the same room as sender.
+        """
+        #print("reached inside send")
         await self.send_json(
             {
                 "msg_type": "sent_to_others",
@@ -644,6 +701,9 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
 
     async def chat_delete(self, event):
+        """
+        Called when someone has deleted a chat.
+        """
         await self.send_json(
             {
                 "msg_type": "delete_room",
@@ -686,6 +746,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         """
         Called when someone has messaged our chat.
         """
+        print("sent message")
         # Send a message down to the client
         await self.send_json(
             {

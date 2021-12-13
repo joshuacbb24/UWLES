@@ -187,7 +187,7 @@ $(".show-events").css('cursor', 'pointer');
 $(".show-calendar").css('color', 'gray');
 $(".show-calendar").css('cursor', 'default');
 });*/
-
+//add event form if all day is selected
 $("#id_all_day").change(function() {
   if ($("#id_all_day").prop('checked'))
   {
@@ -228,6 +228,7 @@ else {
   $(".delete-modal").show();
 }
 });
+  //event deletion
 $("#confirmation-of-delete").on('click', function () {
   $.ajax({
     type: "POST",
@@ -260,6 +261,7 @@ $("#confirmation-of-delete").on('click', function () {
 $("#reverse-delete").on('click', function () {
   $(".delete-modal").hide();
 });
+  //event creation
 $("#event_form").submit(function (e) {
   if (choice == 0)
   {
@@ -335,6 +337,7 @@ $("#event_form").submit(function (e) {
    }
   
   }
+  //event editing
   else{
     e.preventDefault();
     var titlestr = $('#id_title').val();
