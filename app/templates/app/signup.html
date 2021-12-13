@@ -8,19 +8,19 @@
 <!--sign up form-->
 <form method="post" class="signup_layout" enctype="multipart/form-data">
     {% csrf_token %}
-    <p>{{ form.username }} </p>
+    <p>{{ form.username }} Username</p>
     <br />
-    <p>{{ form.email }} </p>
+    <p>{{ form.email }} Email</p>
     <br />
-    <p>{{ form.password1 }} Must be at least 8 characters</p>
+    <p>{{ form.password1 }} Password (must be at least 8 characters)</p>
     <br />
     <p>{{ form.password2 }} Confirm password</p>
     <br />
-    <p>{{ form.first_name }} </p>
+    <p>{{ form.first_name }} First Name</p>
     <br />
-    <p>{{ form.middle_name }} </p>
+    <p>{{ form.middle_name }} Middle Name</p>
     <br />
-    <p>{{ form.last_name }} </p>
+    <p>{{ form.last_name }} Last Name</p>
     <br />
     <label class="profile-picture-upload">
         {{ form.avatar }}
