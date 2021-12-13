@@ -272,7 +272,7 @@ background: #21B5B7;
     margin-right: 27%;
     /* box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%); */
     /* overflow: hidden; */
-  border:none;
+
 }
         #delete-page {
           background-color: #fefefe;
@@ -401,6 +401,7 @@ background: #21B5B7;
     height: 6%;
     /* background: #EBF2F2; */
     height: 50px;
+    border: none;
 }
             .btn-outline-secondary:not(:disabled):not(.disabled).active, .btn-outline-secondary:not(:disabled):not(.disabled):active, .show>.btn-outline-secondary.dropdown-toggle {
             color: #fff;
