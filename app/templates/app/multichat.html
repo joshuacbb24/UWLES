@@ -720,29 +720,31 @@ is empty when first clicked -->
         <div class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="{% url 'dashboard' %}">
-                        <span id="fist-element" class="las la-home"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'resourcedirectory' %}">
-                        <span class="las la-book"></span>
-                    </a>
-                </li>
-                <li>
-                    <a class="active" href="{% url 'multichat' %}">
-                        <span class="las la-comment-alt"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'clientlist' %}">
-                        <span class="las la-user-friends"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'userinfo' %}">
-                        <span class="las la-plus-circle"></span>
-                    </a>
+                    <a href="{% url 'dashboard' %}" class="active">
+            <span id="fist-element" class="las la-home"></span>
+          </a>
+        </li>
+        <li>
+          <a href="/full_directory/">
+            <span class="las la-book"></span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'multichat' %}">
+            <span class="las la-comment-alt"></span>
+          </a>
+        </li>
+        <li>
+          <!--<a href="{% url 'clientlist' %}">-->
+            <a href="{% url 'clientlist' %}">
+            <span class="las la-user-friends"></span>
+          </a>
+        </li>
+        <li>
+          <!--<a href="{% url 'userinfo' %}">-->
+          <a href="">
+            <span class="las la-plus-circle"></span>
+          </a>
                 </li>
             </ul>
         </div>
