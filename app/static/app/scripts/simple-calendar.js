@@ -474,6 +474,7 @@
         plugin.empty(e.pageX, e.pageY);
       });
       },
+    //display events
       displayEventTexts: function (events, status, clicked) {
         //console.log("after timeout/events");
         var count = 0;
@@ -626,6 +627,7 @@
           })
 
       },
+    //get status of event every minute
     eventStatus: function (events) {
       //console.log("eventStatus after 60 seconds");
       var newtoday = new Date();
